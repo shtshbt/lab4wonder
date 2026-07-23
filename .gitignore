@@ -1,0 +1,13 @@
+# Local release and audit archives
+*.zip
+
+# Local handoff and filesystem metadata
+NEXT_SESSION_HANDOFF_*.md
+*:com.dropbox.attrs
+/mocks/
+
+# Operating-system and editor files
+.DS_Store
+Thumbs.db
+*.swp
+*~

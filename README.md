@@ -1,6 +1,18 @@
-# Claude Mini Apps Explorer r70
+# Lab4Wonder
 
-182本の完全オフラインHTMLアプリです。r70は新規アプリを増やさず、既存アプリの完成度を揃える安定化版です。
+おどろきとはっけんの実験室。家庭で楽しむ182本のインタラクティブHTMLアプリ集です。
+
+## iPadから開く
+
+- [Lab4Wonder入口](https://shtshbt.github.io/lab4wonder/)
+- [全アプリ一覧](https://shtshbt.github.io/lab4wonder/explore.html)
+- [こども向け一覧](https://shtshbt.github.io/lab4wonder/kids-index.html)
+
+Safariで入口を開き、共有メニューから「ホーム画面に追加」を選ぶと、次回からアイコンで起動できます。
+
+## 収録パッケージ
+
+Claude Mini Apps Explorer r70を収録しています。r70は新規アプリを増やさず、既存アプリの完成度を揃える安定化版です。
 
 ## r70
 

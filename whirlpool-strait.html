@@ -16,7 +16,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="船速を低くして一段送りし、流れの矢印と実際の軌跡のずれを見よう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="船速を低くして一段送りし、流れの矢印と実際の軌跡のずれを見よう。">
 <header><div><span class="badge">r34・流体・航海・エネルギー</span><h1><ruby>渦潮海峡<rt>うずしおかいきょう</rt></ruby>航行ラボ</h1><div class="subtitle">潮時、渦、船速、進路、安全余裕が軌跡と消費エネルギーを変える。</div></div><div class="headBtns"><button id="guideBtn">？ガイド</button><button id="speakBtn">🔊読む</button><button id="tourBtn">👣操作</button></div></header>
 <section class="learn"><article><b>これは何？</b><p>時間で変わる潮流場を横断する小型船の航行模型。</p></article><article><b>どこを見る？</b><p>流れの矢印、渦中心、実際の軌跡、最小危険距離、燃料。</p></article><article><b>何を変える？</b><p>出発潮時、船速、進路、経路帯、潮流強度、安全余裕。</p></article><article><b>持ち帰る一文</b><p>速い潮流では最短線より、流れを利用し危険域を避ける経路が有利なことがある。</p></article></section>
 <div class="steps"><span><strong>1 予想</strong> 何が変わるか決める</span><span><strong>2 操作</strong> 一つだけ条件を変える</span><span><strong>3 観察</strong> 主図と計器を同期して見る</span><span><strong>4 比較</strong> A/Bで原因を切り分ける</span></div>
@@ -205,4 +206,41 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+<style id="v11-whirlpool-style">.v11-water-tools{display:flex;gap:7px;flex-wrap:wrap;margin:7px 0;padding:9px;border:2px solid #ffd45c;border-radius:13px;background:#10273a}.v11-water-tools b{flex:1 1 100%;font-size:13px}.v11-water-tools button.on{background:#ffd45c;color:#231b00}.stage canvas{cursor:crosshair;touch-action:none}</style>
+<script id="v11-whirlpool-interaction">
+(()=>{
+const canvas=document.getElementById('mainCanvas');if(!canvas)return;
+const tools=document.createElement('div');tools.className='v11-water-tools';
+tools.innerHTML='<b>👆 海へ何度でも投入して、流され方を比べよう</b><button class="on" data-mode="buoy">🟠 浮標を投入</button><button data-mode="boat">⛵ 小舟を投入</button><button data-mode="clear">航跡を消す</button>';
+canvas.closest('.stage').insertAdjacentElement('afterend',tools);
+let mode='buoy',items=[],last=performance.now();
+tools.addEventListener('click',event=>{const b=event.target.closest('[data-mode]');if(!b)return;if(b.dataset.mode==='clear'){items=[];return}mode=b.dataset.mode;tools.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
+canvas.addEventListener('pointerdown',event=>{
+ event.preventDefault();event.stopImmediatePropagation();const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width*900,y=(event.clientY-r.top)/r.height*520;
+ if(y<58||y>462)return;items.push({x,y,type:mode,trail:[[x,y]],age:0});if(items.length>14)items.shift();
+},{capture:true});
+const originalDraw=drawAll;
+drawAll=function(){
+ originalDraw();
+ const now=performance.now(),dt=Math.min(.05,(now-last)/1000);last=now;
+ items.forEach(item=>{const [u,v]=flow(item.x,item.y,sim.t),self=item.type==='boat'?2.1:0;item.x+=(u+self)*dt*7;item.y+=v*dt*7;item.age+=dt;if(!item.trail.length||item.age-item.trail.at(-1)[2]>.12)item.trail.push([item.x,item.y,item.age]);if(item.trail.length>100)item.trail.shift()});
+ items=items.filter(item=>item.x>-20&&item.x<920&&item.y>45&&item.y<475);
+ X.save();
+ vortices().forEach(vortex=>{
+  const spin=sim.t*.9*vortex.s;
+  for(let arm=0;arm<3;arm++){X.strokeStyle=arm===0?'rgba(198,245,255,.92)':'rgba(91,210,244,.55)';X.lineWidth=arm===0?4:3;X.beginPath();for(let i=0;i<70;i++){const radius=8+i*1.05,angle=spin+arm*Math.PI*2/3+i*.16*vortex.s,x=vortex.x+Math.cos(angle)*radius,y=vortex.y+Math.sin(angle)*radius*.72;i?X.lineTo(x,y):X.moveTo(x,y)}X.stroke()}
+  X.fillStyle='#fff';X.font='bold 12px system-ui';X.fillText('うず中心',vortex.x-30,vortex.y-20);
+ });
+ items.forEach((item,index)=>{
+  X.strokeStyle=item.type==='boat'?'#fff':'#ffad43';X.lineWidth=2;X.beginPath();item.trail.forEach((p,i)=>i?X.lineTo(p[0],p[1]):X.moveTo(p[0],p[1]));X.stroke();
+  X.translate(item.x,item.y);
+  if(item.type==='boat'){X.fillStyle='#fff';X.beginPath();X.moveTo(18,0);X.lineTo(-12,-10);X.lineTo(-8,10);X.closePath();X.fill();X.fillStyle='#ff6157';X.beginPath();X.moveTo(-4,-5);X.lineTo(-4,-28);X.lineTo(12,-5);X.fill()}
+  else{X.fillStyle='#ff9f35';X.strokeStyle='#fff';X.lineWidth=3;X.beginPath();X.arc(0,0,11,0,Math.PI*2);X.fill();X.stroke()}
+  X.fillStyle='#fff';X.font='bold 11px system-ui';X.fillText(String(index+1),14,-12);X.setTransform(1,0,0,1,0,0);
+ });
+ X.fillStyle='rgba(5,18,30,.86)';X.fillRect(15,42,260,56);X.fillStyle='#fff';X.font='bold 13px system-ui';X.fillText(`投入 ${items.length}個　白=小舟　橙=浮標`,28,66);X.fillStyle='#aeeaff';X.fillText('航跡の曲がりが潮流の力',28,88);X.restore();
+};
+})();
+</script>
+</body></html>

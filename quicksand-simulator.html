@@ -12,7 +12,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="物体密度だけを沼の密度より上下へ変え、浮力と停止深さの違いを確かめよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="物体密度だけを沼の密度より上下へ変え、浮力と停止深さの違いを確かめよう。">
 <header class="hdr"><div><span class="badge">r58・流体・粘塑性</span><h1 id="title"><ruby>底<rt>そこ</rt></ruby>なし<ruby>沼<rt>ぬま</rt></ruby>・<ruby>粘塑性沈降<rt>ねんそせいちんこう</rt></ruby>ラボ</h1><div class="sub">物体の密度・体積・接地面積・吸水性と、沼の密度・粘度・降伏応力・チキソトロピーを変えて沈降と停止を見る。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>浮力</b><p>排除した泥の重さが上向きに働き、物体と泥の密度差が沈みやすさを左右する。</p></div><div><b>降伏応力</b><p>一定以下の力では泥が固体のように支え、閾値を超えると流れ始める。</p></div><div><b>粘性抵抗</b><p>動き始めた後は粘度と接地形状が沈降速度を抑える。</p></div><div><b>時間依存</b><p>攪乱で構造が崩れ、静置で回復するチキソトロピーを簡略化して扱う。</p></div></section><div class="steps"><span class="step"><strong>1 予想</strong> 変える量と結果を予想</span><span class="step"><strong>2 操作</strong> 一つだけ変える</span><span class="step"><strong>3 比較</strong> 条件A/Bを記録</span></div>
 <section class="toolbar"><button id="playPause" class="primary">▶ 再生</button><button id="stepBtn">一段進める</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="scenarioBtn">課題 S1</button></section>
@@ -197,4 +198,53 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+<style id="v11-quicksand-style">
+.v11-direct{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;padding:9px;border:2px solid #ffd85a;border-radius:14px;background:#182635}.v11-direct b{flex:1 1 100%;font-size:13px}.v11-direct button{flex:1;min-width:150px}.v11-direct .safe{background:#69e0b0;color:#08251c}.v11-direct .danger{background:#ff8d8d;color:#301010}.stage canvas{cursor:pointer;touch-action:none}
+</style>
+<script id="v11-quicksand-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv');
+if(!canvas)return;
+const actions=document.createElement('div');
+actions.className='v11-direct';
+actions.innerHTML='<b>👆 人をタップするか、助け方を選ぼう</b><button class="safe" data-action="spread">👐 手足を広げる</button><button data-action="calm">😮‍💨 じっと落ち着く</button><button class="danger" data-action="struggle">💥 はげしくもがく</button>';
+canvas.closest('.stage').insertAdjacentElement('afterend',actions);
+let action='calm',pulse=0;
+function applyAction(next){
+ action=next;pulse=24;
+ if(next==='spread'){document.getElementById('c3').value='.9';state.structure=Math.min(1,state.structure+.2)}
+ if(next==='calm'){state.vel*=.25;state.structure=Math.min(1,state.structure+.3)}
+ if(next==='struggle'){state.structure=Math.max(.08,state.structure-.65);state.vel+=.12}
+ document.getElementById('c3').dispatchEvent(new Event('input',{bubbles:true}));
+ for(let i=0;i<5;i++)domainStep(APP.step);
+ drawAll();
+}
+actions.addEventListener('click',event=>{const button=event.target.closest('[data-action]');if(button)applyAction(button.dataset.action)});
+canvas.addEventListener('pointerdown',event=>{
+ event.preventDefault();event.stopImmediatePropagation();
+ const box=canvas.getBoundingClientRect(),x=(event.clientX-box.left)/box.width;
+ applyAction(x<.36?'spread':x>.67?'struggle':'calm');
+},{capture:true});
+const originalDraw=drawMain;
+drawMain=function(){
+ originalDraw();
+ const g=canvas.getContext('2d'),d=state.d,y=110+d.depth*290;
+ g.save();
+ g.fillStyle='rgba(5,15,24,.82)';g.fillRect(22,62,292,112);
+ g.font='bold 14px system-ui';g.fillStyle='#fff';g.fillText('赤↓ 重さ（沈める）',42,88);g.fillStyle='#5fd3ff';g.fillText('青↑ 浮力（押し上げる）',42,113);g.fillStyle='#69e0b0';g.fillText('緑↑ 泥の支え',42,138);
+ g.fillStyle=action==='struggle'?'#ff8d8d':'#ffd85a';g.fillText(action==='spread'?'手足を広げて圧力を分散':action==='struggle'?'もがいて泥の構造が崩れた':'動きを止めて泥が回復',42,163);
+ g.translate(450,y-22);g.strokeStyle='#27202a';g.lineWidth=14;g.lineCap='round';
+ g.beginPath();g.moveTo(0,-4);g.lineTo(0,48);g.stroke();
+ g.fillStyle='#ffd0aa';g.beginPath();g.arc(0,-24,18,0,Math.PI*2);g.fill();
+ g.strokeStyle='#f4c85c';g.lineWidth=11;g.beginPath();
+ const arm=action==='spread'?62:action==='struggle'?42:26;
+ g.moveTo(0,8);g.lineTo(-arm,action==='struggle'?-15:18);g.moveTo(0,8);g.lineTo(arm,action==='struggle'?24:18);g.stroke();
+ g.strokeStyle='#4d86c6';g.beginPath();g.moveTo(0,45);g.lineTo(-24,76);g.moveTo(0,45);g.lineTo(24,76);g.stroke();
+ if(pulse>0){g.strokeStyle=action==='struggle'?'#ff8d8d':'#69e0b0';g.lineWidth=5;g.globalAlpha=pulse/24;g.beginPath();g.arc(0,18,90-pulse,0,Math.PI*2);g.stroke();pulse--}
+ g.restore();
+};
+drawAll();
+})();
+</script>
+</body></html>

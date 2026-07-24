@@ -8,7 +8,8 @@
 
 .r59-focusable:focus-visible,body :focus-visible{outline:3px solid #ffd85a!important;outline-offset:3px!important}
 @media(max-width:420px){#r59-globalbar{gap:5px;padding:6px}#r59-globalbar a,#r59-globalbar button{min-height:36px!important;font-size:10px!important;padding:5px 7px!important}}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="同じ分布から取り直しても推定値が同じになるか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="同じ分布から取り直しても推定値が同じになるか予想しよう。">
 <header class="hdr"><div><span class="badge">r36・動的探究版</span><h1><ruby>標本<rt>ひょうほん</rt></ruby>と<ruby>推定<rt>すいてい</rt></ruby>のゆらぎ</h1><div class="sub">反復標本、歪み、外れ値、混合分布、推定量、信頼区間の収束を追う。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>同じ母集団から何度も標本を取り、推定値と区間の揺れを可視化する模型。</p></div><div><b>どこを見る？</b><p>ヒストグラム、真値、推定値、区間幅、被覆率、累積平均。</p></div><div><b>何を変える？</b><p>標本数、歪み、外れ値率、混合間隔、信頼水準、推定量。</p></div><div><b>持ち帰る一文</b><p>標本から得る数値は固定された真実ではなく、分布形と標本数に依存する不確実な推定である。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 外れ値率を上げたとき、平均と中央値のどちらが真値付近に残りやすいか</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
@@ -163,4 +164,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

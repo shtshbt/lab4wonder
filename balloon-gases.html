@@ -8,7 +8,8 @@
 
 .r59-focusable:focus-visible,body :focus-visible{outline:3px solid #ffd85a!important;outline-offset:3px!important}
 @media(max-width:420px){#r59-globalbar{gap:5px;padding:6px}#r59-globalbar a,#r59-globalbar button{min-height:36px!important;font-size:10px!important;padding:5px 7px!important}}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="同じ体積でヘリウムと水素の正味浮力を比べよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="同じ体積でヘリウムと水素の正味浮力を比べよう。">
 <header class="hdr"><div><span class="badge">r38・動的探究版</span><h1><ruby>気球<rt>ききゅう</rt></ruby>ガス比較・浮力と漏れラボ</h1><div class="sub">気体密度、体積、温度、積載、透過漏れ、安全制約を時間発展で比較する。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>ヘリウム、水素、加熱空気、通常空気の密度差と浮力を比べる模型。</p></div><div><b>どこを見る？</b><p>気体密度、正味浮力、高度、速度、漏れ率、安全分類。</p></div><div><b>何を変える？</b><p>気体、体積、積載、温度、漏れ、膜性能。</p></div><div><b>持ち帰る一文</b><p>最大浮力だけで気体を選べず、漏れ、加熱、可燃性、供給制約を別々に評価する。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> ヘリウムと水素で上昇と漏れはどの程度違うか</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
@@ -162,4 +163,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

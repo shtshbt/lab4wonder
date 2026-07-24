@@ -14,7 +14,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="完全五度を選び、純正比と平均律でうなりがどう変わるか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="完全五度を選び、純正比と平均律でうなりがどう変わるか予想しよう。">
 <header class="hdr"><div><span class="badge">r37・動的探究版</span><h1><ruby>音程<rt>おんてい</rt></ruby>・うなり・<ruby>調律<rt>ちょうりつ</rt></ruby>ラボ</h1><div class="sub">周波数比、調律法、微調整、倍音から音の重なりを調べる。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>二つの周期信号の重なりとうなりを時間波形と倍音で見る模型。</p></div><div><b>どこを見る？</b><p>周波数、うなり、セント差、協和度、倍音の重なり。</p></div><div><b>何を変える？</b><p>基準周波数、比、微調整、調律法、倍音数、減衰。</p></div><div><b>持ち帰る一文</b><p>音程は周波数比で決まり、同じ音名でも調律法により比と倍音の重なりが少し変わる。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 純正比と平均律で、うなりと協和度はどう違うか</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
@@ -170,4 +171,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

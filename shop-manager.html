@@ -16,7 +16,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="価格を標準のまま一段送りし、在庫・レジ列・利益を見よう。次にスタッフだけを増やそう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="価格を標準のまま一段送りし、在庫・レジ列・利益を見よう。次にスタッフだけを増やそう。">
 <header><div><span class="badge">r34・経営・待ち行列・在庫</span><h1>店の流れと<ruby>在庫管理<rt>ざいこかんり</rt></ruby>ラボ</h1><div class="subtitle">来客、需要、在庫、補充遅延、価格、スタッフ、廃棄、機会損失を一日の流れで見る。</div></div><div class="headBtns"><button id="guideBtn">？ガイド</button><button id="speakBtn">🔊読む</button><button id="tourBtn">👣操作</button></div></header>
 <section class="learn"><article><b>これは何？</b><p>商品と客とお金の流れを同時に追う小売店の模型。</p></article><article><b>どこを見る？</b><p>客の動線、棚在庫、レジ列、入荷待ち、売上、利益、廃棄。</p></article><article><b>何を変える？</b><p>価格、スタッフ、発注点、発注量、補充遅延、値引き。</p></article><article><b>持ち帰る一文</b><p>在庫を増やすと欠品は減るが、資金拘束と廃棄が増えうる。</p></article></section>
 <div class="steps"><span><strong>1 予想</strong> 何が変わるか決める</span><span><strong>2 操作</strong> 一つだけ条件を変える</span><span><strong>3 観察</strong> 主図と計器を同期して見る</span><span><strong>4 比較</strong> A/Bで原因を切り分ける</span></div>
@@ -210,4 +211,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

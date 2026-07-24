@@ -17,7 +17,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="介入開始を遅らせたとき、ピークがいつ変わるか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="介入開始を遅らせたとき、ピークがいつ変わるか予想しよう。">
 <header class="hdr"><div><span class="badge">r35・動的探究版</span><h1><ruby>感染拡大<rt>かんせんかくだい</rt></ruby>と制御の時間差ラボ</h1><div class="sub">架空感染症の感染連鎖、潜伏、検査、隔離、容量、介入時期を比較する非予測模型。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>架空の集団内で、感受性、潜伏、感染、隔離、回復が移り変わる過程を追う模型。</p></div><div><b>どこを見る？</b><p>感染経路の数、潜伏者、検査容量超過、ピーク、介入開始から効果までの遅れ。</p></div><div><b>何を変える？</b><p>接触低減、検査容量、隔離効果、事前免疫、介入開始日、検査までの遅れ。</p></div><div><b>持ち帰る一文</b><p>同じ介入強度でも、開始時期と検出・隔離の遅れによってピークは大きく変わる。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 介入開始日を遅らせたとき、ピークが何日後に変わるか予想する</span><span><strong>2 再生</strong> 図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
@@ -177,4 +178,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

@@ -16,7 +16,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta content="optional; compact; explicit-targets; no-auto-advance" name="r66-coach-design"/><style id="r67-spotlight-style">.r67-touch-tip{margin:5px 0 8px;padding:6px 9px;border-radius:10px;background:rgba(255,216,90,.12);border:1px solid rgba(255,216,90,.35);font-size:12px;font-weight:800;color:inherit}.r67-toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));z-index:2147483640;transform:translate(-50%,18px);opacity:0;padding:9px 13px;border-radius:999px;background:#ffd85a;color:#231c00;font-weight:900;box-shadow:0 8px 24px #0008;pointer-events:none;transition:.18s}.r67-toast.show{opacity:1;transform:translate(-50%,0)}</style><meta name="r67-release" content="spotlight-polish"></head><body data-first="上昇流を強くすると、粒は長く浮くのか、それとも成長して早く落ちるのか予想しよう。">
+</style><meta content="optional; compact; explicit-targets; no-auto-advance" name="r66-coach-design"/><style id="r67-spotlight-style">.r67-touch-tip{margin:5px 0 8px;padding:6px 9px;border-radius:10px;background:rgba(255,216,90,.12);border:1px solid rgba(255,216,90,.35);font-size:12px;font-weight:800;color:inherit}.r67-toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));z-index:2147483640;transform:translate(-50%,18px);opacity:0;padding:9px 13px;border-radius:999px;background:#ffd85a;color:#231c00;font-weight:900;box-shadow:0 8px 24px #0008;pointer-events:none;transition:.18s}.r67-toast.show{opacity:1;transform:translate(-50%,0)}</style><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="上昇流を強くすると、粒は長く浮くのか、それとも成長して早く落ちるのか予想しよう。">
 <header class="hdr"><div><span class="badge">r67・直接操作強化 / r55・気象・雲物理</span><h1 id="title"><ruby>雨粒視点<rt>あまつぶしてん</rt></ruby>・雲内成長と落下</h1><div class="sub">雲凝結核から雲粒へ成長し、衝突併合・凍結・落下・蒸発を経て地表へ届くかを雨粒目線で追う。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>凝結</b><p>湿った空気では水蒸気が小さな核へ付き、雲粒が育つ。</p></div><div><b>衝突併合</b><p>大きい粒ほど落下が速く、他の粒を取り込んで成長しやすい。</p></div><div><b>終端速度</b><p>空気抵抗と重力が釣り合う速さ。上昇流より速いと下降する。</p></div><div><b>蒸発・凍結</b><p>乾燥層では小さくなり、氷点より高い場所では氷粒になることがある。</p></div></section><div class="steps"><span class="step"><strong>1 予想</strong> 変える量と結果を予想</span><span class="step"><strong>2 操作</strong> 一つだけ変える</span><span class="step"><strong>3 比較</strong> 条件A/Bを記録</span></div>
 <section class="toolbar"><button class="primary" id="playPause">▶ 再生</button><button id="stepBtn">一段進める</button><select aria-label="再生速度" id="speedSel"><option value="0.5">×0.5</option><option selected="" value="1">×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="scenarioBtn">課題 S1</button></section>
@@ -184,4 +185,47 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script><script id="r67-spotlight-helper">(()=>{if(window.r67Tip)return;window.r67Tip=(canvas,text)=>{const p=document.createElement('div');p.className='r67-touch-tip';p.textContent='👆 '+text;canvas.parentElement?.insertAdjacentElement('afterend',p)};window.r67Toast=(canvas,text)=>{let t=document.getElementById('r67-toast');if(!t){t=document.createElement('div');t.id='r67-toast';t.className='r67-toast';document.body.appendChild(t)}t.textContent='✨ '+text;t.classList.add('show');clearTimeout(window.__r67ToastTimer);window.__r67ToastTimer=setTimeout(()=>t.classList.remove('show'),1200)}})();</script><script id="r67-spotlight-patch">(()=>{const cv=document.getElementById('mainCv');if(!cv)return;cv.addEventListener('pointerdown',()=>{try{for(let i=0;i<10;i++)advance(APP.step);drawAll();r67Toast(cv,'雨粒の時間を10段進めた')}catch(_){for(let i=0;i<10;i++)document.getElementById('stepBtn')?.click()}});r67Tip(cv,'タップ：雨粒の旅を10段進める')})();</script></body></html>
+</script><script id="r67-spotlight-helper">(()=>{if(window.r67Tip)return;window.r67Tip=(canvas,text)=>{const p=document.createElement('div');p.className='r67-touch-tip';p.textContent='👆 '+text;canvas.parentElement?.insertAdjacentElement('afterend',p)};window.r67Toast=(canvas,text)=>{let t=document.getElementById('r67-toast');if(!t){t=document.createElement('div');t.id='r67-toast';t.className='r67-toast';document.body.appendChild(t)}t.textContent='✨ '+text;t.classList.add('show');clearTimeout(window.__r67ToastTimer);window.__r67ToastTimer=setTimeout(()=>t.classList.remove('show'),1200)}})();</script><script id="r67-spotlight-patch">(()=>{const cv=document.getElementById('mainCv');if(!cv)return;cv.addEventListener('pointerdown',()=>{try{for(let i=0;i<10;i++)advance(APP.step);drawAll();r67Toast(cv,'雨粒の時間を10段進めた')}catch(_){for(let i=0;i<10;i++)document.getElementById('stepBtn')?.click()}});r67Tip(cv,'タップ：雨粒の旅を10段進める')})();</script><script src="lab4wonder_v1_1.js"></script>
+<style id="v11-raindrop-style">.v11-rain-tools{display:flex;gap:7px;flex-wrap:wrap;margin:7px 0;padding:9px;border:2px solid #ffd85a;border-radius:13px;background:#14283b}.v11-rain-tools b{flex:1 1 100%;font-size:13px}.v11-rain-tools button{flex:1;min-width:145px}.stage canvas{cursor:pointer;touch-action:none}.r67-touch-tip{display:none!important}</style>
+<script id="v11-raindrop-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv');if(!canvas)return;
+const tools=document.createElement('div');tools.className='v11-rain-tools';
+tools.innerHTML='<b>💧 雨粒のまわりへ直接さわろう</b><button data-rain="merge">💦 小粒をぶつける</button><button data-rain="up">⬆️ 上昇気流を送る</button><button data-rain="down">⬇️ 下降気流を送る</button>';
+canvas.closest('.stage').insertAdjacentElement('afterend',tools);
+let effect='',pulse=0;
+function setValue(id,value){const input=document.getElementById(id);input.value=Math.max(+input.min,Math.min(+input.max,value));input.dispatchEvent(new Event('input',{bubbles:true}))}
+function intervene(kind){
+ effect=kind;pulse=25;
+ if(kind==='merge')state.r=Math.min(125,state.r+14);
+ if(kind==='up')setValue('c1',+document.getElementById('c1').value+1.2);
+ if(kind==='down')setValue('c1',+document.getElementById('c1').value-1.2);
+ for(let i=0;i<4;i++)advance(APP.step);
+ drawAll();
+}
+tools.addEventListener('click',event=>{const button=event.target.closest('[data-rain]');if(button)intervene(button.dataset.rain)});
+canvas.addEventListener('pointerdown',event=>{
+ event.preventDefault();event.stopImmediatePropagation();
+ const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width,y=(event.clientY-r.top)/r.height;
+ intervene(x>.32&&x<.68?'merge':y<.5?'up':'down');
+},{capture:true});
+const originalDraw=drawAll;
+drawAll=function(){
+ originalDraw();
+ const g=canvas.getContext('2d'),dropY=450-state.z/3200*370,stage=state.outcome!=='雲内'?state.outcome:state.r<15?'雲のたね':state.r<35?'雲粒が合体中':state.phase==='氷混合'?'氷と水が混ざる':'雨粒へ成長';
+ g.save();
+ const grad=g.createLinearGradient(0,40,0,480);grad.addColorStop(0,'rgba(55,96,140,.55)');grad.addColorStop(.58,'rgba(28,55,80,.15)');grad.addColorStop(1,'rgba(42,106,56,.4)');g.fillStyle=grad;g.fillRect(0,0,900,520);
+ g.fillStyle='rgba(5,18,30,.88)';g.fillRect(18,65,235,145);g.fillStyle='#fff';g.font='bold 14px system-ui';g.fillText('雨粒の旅',35,90);
+ ['① 雲のたね','② 小粒が合体','③ 雨／雪になる','④ 地面へ届く'].forEach((text,i)=>{g.fillStyle=i===(state.outcome!=='雲内'?3:state.r<15?0:state.r<35?1:2)?'#ffd85a':'#aac5da';g.fillText(text,42,118+i*25)});
+ g.translate(450,dropY);const size=Math.max(32,Math.min(68,state.r*.65));
+ g.fillStyle=state.phase==='氷混合'?'#e9fbff':'#5fd3ff';g.strokeStyle='#fff';g.lineWidth=4;g.beginPath();g.moveTo(0,-size);g.bezierCurveTo(size*.72,-size*.15,size*.75,size*.5,0,size);g.bezierCurveTo(-size*.75,size*.5,-size*.72,-size*.15,0,-size);g.fill();g.stroke();
+ g.fillStyle='#09283a';g.beginPath();g.arc(-size*.2,2,4,0,Math.PI*2);g.arc(size*.2,2,4,0,Math.PI*2);g.fill();
+ g.fillStyle='#fff';g.font='bold 13px system-ui';g.textAlign='center';g.fillText(stage,0,size+24);
+ if(effect==='merge')for(let i=0;i<7;i++){const a=i/7*Math.PI*2;g.fillStyle='#9be7ff';g.beginPath();g.arc(Math.cos(a)*(size+18-pulse),Math.sin(a)*(size+18-pulse),6,0,Math.PI*2);g.fill()}
+ if(pulse>0){g.strokeStyle=effect==='down'?'#ffb15d':'#69e0b0';g.globalAlpha=pulse/25;g.lineWidth=6;g.beginPath();g.arc(0,0,size+38-pulse,0,Math.PI*2);g.stroke();pulse--}
+ g.restore();
+};
+drawAll();
+})();
+</script>
+</body></html>

@@ -12,7 +12,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="分岐数を上げると、後戻りと停止危険がどう変わるか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="分岐数を上げると、後戻りと停止危険がどう変わるか予想しよう。">
 <header class="hdr"><div><span class="badge">r40・動的探究版</span><h1><ruby>正規表現<rt>せいきひょうげん</rt></ruby>テスター・探索経路ラボ</h1><div class="sub">トークン、貪欲性、分岐、入れ子、入力長、予算から一致とバックトラックを追跡する。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>文字列上をパターン状態が進み、候補分岐と後戻りを反復する簡略マッチング模型。</p></div><div><b>どこを見る？</b><p>一致数、走査位置、後戻り、誤検出、停止危険、演算量。</p></div><div><b>何を変える？</b><p>トークン数、貪欲性、分岐数、入れ子深さ、入力長、演算予算。</p></div><div><b>持ち帰る一文</b><p>短いパターンでも分岐と入れ子の組合せは探索経路を急増させ、正しさと実行コストは別に評価する必要がある。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 分岐数を上げると、一致数より後戻りと停止危険がどう変わるか予想する。</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
@@ -157,4 +158,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

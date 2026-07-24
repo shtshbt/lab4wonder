@@ -12,7 +12,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="記憶容量を下げると再訪率が上がるか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="記憶容量を下げると再訪率が上がるか予想しよう。">
 <header class="hdr"><div><span class="badge">r40・動的探究版</span><h1><ruby>迷路<rt>めいろ</rt></ruby>・探索方策ラボ</h1><div class="sub">目標指向、壁沿い、記憶、先読み、ループ、感覚雑音から探索効率を比較する。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>固定迷路を歩くエージェントが、局所手掛かりと訪問記憶を使って出口を探す模型。</p></div><div><b>どこを見る？</b><p>進捗、歩数、再訪率、分岐数、推定残距離、探索量。</p></div><div><b>何を変える？</b><p>目標指向、壁沿い、記憶容量、先読み深さ、ループ率、感覚雑音。</p></div><div><b>持ち帰る一文</b><p>局所的に出口へ近づく選択だけでは、袋小路やループを避けられない。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 記憶容量を下げると再訪率が上がるか予想する。</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
@@ -154,4 +155,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

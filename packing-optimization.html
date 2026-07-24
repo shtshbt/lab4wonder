@@ -16,7 +16,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="自動配置を実行して重心と支持率を確認し、急制動後の破損リスクを比べよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="自動配置を実行して重心と支持率を確認し、急制動後の破損リスクを比べよう。">
 <header><div><span class="badge">r34・幾何・力学・物流</span><h1><ruby>積み付け最適化<rt>つみつけさいてきか</rt></ruby>ラボ</h1><div class="subtitle">形状、重量、壊れやすさ、重心、積載上限、取り出し順を配置と輸送で検証する。</div></div><div class="headBtns"><button id="guideBtn">？ガイド</button><button id="speakBtn">🔊読む</button><button id="tourBtn">👣操作</button></div></header>
 <section class="learn"><article><b>これは何？</b><p>箱の中の配置が容積、重心、支持、破損、取り出しやすさを変える模型。</p></article><article><b>どこを見る？</b><p>荷物配置、重心、左右重量、支持率、破損リスク、取り出し順。</p></article><article><b>何を変える？</b><p>自動配置法、向き、摩擦、緩衝、速度、路面、急制動。</p></article><article><b>持ち帰る一文</b><p>空間を埋めるだけでなく、重い物を低く、壊れ物を支え、先に使う物を取り出せる配置が必要。</p></article></section>
 <div class="steps"><span><strong>1 予想</strong> 何が変わるか決める</span><span><strong>2 操作</strong> 一つだけ条件を変える</span><span><strong>3 観察</strong> 主図と計器を同期して見る</span><span><strong>4 比較</strong> A/Bで原因を切り分ける</span></div>
@@ -218,4 +219,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

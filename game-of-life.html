@@ -14,7 +14,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 a[href="index.html"],a[href="kids-index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="グライダーを一段ずつ進め、同じ形が移動するか見よう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="グライダーを一段ずつ進め、同じ形が移動するか見よう。">
 <header class="hdr"><div><span class="badge">r37・動的探究版</span><h1>ライフゲーム・<ruby>局所規則<rt>きょくしょきそく</rt></ruby>ラボ</h1><div class="sub">誕生と生存の局所規則から移動体、振動、静止、消滅が生まれる。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>二次元セルオートマトンを同時更新する決定論的模型。</p></div><div><b>どこを見る？</b><p>配置、生存数、誕生、死亡、活動量、周期候補。</p></div><div><b>何を変える？</b><p>初期密度、誕生条件、生存条件、摂動数、更新世代数、境界。</p></div><div><b>持ち帰る一文</b><p>単純な局所規則でも、初期条件と境界により長期挙動は大きく変わる。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> グライダーに少数の摂動を加えると、移動は保たれるか</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
@@ -170,4 +171,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

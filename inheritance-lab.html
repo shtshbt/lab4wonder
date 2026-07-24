@@ -10,7 +10,8 @@
 
 .r59-focusable:focus-visible,body :focus-visible{outline:3px solid #ffd85a!important;outline-offset:3px!important}
 @media(max-width:420px){#r59-globalbar{gap:5px;padding:6px}#r59-globalbar a,#r59-globalbar button{min-height:36px!important;font-size:10px!important;padding:5px 7px!important}}
-</style><meta name="r60-explicit-accessibility" content="static-control-labels"><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="両方の親をA/aにして100人を作ろう。">
+</style><meta name="r60-explicit-accessibility" content="static-control-labels"><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="両方の親をA/aにして100人を作ろう。">
 <header class="hdr"><div><span class="badge">r30・遺伝学・動的探究版</span><h1>減数分裂・遺伝と組換えラボ</h1><div class="sub">相同染色体の対合・交差・分離から配偶子形成と受精までを追い、子の分布を繰り返し観察する。</div></div><div class="head-actions"><button id="guideBtn" aria-label="？ ガイド">？ ガイド</button><button id="speakBtn" aria-label="🔊 読む">🔊 読む</button><button id="tourBtn" aria-label="👣 操作">👣 操作</button><button id="resetTop" aria-label="↺ リセット">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>相同染色体の対合・交差・分離から配偶子形成と受精までを追い、子の分布を繰り返し観察する。</p></div><div><b>どこを見る？</b><p>染色体の組合せ、交差位置、4種類の配偶子、子の遺伝子型、期待比と観察比。</p></div><div><b>何を変える？</b><p>父母の遺伝子型、連鎖配置、組換え率、優性の表れ方、試行人数。</p></div><div><b>持ち帰る一文</b><p data-takeaway="">遺伝は一人の結果を決め打ちする規則ではなく、配偶子形成と受精の確率が集団の分布を作る。</p></div></section>
 <section class="toolbar" data-tour="controls"><button class="primary" id="playPause" aria-label="▶ 減数分裂を再生">▶ 減数分裂を再生</button><button id="stepBtn" aria-label="1段階">1段階</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option selected="" value="1">×1</option><option value="3">×3</option><option value="8">×8</option></select><button id="childBtn" aria-label="子を1人つくる">子を1人つくる</button><button id="batchBtn" aria-label="100人">100人</button><button id="scenarioBtn" aria-label="別の遺伝問題">別の遺伝問題</button></section>
@@ -72,7 +73,7 @@ let zoom=false;q('#zoomToggle').addEventListener('click',()=>{zoom=!zoom;q('#zoo
  function conditions(){return Object.fromEntries(controls().map(x=>[x.id,String(x.value)]))}
  function signature(){let s=(window.r49ScenarioIndex||0)*71;controls().forEach((x,i)=>{const z=String(x.value);let h=0;for(let j=0;j<z.length;j++)h=(h*33+z.charCodeAt(j))%997;s=(s+h*(i+3))%997});return s%997}
  function overlay(cv,label,color){const x=cv.getContext('2d'),w=cv.width,h=cv.height,sig=signature(),p=(Math.floor(tick*23)+sig)%101;x.save();x.setTransform(1,0,0,1,0,0);const bh=Math.max(38,Math.round(h*.08)),pad=Math.max(10,Math.round(w*.018));x.fillStyle='rgba(5,13,24,.9)';x.fillRect(0,h-bh,w,bh);x.font=`${Math.max(12,Math.round(w/72))}px system-ui`;x.fillStyle='#d8e5f4';x.fillText(`${label}  u=${tick.toFixed(1)}  S${(window.r49ScenarioIndex||0)+1}  C${String(sig).padStart(3,'0')}`,pad,h-bh+17);x.fillStyle='#20364e';x.fillRect(pad,h-13,w-pad*2,7);x.fillStyle=color;x.fillRect(pad,h-13,Math.max(8,(w-pad*2)*p/100),7);x.restore()}
- function paint(){if(q('r49TickMetric'))q('r49TickMetric').textContent=tick.toFixed(1);if(q('r49SigMetric'))q('r49SigMetric').textContent=String(signature()).padStart(3,'0');overlay(main,'主Canvas','#ffd85a');overlay(second,'同期定量Canvas','#55d6be')}
+ function paint(){if(q('r49TickMetric'))q('r49TickMetric').textContent=tick.toFixed(1);if(q('r49SigMetric'))q('r49SigMetric').textContent=String(signature()).padStart(3,'0');}
  function resetSeed(){window.r49SetSeed(base+(window.r49ScenarioIndex||0)*7919);tick=0;manualUpdates=0}
  const originalReset=window.resetSimulation;window.resetSimulation=()=>{resetSeed();const r=originalReset&&originalReset();requestAnimationFrame(paint);return r};
  resetBtn?.addEventListener('click',resetSeed,true);
@@ -209,4 +210,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

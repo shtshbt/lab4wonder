@@ -16,7 +16,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 a[href="index.html"],a[href="kids-index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta content="optional; compact; explicit-targets; no-auto-advance" name="r66-coach-design"/><style id="r67-spotlight-style">.r67-touch-tip{margin:5px 0 8px;padding:6px 9px;border-radius:10px;background:rgba(255,216,90,.12);border:1px solid rgba(255,216,90,.35);font-size:12px;font-weight:800;color:inherit}.r67-toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));z-index:2147483640;transform:translate(-50%,18px);opacity:0;padding:9px 13px;border-radius:999px;background:#ffd85a;color:#231c00;font-weight:900;box-shadow:0 8px 24px #0008;pointer-events:none;transition:.18s}.r67-toast.show{opacity:1;transform:translate(-50%,0)}</style><meta content="spotlight-polish" name="r67-release"/></head><body data-first="反応強度だけを上げ、同期までの時間が短くなるか予想しよう。">
+</style><meta content="optional; compact; explicit-targets; no-auto-advance" name="r66-coach-design"/><style id="r67-spotlight-style">.r67-touch-tip{margin:5px 0 8px;padding:6px 9px;border-radius:10px;background:rgba(255,216,90,.12);border:1px solid rgba(255,216,90,.35);font-size:12px;font-weight:800;color:inherit}.r67-toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));z-index:2147483640;transform:translate(-50%,18px);opacity:0;padding:9px 13px;border-radius:999px;background:#ffd85a;color:#231c00;font-weight:900;box-shadow:0 8px 24px #0008;pointer-events:none;transition:.18s}.r67-toast.show{opacity:1;transform:translate(-50%,0)}</style><meta content="spotlight-polish" name="r67-release"/><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="反応強度だけを上げ、同期までの時間が短くなるか予想しよう。">
 <header class="hdr"><div><span class="badge">r67・直接操作強化 / r32・生態・複雑系・動的探究版</span><h1>ホタル・局所視野・集団同期ラボ</h1><div class="sub">各ホタルが近くで見えた発光にだけ反応する局所ルールから、群れ全体の周期的な一斉発光が生まれる。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetTop">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>各ホタルが近くで見えた発光にだけ反応する局所ルールから、群れ全体の周期的な一斉発光が生まれる。</p></div><div><b>どこを見る？</b><p>個体の移動と発光、見える関係、同時発光率と同期度の履歴。</p></div><div><b>何を変える？</b><p>個体数、見える距離、反応強度、周期ばらつき、移動、障害物。</p></div><div><b>持ち帰る一文</b><p data-takeaway="">全体同期には指揮者が不要で、局所的な相互作用ネットワークが十分につながれば秩序が自己組織化する。</p></div></section>
 <section class="toolbar" data-tour="controls"><button class="primary" id="playPause">▶ 再生</button><button id="stepBtn">1秒</button><select aria-label="再生速度" id="speedSel"><option value="0.5">×0.5</option><option value="1">×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="obstacleBtn">木を置く</button><button id="pulseBtn">一斉刺激</button><button id="scenarioBtn">別の群れ</button></section>
@@ -204,4 +205,52 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script><script id="r67-spotlight-helper">(()=>{if(window.r67Tip)return;window.r67Tip=(canvas,text)=>{const p=document.createElement('div');p.className='r67-touch-tip';p.textContent='👆 '+text;canvas.parentElement?.insertAdjacentElement('afterend',p)};window.r67Toast=(canvas,text)=>{let t=document.getElementById('r67-toast');if(!t){t=document.createElement('div');t.id='r67-toast';t.className='r67-toast';document.body.appendChild(t)}t.textContent='✨ '+text;t.classList.add('show');clearTimeout(window.__r67ToastTimer);window.__r67ToastTimer=setTimeout(()=>t.classList.remove('show'),1200)}})();</script><script id="r67-spotlight-patch">(()=>{const cv=document.getElementById('mainCv'),hit=cv?.closest('.stage')||cv;if(!cv||!hit)return;hit.style.touchAction='none';hit.addEventListener('pointerdown',e=>{const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*cv.width,y=(e.clientY-r.top)/r.height*cv.height;let n=0;try{flies.forEach(f=>{if(Math.hypot(f.x-x,f.y-y)<145){f.ph=.98;f.flash=.25;n++}});draw();r67Toast(cv,`${n}匹へ光を送った`)}catch(_){document.getElementById('pulseBtn')?.click();r67Toast(cv,'群れへ光を送った')}},{capture:true});r67Tip(cv,'画面をタップ：近くのホタルへ光を送る')})();</script></body></html>
+</script><script id="r67-spotlight-helper">(()=>{if(window.r67Tip)return;window.r67Tip=(canvas,text)=>{const p=document.createElement('div');p.className='r67-touch-tip';p.textContent='👆 '+text;canvas.parentElement?.insertAdjacentElement('afterend',p)};window.r67Toast=(canvas,text)=>{let t=document.getElementById('r67-toast');if(!t){t=document.createElement('div');t.id='r67-toast';t.className='r67-toast';document.body.appendChild(t)}t.textContent='✨ '+text;t.classList.add('show');clearTimeout(window.__r67ToastTimer);window.__r67ToastTimer=setTimeout(()=>t.classList.remove('show'),1200)}})();</script><script id="r67-spotlight-patch">(()=>{const cv=document.getElementById('mainCv'),hit=cv?.closest('.stage')||cv;if(!cv||!hit)return;hit.style.touchAction='none';hit.addEventListener('pointerdown',e=>{const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*cv.width,y=(e.clientY-r.top)/r.height*cv.height;let n=0;try{flies.forEach(f=>{if(Math.hypot(f.x-x,f.y-y)<145){f.ph=.98;f.flash=.25;n++}});draw();r67Toast(cv,`${n}匹へ光を送った`)}catch(_){document.getElementById('pulseBtn')?.click();r67Toast(cv,'群れへ光を送った')}});r67Tip(cv,'画面をタップ：近くのホタルへ光を送る')})();</script>
+<script id="biology-interaction-v1">
+(()=>{
+  const canvas=document.getElementById('mainCv');
+  if(!canvas)return;
+  const style=document.createElement('style');
+  style.textContent='.bio-tools{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}.bio-tools button{flex:1 1 115px}.bio-tools button.on{background:#ffe45f;color:#211b00}.bio-mission{padding:9px 11px;border:1px solid #ffe45f77;border-radius:12px;background:#142237;font-size:12px;line-height:1.65}.bio-key{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}.bio-key span{padding:3px 7px;border-radius:999px;background:#091522}';
+  document.head.append(style);
+  const panel=document.createElement('div');
+  panel.innerHTML='<div class="bio-tools" role="toolbar" aria-label="夜の森の道具"><button data-tool="tree" class="on">🌳 木を置く</button><button data-tool="move">☝️ 木を動かす</button><button data-tool="erase">🪓 木を消す</button><button data-tool="light">✨ 光を送る</button></div><div class="bio-mission"><b>光の波をデザイン：</b>森へ木を置き、ドラッグで移動しよう。木は光を遮る。ホタルの群れを二つに分けた後、木を消して同期の波がつながるか試そう。<div class="bio-key"><span>黄い光＝今まさに発光</span><span>青い輪＝見える距離</span><span>木の影＝光が届かない</span><span>同期＝同じタイミングで光ること</span></div></div>';
+  canvas.closest('.stage').insertAdjacentElement('afterend',panel);
+  let tool='tree',dragTree=null;
+  panel.querySelectorAll('[data-tool]').forEach(button=>button.onclick=()=>{tool=button.dataset.tool;panel.querySelectorAll('[data-tool]').forEach(b=>b.classList.toggle('on',b===button))});
+  const baseDraw=draw;
+  function fireflyShape(f){
+    c.save();c.translate(f.x,f.y);c.rotate(Math.atan2(f.vy,f.vx));
+    c.fillStyle='#151c20';c.beginPath();c.ellipse(0,0,6,3,0,0,Math.PI*2);c.fill();
+    c.fillStyle='rgba(185,225,238,.48)';c.beginPath();c.ellipse(-1,-4,5,2,-.35,0,Math.PI*2);c.ellipse(-1,4,5,2,.35,0,Math.PI*2);c.fill();
+    c.fillStyle=f.flash>0?'#fff57a':'#b49d45';c.shadowColor='#fff35c';c.shadowBlur=f.flash>0?18:0;c.beginPath();c.arc(5,0,f.flash>0?4.8:2.4,0,Math.PI*2);c.fill();c.restore();
+  }
+  draw=function(){
+    baseDraw();c.save();
+    for(const tr of trees){
+      c.fillStyle='#392719';c.fillRect(tr.x-tr.r*.14,tr.y-tr.r*.05,tr.r*.28,tr.r*1.15);
+      const grad=c.createRadialGradient(tr.x-tr.r*.2,tr.y-tr.r*.25,5,tr.x,tr.y,tr.r*1.05);grad.addColorStop(0,'#397b42');grad.addColorStop(1,'#12361e');
+      c.fillStyle=grad;for(let i=0;i<6;i++){const a=i/6*Math.PI*2;c.beginPath();c.arc(tr.x+Math.cos(a)*tr.r*.45,tr.y+Math.sin(a)*tr.r*.35,tr.r*.55,0,Math.PI*2);c.fill()}
+      c.fillStyle='rgba(0,0,0,.22)';c.beginPath();c.ellipse(tr.x,tr.y+tr.r*.65,tr.r*1.15,tr.r*.35,0,0,Math.PI*2);c.fill();
+    }
+    flies.forEach(fireflyShape);
+    c.fillStyle='#ffffffdd';c.font='bold 13px system-ui';c.fillText(`木 ${trees.length}本　同期 ${Math.round(stats().R*100)}%`,700,30);
+    if(trees.length>=2&&stats().R>.75){c.fillStyle='#9af2ae';c.fillText('★ 森を越えて光がそろった！',650,52)}
+    c.restore();
+  };
+  function point(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*canvas.width,y:(e.clientY-r.top)/r.height*canvas.height}}
+  function nearest(p){return trees.reduce((best,tr)=>!best||Math.hypot(tr.x-p.x,tr.y-p.y)<Math.hypot(best.x-p.x,best.y-p.y)?tr:best,null)}
+  canvas.addEventListener('pointerdown',e=>{
+    if(e.button!==undefined&&e.button!==0)return;e.preventDefault();e.stopImmediatePropagation();const p=point(e);
+    if(tool==='tree'){trees.push({x:p.x,y:p.y,r:42});r67Toast(canvas,'ここに木を植えた。光が遮られる')}
+    if(tool==='erase'){const tr=nearest(p);if(tr&&Math.hypot(tr.x-p.x,tr.y-p.y)<tr.r*1.5)trees.splice(trees.indexOf(tr),1)}
+    if(tool==='move'){dragTree=nearest(p);if(dragTree&&Math.hypot(dragTree.x-p.x,dragTree.y-p.y)<dragTree.r*1.8)canvas.setPointerCapture?.(e.pointerId);else dragTree=null}
+    if(tool==='light'){let n=0;flies.forEach(f=>{if(Math.hypot(f.x-p.x,f.y-p.y)<150){f.ph=.99;f.flash=.28;n++}});r67Toast(canvas,`${n}匹へ光を送った`)}
+    running=true;document.getElementById('playPause').textContent='⏸ 一時停止';draw();
+  },{capture:true});
+  canvas.addEventListener('pointermove',e=>{if(!dragTree||!canvas.hasPointerCapture?.(e.pointerId))return;e.preventDefault();e.stopImmediatePropagation();const p=point(e);dragTree.x=p.x;dragTree.y=p.y;draw()},{capture:true});
+  canvas.addEventListener('pointerup',()=>{dragTree=null},{capture:true});
+  draw();
+})();
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

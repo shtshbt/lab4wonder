@@ -14,7 +14,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="日付線を東西どちらへ越えると日付を足すか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="日付線を東西どちらへ越えると日付を足すか予想しよう。">
 <header class="hdr"><div><span class="badge">r36・動的探究版</span><h1><ruby>地球<rt>ちきゅう</rt></ruby>・<ruby>時差<rt>じさ</rt></ruby>・<ruby>日付線<rt>ひづけせん</rt></ruby></h1><div class="sub">自転、経度、季節、太陽高度、日付変更線、東西移動を一つの時間軸で結ぶ。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>同じ絶対時刻を地球上の地方時、昼夜、暦日へ変換する模型。</p></div><div><b>どこを見る？</b><p>昼夜境界、都市時刻、太陽高度、移動位置、日付補正。</p></div><div><b>何を変える？</b><p>UTC時刻、季節日、地軸傾き、移動時間、東西方向、移動速度。</p></div><div><b>持ち帰る一文</b><p>時差は時計のずれではなく、地球の自転と経度から生じ、日付線では暦日の補正も必要になる。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 東京からボストンへ東回りと西回りで移動すると、日付補正はどちら向きになるか</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
@@ -170,4 +171,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

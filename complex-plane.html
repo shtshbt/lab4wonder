@@ -7,7 +7,8 @@
 
 .r59-focusable:focus-visible,body :focus-visible{outline:3px solid #ffd85a!important;outline-offset:3px!important}
 @media(max-width:420px){#r59-globalbar{gap:5px;padding:6px}#r59-globalbar a,#r59-globalbar button{min-height:36px!important;font-size:10px!important;padding:5px 7px!important}}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="演算を乗法にし、絶対値1・偏角90°の複素数を繰り返し掛けると点がどう動くか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="演算を乗法にし、絶対値1・偏角90°の複素数を繰り返し掛けると点がどう動くか予想しよう。">
 <header class="hdr"><div><span class="badge">r56・数学・複素数</span><h1 id="title"><ruby>複素数平面<rt>ふくそすうへいめん</rt></ruby>・回転と拡大</h1><div class="sub">複素数の加法と乗法を、平面上の移動、回転、拡大、絶対値、偏角の変化として追う。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>実部と虚部</b><p>横軸が実部、縦軸が虚部。複素数は平面上の一点として表せる。</p></div><div><b>絶対値と偏角</b><p>原点からの距離が絶対値、正の実軸からの角度が偏角。</p></div><div><b>乗法</b><p>絶対値を掛け、偏角を足す。回転と拡大が同時に起こる。</p></div><div><b>加法</b><p>矢印を平行移動してつなぎ、実部と虚部をそれぞれ足す。</p></div></section><div class="steps"><span class="step"><strong>1 予想</strong> 変える量と結果を予想</span><span class="step"><strong>2 操作</strong> 一つだけ変える</span><span class="step"><strong>3 比較</strong> 条件A/Bを記録</span></div>
 <section class="toolbar"><button id="playPause" class="primary">▶ 再生</button><button id="stepBtn">一段進める</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="scenarioBtn">課題 S1</button></section>
@@ -186,4 +187,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

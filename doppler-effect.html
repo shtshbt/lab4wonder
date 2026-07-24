@@ -7,7 +7,8 @@
 
 .r59-focusable:focus-visible,body :focus-visible{outline:3px solid #ffd85a!important;outline-offset:3px!important}
 @media(max-width:420px){#r59-globalbar{gap:5px;padding:6px}#r59-globalbar a,#r59-globalbar button{min-height:36px!important;font-size:10px!important;padding:5px 7px!important}}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="音源速度だけを正から負へ変え、観測周波数が発信周波数の上下どちらへ動くか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="音源速度だけを正から負へ変え、観測周波数が発信周波数の上下どちらへ動くか予想しよう。">
 <header class="hdr"><div><span class="badge">r57・物理・波動</span><h1 id="title">Doppler<ruby>効果<rt>こうか</rt></ruby>・<ruby>波面<rt>はめん</rt></ruby>ラボ</h1><div class="sub">音源と観測者の速度、周波数、音速から、波面の圧縮・伸長と観測周波数の変化を調べる。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>接近</b><p>音源が観測者へ近づくと前方の波面間隔が狭くなり、観測周波数が高くなる。</p></div><div><b>遠ざかる</b><p>後方では波面間隔が広がり、観測周波数が低くなる。</p></div><div><b>観測者の運動</b><p>観測者自身が波面へ近づく場合も、単位時間に受け取る波面数が増える。</p></div><div><b>限界速度</b><p>音源速度が音速へ近づくと単純式の分母が小さくなり、衝撃波領域では別の扱いが必要。</p></div></section><div class="steps"><span class="step"><strong>1 予想</strong> 変える量と結果を予想</span><span class="step"><strong>2 操作</strong> 一つだけ変える</span><span class="step"><strong>3 比較</strong> 条件A/Bを記録</span></div>
 <section class="toolbar"><button id="playPause" class="primary">▶ 再生</button><button id="stepBtn">一段進める</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="scenarioBtn">課題 S1</button></section>
@@ -184,4 +185,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

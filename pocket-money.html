@@ -17,7 +17,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="4週間後に目標用と予備費のどちらが足りなくなるか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="4週間後に目標用と予備費のどちらが足りなくなるか予想しよう。">
 <header class="hdr"><div><span class="badge">r35・動的探究版</span><h1><ruby>お小遣い<rt>おこづかい</rt></ruby>・買い物意思決定ラボ</h1><div class="sub">今使う、目標へ回す、予備費を持つという可逆・不可逆の選択を4週間で比較する。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>収入、予定外出費、任意の買い物、目標購入を、残高と時間の流れとして追う模型。</p></div><div><b>どこを見る？</b><p>予備費が予定外出費をどこまで吸収し、目標到達日と任意支出がどう交換関係になるか。</p></div><div><b>何を変える？</b><p>週の収入、目標額、目標へ回す割合、予備費、任意支出上限、待つ日数。</p></div><div><b>持ち帰る一文</b><p>同じ収入でも、配分、待ち時間、予備費によって選べる余地と不足リスクが変わる。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 4週間後に目標と予備費のどちらが不足するか予想する</span><span><strong>2 再生</strong> 図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
@@ -179,4 +180,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

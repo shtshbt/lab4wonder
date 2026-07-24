@@ -16,7 +16,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="流入を固定して一段送りし、各方向の待ち行列を見よう。次に青時間だけを変えよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="流入を固定して一段送りし、各方向の待ち行列を見よう。次に青時間だけを変えよう。">
 <header><div><span class="badge">r34・交通工学・待ち行列</span><h1>交差点<ruby>交通制御<rt>こうつうせいぎょ</rt></ruby>ラボ</h1><div class="subtitle">信号現示が車、歩行者、緊急車両の滞留と通過量をどう変えるか追跡する。</div></div><div class="headBtns"><button id="guideBtn">？ガイド</button><button id="speakBtn">🔊読む</button><button id="tourBtn">👣操作</button></div></header>
 <section class="learn"><article><b>これは何？</b><p>流入と処理能力の釣り合いを、信号付き交差点で見る模型。</p></article><article><b>どこを見る？</b><p>各方向の待ち行列、現示、通過量、平均待ち、歩行者待ち。</p></article><article><b>何を変える？</b><p>周期、青時間配分、右左折、歩行者、需要、感応制御。</p></article><article><b>持ち帰る一文</b><p>青信号を増やすと一方向は改善するが、他方向の待ち時間を増やしうる。</p></article></section>
 <div class="steps"><span><strong>1 予想</strong> 何が変わるか決める</span><span><strong>2 操作</strong> 一つだけ条件を変える</span><span><strong>3 観察</strong> 主図と計器を同期して見る</span><span><strong>4 比較</strong> A/Bで原因を切り分ける</span></div>
@@ -217,4 +218,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

@@ -15,7 +15,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="地表温度を上げると、遠方物体から来る光線は地面側へ曲がるか、上空側へ曲がるか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="地表温度を上げると、遠方物体から来る光線は地面側へ曲がるか、上空側へ曲がるか予想しよう。">
 <header class="hdr"><div><span class="badge">r55・光学・大気</span><h1 id="title"><ruby>蜃気楼<rt>しんきろう</rt></ruby>・屈折率勾配ラボ</h1><div class="sub">地表と上空の温度差が空気の屈折率勾配を作り、光線を連続的に曲げて見かけの像を変える。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>温度と密度</b><p>暖かい空気は密度が低く、屈折率もわずかに小さい。</p></div><div><b>連続屈折</b><p>層ごとの小さな屈折が積み重なり、光線は曲線になる。</p></div><div><b>下位蜃気楼</b><p>熱い地表付近で光線が上向きに曲がり、空の反転像が水面のように見える。</p></div><div><b>上位蜃気楼</b><p>逆転層では遠方の像が持ち上がったり伸びたりする。</p></div></section><div class="steps"><span class="step"><strong>1 予想</strong> 変える量と結果を予想</span><span class="step"><strong>2 操作</strong> 一つだけ変える</span><span class="step"><strong>3 比較</strong> 条件A/Bを記録</span></div>
 <section class="toolbar"><button id="playPause" class="primary">▶ 再生</button><button id="stepBtn">一段進める</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="scenarioBtn">課題 S1</button></section>
@@ -185,4 +186,41 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+<style id="v11-mirage-style">.v11-mirage-tip{margin:7px 0;padding:9px 11px;border:2px solid #ffd85a;border-radius:13px;background:#17283b;font-size:13px;font-weight:850}.v11-mirage-key{display:flex;gap:6px;flex-wrap:wrap}.v11-mirage-key span{padding:4px 8px;border-radius:999px;background:#213950}.stage canvas{cursor:crosshair;touch-action:none}</style>
+<script id="v11-mirage-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv');if(!canvas)return;
+const tip=document.createElement('div');tip.className='v11-mirage-tip';
+tip.innerHTML='👆 直接操作：左の目を上下ドラッグ／右のバスを左右ドラッグ／地面をタップして熱くする／空気層をタップして温度を変える<div class="v11-mirage-key"><span>🟡 本物の光</span><span>🚌 本物</span><span>🫧 見かけの像</span></div>';
+canvas.closest('.stage').insertAdjacentElement('afterend',tip);
+let start=null,pulse=0,changed='地面';
+function setInput(id,value){const input=document.getElementById(id);input.value=Math.max(+input.min,Math.min(+input.max,value));input.dispatchEvent(new Event('input',{bubbles:true}))}
+canvas.addEventListener('pointerdown',event=>{event.preventDefault();event.stopImmediatePropagation();const r=canvas.getBoundingClientRect();start={x:(event.clientX-r.left)/r.width,y:(event.clientY-r.top)/r.height};try{canvas.setPointerCapture?.(event.pointerId)}catch(_){}},{capture:true});
+canvas.addEventListener('pointerup',event=>{
+ if(!start)return;event.preventDefault();event.stopImmediatePropagation();
+ const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width,y=(event.clientY-r.top)/r.height,dx=x-start.x,dy=y-start.y;
+ if(start.x<.28){setInput('c4',.5+(1-y)*4.5);changed='観察者の目'}
+ else if(start.x>.68&&Math.abs(dx)>.03){setInput('c5',50+x*950);changed='遠くのバス'}
+ else if(start.y>.63){setInput('c1',+document.getElementById('c1').value+(x<.5?-6:6));changed=x<.5?'地面を冷却':'地面を加熱'}
+ else{setInput('c2',-20+(1-y)*60);setInput('c3',.5+(1-y)*19.5);changed='空気の温度層'}
+ pulse=28;for(let i=0;i<3;i++)advance(APP.step);drawAll();start=null;
+},{capture:true});
+const originalDraw=drawAll;
+drawAll=function(){
+ originalDraw();
+ const g=canvas.getContext('2d'),e=compute().extra,observerY=350-e.obs*35,objectX=660+Math.min(170,e.D/1000*170);
+ g.save();
+ const air=g.createLinearGradient(0,110,0,350);air.addColorStop(0,'rgba(40,105,178,.05)');air.addColorStop(1,e.tg>e.ta?'rgba(255,77,35,.34)':'rgba(90,190,255,.3)');g.fillStyle=air;g.fillRect(0,100,900,250);
+ for(let y=285;y<350;y+=14){g.strokeStyle=e.tg>e.ta?'rgba(255,221,105,.75)':'rgba(120,220,255,.75)';g.lineWidth=3;g.beginPath();for(let x=20;x<880;x+=18){const py=y+Math.sin(x*.045+state.time*2)*4;x===20?g.moveTo(x,py):g.lineTo(x,py)}g.stroke()}
+ g.fillStyle='#081522dd';g.fillRect(18,18,300,63);g.fillStyle='#fff';g.font='bold 14px system-ui';g.fillText(`地面 ${e.tg}℃　上空 ${e.ta}℃`,32,43);g.fillStyle='#ffd85a';g.fillText(`${e.kind}：${changed}を動かした`,32,67);
+ g.strokeStyle='#fff';g.lineWidth=5;g.beginPath();g.arc(100,observerY-13,13,0,Math.PI*2);g.moveTo(100,observerY);g.lineTo(100,observerY+48);g.moveTo(100,observerY+14);g.lineTo(75,observerY+30);g.moveTo(100,observerY+14);g.lineTo(125,observerY+30);g.stroke();g.fillStyle='#fff';g.fillText('見る人 ↕',48,observerY+72);
+ g.fillStyle='#ff553f';g.strokeStyle='#fff';g.lineWidth=3;g.fillRect(objectX-35,278,70,50);g.strokeRect(objectX-35,278,70,50);g.fillStyle='#11243a';g.beginPath();g.arc(objectX-22,332,10,0,Math.PI*2);g.arc(objectX+22,332,10,0,Math.PI*2);g.fill();g.fillStyle='#fff';g.fillText('本物のバス ↔',objectX-55,270);
+ if(e.kind!=='ほぼ通常'){g.save();g.globalAlpha=.72;g.fillStyle='#56dcff';g.strokeStyle='#d7fbff';g.setLineDash([6,4]);g.fillRect(objectX-35,365,70,35);g.strokeRect(objectX-35,365,70,35);g.setLineDash([]);g.fillStyle='#d7fbff';g.fillText('見かけの像',objectX-45,418);g.restore()}
+ if(pulse>0){g.strokeStyle='#ffd85a';g.globalAlpha=pulse/28;g.lineWidth=7;g.strokeRect(9+pulse,9+pulse,882-pulse*2,502-pulse*2);pulse--}
+ g.restore();
+};
+drawAll();
+})();
+</script>
+</body></html>

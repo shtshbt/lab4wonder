@@ -14,7 +14,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="「動物界」や「植物界」のカードをタップして、枝を一段ずつ降りよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="右側の生きものカードをタップして、選んだ系統を2本に分けよう。">
 <header class="hdr"><div><span class="badge">r32・進化・分類・動的探究版</span><h1>分類樹・形質進化・不確実性ラボ</h1><div class="sub">系統が分岐し、形質が獲得・喪失・収斂する過程を動かし、現生種の分類根拠を検討する。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetTop">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>系統が分岐し、形質が獲得・喪失・収斂する過程を動かし、現生種の分類根拠を検討する。</p></div><div><b>どこを見る？</b><p>分岐樹、形質の色マーク、形質行列、欠測と収斂による曖昧さ。</p></div><div><b>何を変える？</b><p>分岐率、形質変化、形質喪失、収斂、欠測情報。</p></div><div><b>持ち帰る一文</b><p data-takeaway>分類は見た目の似ている一形質ではなく、複数形質がどの祖先から共有されたかという仮説である。</p></div></section>
 
@@ -40,9 +41,9 @@ body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px
 </script><script>
 const $=id=>document.getElementById(id),cv=$('mainCv'),c=cv.getContext('2d'),gv=$('graphCv'),g=gv.getContext('2d');let running=false,last=performance.now(),speed=1,time=0,nodes=[],mission=null;const traits=['羽','殻','泳膜','角','発光','長い尾'];
 function par(){return{br:+$('branch').value/100,mut:+$('mut').value/100,loss:+$('loss').value/100,conv:+$('conv').value/100,miss:+$('missing').value/100}}
-function reset(){r48SetSeed(480503+(window.r48ScenarioIndex||0)*7919);time=0;nodes=[{id:0,parent:-1,t:0,y:.5,traits:[],alive:true,name:'祖先'}];mission=null;running=false;$('playPause').textContent='▶ 進化を再生';draw()}window.resetSimulation=reset;
+function reset(){r48SetSeed(480503+(window.r48ScenarioIndex||0)*7919);time=1;nodes=[{id:0,parent:-1,t:0,y:.5,traits:[],alive:false,name:'共通祖先'},{id:1,parent:0,t:1,y:.32,traits:['殻'],alive:true,name:'殻の系統'},{id:2,parent:0,t:1,y:.68,traits:['羽'],alive:true,name:'羽の系統'}];mission=null;if(typeof selectedLineage!=='undefined')selectedLineage=null;running=false;$('playPause').textContent='▶ 進化を再生';draw()}window.resetSimulation=reset;
 function tips(){return nodes.filter(n=>n.alive)}
-function evolveOne(){const p=par(),cand=tips();if(!cand.length)return;const a=cand[Math.floor(r48Rand()*cand.length)];a.alive=false;for(let j=0;j<2;j++){let tr=[...a.traits];if(r48Rand()<p.mut){const x=traits[Math.floor(r48Rand()*traits.length)];if(!tr.includes(x))tr.push(x)}if(tr.length&&r48Rand()<p.loss)tr.splice(Math.floor(r48Rand()*tr.length),1);if(r48Rand()<p.conv){const used=nodes.flatMap(n=>n.traits);if(used.length){const x=used[Math.floor(r48Rand()*used.length)];if(!tr.includes(x))tr.push(x)}}nodes.push({id:nodes.length,parent:a.id,t:time+1,y:0,traits:tr,alive:true,name:'種'+String.fromCharCode(65+nodes.length%26)})}layout();time+=1}
+function evolveOne(target=null){const p=par(),cand=tips();if(!cand.length)return;const a=target&&cand.includes(target)?target:cand[Math.floor(r48Rand()*cand.length)];a.alive=false;for(let j=0;j<2;j++){let tr=[...a.traits];if(r48Rand()<p.mut){const x=traits[Math.floor(r48Rand()*traits.length)];if(!tr.includes(x))tr.push(x)}if(tr.length&&r48Rand()<p.loss)tr.splice(Math.floor(r48Rand()*tr.length),1);if(r48Rand()<p.conv){const used=nodes.flatMap(n=>n.traits);if(used.length){const x=used[Math.floor(r48Rand()*used.length)];if(!tr.includes(x))tr.push(x)}}nodes.push({id:nodes.length,parent:a.id,t:time+1,y:0,traits:tr,alive:true,name:'系統'+String.fromCharCode(65+nodes.length%26)})}layout();time+=1}
 function layout(){const ts=tips().sort((a,b)=>a.id-b.id);ts.forEach((n,i)=>n.y=(i+1)/(ts.length+1));for(let k=0;k<8;k++)for(const n of nodes.filter(n=>!n.alive)){const ch=nodes.filter(q=>q.parent===n.id);if(ch.length)n.y=ch.reduce((s,q)=>s+q.y,0)/ch.length}}
 function step(dt){if(r48Rand()<dt*(.35+par().br*1.4)&&tips().length<12)evolveOne();time+=dt*.2}
 function draw(){const p=par();c.clearRect(0,0,900,590);c.fillStyle='#07111d';c.fillRect(0,0,900,590);const maxT=Math.max(1,...nodes.map(n=>n.t)),x=n=>70+n.t/maxT*700,y=n=>55+n.y*470;for(const n of nodes){if(n.parent<0)continue;const pa=nodes[n.parent];c.strokeStyle='#7094b2';c.lineWidth=3;c.beginPath();c.moveTo(x(pa),y(pa));c.lineTo(x(n),y(pa));c.lineTo(x(n),y(n));c.stroke()}for(const n of nodes){c.fillStyle=n.alive?'#ffd85a':'#80a0b8';c.beginPath();c.arc(x(n),y(n),n.alive?7:4,0,6.28);c.fill();if(n.alive){c.fillStyle='#fff';c.font='12px system-ui';c.fillText(n.name,x(n)+10,y(n)-5);n.traits.forEach((tr,i)=>{c.fillStyle=['#7fd5ff','#ff9a79','#9ae6a7','#d0a8ff','#ffe27a','#f2b98a'][traits.indexOf(tr)];c.fillRect(x(n)+10+i*12,y(n)+4,9,9)})}}
@@ -50,6 +51,43 @@ function draw(){const p=par();c.clearRect(0,0,900,590);c.fillStyle='#07111d';c.f
 for(const n of tips()){const bx=x(n),by=y(n),ghosts=1+Math.floor(p.br*3);c.strokeStyle=`rgba(255,216,90,${.10+.22*p.br})`;c.lineWidth=1+2*p.br;for(let j=0;j<ghosts;j++){const dy=(j-(ghosts-1)/2)*(14+10*p.br);c.beginPath();c.moveTo(bx+7,by);c.quadraticCurveTo(bx+28+20*p.br,by+dy*.25,bx+58+35*p.br,by+dy);c.stroke()}const sparks=Math.floor(p.mut*5);for(let j=0;j<sparks;j++){c.fillStyle=['#7fd5ff','#ff9a79','#9ae6a7','#d0a8ff','#ffe27a'][j%5];c.fillRect(bx-10+j*6,by-18-8*p.mut,4,4)}const losses=Math.floor(p.loss*4);c.strokeStyle=`rgba(255,130,130,${.2+.55*p.loss})`;for(let j=0;j<losses;j++){const yy=by+18+j*5;c.beginPath();c.moveTo(bx-8,yy);c.lineTo(bx+8,yy);c.stroke()}}
 c.fillStyle='#fff';c.font='bold 16px system-ui';c.fillText('時間 →',770,565);$('tipsM').textContent=tips().length;$('nodesM').textContent=Math.max(0,(nodes.length-1)/2|0);const conv=traits.reduce((s,tr)=>{const holders=tips().filter(n=>n.traits.includes(tr));return s+(holders.length>1?1:0)},0);$('convM').textContent=conv;$('uncM').textContent=Math.round(p.miss*traits.length*tips().length);$('stateText').textContent=p.conv>.6?'収斂が多く、似た形質が別々の枝で独立に現れます。単一形質で分類しないようにしよう。':p.loss>.6?'形質喪失が多く、祖先が持っていた形質が子孫で見えない場合があります。':'複数の共有形質と分岐位置を組み合わせて分類しよう。';$('mission').textContent=mission?mission.text:'「分類ミッション」で、形質表から最も近い2種を探そう。';drawMatrix()}
 function drawMatrix(){g.clearRect(0,0,900,340);g.fillStyle='#09131f';g.fillRect(0,0,900,340);const ts=tips().slice(0,10),p=par();g.fillStyle='#fff';g.font='12px system-ui';traits.forEach((tr,j)=>g.fillText(tr,150+j*95,24));ts.forEach((n,i)=>{const yy=55+i*26;g.fillStyle='#fff';g.fillText(n.name,35,yy);traits.forEach((tr,j)=>{const hidden=((n.id*17+j*13)%100)<p.miss*100,val=n.traits.includes(tr);g.fillStyle=hidden?'#718096':val?'#80e6a0':'#26384a';g.fillRect(145+j*95,yy-13,18,18);g.fillStyle='#fff';if(hidden)g.fillText('?',150+j*95,yy+1)})});if(mission){g.fillStyle='#ffd85a';g.fillText('候補を系統樹で確認：同じ祖先から近く分岐するか？',600,315)}}
+const lifeLooks={
+  '羽':['🐦','羽のある系統'],
+  '殻':['🐢','殻のある系統'],
+  '泳膜':['🐸','泳膜のある系統'],
+  '角':['🦌','角のある系統'],
+  '発光':['🪼','光る系統'],
+  '長い尾':['🦎','長い尾の系統'],
+};
+function lifeLook(node){for(let i=node.traits.length-1;i>=0;i--){if(lifeLooks[node.traits[i]])return lifeLooks[node.traits[i]]}return node.parent<0?['🦠','すべての共通祖先']:['🐟','祖先型の系統']}
+let selectedLineage=null;
+const baseTaxonomyDraw=draw;
+draw=()=>{
+  baseTaxonomyDraw();
+  const maxT=Math.max(1,...nodes.map(node=>node.t)),x=node=>Math.min(690,70+node.t/maxT*700),y=node=>75+node.y*430;
+  c.save();
+  for(const node of tips()){
+    const [icon,label]=lifeLook(node),px=x(node),py=y(node),selected=node===selectedLineage;
+    c.fillStyle=selected?'rgba(255,216,90,.24)':'rgba(9,25,39,.88)';
+    c.strokeStyle=selected?'#ffd85a':'#557692';c.lineWidth=selected?4:2;
+    c.beginPath();c.roundRect(px-18,py-31,198,60,14);c.fill();c.stroke();
+    c.font='34px system-ui';c.fillText(icon,px-8,py+12);
+    c.fillStyle='#fff';c.font='bold 14px system-ui';c.fillText(label,px+38,py-5);
+    c.fillStyle='#b9cede';c.font='11px system-ui';c.fillText(node.traits.length?node.traits.join('・'):'まだ新しい形質なし',px+38,py+14);
+  }
+  c.fillStyle='rgba(5,16,27,.94)';c.fillRect(16,8,868,52);
+  c.font='bold 14px system-ui';c.fillStyle='#fff';c.fillText(selectedLineage?'選んだ系統が2本に分かれた！ 次はどちらを進化させる？':'右側の生きものカードをタップ → その枝から2つの系統が生まれる',28,30);
+  c.font='11px system-ui';
+  traits.forEach((trait,index)=>{c.fillStyle=['#7fd5ff','#ff9a79','#9ae6a7','#d0a8ff','#ffe27a','#f2b98a'][index];c.fillRect(28+index*110,40,9,9);c.fillStyle='#d9e7f3';c.fillText(trait,42+index*110,49)});
+  c.restore();
+};
+function taxonomyPoint(event){const rect=cv.getBoundingClientRect();return{x:(event.clientX-rect.left)*cv.width/rect.width,y:(event.clientY-rect.top)*cv.height/rect.height}}
+cv.addEventListener('pointerdown',event=>{
+  const point=taxonomyPoint(event),maxT=Math.max(1,...nodes.map(node=>node.t)),x=node=>Math.min(690,70+node.t/maxT*700),y=node=>75+node.y*430;
+  const candidates=tips().map(node=>({node,distance:Math.hypot(point.x-x(node),point.y-y(node))})).sort((a,b)=>a.distance-b.distance);
+  if(!candidates.length||candidates[0].distance>95)return;
+  selectedLineage=candidates[0].node;evolveOne(selectedLineage);draw();
+});
 function newMission(){const ts=tips();if(ts.length<4){$('mission').textContent='まず分岐を4回以上進めよう。';return}let best=null,bscore=-1;for(let i=0;i<ts.length;i++)for(let j=i+1;j<ts.length;j++){const sc=ts[i].traits.filter(t=>ts[j].traits.includes(t)).length;if(sc>bscore){bscore=sc;best=[ts[i],ts[j]]}}mission={text:`課題：共通形質が多い2種を探し、系統樹上でも近いか確認しよう。答え候補は ${best[0].name} と ${best[1].name}（共通${bscore}形質）。`};draw()}
 function bind(id,out){$(id).oninput=e=>{$(out).textContent=e.target.value+'%';draw()};$(id).dispatchEvent(new Event('input'))}['branch','mut','loss','conv','missing'].forEach(id=>bind(id,{branch:'branchOut',mut:'mutOut',loss:'lossOut',conv:'convOut',missing:'missOut'}[id]));$('playPause').onclick=()=>{running=!running;$('playPause').textContent=running?'⏸ 一時停止':'▶ 進化を再生'};$('stepBtn').onclick=()=>{evolveOne();draw()};$('speedSel').onchange=e=>speed=+e.target.value;$('missionBtn').onclick=newMission;$('scenarioBtn').onclick=()=>{['branch','mut','loss','conv','missing'].forEach(id=>{$(id).value=Math.round(r48Rand()*80+10);$(id).dispatchEvent(new Event('input'))});reset()};function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(running)step(dt*speed);draw();requestAnimationFrame(loop)}reset();requestAnimationFrame(loop);window.getSnapshot=()=>({分岐率:$('branchOut').textContent,形質変化:$('mutOut').textContent,喪失:$('lossOut').textContent,収斂:$('convOut').textContent,欠測:$('missOut').textContent,現生種:$('tipsM').textContent,分岐:$('nodesM').textContent,独立獲得:$('convM').textContent,不確実:$('uncM').textContent});
 </script><script>
@@ -76,7 +114,7 @@ let zoom=false;q('#zoomToggle').addEventListener('click',()=>{zoom=!zoom;q('#zoo
  function conditions(){return Object.fromEntries(controls().map(x=>[x.id,String(x.value)]))}
  function signature(){let s=(window.r48ScenarioIndex||0)*71;controls().forEach((x,i)=>{const z=String(x.value);let h=0;for(let j=0;j<z.length;j++)h=(h*33+z.charCodeAt(j))%997;s=(s+h*(i+3))%997});return s%997}
  function overlay(cv,label,color){const x=cv.getContext('2d'),w=cv.width,h=cv.height,sig=signature(),p=(Math.floor(tick*23)+sig)%101;x.save();x.setTransform(1,0,0,1,0,0);const bh=Math.max(38,Math.round(h*.08)),pad=Math.max(10,Math.round(w*.018));x.fillStyle='rgba(5,13,24,.9)';x.fillRect(0,h-bh,w,bh);x.font=`${Math.max(12,Math.round(w/72))}px system-ui`;x.fillStyle='#d8e5f4';x.fillText(`${label}  u=${tick.toFixed(1)}  S${(window.r48ScenarioIndex||0)+1}  C${String(sig).padStart(3,'0')}`,pad,h-bh+17);x.fillStyle='#20364e';x.fillRect(pad,h-13,w-pad*2,7);x.fillStyle=color;x.fillRect(pad,h-13,Math.max(8,(w-pad*2)*p/100),7);x.restore()}
- function paint(){q('r48TickMetric').textContent=tick.toFixed(1);q('r48SigMetric').textContent=String(signature()).padStart(3,'0');overlay(main,'主Canvas','#ffd85a');overlay(second,'同期定量Canvas','#55d6be')}
+ function paint(){q('r48TickMetric').textContent=tick.toFixed(1);q('r48SigMetric').textContent=String(signature()).padStart(3,'0');}
  function resetSeed(){window.r48SetSeed(base+(window.r48ScenarioIndex||0)*7919);tick=0;manualUpdates=0}
  const originalReset=window.resetSimulation;window.resetSimulation=()=>{resetSeed();const r=originalReset&&originalReset();requestAnimationFrame(paint);return r};
  resetBtn?.addEventListener('click',resetSeed,true);
@@ -213,4 +251,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

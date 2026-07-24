@@ -14,7 +14,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="音の往復を一段送りし、距離と往復時間から速度が出る流れを見よう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="音の往復を一段送りし、距離と往復時間から速度が出る流れを見よう。">
 <header class="hdr"><div><h1><ruby>音速<rt>おんそく</rt></ruby>・<ruby>光速<rt>こうそく</rt></ruby>を<ruby>測<rt>はか</rt></ruby>った<ruby>方法<rt>ほうほう</rt></ruby>ラボ</h1><div class="sub">信号の往復時間から速度を求め、距離、時間分解能、ランダム雑音、系統誤差が測定へどう効くか調べる。</div></div><span class="badge">物理・測定</span></header>
 <section class="learn"><div><b>これは何？</b><p>既知の距離を進む信号の時間を測り、速度＝距離÷時間で推定する模型。</p></div><div><b>どこを見る？</b><p>往復パルス、測定値のばらつき、平均、真値との差、不確かさ。</p></div><div><b>何を変える？</b><p>実験法、距離、時間分解能、系統誤差、雑音、気温。</p></div><div><b>模型の限界</b><p>装置の詳細、分散、相対論、大気屈折、実際の安全手順を省略。概念学習専用。</p></div></section>
 <div class="toolbar"><button id="playBtn" class="primary">▶ 再生</button><button id="stepBtn">一段送り</button><button id="resetBtn">↻ リセット</button><button id="speedBtn">速度 1×</button></div>
@@ -172,4 +173,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

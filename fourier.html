@@ -8,7 +8,8 @@
 
 .r59-focusable:focus-visible,body :focus-visible{outline:3px solid #ffd85a!important;outline-offset:3px!important}
 @media(max-width:420px){#r59-globalbar{gap:5px;padding:6px}#r59-globalbar a,#r59-globalbar button{min-height:36px!important;font-size:10px!important;padding:5px 7px!important}}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="方形波の成分数を増やすと角の飛び出しが消えるか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="方形波の成分数を増やすと角の飛び出しが消えるか予想しよう。">
 <header class="hdr"><div><span class="badge">r36・動的探究版</span><h1><ruby>フーリエ<rt>ふーりえ</rt></ruby><ruby>再構成<rt>さいこうせい</rt></ruby>ラボ</h1><div class="sub">正弦波の振幅、位相、カットオフ、フィルタが時間波形と誤差を変える。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>複雑な信号を周波数成分へ分け、有限個の成分から再構成する模型。</p></div><div><b>どこを見る？</b><p>目標波形、再構成波形、スペクトル、RMSE、最大誤差、エネルギー。</p></div><div><b>何を変える？</b><p>成分数、カットオフ、位相ずれ、雑音、窓、フィルタ。</p></div><div><b>持ち帰る一文</b><p>時間波形と周波数成分は同じ情報の異なる見方で、成分を削ると細部と急変が失われる。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 方形波の成分数を増やしたとき、不連続点の最大オーバーシュートはゼロになるか</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
@@ -163,4 +164,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

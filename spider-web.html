@@ -16,7 +16,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="同じ糸強度でらせん密度だけを増やし、捕獲確率・残り糸・最大張力を比べよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="同じ糸強度でらせん密度だけを増やし、捕獲確率・残り糸・最大張力を比べよう。">
 <header class="hdr"><div><span class="badge">r33・生態・構造・動的探究版</span><h1>クモの巣・建設・振動伝達ラボ</h1><div class="sub">枠糸、放射糸、粘着らせんを順に張り、材料・風荷重・振動伝達・捕獲性能の交換条件を調べる。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetTop">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>枠糸、放射糸、粘着らせんを順に張り、材料・風荷重・振動伝達・捕獲性能の交換条件を調べる。</p></div><div><b>どこを見る？</b><p>建設工程、糸の張力、獲物の振動波、破損、材料配分、捕獲確率。</p></div><div><b>何を変える？</b><p>放射糸数、らせん密度、糸の強さ、粘着性、風、獲物、突風。</p></div><div><b>持ち帰る一文</b><p data-takeaway="">巣の形は装飾ではなく、振動を中心へ伝える骨格と獲物を止める捕獲面を、限られた糸で両立させる設計である。</p></div></section>
 <section class="toolbar" data-tour="controls"><button class="primary" id="playPause">▶ 建設</button><button id="stepBtn">1工程</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option selected="" value="1">×1</option><option value="3">×3</option><option value="8">×8</option></select><button id="preyBtn">獲物を落とす</button><button id="gustBtn">突風</button><button id="scenarioBtn">別の枠</button></section>
@@ -39,15 +40,54 @@ body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px
 })();
 </script><script>
 const $=id=>document.getElementById(id),cv=$('mainCv'),c=cv.getContext('2d'),gv=$('graphCv'),g=gv.getContext('2d');
-let phase=0,progress=0,running=false,last=performance.now(),speed=1,prey=null,gust=0,damage=[],hist=[],modelTime=0;
+let phase=0,progress=0,running=false,last=performance.now(),speed=1,prey=null,gust=0,damage=[],hist=[],modelTime=0,customStrands=[],lastOutcome='巣をつくり、画面をタップして獲物を落とそう';
 function par(){return{rad:+$('radial').value,spir:+$('spiral').value,silk:+$('silk').value/100,sticky:+$('sticky').value/100,wind:+$('wind').value/100}}
 const center={x:455,y:305};
-function reset(){modelTime=0;phase=0;progress=0;prey=null;gust=0;damage=[];hist=[];running=false;$('playPause').textContent='▶ 建設';draw()}window.resetSimulation=reset;
+function reset(){modelTime=0;phase=0;progress=0;prey=null;gust=0;damage=[];hist=[];customStrands=[];lastOutcome='巣をつくり、画面をタップして獲物を落とそう';running=false;$('playPause').textContent='▶ 建設';draw()}window.resetSimulation=reset;
 function framePoints(){return[{x:110,y:95},{x:790,y:100},{x:835,y:500},{x:90,y:510}]}
 function step(dt){const p=par();modelTime+=dt;progress=Math.min(1,progress+dt*.035*(1.2+p.silk));if(progress<.18)phase=0;else if(progress<.55)phase=1;else phase=2;gust=Math.max(0,gust-dt*.18);const wind=p.wind+gust;if(wind>.75&&progress>.35&&r49Rand()<dt*(wind-.72)*.4){damage.push({a:r49Rand()*6.28,r:.35+r49Rand()*.6});if(damage.length>12)damage.shift()}if(prey){prey.t+=dt;prey.amp*=Math.pow(.985-.008*p.sticky,dt*20);prey.x+=prey.vx*dt;prey.y+=prey.vy*dt;const d=Math.hypot(prey.x-center.x,prey.y-center.y);const captured=progress>.65&&d<310&&p.sticky>.18;if(captured){prey.vx*=.92;prey.vy*=.92;prey.amp=Math.max(prey.amp,.2+p.sticky*.6)}else prey.vy+=dt*20;if(prey.y>580||prey.t>18)prey=null}const st=stats();if(!hist.length||modelTime-hist.at(-1).wall>.18){hist.push({wall:modelTime,amp:prey?prey.amp:0,tension:st.tension,build:progress});if(hist.length>220)hist.shift()}}
-function stats(){const p=par(),frame=620,rad=p.rad*310,spir=p.spir*2*Math.PI*170,total=frame+rad+spir,used=progress*total,budget=11600*p.silk,tension=(p.wind+gust)*(1+p.spir/24)*(1.2-p.silk*.5),capture=Math.max(0,Math.min(1,progress*(.25+.6*p.sticky)*(.55+.45*Math.min(1,p.spir/18))*(1-Math.max(0,tension-1)*.35)));return{total,used,budget,tension,capture}}
+function stats(){const p=par(),frame=620,rad=p.rad*310,spir=p.spir*2*Math.PI*170,total=frame+rad+spir+customStrands.length*170,used=progress*(frame+rad+spir)+customStrands.length*170,budget=11600*p.silk,tension=(p.wind+gust)*(1+p.spir/24)*(1.2-p.silk*.5),reinforce=Math.min(.18,customStrands.length*.03),capture=Math.max(0,Math.min(1,progress*(.25+.6*p.sticky)*(.55+.45*Math.min(1,p.spir/18))*(1-Math.max(0,tension-1)*.35)+reinforce));return{total,used,budget,tension,capture}}
 function draw(){const p=par(),st=stats(),pts=framePoints();c.clearRect(0,0,900,590);c.fillStyle='#07101a';c.fillRect(0,0,900,590);c.strokeStyle='#25435b';c.lineWidth=7;c.beginPath();c.moveTo(pts[0].x,pts[0].y);pts.slice(1).forEach(q=>c.lineTo(q.x,q.y));c.closePath();c.stroke();c.strokeStyle='rgba(210,235,255,.72)';c.lineWidth=2;if(progress>0){const n=Math.min(4,Math.ceil(progress/.045));c.beginPath();for(let i=0;i<n;i++){const a=pts[i],b=pts[(i+1)%4];c.moveTo(a.x,a.y);c.lineTo(b.x,b.y)}c.stroke()}const rprog=Math.max(0,Math.min(1,(progress-.18)/.37)),sprog=Math.max(0,Math.min(1,(progress-.55)/.45));for(let i=0;i<Math.floor(p.rad*rprog);i++){const a=i/p.rad*6.28,rx=330,ry=205,x=center.x+Math.cos(a)*rx,y=center.y+Math.sin(a)*ry;c.strokeStyle='rgba(220,240,255,.66)';c.beginPath();c.moveTo(center.x,center.y);c.lineTo(x,y);c.stroke()}if(sprog>0){c.strokeStyle='rgba(240,245,255,.72)';c.lineWidth=1.5;c.beginPath();const turns=p.spir*sprog,steps=Math.max(20,turns*35);for(let i=0;i<=steps;i++){const a=i/steps*turns*6.28,r=8+i/steps*300,x=center.x+Math.cos(a)*r,y=center.y+Math.sin(a)*r*.64;i?c.lineTo(x,y):c.moveTo(x,y)}c.stroke()}for(const d of damage){const x=center.x+Math.cos(d.a)*d.r*300,y=center.y+Math.sin(d.a)*d.r*190;c.strokeStyle='#ff7474';c.lineWidth=4;c.beginPath();c.moveTo(x-8,y-8);c.lineTo(x+8,y+8);c.moveTo(x+8,y-8);c.lineTo(x-8,y+8);c.stroke()}if(prey){const a=prey.amp*Math.sin(prey.t*16);c.strokeStyle='rgba(255,215,90,.45)';for(let j=0;j<4;j++){c.beginPath();c.arc(prey.x,prey.y,15+j*12+Math.abs(a)*8,0,6.28);c.stroke()}c.fillStyle='#ffad62';c.beginPath();c.arc(prey.x,prey.y,9,0,6.28);c.fill()}c.fillStyle='#c0d9ee';c.beginPath();c.arc(center.x,center.y,7,0,6.28);c.fill();c.fillStyle='#fff';c.font='bold 16px system-ui';c.fillText('枠糸 → 放射糸 → 粘着らせん',24,30);c.font='12px system-ui';c.fillStyle='#cfe9ff';c.fillText('建設工程と振動伝達を同じ巣で観察する',24,51);$('buildM').textContent=(progress*100).toFixed(0)+'%';$('silkM').textContent=Math.max(0,st.budget-st.used).toFixed(0);$('tensionM').textContent=st.tension.toFixed(2);$('captureM').textContent=(st.capture*100).toFixed(0)+'%';let msg=st.used>st.budget?'材料不足です。放射糸やらせん密度を下げる必要があります。':st.tension>1.2?'風荷重が糸の強さを超え、切断が起きやすいです。':progress<.55?'骨格となる枠糸と放射糸を建設中です。':prey?'振動が放射糸を通って中心へ伝わります。':'粘着らせんを張り、捕獲面を増やしています。';$('stateText').textContent=msg;$('explain').textContent='放射糸は振動伝達、らせん密度と粘着性は捕獲、糸の強さは材料量と耐荷重、風は全体の張力と破損を変えます。';drawGraph(st)}
 function drawGraph(st){g.clearRect(0,0,900,330);g.fillStyle='#09131f';g.fillRect(0,0,900,330);if(hist.length>1){const t0=hist[0].wall,t1=hist.at(-1).wall,xx=v=>45+(v-t0)/Math.max(1,t1-t0)*500;function line(get,max,col){g.strokeStyle=col;g.lineWidth=3;g.beginPath();hist.forEach((h,i)=>{const x=xx(h.wall),y=270-Math.min(max,get(h))/max*210;i?g.lineTo(x,y):g.moveTo(x,y)});g.stroke()}line(h=>h.amp,1,'#ffe36a');line(h=>h.tension,2,'#ff8b7c');line(h=>h.build,1,'#7fd5ff')}g.fillStyle='#ffe36a';g.fillText('振動',45,24);g.fillStyle='#ff8b7c';g.fillText('張力',95,24);g.fillStyle='#7fd5ff';g.fillText('完成度',145,24);const p=par(),frame=620,rad=p.rad*310,spir=p.spir*2*Math.PI*170,total=frame+rad+spir;const arr=[['枠糸',frame,'#8fcdf7'],['放射糸',rad,'#a9e9c2'],['らせん糸',spir,'#ffe36a']];arr.forEach((q,i)=>{const y=75+i*65;g.fillStyle='#17283a';g.fillRect(620,y,220,24);g.fillStyle=q[2];g.fillRect(620,y,220*q[1]/total,24);g.fillStyle='#fff';g.fillText(`${q[0]} ${(q[1]/total*100).toFixed(0)}%`,620,y-7)})}
+const baseDraw=draw;
+draw=()=>{
+  if(prey&&!prey.result&&prey.t>1.15){
+    const st=stats(),inside=Math.hypot(prey.x-center.x,(prey.y-center.y)/.64)<305;
+    prey.result=inside&&st.capture>=.46?'caught':'escaped';
+    lastOutcome=prey.result==='caught'?'つかまえた！ 振動が中心のクモまで届いた':'逃げた！ 糸の密度・粘り・張り方を変えて再挑戦';
+  }
+  baseDraw();
+  c.save();
+  c.lineCap='round';
+  customStrands.forEach((strand,index)=>{
+    c.strokeStyle=index===customStrands.length-1?'#72e7ff':'rgba(139,224,245,.72)';
+    c.lineWidth=index===customStrands.length-1?4:2.4;
+    c.beginPath();c.moveTo(strand.x1,strand.y1);c.lineTo(strand.x2,strand.y2);c.stroke();
+  });
+  c.fillStyle='#161116';c.beginPath();c.arc(center.x,center.y,12,0,Math.PI*2);c.fill();
+  c.strokeStyle='#d7c2a0';c.lineWidth=3;
+  for(let i=0;i<8;i++){const a=i/8*Math.PI*2;c.beginPath();c.moveTo(center.x+Math.cos(a)*8,center.y+Math.sin(a)*8);c.lineTo(center.x+Math.cos(a)*22,center.y+Math.sin(a)*16);c.stroke()}
+  c.fillStyle=lastOutcome.startsWith('つかまえた')?'rgba(24,91,57,.94)':lastOutcome.startsWith('逃げた')?'rgba(112,43,43,.94)':'rgba(9,24,38,.94)';
+  c.fillRect(20,10,860,48);c.fillStyle='#fff';c.font='bold 15px system-ui';c.fillText(lastOutcome,36,39);
+  c.restore();
+};
+function canvasPoint(event){const rect=cv.getBoundingClientRect();return{x:(event.clientX-rect.left)*cv.width/rect.width,y:(event.clientY-rect.top)*cv.height/rect.height}}
+let webPointer=null;
+cv.addEventListener('pointerdown',event=>{webPointer=canvasPoint(event);cv.setPointerCapture?.(event.pointerId)});
+cv.addEventListener('pointerup',event=>{
+  if(!webPointer)return;
+  const end=canvasPoint(event),distance=Math.hypot(end.x-webPointer.x,end.y-webPointer.y);
+  if(distance>38){
+    customStrands.push({x1:webPointer.x,y1:webPointer.y,x2:end.x,y2:end.y});
+    if(customStrands.length>6)customStrands.shift();
+    progress=Math.max(progress,.68);
+    lastOutcome='補強糸を張った！ 次は巣をタップして獲物を落とそう';
+  }else{
+    prey={x:end.x,y:end.y,vx:0,vy:5,amp:1,t:0,result:null};
+    lastOutcome=progress<.55?'まだ巣が未完成。ドラッグで糸を張って助けよう':'判定中… 黄色い波が中心へ届くか見よう';
+  }
+  webPointer=null;draw();
+});
 function bind(id,out,fmt=v=>v){$(id).oninput=e=>{$(out).textContent=fmt(+e.target.value);draw()};$(id).dispatchEvent(new Event('input'))}bind('radial','radialOut',v=>v+'本');bind('spiral','spiralOut',v=>v+'周');bind('silk','silkOut',v=>v+'%');bind('sticky','stickyOut',v=>v+'%');bind('wind','windOut',v=>v+'%');$('playPause').onclick=()=>{running=!running;$('playPause').textContent=running?'⏸ 一時停止':'▶ 建設'};$('stepBtn').onclick=()=>{step(2);draw()};$('speedSel').onchange=e=>speed=+e.target.value;$('preyBtn').onclick=()=>prey={x:160+r49Rand()*580,y:100+r49Rand()*320,vx:(r49Rand()-.5)*30,vy:10,amp:1,t:0};$('gustBtn').onclick=()=>gust=1;$('scenarioBtn').onclick=()=>{for(const id of ['radial','spiral','silk','sticky','wind']){const el=$(id);el.value=Math.round(+el.min+r49Rand()*(+el.max-+el.min));el.dispatchEvent(new Event('input'))}reset()};function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(running)step(dt*speed);draw();requestAnimationFrame(loop)}reset();requestAnimationFrame(loop);window.getSnapshot=()=>({放射糸:$('radialOut').textContent,らせん:$('spiralOut').textContent,糸強度:$('silkOut').textContent,粘着:$('stickyOut').textContent,風:$('windOut').textContent,完成:$('buildM').textContent,残糸:$('silkM').textContent,張力:$('tensionM').textContent,捕獲:$('captureM').textContent});
 </script><script>
 (()=>{const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];const guide=q('#guideBack'),tray=q('#trayBack'),zoomBack=q('#zoomBack');q('#guideBtn').addEventListener('click',()=>guide.classList.add('show'));q('#guideClose').addEventListener('click',()=>guide.classList.remove('show'));guide.addEventListener('click',e=>{if(e.target===guide)guide.classList.remove('show')});q('#trayOpen').addEventListener('click',()=>tray.classList.add('show'));q('#trayClose').addEventListener('click',()=>tray.classList.remove('show'));tray.addEventListener('click',e=>{if(e.target===tray)tray.classList.remove('show')});q('#resetTop').addEventListener('click',()=>window.resetSimulation&&window.resetSimulation());q('#speakBtn').addEventListener('click',()=>{if(!('speechSynthesis'in window))return; speechSynthesis.cancel();const t=new SpeechSynthesisUtterance(q('h1').innerText+'。'+q('[data-takeaway]').innerText);t.lang='ja-JP';speechSynthesis.speak(t)});
@@ -74,7 +114,7 @@ let zoom=false;q('#zoomToggle').addEventListener('click',()=>{zoom=!zoom;q('#zoo
  function conditions(){return Object.fromEntries(controls().map(x=>[x.id,String(x.value)]))}
  function signature(){let s=(window.r49ScenarioIndex||0)*71;controls().forEach((x,i)=>{const z=String(x.value);let h=0;for(let j=0;j<z.length;j++)h=(h*33+z.charCodeAt(j))%997;s=(s+h*(i+3))%997});return s%997}
  function overlay(cv,label,color){const x=cv.getContext('2d'),w=cv.width,h=cv.height,sig=signature(),p=(Math.floor(tick*23)+sig)%101;x.save();x.setTransform(1,0,0,1,0,0);const bh=Math.max(38,Math.round(h*.08)),pad=Math.max(10,Math.round(w*.018));x.fillStyle='rgba(5,13,24,.9)';x.fillRect(0,h-bh,w,bh);x.font=`${Math.max(12,Math.round(w/72))}px system-ui`;x.fillStyle='#d8e5f4';x.fillText(`${label}  u=${tick.toFixed(1)}  S${(window.r49ScenarioIndex||0)+1}  C${String(sig).padStart(3,'0')}`,pad,h-bh+17);x.fillStyle='#20364e';x.fillRect(pad,h-13,w-pad*2,7);x.fillStyle=color;x.fillRect(pad,h-13,Math.max(8,(w-pad*2)*p/100),7);x.restore()}
- function paint(){if(q('r49TickMetric'))q('r49TickMetric').textContent=tick.toFixed(1);if(q('r49SigMetric'))q('r49SigMetric').textContent=String(signature()).padStart(3,'0');overlay(main,'主Canvas','#ffd85a');overlay(second,'同期定量Canvas','#55d6be')}
+ function paint(){if(q('r49TickMetric'))q('r49TickMetric').textContent=tick.toFixed(1);if(q('r49SigMetric'))q('r49SigMetric').textContent=String(signature()).padStart(3,'0');}
  function resetSeed(){window.r49SetSeed(base+(window.r49ScenarioIndex||0)*7919);tick=0;manualUpdates=0}
  const originalReset=window.resetSimulation;window.resetSimulation=()=>{resetSeed();const r=originalReset&&originalReset();requestAnimationFrame(paint);return r};
  resetBtn?.addEventListener('click',resetSeed,true);
@@ -214,4 +254,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

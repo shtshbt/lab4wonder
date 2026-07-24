@@ -7,7 +7,8 @@
 
 .r59-focusable:focus-visible,body :focus-visible{outline:3px solid #ffd85a!important;outline-offset:3px!important}
 @media(max-width:420px){#r59-globalbar{gap:5px;padding:6px}#r59-globalbar a,#r59-globalbar button{min-height:36px!important;font-size:10px!important;padding:5px 7px!important}}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="載荷速度だけを上げると、最初の破壊までの時間と地震回数がどう変わるか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="載荷速度だけを上げると、最初の破壊までの時間と地震回数がどう変わるか予想しよう。">
 <header class="hdr"><div><span class="badge">r56・地学・断層</span><h1 id="title"><ruby>断層<rt>だんそう</rt></ruby>stick-slip・地震発生</h1><div class="sub">断層面の固着、応力蓄積、静止摩擦破壊、動摩擦滑り、地震波、散逸をばねブロック模型で追う。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>固着</b><p>断層がすぐ動かず、プレート運動による弾性変形と応力を蓄える段階。</p></div><div><b>破壊条件</b><p>せん断応力が静止摩擦の限界を超えると滑りが始まる。</p></div><div><b>stick-slip</b><p>滑り始めると摩擦が低下し、急速な変位とエネルギー解放が起きる。</p></div><div><b>余震・波形</b><p>不均一な応力再配分により小さな再滑りが起こる。ここでは単純化した波形だけを示す。</p></div></section><div class="steps"><span class="step"><strong>1 予想</strong> 変える量と結果を予想</span><span class="step"><strong>2 操作</strong> 一つだけ変える</span><span class="step"><strong>3 比較</strong> 条件A/Bを記録</span></div>
 <section class="toolbar"><button id="playPause" class="primary">▶ 再生</button><button id="stepBtn">一段進める</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="scenarioBtn">課題 S1</button></section>
@@ -186,4 +187,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

@@ -13,7 +13,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="温度だけを高くし、上位候補の確率と分布の広がりがどう変わるか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="温度だけを高くし、上位候補の確率と分布の広がりがどう変わるか予想しよう。">
 <header class="hdr"><div><span class="badge">r57・AI・言語模型</span><h1 id="title"><ruby>小型<rt>こがた</rt></ruby>Transformer・<ruby>次トークン予測<rt>つぎとーくんよそく</rt></ruby></h1><div class="sub">小語彙の教育模型で、文脈、注意重み、層更新、温度、次トークン確率がどう結び付くかを見る。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>トークン</b><p>文章を処理しやすい単位へ分けたもの。単語と完全には一致しない。</p></div><div><b>注意機構</b><p>現在の予測に関係する過去トークンへ重みを割り当て、情報を混ぜる。</p></div><div><b>温度</b><p>確率分布を鋭くしたり平らにしたりする。知識量そのものは増えない。</p></div><div><b>次トークン予測</b><p>候補の確率から一つを選び、生成したトークンを次の文脈へ加える。</p></div></section><div class="steps"><span class="step"><strong>1 予想</strong> 変える量と結果を予想</span><span class="step"><strong>2 操作</strong> 一つだけ変える</span><span class="step"><strong>3 比較</strong> 条件A/Bを記録</span></div>
 <section class="toolbar"><button id="playPause" class="primary">▶ 再生</button><button id="stepBtn">一段進める</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="scenarioBtn">課題 S1</button></section>
@@ -193,4 +194,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

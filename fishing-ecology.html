@@ -11,7 +11,8 @@
 
 .r59-focusable:focus-visible,body :focus-visible{outline:3px solid #ffd85a!important;outline-offset:3px!important}
 @media(max-width:420px){#r59-globalbar{gap:5px;padding:6px}#r59-globalbar a,#r59-globalbar button{min-height:36px!important;font-size:10px!important;padding:5px 7px!important}}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="漁獲を増やしたあと、親魚と加入のどちらが先に減るか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="漁獲を増やしたあと、親魚と加入のどちらが先に減るか予想しよう。">
 <header class="hdr"><div><span class="badge">r35・動的探究版</span><h1>魚の<ruby>生態<rt>せいたい</rt></ruby>と持続可能な釣りラボ</h1><div class="sub">個体の成長と移動、親魚、加入、選択的漁獲、生息地の遅れをつなぐ。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>魚一匹ずつの大きさと場所を動かし、集団の増減と漁獲を同時に追う模型。</p></div><div><b>どこを見る？</b><p>親魚が減ってから加入が減るまでの遅れ、小型魚の漁獲、保護域への分布。</p></div><div><b>何を変える？</b><p>漁獲努力、最小サイズ、保護域、水温、禁漁月、生息地の質。</p></div><div><b>持ち帰る一文</b><p>今日の漁獲量だけでなく、次の季節に加入を生む親魚と成育場を残す必要がある。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 漁獲を増やした後、個体数より先に変わる指標を予想する</span><span><strong>2 再生</strong> 図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
@@ -169,4 +170,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

@@ -6,7 +6,8 @@
 
 .r59-focusable:focus-visible,body :focus-visible{outline:3px solid #ffd85a!important;outline-offset:3px!important}
 @media(max-width:420px){#r59-globalbar{gap:5px;padding:6px}#r59-globalbar a,#r59-globalbar button{min-height:36px!important;font-size:10px!important;padding:5px 7px!important}}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="右ローター初期位置を変えると、最初の暗号文がどう変わるか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="右ローター初期位置を変えると、最初の暗号文がどう変わるか予想しよう。">
 <header class="hdr"><div><span class="badge">r40・動的探究版</span><h1>エニグマ・<ruby>回転子<rt>かいてんし</rt></ruby>状態ラボ</h1><div class="sub">ローター位置、段進、置換経路、可逆性、鍵空間を一文字ずつ追跡する。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>文字を配線置換、三枚のローター、反射板へ通し、文字ごとにローター状態を更新する概念模型。</p></div><div><b>どこを見る？</b><p>処理文字、出力多様性、一致指数、ローター状態、往復一致、演算量。</p></div><div><b>何を変える？</b><p>左ローター初期位置、中ローター初期位置、右ローター初期位置、リングずれ、交換対、段進異常。</p></div><div><b>持ち帰る一文</b><p>同じ文字でもローター状態が変われば別の文字へ写り、復号には同じ初期状態と段進規則が必要。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 右ローター初期位置を変えると、最初の出力列とローター状態がどう変わるか予想する。</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
@@ -153,4 +154,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

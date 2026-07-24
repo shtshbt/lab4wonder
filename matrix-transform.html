@@ -7,7 +7,8 @@
 
 .r59-focusable:focus-visible,body :focus-visible{outline:3px solid #ffd85a!important;outline-offset:3px!important}
 @media(max-width:420px){#r59-globalbar{gap:5px;padding:6px}#r59-globalbar a,#r59-globalbar button{min-height:36px!important;font-size:10px!important;padding:5px 7px!important}}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="bだけを0から大きくし、正方形がどうせん断され、面積倍率がどうなるか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="bだけを0から大きくし、正方形がどうせん断され、面積倍率がどうなるか予想しよう。">
 <header class="hdr"><div><span class="badge">r56・数学・線形代数</span><h1 id="title"><ruby>行列<rt>ぎょうれつ</rt></ruby>・線形変換ラボ</h1><div class="sub">2×2行列が格子、図形、基底ベクトル、面積、向きをどう変えるかを幾何として操作する。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>基底ベクトル</b><p>行列の列は、もとのx軸・y軸がどこへ移るかを表す。</p></div><div><b>行列式</b><p>符号付き面積倍率。0なら平面が線へつぶれる。負なら向きが反転する。</p></div><div><b>せん断</b><p>一方の軸方向へずらす変換。角度は変わるが平行線は平行のまま。</p></div><div><b>変換の途中</b><p>恒等変換から目標行列まで連続的に動かし、どこでつぶれや反転が起きるかを見る。</p></div></section><div class="steps"><span class="step"><strong>1 予想</strong> 変える量と結果を予想</span><span class="step"><strong>2 操作</strong> 一つだけ変える</span><span class="step"><strong>3 比較</strong> 条件A/Bを記録</span></div>
 <section class="toolbar"><button id="playPause" class="primary">▶ 再生</button><button id="stepBtn">一段進める</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="scenarioBtn">課題 S1</button></section>
@@ -186,4 +187,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

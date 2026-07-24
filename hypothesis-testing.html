@@ -9,7 +9,8 @@
 
 .r59-focusable:focus-visible,body :focus-visible{outline:3px solid #ffd85a!important;outline-offset:3px!important}
 @media(max-width:420px){#r59-globalbar{gap:5px;padding:6px}#r59-globalbar a,#r59-globalbar button{min-height:36px!important;font-size:10px!important;padding:5px 7px!important}}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="効果量を固定し、標本サイズだけを増やすとp値と検出力がどう変わるか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="効果量を固定し、標本サイズだけを増やすとp値と検出力がどう変わるか予想しよう。">
 <header class="hdr"><div><span class="badge">r55・統計・推測</span><h1 id="title"><ruby>統計的仮説検定<rt>とうけいてきかせつけんてい</rt></ruby>ラボ</h1><div class="sub">帰無仮説下の標本分布、p値、効果量、標本サイズ、検出力と二種類の誤りを同期表示する。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>帰無仮説</b><p>差がない模型を基準に、観測値がどれほど珍しいかを見る。</p></div><div><b>p値</b><p>帰無仮説の下で、観測以上に極端な結果が出る確率。</p></div><div><b>検出力</b><p>本当に差があるとき、検定がそれを検出できる確率。</p></div><div><b>誤り</b><p>第一種は偽陽性、第二種は見逃し。標本数と閾値で交換関係がある。</p></div></section><div class="steps"><span class="step"><strong>1 予想</strong> 変える量と結果を予想</span><span class="step"><strong>2 操作</strong> 一つだけ変える</span><span class="step"><strong>3 比較</strong> 条件A/Bを記録</span></div>
 <section class="toolbar"><button id="playPause" class="primary">▶ 再生</button><button id="stepBtn">一段進める</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="scenarioBtn">課題 S1</button></section>
@@ -176,4 +177,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

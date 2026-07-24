@@ -14,7 +14,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 a[href="index.html"],a[href="kids-index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="雑音を増やしたとき、群れがすぐ崩れるか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="雑音を増やしたとき、群れがすぐ崩れるか予想しよう。">
 <header class="hdr"><div><span class="badge">r36・動的探究版</span><h1><ruby>粒子生命<rt>りゅうしせいめい</rt></ruby>の<ruby>相変化<rt>そうへんか</rt></ruby></h1><div class="sub">局所的な引力・斥力から、群れ、追跡、分散、境界が生まれる。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>複数種類の粒子が近傍だけを見て動く人工生命の模型。</p></div><div><b>どこを見る？</b><p>粒子群、活動量、近接率、孤立数、空間分散、粒子数保存。</p></div><div><b>何を変える？</b><p>引力、斥力、相互作用範囲、摩擦、雑音、粒子密度。</p></div><div><b>持ち帰る一文</b><p>個体が全体像を知らなくても、局所相互作用から集団構造と相変化が生まれる。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 雑音を上げると、群れは直ちに崩れるか、それとも一定範囲で保たれるか</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
@@ -170,4 +171,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

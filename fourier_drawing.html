@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>手描きフーリエ変換</title>
+<link rel="stylesheet" href="lab4wonder_v1_1.css">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{max-width:980px;margin:auto;padding:12px 12px 100px;background:#08111c;color:#eef5fb;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}
+button,input{font:inherit}
+button{min-height:44px;border:1px solid #42617e;border-radius:12px;padding:8px 12px;background:#15283b;color:#f5f9fc;font-weight:850}
+button.primary,button.on{border-color:#d6b43d;background:#ffd85a;color:#211a00}
+.header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.header h1{margin:0;font-size:clamp(21px,4vw,29px)}
+.sub{margin:5px 0 0;color:#afc0d0;font-size:13px;line-height:1.65}
+.stage{position:relative;margin-top:12px;overflow:hidden;border:1px solid #36506b;border-radius:18px;background:#080d14}
+#canvas{display:block;width:100%;height:auto;aspect-ratio:3/2;touch-action:none}
+.prompt{position:absolute;top:12px;left:12px;max-width:calc(100% - 24px);padding:7px 10px;border:1px solid #5f7180;border-radius:999px;background:#07101bd9;font-size:12px;font-weight:850;pointer-events:none}
+.controls{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;margin-top:10px;padding:11px;border:1px solid #2e465e;border-radius:14px;background:#101d2b}
+.controls label{font-size:13px;font-weight:850}
+.controls output{color:#ffd85a;font:800 13px ui-monospace,monospace}
+.controls input{grid-column:1/-1;width:100%;height:32px}
+.buttons{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:9px}
+.explain{margin-top:10px;padding:10px 12px;border-left:4px solid #ffd85a;border-radius:10px;background:#122338;font-size:13px;line-height:1.7}
+.meaning{display:flex;flex-wrap:wrap;gap:7px 13px;margin-top:10px;padding:9px 11px;border:1px solid #304961;border-radius:12px;font-size:12px}
+.meaning b{width:100%;color:#ffd85a}
+.dot{display:inline-block;width:12px;height:12px;margin-right:5px;border-radius:50%;vertical-align:-1px}
+.concept{margin-top:10px;padding:10px 12px;border:1px solid #304961;border-radius:12px;background:#101d2b}
+.concept summary{min-height:32px;color:#ffd85a;font-size:13px;font-weight:900;cursor:pointer}
+.concept p{margin:7px 0 2px;color:#d5e0e9;font-size:13px;line-height:1.75}
+@media(max-width:620px){.header{display:block}.buttons{grid-template-columns:repeat(3,1fr)}.buttons button:first-child{grid-column:span 2}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div>
+    <h1>手描きフーリエ変換</h1>
+    <p class="sub">指で描いた一本の線を、たくさんの「回る円」がもう一度描きます。</p>
+  </div>
+  <button id="reset_button" type="button">↺ はじめから</button>
+</header>
+
+<section class="stage" aria-label="手描きとフーリエ再構成の画面">
+  <canvas id="canvas" width="900" height="600"></canvas>
+  <div class="prompt" id="prompt">👆 画面に好きな形を一筆で描いてみよう</div>
+</section>
+
+<section class="controls">
+  <label for="term_count">回る円の数</label>
+  <output id="term_output">30個</output>
+  <input id="term_count" type="range" min="1" max="100" value="30">
+</section>
+
+<div class="buttons">
+  <button id="draw_button" class="primary" type="button">✏️ 自分で描く</button>
+  <button id="star_button" type="button">★ 星</button>
+  <button id="heart_button" type="button">♥ ハート</button>
+  <button id="note_button" type="button">♪ 音符</button>
+  <button id="pause_button" type="button">⏸ とめる</button>
+</div>
+
+<div class="meaning" aria-label="色と記号の意味">
+  <b>色・記号の意味</b>
+  <span><i class="dot" style="background:#6f7785"></i>灰色：最初に描いた線</span>
+  <span><i class="dot" style="background:#d4af37"></i>金色：回る円と腕</span>
+  <span><i class="dot" style="background:#4ad3d3"></i>水色：円が描き直した線</span>
+  <span><i class="dot" style="background:#fff"></i>白点：いま線を描いている先端</span>
+</div>
+
+<p class="explain" id="explanation">円を少なくすると大まかな形だけが残り、増やすと角や小さな曲がりまで戻ってきます。</p>
+
+<details class="concept">
+  <summary>「フーリエ変換」ってなに？</summary>
+  <p>でこぼこした一本の線を、かんたんな波の集まりに分ける方法です。この遊びでは、波を「同じ速さで回り続ける円」に置きかえて見せています。大きさや速さのちがう円を足すと、星やハート、きみが描いた線まで作り直せます。</p>
+</details>
+
+<script>
+(() => {
+  "use strict";
+
+  const canvas = document.getElementById("canvas");
+  const context = canvas.getContext("2d");
+  const termInput = document.getElementById("term_count");
+  const termOutput = document.getElementById("term_output");
+  const prompt = document.getElementById("prompt");
+  const explanation = document.getElementById("explanation");
+  const center = { x: canvas.width / 2, y: canvas.height * 0.46 };
+  let rawPoints = [];
+  let coefficients = [];
+  let trace = [];
+  let drawing = false;
+  let paused = false;
+  let time = 0;
+
+  function resample(points, count) {
+    if (points.length < 2) return [];
+    const distances = [0];
+    for (let index = 1; index < points.length; index += 1) {
+      const previous = points[index - 1];
+      const current = points[index];
+      distances.push(distances[index - 1] + Math.hypot(current.x - previous.x, current.y - previous.y));
+    }
+    const closeDistance = Math.hypot(
+      points[0].x - points.at(-1).x,
+      points[0].y - points.at(-1).y,
+    );
+    const total = distances.at(-1) + closeDistance;
+    if (total < 8) return [];
+    return Array.from({ length: count }, (_, index) => sampleAt(points, distances, total, closeDistance, index / count * total));
+  }
+
+  function sampleAt(points, distances, total, closeDistance, target) {
+    if (target >= distances.at(-1)) {
+      const ratio = (target - distances.at(-1)) / Math.max(1, closeDistance);
+      return {
+        x: points.at(-1).x + (points[0].x - points.at(-1).x) * ratio,
+        y: points.at(-1).y + (points[0].y - points.at(-1).y) * ratio,
+      };
+    }
+    let index = 1;
+    while (index < distances.length && distances[index] < target) index += 1;
+    const span = Math.max(1, distances[index] - distances[index - 1]);
+    const ratio = (target - distances[index - 1]) / span;
+    return {
+      x: points[index - 1].x + (points[index].x - points[index - 1].x) * ratio,
+      y: points[index - 1].y + (points[index].y - points[index - 1].y) * ratio,
+    };
+  }
+
+  function transform(points) {
+    const count = points.length;
+    const result = [];
+    for (let frequencyIndex = 0; frequencyIndex < count; frequencyIndex += 1) {
+      let real = 0;
+      let imaginary = 0;
+      for (let pointIndex = 0; pointIndex < count; pointIndex += 1) {
+        const phase = -2 * Math.PI * frequencyIndex * pointIndex / count;
+        real += points[pointIndex].x * Math.cos(phase) - points[pointIndex].y * Math.sin(phase);
+        imaginary += points[pointIndex].x * Math.sin(phase) + points[pointIndex].y * Math.cos(phase);
+      }
+      real /= count;
+      imaginary /= count;
+      const frequency = frequencyIndex <= count / 2 ? frequencyIndex : frequencyIndex - count;
+      result.push({ frequency, amplitude: Math.hypot(real, imaginary), phase: Math.atan2(imaginary, real) });
+    }
+    return result.sort((left, right) => right.amplitude - left.amplitude);
+  }
+
+  function setShape(points) {
+    const sampled = resample(points, 180);
+    if (!sampled.length) return;
+    rawPoints = points;
+    coefficients = transform(sampled);
+    trace = [];
+    time = 0;
+    prompt.textContent = "もう一度描くと、その形に入れ替わります";
+  }
+
+  function canvasPoint(event) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: (event.clientX - rect.left) / rect.width * canvas.width - center.x,
+      y: (event.clientY - rect.top) / rect.height * canvas.height - center.y,
+    };
+  }
+
+  function beginDrawing(event) {
+    drawing = true;
+    paused = false;
+    rawPoints = [canvasPoint(event)];
+    coefficients = [];
+    trace = [];
+    prompt.textContent = "指を離すと、回る円に変わります";
+    canvas.setPointerCapture?.(event.pointerId);
+  }
+
+  function continueDrawing(event) {
+    if (!drawing) return;
+    const point = canvasPoint(event);
+    const previous = rawPoints.at(-1);
+    if (Math.hypot(point.x - previous.x, point.y - previous.y) > 3) rawPoints.push(point);
+  }
+
+  function finishDrawing(event) {
+    if (!drawing) return;
+    drawing = false;
+    canvas.releasePointerCapture?.(event.pointerId);
+    if (rawPoints.length > 8) {
+      setShape(rawPoints);
+      explanation.textContent = "あなたの線を、金色の円の足し算が水色の線として描き直しています。";
+    } else {
+      resetToStar();
+    }
+  }
+
+  function drawOriginal() {
+    if (rawPoints.length < 2) return;
+    context.strokeStyle = drawing ? "#aeb5c0" : "rgba(170,180,192,.35)";
+    context.lineWidth = drawing ? 4 : 2;
+    context.setLineDash(drawing ? [] : [7, 7]);
+    context.beginPath();
+    rawPoints.forEach((point, index) => {
+      const x = center.x + point.x;
+      const y = center.y + point.y;
+      if (index) context.lineTo(x, y);
+      else context.moveTo(x, y);
+    });
+    context.stroke();
+    context.setLineDash([]);
+  }
+
+  function drawEpicycles() {
+    let x = center.x;
+    let y = center.y;
+    const terms = Math.min(Number(termInput.value), coefficients.length);
+    for (let index = 0; index < terms; index += 1) {
+      const item = coefficients[index];
+      const angle = item.phase + 2 * Math.PI * item.frequency * time;
+      const nextX = x + item.amplitude * Math.cos(angle);
+      const nextY = y + item.amplitude * Math.sin(angle);
+      if (item.frequency !== 0) drawCircleArm(x, y, nextX, nextY, item.amplitude);
+      x = nextX;
+      y = nextY;
+    }
+    trace.push({ x, y });
+    if (trace.length > 1100) trace.shift();
+    drawTrace(x, y);
+  }
+
+  function drawCircleArm(x, y, nextX, nextY, radius) {
+    context.strokeStyle = "rgba(212,175,55,.32)";
+    context.lineWidth = 1.2;
+    context.beginPath();
+    context.arc(x, y, radius, 0, Math.PI * 2);
+    context.stroke();
+    context.strokeStyle = "rgba(242,205,92,.78)";
+    context.beginPath();
+    context.moveTo(x, y);
+    context.lineTo(nextX, nextY);
+    context.stroke();
+  }
+
+  function drawTrace(x, y) {
+    context.strokeStyle = "#4ad3d3";
+    context.lineWidth = 3.2;
+    context.lineCap = "round";
+    context.lineJoin = "round";
+    context.beginPath();
+    trace.forEach((point, index) => {
+      if (index) context.lineTo(point.x, point.y);
+      else context.moveTo(point.x, point.y);
+    });
+    context.stroke();
+    context.fillStyle = "#fff";
+    context.beginPath();
+    context.arc(x, y, 4, 0, Math.PI * 2);
+    context.fill();
+  }
+
+  function frame() {
+    context.fillStyle = "#080d14";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    drawOriginal();
+    if (!drawing && coefficients.length) {
+      drawEpicycles();
+      if (!paused) time = (time + 1 / 850) % 1;
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function starPoints() {
+    const points = [];
+    for (let index = 0; index < 10; index += 1) {
+      const angle = -Math.PI / 2 + index * Math.PI / 5;
+      const radius = index % 2 ? 92 : 220;
+      points.push({ x: Math.cos(angle) * radius, y: Math.sin(angle) * radius });
+    }
+    return points;
+  }
+
+  function heartPoints() {
+    return Array.from({ length: 120 }, (_, index) => {
+      const angle = index / 120 * Math.PI * 2;
+      return {
+        x: 13 * 16 * Math.sin(angle) ** 3,
+        y: -13 * (13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle)),
+      };
+    });
+  }
+
+  function notePoints() {
+    const path = [[0,170],[45,170],[45,-60],[175,-105],[175,-185],[45,-140],[45,-205],[0,-220],[-65,-205],[-95,-160],[-70,-120],[0,-135],[0,145],[-70,130],[-100,175],[-65,210],[-10,205]];
+    return path.map(([x, y]) => ({ x, y }));
+  }
+
+  function resetToStar() {
+    paused = false;
+    document.getElementById("pause_button").textContent = "⏸ とめる";
+    setShape(starPoints());
+    prompt.textContent = "👆 画面に好きな形を一筆で描いてみよう";
+  }
+
+  canvas.addEventListener("pointerdown", beginDrawing);
+  canvas.addEventListener("pointermove", continueDrawing);
+  canvas.addEventListener("pointerup", finishDrawing);
+  canvas.addEventListener("pointercancel", finishDrawing);
+  termInput.addEventListener("input", () => {
+    termOutput.textContent = `${termInput.value}個`;
+    trace = [];
+    explanation.textContent = Number(termInput.value) < 12
+      ? "円が少ないので、細かな角や曲がりが省かれています。"
+      : "円を増やすほど、元の線の細かな形まで戻ってきます。";
+  });
+  document.getElementById("draw_button").addEventListener("click", () => {
+    coefficients = [];
+    rawPoints = [];
+    trace = [];
+    prompt.textContent = "👆 画面に好きな形を一筆で描いてみよう";
+  });
+  document.getElementById("star_button").addEventListener("click", () => setShape(starPoints()));
+  document.getElementById("heart_button").addEventListener("click", () => setShape(heartPoints()));
+  document.getElementById("note_button").addEventListener("click", () => setShape(notePoints()));
+  document.getElementById("pause_button").addEventListener("click", (event) => {
+    paused = !paused;
+    event.currentTarget.textContent = paused ? "▶ うごかす" : "⏸ とめる";
+  });
+  document.getElementById("reset_button").addEventListener("click", resetToStar);
+
+  resetToStar();
+  requestAnimationFrame(frame);
+})();
+</script>
+<script src="lab4wonder_v1_1.js"></script>
+</body>
+</html>

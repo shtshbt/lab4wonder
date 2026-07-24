@@ -13,7 +13,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="せん断だけを上げ、堆積粒子が床面移動から浮遊へ移る境界を探そう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="せん断だけを上げ、堆積粒子が床面移動から浮遊へ移る境界を探そう。">
 <header class="hdr"><div><span class="badge">r57・流体・粒子輸送</span><h1 id="title"><ruby>粒子堆積<rt>りゅうしたいせき</rt></ruby>・<ruby>再懸濁<rt>さいけんだく</rt></ruby>ラボ</h1><div class="sub">粒径、密度、形状、粘度、せん断を変え、沈降・床面移動・舞い上がり・再堆積の違いと質量収支を見る。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>沈降</b><p>重力と浮力の差が粒子を下向きに動かし、抗力が速さを制限する。</p></div><div><b>再懸濁</b><p>床面のせん断が粒子を持ち上げる閾値を超えると、堆積粒子が再び浮遊する。</p></div><div><b>粒子形状</b><p>球から外れるほど抗力が増え、同じ粒径・密度でも沈降が遅くなりやすい。</p></div><div><b>質量収支</b><p>浮遊・床面移動・堆積の合計は常に同じ粒子総量になる。</p></div></section><div class="steps"><span class="step"><strong>1 予想</strong> 変える量と結果を予想</span><span class="step"><strong>2 操作</strong> 一つだけ変える</span><span class="step"><strong>3 比較</strong> 条件A/Bを記録</span></div>
 <section class="toolbar"><button id="playPause" class="primary">▶ 再生</button><button id="stepBtn">一段進める</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="scenarioBtn">課題 S1</button></section>
@@ -193,4 +194,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

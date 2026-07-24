@@ -16,7 +16,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r60-explicit-accessibility" content="static-control-labels"><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="同じ質量の台車を正面衝突させ、衝突前後の速度を見よう。">
+</style><meta name="r60-explicit-accessibility" content="static-control-labels"><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="同じ質量の台車を正面衝突させ、衝突前後の速度を見よう。">
 <header class="hdr"><div><span class="badge">r27・力学・動的探究版</span><h1>衝突・運動量・エネルギーラボ</h1><div class="sub">二台の台車の衝突を時間発展させ、個々の運動量・全運動量・重心運動・エネルギー損失を同時に追う。</div></div><div class="head-actions"><button id="guideBtn" aria-label="？ ガイド">？ ガイド</button><button id="speakBtn" aria-label="🔊 読む">🔊 読む</button><button id="tourBtn" aria-label="👣 操作">👣 操作</button><button id="resetTop" aria-label="↺ リセット">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>二台の台車の衝突を時間発展させ、個々の運動量・全運動量・重心運動・エネルギー損失を同時に追う。</p></div><div><b>どこを見る？</b><p>台車の位置と速度矢印、重心、衝突点、運動量バー、衝突力履歴。</p></div><div><b>何を変える？</b><p>二台の質量と速度、反発係数、路面摩擦。</p></div><div><b>持ち帰る一文</b><p data-takeaway>外力が無視できる短い衝突では全運動量が保たれるが、運動エネルギーは変形・熱・音へ移り得る。</p></div></section>
 
@@ -66,7 +67,7 @@ let zoom=false;q('#zoomToggle').addEventListener('click',()=>{zoom=!zoom;q('#zoo
  function signature(){let s=(window.r53ScenarioIndex||0)*71;controls().forEach((x,i)=>{const z=String(x.value);let h=0;for(let j=0;j<z.length;j++)h=(h*33+z.charCodeAt(j))%997;s=(s+h*(i+3))%997});return s%997}
  function normalize(cv){if(!cv)return;const z=cv.getContext('2d');z.setTransform(1,0,0,1,0,0);z.globalAlpha=1;z.globalCompositeOperation='source-over';z.lineWidth=1;z.setLineDash([]);z.lineDashOffset=0;z.textAlign='start';z.textBaseline='alphabetic';z.font='10px sans-serif';z.fillStyle='#000';z.strokeStyle='#000';z.lineCap='butt';z.lineJoin='miter';z.miterLimit=10;z.shadowBlur=0;z.shadowColor='transparent'}
  function overlay(cv,label,color){if(!cv)return;const x=cv.getContext('2d'),w=cv.width,h=cv.height,sig=signature(),p=(Math.floor(tick*23)+sig)%101;x.save();x.setTransform(1,0,0,1,0,0);const bh=Math.max(38,Math.round(h*.08)),pad=Math.max(10,Math.round(w*.018));x.fillStyle='rgba(5,13,24,.90)';x.fillRect(0,h-bh,w,bh);x.font=`${Math.max(12,Math.round(w/72))}px system-ui`;x.textAlign='start';x.textBaseline='alphabetic';x.fillStyle='#d8e5f4';x.fillText(`${label}  u=${tick.toFixed(1)}  S${(window.r53ScenarioIndex||0)+1}  C${String(sig).padStart(3,'0')}`,pad,h-bh+17);x.fillStyle='#20364e';x.fillRect(pad,h-13,w-pad*2,7);x.fillStyle=color;x.fillRect(pad,h-13,Math.max(8,(w-pad*2)*p/100),7);x.restore()}
- function paint(){if(q('r53TickMetric'))q('r53TickMetric').textContent=tick.toFixed(1);if(q('r53SigMetric'))q('r53SigMetric').textContent=String(signature()).padStart(3,'0');if(q('r53DomainStepMetric'))q('r53DomainStepMetric').textContent=tick.toFixed(1)+' u';overlay(main,'主Canvas','#ffd85a');overlay(second,'同期定量Canvas','#55d6be')}
+ function paint(){if(q('r53TickMetric'))q('r53TickMetric').textContent=tick.toFixed(1);if(q('r53SigMetric'))q('r53SigMetric').textContent=String(signature()).padStart(3,'0');if(q('r53DomainStepMetric'))q('r53DomainStepMetric').textContent=tick.toFixed(1)+' u';}
  function fire(el){el.dispatchEvent(new Event(el.tagName==='SELECT'?'change':'input',{bubbles:true}))}
  function setControls(S){for(const [id,value] of Object.entries(S)){const el=q(id);if(!el)continue;el.value=String(value);fire(el)}}
  const originalReset=(cfg.resetName&&typeof window[cfg.resetName]==='function')?window[cfg.resetName].bind(window):()=>q(cfg.resetButton)?.click();
@@ -200,4 +201,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

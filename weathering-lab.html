@@ -26,7 +26,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r60-explicit-accessibility" content="static-control-labels"><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="水量だけを上げて一段送りし、岩に残る量・その場の粒・運ばれた量の収支を見よう。">
+</style><meta name="r60-explicit-accessibility" content="static-control-labels"><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="水量だけを上げて一段送りし、岩に残る量・その場の粒・運ばれた量の収支を見よう。">
 <header class="hdr"><div><a class="back" href="kids-index.html">← いちらんへ</a><h1>岩石の<ruby>風化<rt>ふうか</rt></ruby>ラボ</h1><div class="sub">岩がその場で壊れたり溶けたりする<ruby>風化<rt>ふうか</rt></ruby>と、できた粒が運ばれる<ruby>侵食<rt>しんしょく</rt></ruby>を分けて<ruby>観察<rt>かんさつ</rt></ruby>する。</div></div><div class="head-actions"><span class="badge">地学</span><button id="readBtn" aria-label="🔊 よむ">🔊 よむ</button><button class="primary" id="tourBtn" aria-label="👆 つかいかた">👆 つかいかた</button></div></header>
 <section aria-label="このアプリで学ぶこと" class="learn"><div><b>これは何？</b><p>岩の<ruby>断面<rt>だんめん</rt></ruby>と、<ruby>物理的風化<rt>ぶつりてきふうか</rt></ruby>・<ruby>化学的風化<rt>かがくてきふうか</rt></ruby>の進み方を表す<ruby>模型<rt>もけい</rt></ruby>です。</p></div><div><b>どこを見る？</b><p>割れ目、溶けた量、その場に残る粒、運び去られた量を別々に見ます。</p></div><div><b>何を変える？</b><p>岩石、水、温度、<ruby>酸性<rt>さんせい</rt></ruby>、植物、風や流れを変えます。</p></div><div><b>持ち帰る一文</b><p><ruby>風化<rt>ふうか</rt></ruby>は岩がその場で変わること、<ruby>侵食<rt>しんしょく</rt></ruby>はできた物質が運ばれることです。</p></div></section>
 <div class="steps"><span class="step"><strong>1</strong> 岩石と作用を選ぶ</span><span class="step"><strong>2</strong> <ruby>結果<rt>けっか</rt></ruby>を<ruby>予想<rt>よそう</rt></ruby></span><span class="step"><strong>3</strong> <ruby>時間<rt>じかん</rt></ruby>を進める</span><span class="step"><strong>4</strong> <ruby>風化<rt>ふうか</rt></ruby>と<ruby>侵食<rt>しんしょく</rt></ruby>を分ける</span></div>
@@ -136,7 +137,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){back.classList.remo
  function signature(){let s=(window.r53ScenarioIndex||0)*71;controls().forEach((x,i)=>{const z=String(x.value);let h=0;for(let j=0;j<z.length;j++)h=(h*33+z.charCodeAt(j))%997;s=(s+h*(i+3))%997});return s%997}
  function normalize(cv){if(!cv)return;const z=cv.getContext('2d');z.setTransform(1,0,0,1,0,0);z.globalAlpha=1;z.globalCompositeOperation='source-over';z.lineWidth=1;z.setLineDash([]);z.lineDashOffset=0;z.textAlign='start';z.textBaseline='alphabetic';z.font='10px sans-serif';z.fillStyle='#000';z.strokeStyle='#000';z.lineCap='butt';z.lineJoin='miter';z.miterLimit=10;z.shadowBlur=0;z.shadowColor='transparent'}
  function overlay(cv,label,color){if(!cv)return;const x=cv.getContext('2d'),w=cv.width,h=cv.height,sig=signature(),p=(Math.floor(tick*23)+sig)%101;x.save();x.setTransform(1,0,0,1,0,0);const bh=Math.max(38,Math.round(h*.08)),pad=Math.max(10,Math.round(w*.018));x.fillStyle='rgba(5,13,24,.90)';x.fillRect(0,h-bh,w,bh);x.font=`${Math.max(12,Math.round(w/72))}px system-ui`;x.textAlign='start';x.textBaseline='alphabetic';x.fillStyle='#d8e5f4';x.fillText(`${label}  u=${tick.toFixed(1)}  S${(window.r53ScenarioIndex||0)+1}  C${String(sig).padStart(3,'0')}`,pad,h-bh+17);x.fillStyle='#20364e';x.fillRect(pad,h-13,w-pad*2,7);x.fillStyle=color;x.fillRect(pad,h-13,Math.max(8,(w-pad*2)*p/100),7);x.restore()}
- function paint(){if(q('r53TickMetric'))q('r53TickMetric').textContent=tick.toFixed(1);if(q('r53SigMetric'))q('r53SigMetric').textContent=String(signature()).padStart(3,'0');if(q('r53DomainStepMetric'))q('r53DomainStepMetric').textContent=tick.toFixed(1)+' u';overlay(main,'主Canvas','#ffd85a');overlay(second,'同期定量Canvas','#55d6be')}
+ function paint(){if(q('r53TickMetric'))q('r53TickMetric').textContent=tick.toFixed(1);if(q('r53SigMetric'))q('r53SigMetric').textContent=String(signature()).padStart(3,'0');if(q('r53DomainStepMetric'))q('r53DomainStepMetric').textContent=tick.toFixed(1)+' u';}
  function fire(el){el.dispatchEvent(new Event(el.tagName==='SELECT'?'change':'input',{bubbles:true}))}
  function setControls(S){for(const [id,value] of Object.entries(S)){const el=q(id);if(!el)continue;el.value=String(value);fire(el)}}
  const originalReset=(cfg.resetName&&typeof window[cfg.resetName]==='function')?window[cfg.resetName].bind(window):()=>q(cfg.resetButton)?.click();
@@ -157,6 +158,77 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){back.classList.remo
  function isPlaying(){return !!playBtn&&(/一時停止|停止|■/.test(playBtn.textContent)&&!/▶/.test(playBtn.textContent))}
  function loop(now){const dt=Math.min(.1,(now-last)/1000);last=now;if(isPlaying())tick+=dt*Number(speedSel?.value||1);paint();requestAnimationFrame(loop)}
  applyScenario(0);requestAnimationFrame(loop);
+})();
+</script><script id="v1-1-weather-direct-play">
+(()=>{
+ const canvas=document.getElementById('weatherCanvas');
+ if(!canvas)return;
+ const tools=[
+  {id:'freeze',label:'水→氷',icon:'❄',color:'#76d9ff',control:'waterW',value:95},
+  {id:'roots',label:'根をのばす',icon:'根',color:'#75dc75',control:'rootW',value:95},
+  {id:'acid',label:'酸性の水',icon:'滴',color:'#e2ef72',control:'acidW',value:95},
+  {id:'thermal',label:'熱する',icon:'熱',color:'#ff886c',control:'tempW',value:95}
+ ];
+ let selected='freeze',actions=[],pointerDown=false,lastApply=0;
+ const baseDraw=drawW;
+ function rounded(ctx,x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
+ function drawCrack(ctx,x,y,seed,length,color){
+  ctx.strokeStyle=color;ctx.lineWidth=4;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x,y);
+  for(let i=1;i<6;i++){const yy=y+i*length/6,xx=x+Math.sin(seed+i*2.1)*18;ctx.lineTo(xx,yy)}
+  ctx.stroke();
+ }
+ function drawLayer(){
+  wx.save();
+  actions.slice(-14).forEach((action,index)=>{
+   const alpha=.45+index/28;wx.globalAlpha=alpha;
+   if(action.tool==='freeze'){
+    wx.fillStyle='#bcecff';for(let i=0;i<6;i++){wx.beginPath();wx.arc(action.x-26+i*11,action.y-30-Math.abs(i-2.5)*4,5,0,7);wx.fill()}
+    drawCrack(wx,action.x,action.y-15,index,110,'#d8f6ff');
+   }else if(action.tool==='roots'){
+    wx.strokeStyle='#8be878';wx.lineWidth=7;wx.beginPath();wx.moveTo(action.x,105);wx.bezierCurveTo(action.x-35,180,action.x+30,235,action.x,action.y+80);wx.stroke();
+    drawCrack(wx,action.x,action.y,index+2,90,'#43291d');
+   }else if(action.tool==='acid'){
+    wx.fillStyle='#dcf56c';for(let i=0;i<7;i++){wx.beginPath();wx.arc(action.x-30+i*10,action.y+i%2*14,6+i%3,0,7);wx.fill()}
+   }else{
+    wx.strokeStyle='#ff765d';wx.lineWidth=5;for(let i=0;i<4;i++){wx.beginPath();wx.moveTo(action.x-35+i*24,action.y+55);wx.quadraticCurveTo(action.x-22+i*24,action.y+25,action.x-10+i*24,action.y-5);wx.stroke()}
+    drawCrack(wx,action.x,action.y-15,index+4,105,'#2b1714');
+   }
+  });
+  wx.globalAlpha=1;wx.fillStyle='rgba(4,12,20,.94)';wx.fillRect(18,423,864,62);
+  wx.font='bold 15px system-ui';wx.textAlign='center';wx.textBaseline='middle';
+  tools.forEach((tool,i)=>{
+   const x=28+i*154,w=142,on=tool.id===selected;
+   rounded(wx,x,434,w,40,12);wx.fillStyle=on?tool.color:'#172b3d';wx.fill();wx.strokeStyle=on?'#fff':'#486781';wx.lineWidth=on?3:1;wx.stroke();
+   wx.fillStyle=on?'#101820':'#eef6fc';wx.fillText(`${tool.icon} ${tool.label}`,x+w/2,454);
+  });
+  wx.textAlign='left';wx.font='bold 13px system-ui';wx.fillStyle='#e3edf5';
+  wx.fillText('道具を選び、岩をタップ／なぞる',660,442);
+  wx.fillStyle=actions.length>=6?'#83e7a3':'#ffd85a';
+  wx.fillText(actions.length>=6?'★ 達成：岩の変わり方を比較できた！':`目標：6回作用させる（${actions.length}/6）`,660,465);
+  wx.restore();
+ }
+ drawW=function(){baseDraw();drawLayer()};
+ function point(event){const rect=canvas.getBoundingClientRect();return{x:(event.clientX-rect.left)*canvas.width/rect.width,y:(event.clientY-rect.top)*canvas.height/rect.height}}
+ function applyTool(event){
+  const p=point(event);
+  if(p.y>=420){
+   const index=Math.floor((p.x-28)/154);if(index>=0&&index<tools.length){selected=tools[index].id;drawW()}return;
+  }
+  if(p.x<65||p.x>470||p.y<115||p.y>450)return;
+  const now=performance.now();if(now-lastApply<170)return;lastApply=now;
+  const tool=tools.find(item=>item.id===selected);
+  wMode.value=tool.id;document.getElementById(tool.control).value=tool.value;
+  document.getElementById(tool.control).dispatchEvent(new Event('input',{bubbles:true}));
+  actions.push({tool:tool.id,x:p.x,y:p.y});if(actions.length>22)actions.shift();
+  for(let i=0;i<3;i++)stepW();drawW();
+ }
+ canvas.addEventListener('pointerdown',event=>{event.stopImmediatePropagation();pointerDown=true;try{canvas.setPointerCapture?.(event.pointerId)}catch(_){/* synthetic pointer */}applyTool(event)});
+ canvas.addEventListener('pointermove',event=>{if(pointerDown&&event.buttons)applyTool(event)});
+ canvas.addEventListener('pointerup',()=>{pointerDown=false});
+ canvas.addEventListener('pointercancel',()=>{pointerDown=false});
+ const resetButton=document.getElementById('resetW');
+ resetButton.addEventListener('click',()=>{actions=[];selected='freeze';requestAnimationFrame(drawW)});
+ drawW();
 })();
 </script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
@@ -267,4 +339,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

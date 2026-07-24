@@ -16,7 +16,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="寒冷前線と温暖前線を切り替え、空気の上がり方と雨域を比べよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="寒冷前線と温暖前線を切り替え、空気の上がり方と雨域を比べよう。">
 <header class="hdr"><div><span class="badge">r52・地学・気象・動的探究版</span><h1>前線・雲・降水ラボ</h1><div class="sub">寒気と暖気の境界が動き、暖かく湿った空気が持ち上げられて雲と雨を生む過程を断面で追う。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetTop">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>寒気と暖気の境界が動き、暖かく湿った空気が持ち上げられて雲と雨を生む過程を断面で追う。</p></div><div><b>どこを見る？</b><p>前線面、空気塊、雲の高さと広がり、雨粒、観測点の時間変化。</p></div><div><b>何を変える？</b><p>前線型、温度差、湿度、風、安定度、観測点位置。</p></div><div><b>持ち帰る一文</b><p data-takeaway>前線の天気は境界の名前だけでなく、温度差・水蒸気・上昇速度・移動速度の組合せで決まる。</p></div></section>
 
@@ -57,7 +58,7 @@ let zoom=false;q('#zoomToggle').addEventListener('click',()=>{zoom=!zoom;q('#zoo
  function signature(){let s=(window.r52ScenarioIndex||0)*71;controls().forEach((x,i)=>{const z=String(x.value);let h=0;for(let j=0;j<z.length;j++)h=(h*33+z.charCodeAt(j))%997;s=(s+h*(i+3))%997});return s%997}
  function normalize(cv){if(!cv)return;const z=cv.getContext('2d');z.setTransform(1,0,0,1,0,0);z.globalAlpha=1;z.globalCompositeOperation='source-over';z.lineWidth=1;z.setLineDash([]);z.lineDashOffset=0;z.textAlign='start';z.textBaseline='alphabetic';z.shadowBlur=0;z.shadowColor='transparent'}
  function overlay(cv,label,color){if(!cv)return;const x=cv.getContext('2d'),w=cv.width,h=cv.height,sig=signature(),p=(Math.floor(tick*23)+sig)%101;x.save();x.setTransform(1,0,0,1,0,0);const bh=Math.max(38,Math.round(h*.08)),pad=Math.max(10,Math.round(w*.018));x.fillStyle='rgba(5,13,24,.90)';x.fillRect(0,h-bh,w,bh);x.font=`${Math.max(12,Math.round(w/72))}px system-ui`;x.textAlign='start';x.textBaseline='alphabetic';x.fillStyle='#d8e5f4';x.fillText(`${label}  u=${tick.toFixed(1)}  S${(window.r52ScenarioIndex||0)+1}  C${String(sig).padStart(3,'0')}`,pad,h-bh+17);x.fillStyle='#20364e';x.fillRect(pad,h-13,w-pad*2,7);x.fillStyle=color;x.fillRect(pad,h-13,Math.max(8,(w-pad*2)*p/100),7);x.restore()}
- function paint(){if(q('r52TickMetric'))q('r52TickMetric').textContent=tick.toFixed(1);if(q('r52SigMetric'))q('r52SigMetric').textContent=String(signature()).padStart(3,'0');overlay(main,'主Canvas','#ffd85a');overlay(second,'同期定量Canvas','#55d6be')}
+ function paint(){if(q('r52TickMetric'))q('r52TickMetric').textContent=tick.toFixed(1);if(q('r52SigMetric'))q('r52SigMetric').textContent=String(signature()).padStart(3,'0');}
  function fire(el){el.dispatchEvent(new Event(el.tagName==='SELECT'?'change':'input',{bubbles:true}))}
  function setControls(S){for(const [id,value] of Object.entries(S)){if(id.startsWith('__'))continue;const el=q(id);if(!el)continue;el.value=String(value);fire(el)}}
  function postScenario(S){if(S.__seed)q('seedBtn')?.click()}
@@ -190,4 +191,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

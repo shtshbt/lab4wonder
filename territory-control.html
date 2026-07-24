@@ -17,7 +17,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="青の拠点から資源まで、切れにくい道を予想して再生しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="青の拠点から資源まで、切れにくい道を予想して再生しよう。">
 <header class="hdr"><div><span class="badge">r35・動的探究版</span><h1><ruby>陣取<rt>じんど</rt></ruby>り・<ruby>補給線<rt>ほきゅうせん</rt></ruby>シミュレーター</h1><div class="sub">面積だけでなく、地形、資源、接続、補給、損耗を同時に追う。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>二つの探検チームが区画を広げる過程を、ネットワークと資源配分として扱う模型。</p></div><div><b>どこを見る？</b><p>取った区画のうち、拠点まで連続して補給できる割合と孤立区画。</p></div><div><b>何を変える？</b><p>移動力、補給投資、資源優先、攻勢、地形回避、孤立からの回復。</p></div><div><b>持ち帰る一文</b><p>広い面積でも補給線が切れれば弱く、連続した小さなネットワークの方が維持しやすい。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 最短で資源へ向かう道と、切れやすい場所を予想する</span><span><strong>2 再生</strong> 図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
@@ -177,4 +178,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

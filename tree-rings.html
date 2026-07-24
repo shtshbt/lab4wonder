@@ -16,7 +16,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="同じ条件で干ばつ年を一度だけ入れ、細い年輪が系列のどこへ残るか確認しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="同じ条件で干ばつ年を一度だけ入れ、細い年輪が系列のどこへ残るか確認しよう。">
 <header class="hdr"><div><span class="badge">r32・植物・古環境・動的探究版</span><h1>年輪・形成層・気候記録ラボ</h1><div class="sub">形成層が季節ごとに早材と晩材を作り、干ばつ・火災・霜などの履歴が年輪系列へ残る。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetTop">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>形成層が季節ごとに早材と晩材を作り、干ばつ・火災・霜などの履歴が年輪系列へ残る。</p></div><div><b>どこを見る？</b><p>幹断面の新しい層、季節ごとの細胞密度、年輪幅の年次系列。</p></div><div><b>何を変える？</b><p>春雨、夏の暑さ、養分、樹冠、年変動、干ばつ・火災イベント。</p></div><div><b>持ち帰る一文</b><p data-takeaway="">年輪は単なる年齢の目盛りではなく、その年の季節条件を圧縮して残す生物学的記録である。</p></div></section>
 <section class="toolbar" data-tour="controls"><button class="primary" id="playPause">▶ 再生</button><button id="stepBtn">1か月</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option selected="" value="1">×1</option><option value="4">×4</option><option value="12">×12</option></select><button id="droughtBtn">干ばつ年</button><button id="fireBtn">火災傷</button><button id="scenarioBtn">別の気候</button></section>
@@ -71,7 +72,7 @@ let zoom=false;q('#zoomToggle').addEventListener('click',()=>{zoom=!zoom;q('#zoo
  function conditions(){return Object.fromEntries(controls().map(x=>[x.id,String(x.value)]))}
  function signature(){let s=(window.r49ScenarioIndex||0)*71;controls().forEach((x,i)=>{const z=String(x.value);let h=0;for(let j=0;j<z.length;j++)h=(h*33+z.charCodeAt(j))%997;s=(s+h*(i+3))%997});return s%997}
  function overlay(cv,label,color){const x=cv.getContext('2d'),w=cv.width,h=cv.height,sig=signature(),p=(Math.floor(tick*23)+sig)%101;x.save();x.setTransform(1,0,0,1,0,0);const bh=Math.max(38,Math.round(h*.08)),pad=Math.max(10,Math.round(w*.018));x.fillStyle='rgba(5,13,24,.9)';x.fillRect(0,h-bh,w,bh);x.font=`${Math.max(12,Math.round(w/72))}px system-ui`;x.fillStyle='#d8e5f4';x.fillText(`${label}  u=${tick.toFixed(1)}  S${(window.r49ScenarioIndex||0)+1}  C${String(sig).padStart(3,'0')}`,pad,h-bh+17);x.fillStyle='#20364e';x.fillRect(pad,h-13,w-pad*2,7);x.fillStyle=color;x.fillRect(pad,h-13,Math.max(8,(w-pad*2)*p/100),7);x.restore()}
- function paint(){if(q('r49TickMetric'))q('r49TickMetric').textContent=tick.toFixed(1);if(q('r49SigMetric'))q('r49SigMetric').textContent=String(signature()).padStart(3,'0');overlay(main,'主Canvas','#ffd85a');overlay(second,'同期定量Canvas','#55d6be')}
+ function paint(){if(q('r49TickMetric'))q('r49TickMetric').textContent=tick.toFixed(1);if(q('r49SigMetric'))q('r49SigMetric').textContent=String(signature()).padStart(3,'0');}
  function resetSeed(){window.r49SetSeed(base+(window.r49ScenarioIndex||0)*7919);tick=0;manualUpdates=0}
  const originalReset=window.resetSimulation;window.resetSimulation=()=>{resetSeed();const r=originalReset&&originalReset();requestAnimationFrame(paint);return r};
  resetBtn?.addEventListener('click',resetSeed,true);
@@ -98,6 +99,72 @@ let zoom=false;q('#zoomToggle').addEventListener('click',()=>{zoom=!zoom;q('#zoo
  window.r49TestClick=(id,n=1)=>{const el=q(id);if(!el)throw new Error('missing action '+id);for(let i=0;i<n;i++)el.click();paint();return capture()};
  function loop(now){const dt=Math.min(.1,(now-last)/1000);last=now;if(play.textContent.includes('一時停止')||play.textContent.includes('停止'))tick+=dt*(Number(speedSel.value)||1);paint();requestAnimationFrame(loop)}
  window.resetSimulation();requestAnimationFrame(loop);
+})();
+</script><script id="v1-1-tree-direct-play">
+(()=>{
+ const canvas=document.getElementById('mainCv');
+ if(!canvas)return;
+ const tools=[
+  {id:'rain',label:'春の雨',icon:'💧',color:'#62c8ff',width:5.4},
+  {id:'sun',label:'夏の暑さ',icon:'☀',color:'#ffcf58',width:2.4},
+  {id:'drought',label:'干ばつ',icon:'ひび',color:'#d99b62',width:.65},
+  {id:'scar',label:'幹の傷',icon:'傷',color:'#ff786b',width:2.8}
+ ];
+ let selected='rain',placed=0,pointerDown=false,lastPlace=0;
+ const baseDraw=draw;
+ function finishYear(tool,x,y){
+  const p=par(),variation=.84+((x+y)%43)/100;
+  const width=Math.max(.42,tool.width*(.45+.55*p.nut)*(.5+.5*p.crown)*variation);
+  rings.push({w:width,drought:tool.id==='drought',fire:tool.id==='scar',direct:tool.id});
+  if(tool.id==='scar')scarYear=rings.length-1;
+  if(rings.length>45)rings.shift();
+  month=rings.length*12;current=0;drought=false;fire=false;placed++;
+  baseDraw();drawDirectLayer();
+ }
+ function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();ctx.roundRect(x,y,w,h,r);
+ }
+ function drawDirectLayer(){
+  c.save();
+  c.fillStyle='rgba(4,12,20,.92)';c.fillRect(18,440,864,62);
+  c.font='bold 15px system-ui';c.textAlign='center';c.textBaseline='middle';
+  tools.forEach((tool,i)=>{
+   const x=27+i*150,w=138,on=tool.id===selected;
+   roundRect(c,x,450,w,40,12);c.fillStyle=on?tool.color:'#172b3d';c.fill();
+   c.strokeStyle=on?'#fff':'#45627d';c.lineWidth=on?3:1;c.stroke();
+   c.fillStyle=on?'#101820':'#eef6fc';c.fillText(`${tool.icon} ${tool.label}`,x+w/2,470);
+  });
+  c.textAlign='left';c.fillStyle='#d9e8f2';c.font='bold 13px system-ui';
+  c.fillText('① 選ぶ　② 幹をタップして1年を刻む',640,459);
+  c.fillStyle=placed>=4?'#82e7a3':'#ffd85a';
+  c.fillText(placed>=4?'★ 達成：4つの年輪を比べられた！':`目標：ちがう年輪を4つ作る（${placed}/4）`,640,481);
+  c.strokeStyle='#ffffffaa';c.lineWidth=2;c.beginPath();c.arc(650,310,Math.min(238,34+rings.reduce((sum,ring)=>sum+ring.w*2.7,0)),0,Math.PI*2);c.stroke();
+  c.restore();
+ }
+ draw=function(){baseDraw();drawDirectLayer()};
+ function point(event){
+  const rect=canvas.getBoundingClientRect();
+  return{x:(event.clientX-rect.left)*canvas.width/rect.width,y:(event.clientY-rect.top)*canvas.height/rect.height};
+ }
+ function interact(event){
+  const p=point(event);
+  if(p.y>=438){
+   const index=Math.floor((p.x-27)/150);
+   if(index>=0&&index<tools.length){selected=tools[index].id;draw()}
+   return;
+  }
+  if(p.x<405||p.x>890||p.y<105||p.y>495)return;
+  const now=performance.now();if(now-lastPlace<180)return;lastPlace=now;
+  finishYear(tools.find(tool=>tool.id===selected),p.x,p.y);
+ }
+ canvas.addEventListener('pointerdown',event=>{event.stopImmediatePropagation();pointerDown=true;try{canvas.setPointerCapture?.(event.pointerId)}catch(_){/* synthetic pointer */}interact(event)});
+ canvas.addEventListener('pointermove',event=>{if(pointerDown&&event.buttons)interact(event)});
+ canvas.addEventListener('pointerup',()=>{pointerDown=false});
+ canvas.addEventListener('pointercancel',()=>{pointerDown=false});
+ const baseReset=window.resetSimulation;
+ window.resetSimulation=()=>{placed=0;selected='rain';const result=baseReset?.();draw();return result};
+ window.addEventListener('load',()=>document.querySelectorAll('.lw-direct-tools').forEach(node=>node.remove()));
+ draw();
 })();
 </script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
@@ -211,4 +278,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

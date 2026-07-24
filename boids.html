@@ -14,7 +14,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 a[href="index.html"],a[href="kids-index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="結合の強さだけを変え、群れ数とまとまりを見よう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="結合の強さだけを変え、群れ数とまとまりを見よう。">
 <header class="hdr"><div><span class="badge">r33・生態・複雑系・動的探究版</span><h1>鳥の群れ・局所ルール・集団行動ラボ</h1><div class="sub">各個体が近くの仲間との間隔・向き・中心だけを使い、群れ全体の整列や分裂が生まれる過程を追う。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetTop">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>各個体が近くの仲間との間隔・向き・中心だけを使い、群れ全体の整列や分裂が生まれる過程を追う。</p></div><div><b>どこを見る？</b><p>個体の移動、障害物回避、捕食者回避、群れの分裂、向きの一致とまとまりの履歴。</p></div><div><b>何を変える？</b><p>間隔、向き合わせ、凝集、見える距離、風、餌場、捕食者。</p></div><div><b>持ち帰る一文</b><p data-takeaway>群れの秩序は全体を指揮する個体がなくても、局所的な相互作用の組み合わせから生まれる。</p></div></section>
 
@@ -177,4 +178,48 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script id="biology-interaction-v1">
+(()=>{
+  const canvas=document.getElementById('mainCv');
+  if(!canvas)return;
+  const style=document.createElement('style');
+  style.textContent='.bio-tools{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}.bio-tools button{flex:1 1 105px}.bio-tools button.on{background:#ffe36a;color:#201900}.bio-mission{padding:9px 11px;border:1px solid #ffe36a77;border-radius:12px;background:#142237;font-size:12px;line-height:1.6}.bio-key{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}.bio-key span{padding:3px 7px;border-radius:999px;background:#091522}';
+  document.head.append(style);
+  const panel=document.createElement('div');
+  panel.innerHTML='<div class="bio-tools" role="toolbar" aria-label="群れへ置くもの"><button data-tool="birds" class="on">🐦 鳥を10羽追加</button><button data-tool="food">🌾 餌場を置く</button><button data-tool="tree">🌳 木を置く</button><button data-tool="pred">🦅 捕食者を放す</button><button id="bio-remove-birds">−10羽</button></div><div class="bio-mission"><b>群れを揺さぶろう：</b>道具を選び、空の好きな場所をタップ。鳥を増やす、餌へ集める、木で二手に分ける、ワシから逃がす。分かれた群れがもう一度集まれば成功！<div class="bio-key"><span>黄い小鳥＝群れ</span><span>赤い大鳥＝捕食者</span><span>緑の穂＝餌場</span><span>木＝避ける障害物</span></div></div>';
+  canvas.closest('.stage').insertAdjacentElement('afterend',panel);
+  let tool='birds';
+  panel.querySelectorAll('[data-tool]').forEach(button=>button.onclick=()=>{tool=button.dataset.tool;panel.querySelectorAll('[data-tool]').forEach(b=>b.classList.toggle('on',b===button))});
+  panel.querySelector('#bio-remove-birds').onclick=()=>{if(birds.length>10)birds.splice(Math.max(10,birds.length-10),10);draw()};
+  const baseDraw=draw;
+  function birdShape(b,predator=false){
+    const a=Math.atan2(b.vy,b.vx),wing=Math.sin(t*8+b.x*.03)*(predator?8:5);
+    c.save();c.translate(b.x,b.y);c.rotate(a);
+    c.fillStyle=predator?'#e95f55':b.e<.3?'#ff987c':'#ffe36a';c.strokeStyle=predator?'#651f25':'#5b4916';c.lineWidth=1.2;
+    c.beginPath();c.ellipse(0,0,predator?15:9,predator?5.5:3.8,0,0,Math.PI*2);c.fill();c.stroke();
+    c.beginPath();c.moveTo(-2,0);c.quadraticCurveTo(-10,-wing-4,-16,-3);c.quadraticCurveTo(-8,1,-1,2);c.quadraticCurveTo(-8,wing+4,-16,3);c.quadraticCurveTo(-8,-1,-1,-2);c.fill();c.stroke();
+    c.fillStyle=predator?'#ffd05b':'#f09a33';c.beginPath();c.moveTo(predator?15:9,-2);c.lineTo(predator?23:14,0);c.lineTo(predator?15:9,2);c.closePath();c.fill();
+    c.restore();
+  }
+  draw=function(){
+    baseDraw();c.save();
+    for(const o of obs){c.fillStyle='#4c3421';c.fillRect(o.x-5,o.y,10,o.r*.8);c.fillStyle='#287248';for(let i=0;i<5;i++){c.beginPath();c.arc(o.x+Math.cos(i*2.3)*o.r*.35,o.y-o.r*.18+Math.sin(i*2.3)*o.r*.3,o.r*.38,0,Math.PI*2);c.fill()}}
+    c.strokeStyle='#9ce17d';c.lineWidth=3;for(let i=-3;i<=3;i++){c.beginPath();c.moveTo(food.x+i*5,food.y+22);c.quadraticCurveTo(food.x+i*6,food.y,food.x+i*3,food.y-20);c.stroke()}
+    birds.forEach(b=>birdShape(b));preds.forEach(p=>birdShape(p,true));
+    c.fillStyle='#ffffffdd';c.font='bold 13px system-ui';c.fillText(`🐦 ${birds.length}羽　群れ ${stats().groups}　まとまり ${Math.round(stats().cohesion*100)}%`,620,30);
+    if(stats().groups===1&&birds.length>=80){c.fillStyle='#91f0a9';c.fillText('★ 大群がひとつに集まった！',620,52)}
+    c.restore();
+  };
+  function point(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*canvas.width,y:(e.clientY-r.top)/r.height*canvas.height}}
+  canvas.addEventListener('pointerdown',e=>{
+    if(e.button!==undefined&&e.button!==0)return;e.preventDefault();e.stopImmediatePropagation();const p=point(e);
+    if(tool==='birds')for(let i=0;i<10;i++){const a=Math.random()*Math.PI*2;birds.push({x:p.x+(Math.random()-.5)*45,y:p.y+(Math.random()-.5)*45,vx:Math.cos(a)*2,vy:Math.sin(a)*2,e:.8+Math.random()*.2})}
+    if(tool==='food'){food.x=p.x;food.y=Math.max(90,Math.min(540,p.y))}
+    if(tool==='tree')obs.push({x:p.x,y:Math.max(100,Math.min(520,p.y)),r:42});
+    if(tool==='pred')preds.push({x:p.x,y:p.y,vx:2.5,vy:0});
+    running=true;document.getElementById('playPause').textContent='⏸ 一時停止';draw();
+  },{capture:true});
+  draw();
+})();
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

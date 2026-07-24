@@ -15,7 +15,8 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="ミルクウィードだけを減らすと、北上距離と総個体数のどちらが先に変わるか予想しよう。">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="ミルクウィードだけを減らすと、北上距離と総個体数のどちらが先に変わるか予想しよう。">
 <header class="hdr"><div><span class="badge">r55・生態・渡り</span><h1 id="title">オオカバマダラの<ruby>渡り<rt>わたり</rt></ruby>と<ruby>世代交代<rt>せだいこうたい</rt></ruby></h1><div class="sub">北米を複数世代で北上し、秋の長寿命世代が越冬地へ戻る一年を、気温・食草・干ばつ・風・生息地から追う。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>春の北上</b><p>一匹が往復するのでなく、複数世代が順番に北へ広がる。</p></div><div><b>秋の帰還</b><p>秋世代は長寿命で、メキシコの越冬地へ長距離移動する。</p></div><div><b>食草</b><p>幼虫にはミルクウィードが必要で、量は増殖率を制限する。</p></div><div><b>複合条件</b><p>気温だけでなく、干ばつ、追い風、越冬地損失が成功率を変える。</p></div></section><div class="steps"><span class="step"><strong>1 予想</strong> 変える量と結果を予想</span><span class="step"><strong>2 操作</strong> 一つだけ変える</span><span class="step"><strong>3 比較</strong> 条件A/Bを記録</span></div>
 <section class="toolbar"><button id="playPause" class="primary">▶ 再生</button><button id="stepBtn">一段進める</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="scenarioBtn">課題 S1</button></section>
@@ -53,10 +54,16 @@ if(t==='mirage'){const tg=num('c1'),ta=num('c2'),H=num('c3'),obs=num('c4'),D=num
 function updateOutputs(){controls().forEach(el=>{const out=$(el.id+'Out');out.textContent=el.tagName==='SELECT'?el.options[el.selectedIndex].text:el.value+(el.dataset.unit||'')})}
 function metricSnapshot(){const c=compute();return controls().map(x=>x.id+'='+x.value).join(', ')+'\n'+APP.metricLabels.map((x,i)=>x+': '+c.metrics[i]).join('\n')}
 function drawAxes(ctx,w,h){ctx.strokeStyle='#38506b';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(55,h-40);ctx.lineTo(w-25,h-40);ctx.moveTo(55,25);ctx.lineTo(55,h-40);ctx.stroke()}
+function drawMonarch(ctx,x,y,scale,angle){
+  ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.scale(scale,scale);
+  ctx.fillStyle='#f39a32';ctx.strokeStyle='#19130f';ctx.lineWidth=1.7;
+  for(const side of [-1,1]){ctx.save();ctx.scale(side,1);ctx.beginPath();ctx.moveTo(0,-1);ctx.bezierCurveTo(5,-13,18,-14,17,-2);ctx.bezierCurveTo(16,8,7,11,1,4);ctx.closePath();ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(1,3);ctx.bezierCurveTo(10,5,15,13,8,17);ctx.bezierCurveTo(2,18,-1,10,0,4);ctx.closePath();ctx.fill();ctx.stroke();ctx.strokeStyle='#fff4';ctx.beginPath();ctx.moveTo(4,-5);ctx.lineTo(14,-2);ctx.moveTo(5,4);ctx.lineTo(11,12);ctx.stroke();ctx.restore()}
+  ctx.fillStyle='#151515';ctx.beginPath();ctx.ellipse(0,2,2.3,10,0,0,Math.PI*2);ctx.fill();ctx.restore();
+}
 function line(ctx,pts,color,w=2){if(!pts.length)return;ctx.strokeStyle=color;ctx.lineWidth=w;ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke()}
 function drawAll(){updateOutputs();const c=compute(),m=$('mainCv').getContext('2d'),g=$('graphCv').getContext('2d'),W=900,H=520,GW=900,GH=280;m.clearRect(0,0,W,H);m.fillStyle='#081522';m.fillRect(0,0,W,H);g.clearRect(0,0,GW,GH);g.fillStyle='#091725';g.fillRect(0,0,GW,GH);drawAxes(g,GW,GH);const t=APP.type;
 if(t==='hypothesis'){const e=c.extra,sc=50;m.fillStyle='#e8f0f8';m.font='16px system-ui';m.fillText('反復標本の平均値',45,35);state.hist.forEach((x,i)=>{const px=450+x*220,py=70+(i%14)*25;m.fillStyle=Math.abs(x/e.se)>e.zc?'#ff8d8d':'#5fd3ff';m.beginPath();m.arc(clamp(px,30,870),py,5,0,7);m.fill()});m.strokeStyle='#ffd85a';m.beginPath();m.moveTo(450,55);m.lineTo(450,450);m.stroke();for(let i=0;i<800;i++){const x=-4+8*i/799,y0=Math.exp(-x*x/2),y1=Math.exp(-(x-e.delta)*(x-e.delta)/2),px=55+i,py0=230-y0*150,py1=230-y1*150;if(i===0){g.beginPath();g.moveTo(px,py0)}else g.lineTo(px,py0)}g.strokeStyle='#5fd3ff';g.stroke();g.beginPath();for(let i=0;i<800;i++){const x=-4+8*i/799,y=Math.exp(-(x-e.delta)*(x-e.delta)/2),px=55+i,py=230-y*150;i?g.lineTo(px,py):g.moveTo(px,py)}g.strokeStyle='#69e0b0';g.stroke();g.fillStyle='#ff8d8d55';const left=55+(4-e.zc)*100,right=55+(4+e.zc)*100;g.fillRect(55,40,Math.max(0,left-55),190);g.fillRect(right,40,Math.max(0,855-right),190);g.strokeStyle='#ffd85a';g.lineWidth=3;const zx=55+(state.lastZ+4)*100;g.beginPath();g.moveTo(clamp(zx,55,855),45);g.lineTo(clamp(zx,55,855),230);g.stroke();g.fillStyle='#eef5fb';g.fillText('青:帰無分布  緑:対立分布  赤:棄却域  黄:最新z',60,258)}
-else if(t==='monarch'){m.fillStyle='#12324b';m.fillRect(180,35,520,430);m.strokeStyle='#7bc7e8';m.lineWidth=8;m.beginPath();m.moveTo(390,430);m.bezierCurveTo(340,340,420,250,470,185);m.bezierCurveTo(520,125,570,95,600,70);m.stroke();const y=430-(state.lat-19.5)/30*360,x=450+45*Math.sin(state.day/55);for(let i=0;i<18;i++){m.fillStyle=i%2?'#ff9f43':'#111';m.beginPath();m.ellipse(x+(rnd()-.5)*80,y+(rnd()-.5)*45,8,4,(rnd()-.5),0,7);m.fill()}m.fillStyle='#eef5fb';m.font='16px system-ui';m.fillText('メキシコ',285,455);m.fillText('カナダ',585,65);m.fillText('G'+state.gen+'  '+state.pop.toFixed(0)+'個体',35,45);const hist=state.hist;if(hist.length){const max=Math.max(120,...hist.map(x=>x[1]));line(g,hist.map((x,i)=>[55+i*800/Math.max(1,hist.length-1),230-x[1]/max*170]),'#ffd85a',3);line(g,hist.map((x,i)=>[55+i*800/Math.max(1,hist.length-1),230-(x[2]-19.5)/30*170]),'#5fd3ff',2)}g.fillStyle='#eef5fb';g.fillText('黄:個体数  青:平均緯度',60,258)}
+else if(t==='monarch'){m.fillStyle='#12324b';m.fillRect(180,35,520,430);m.strokeStyle='#7bc7e8';m.lineWidth=8;m.beginPath();m.moveTo(390,430);m.bezierCurveTo(340,340,420,250,470,185);m.bezierCurveTo(520,125,570,95,600,70);m.stroke();const y=430-(state.lat-19.5)/30*360,x=450+45*Math.sin(state.day/55);for(let i=0;i<14;i++){const bx=x+Math.sin(i*2.4+state.day*.04)*58,by=y+Math.cos(i*1.7+state.day*.05)*34;drawMonarch(m,bx,by,.58+(i%3)*.08,Math.sin(state.day*.03+i)*.22)}m.fillStyle='#eef5fb';m.font='16px system-ui';m.fillText('メキシコ',285,455);m.fillText('カナダ',585,65);m.fillText('G'+state.gen+'  '+state.pop.toFixed(0)+'個体',35,45);const hist=state.hist;if(hist.length){const max=Math.max(120,...hist.map(x=>x[1]));line(g,hist.map((x,i)=>[55+i*800/Math.max(1,hist.length-1),230-x[1]/max*170]),'#ffd85a',3);line(g,hist.map((x,i)=>[55+i*800/Math.max(1,hist.length-1),230-(x[2]-19.5)/30*170]),'#5fd3ff',2)}g.fillStyle='#eef5fb';g.fillText('黄:個体数  青:平均緯度',60,258)}
 else if(t==='raindrop'){const y=450-state.z/3200*370;m.fillStyle='#263c52';m.beginPath();m.ellipse(450,170,330,125,0,0,7);m.fill();m.fillStyle=state.phase==='氷混合'?'#d9f4ff':'#5fd3ff';m.beginPath();m.arc(450,y,clamp(state.r/3,5,42),0,7);m.fill();m.strokeStyle='#69e0b0';m.lineWidth=3;m.beginPath();m.moveTo(450,y+55);m.lineTo(450,y+10);m.stroke();m.fillStyle='#eef5fb';m.font='16px system-ui';m.fillText('上昇流 ↑ '+num('c1').toFixed(1)+' m/s',35,45);m.fillText('地表',35,470);const hist=state.hist;if(hist.length){const ma=Math.max(40,...hist.map(x=>x[1]));line(g,hist.map((x,i)=>[55+i*800/Math.max(1,hist.length-1),230-x[1]/ma*170]),'#ffd85a',3);line(g,hist.map((x,i)=>[55+i*800/Math.max(1,hist.length-1),230-x[2]/3200*170]),'#5fd3ff',2);line(g,hist.map((x,i)=>[55+i*800/Math.max(1,hist.length-1),230-x[3]/9*170]),'#69e0b0',2)}g.fillStyle='#eef5fb';g.fillText('黄:半径  青:高度  緑:終端速度',60,258)}
 else if(t==='typhoon'){const cx=450,cy=260,rad=80+state.wind*2.2;for(let k=0;k<6;k++){m.strokeStyle=`rgba(95,211,255,${.25+k*.1})`;m.lineWidth=5;m.beginPath();for(let i=0;i<100;i++){const a=i*.18+state.time*.6+k,rr=18+i*rad/100,x=cx+Math.cos(a)*rr,y=cy+Math.sin(a)*rr*.65;i?m.lineTo(x,y):m.moveTo(x,y)}m.stroke()}m.fillStyle='#081522';m.beginPath();m.arc(cx,cy,22+state.sym*18,0,7);m.fill();m.fillStyle='#eef5fb';m.font='18px system-ui';m.fillText(state.p.toFixed(0)+' hPa',390,42);const hist=state.hist;if(hist.length){line(g,hist.map((x,i)=>[55+i*800/Math.max(1,hist.length-1),230-(1015-x[1])/135*170]),'#5fd3ff',2);line(g,hist.map((x,i)=>[55+i*800/Math.max(1,hist.length-1),230-x[2]/85*170]),'#ffd85a',3);line(g,hist.map((x,i)=>[55+i*800/Math.max(1,hist.length-1),230-x[3]/2*170]),'#ff8d8d',2)}g.fillStyle='#eef5fb';g.fillText('青:気圧低下  黄:風速  赤:暖気核',60,258)}
 else if(t==='derivative'){const e=c.extra, xmin=-3.3,xmax=3.3,sy=70,ox=450,oy=260;line(m,Array.from({length:400},(_,i)=>{const x=xmin+(xmax-xmin)*i/399;return[55+i*790/399,oy-ffun(x,e.type,e.a)*sy]}),'#5fd3ff',3);m.strokeStyle='#384e67';m.beginPath();m.moveTo(55,oy);m.lineTo(845,oy);m.stroke();const px=55+(e.x-xmin)/(xmax-xmin)*790,py=oy-ffun(e.x,e.type,e.a)*sy,px2=55+(e.x+e.h-xmin)/(xmax-xmin)*790,py2=oy-ffun(e.x+e.h,e.type,e.a)*sy;m.fillStyle='#ffd85a';m.beginPath();m.arc(px,py,8,0,7);m.fill();m.beginPath();m.arc(px2,py2,7,0,7);m.fill();m.strokeStyle='#ffd85a';m.lineWidth=2;m.beginPath();m.moveTo(px-220,py+e.sec*220*sy/120);m.lineTo(px+220,py-e.sec*220*sy/120);m.stroke();m.strokeStyle='#69e0b0';m.beginPath();m.moveTo(px-220,py+e.trueD*220*sy/120);m.lineTo(px+220,py-e.trueD*220*sy/120);m.stroke();const pts=[];for(let i=0;i<260;i++){const h=Math.pow(10,-3+3*i/259),s=(ffun(e.x+h,e.type,e.a)-ffun(e.x,e.type,e.a))/h;pts.push([55+i*790/259,180-s*35])}line(g,pts,'#ffd85a',3);g.strokeStyle='#69e0b0';g.beginPath();g.moveTo(55,180-e.trueD*35);g.lineTo(845,180-e.trueD*35);g.stroke();const hx=55+clamp((Math.log10(e.h)+3)/3,0,1)*790;g.strokeStyle='#ff8d8d';g.lineWidth=3;g.beginPath();g.moveTo(hx,35);g.lineTo(hx,230);g.stroke();g.fillStyle='#eef5fb';g.fillText('黄:差分商  緑:真の導関数  赤:現在h',60,258)}
@@ -73,6 +80,74 @@ $('guideBtn').onclick=()=>$('guideBack').classList.add('show');$('guideClose').o
 $('speakBtn').onclick=()=>{if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(APP.title+'。'+APP.subtitle+'。'+APP.first);u.lang='ja-JP';speechSynthesis.speak(u)}};
 function record(which){const text=metricSnapshot();if(which==='A'){A=text;$('snapA').textContent=text}else{B=text;$('snapB').textContent=text}$('diffAB').textContent=A&&B?'条件と結果を見比べ、変えた入力が一つだけか確認してください。':'もう一方も記録してください。'}$('recA').onclick=()=>record('A');$('recB').onclick=()=>record('B');$('clearAB').onclick=()=>{A=B=null;$('snapA').textContent=$('snapB').textContent=$('diffAB').textContent=''};
 applyScenario(0);
+</script><script id="v1-1-monarch-direct-play">
+(()=>{
+ const canvas=document.getElementById('mainCv'),ctx=canvas?.getContext('2d');
+ if(!canvas||!ctx)return;
+ const tools=[
+  {id:'flower',label:'花畑',icon:'✿',color:'#ff9ccc'},
+  {id:'wind',label:'追い風',icon:'➜',color:'#7ee6f2'},
+  {id:'danger',label:'危険',icon:'!',color:'#ff846e'}
+ ];
+ let selected='flower',marks=[],pointerDown=false,lastPlace=0;
+ const baseDraw=drawAll;
+ function rounded(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
+ function routePoints(){
+  const sorted=[...marks].sort((a,b)=>b.y-a.y),points=[[390,442]];
+  let shift=0;
+  sorted.forEach(mark=>{
+   if(mark.tool==='wind')shift+=mark.x<450?-42:42;
+   const dodge=mark.tool==='danger'?(mark.x<450?100:-100):0;
+   points.push([clamp(mark.x+shift+dodge,220,680),mark.y]);
+  });
+  points.push([600+shift*.35,68]);return points;
+ }
+ function drawMapLayer(){
+  ctx.save();
+  const points=routePoints();
+  ctx.strokeStyle='#fff6a6';ctx.lineWidth=10;ctx.globalAlpha=.28;ctx.lineJoin='round';ctx.beginPath();
+  points.forEach((point,index)=>index?ctx.lineTo(point[0],point[1]):ctx.moveTo(point[0],point[1]));ctx.stroke();
+  ctx.globalAlpha=1;ctx.strokeStyle='#ffe46b';ctx.lineWidth=3;ctx.setLineDash([12,8]);ctx.stroke();ctx.setLineDash([]);
+  marks.forEach(mark=>{
+   ctx.fillStyle=tools.find(tool=>tool.id===mark.tool).color;ctx.strokeStyle='#fff';ctx.lineWidth=2;
+   ctx.beginPath();ctx.arc(mark.x,mark.y,23,0,Math.PI*2);ctx.fill();ctx.stroke();
+   ctx.fillStyle='#13202b';ctx.font='bold 22px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';
+   ctx.fillText(tools.find(tool=>tool.id===mark.tool).icon,mark.x,mark.y);
+  });
+  ctx.fillStyle='rgba(4,12,20,.94)';ctx.fillRect(16,414,868,48);
+  tools.forEach((tool,i)=>{
+   const x=28+i*150,w=138,on=tool.id===selected;
+   rounded(x,420,w,35,11);ctx.fillStyle=on?tool.color:'#172b3d';ctx.fill();ctx.strokeStyle=on?'#fff':'#486781';ctx.lineWidth=on?3:1;ctx.stroke();
+   ctx.fillStyle=on?'#101820':'#eef6fc';ctx.font='bold 14px system-ui';ctx.fillText(`${tool.icon} ${tool.label}`,x+w/2,438);
+  });
+  ctx.textAlign='left';ctx.fillStyle='#e3edf5';ctx.font='bold 13px system-ui';ctx.fillText('地図に置くと渡り道が変わる',500,428);
+  ctx.fillStyle=marks.length>=5?'#83e7a3':'#ffd85a';
+  ctx.fillText(marks.length>=5?'★ 達成：ちがう渡り道を作れた！':`目標：花・風・危険を5個置く（${marks.length}/5）`,500,448);
+  ctx.restore();
+ }
+ drawAll=function(){baseDraw();drawMapLayer()};
+ function point(event){const rect=canvas.getBoundingClientRect();return{x:(event.clientX-rect.left)*canvas.width/rect.width,y:(event.clientY-rect.top)*canvas.height/rect.height}}
+ function place(event){
+  const p=point(event);
+  if(p.y>=410){
+   const index=Math.floor((p.x-28)/150);if(index>=0&&index<tools.length){selected=tools[index].id;drawAll()}return;
+  }
+  if(p.x<180||p.x>700||p.y<35||p.y>448)return;
+  const now=performance.now();if(now-lastPlace<180)return;lastPlace=now;
+  marks.push({tool:selected,x:p.x,y:p.y});if(marks.length>18)marks.shift();
+  if(selected==='flower'){state.pop=clamp(state.pop*1.08+12,2,5000);document.getElementById('c2').value=clamp(num('c2')+5,20,140)}
+  if(selected==='wind'){state.lat=clamp(state.lat+1.4,19.5,49.5);document.getElementById('c4').value=clamp(num('c4')+5,-40,50)}
+  if(selected==='danger'){state.pop=clamp(state.pop*.88,2,5000);document.getElementById('c3').value=clamp(num('c3')+5,0,100)}
+  manualUpdates++;drawAll();
+ }
+ canvas.addEventListener('pointerdown',event=>{event.stopImmediatePropagation();pointerDown=true;try{canvas.setPointerCapture?.(event.pointerId)}catch(_){/* synthetic pointer */}place(event)});
+ canvas.addEventListener('pointermove',event=>{if(pointerDown&&event.buttons)place(event)});
+ canvas.addEventListener('pointerup',()=>{pointerDown=false});
+ canvas.addEventListener('pointercancel',()=>{pointerDown=false});
+ const baseReset=resetState;
+ resetState=function(){marks=[];selected='flower';baseReset()};
+ drawAll();
+})();
 </script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
 const ready=()=>{
@@ -185,4 +260,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

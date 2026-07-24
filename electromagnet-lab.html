@@ -10,7 +10,8 @@ html,body{max-width:100%;overflow-x:hidden}canvas{max-width:100%;height:auto}.r5
 
 .r59-focusable:focus-visible,body :focus-visible{outline:3px solid #ffd85a!important;outline-offset:3px!important}
 @media(max-width:420px){#r59-globalbar{gap:5px;padding:6px}#r59-globalbar a,#r59-globalbar button{min-height:36px!important;font-size:10px!important;padding:5px 7px!important}}
-</style><meta name="r60-explicit-accessibility" content="static-control-labels"><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"></head><body data-first="モーターモードで負荷を固定し、巻数だけを増やして始動トルク・回転数・銅損を比べよう。">
+</style><meta name="r60-explicit-accessibility" content="static-control-labels"><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</head><body data-first="モーターモードで負荷を固定し、巻数だけを増やして始動トルク・回転数・銅損を比べよう。">
 <header class="hdr"><div><span class="badge">r51・物理・電磁気・動的探究版</span><h1>電磁石・モーター・発電機ラボ</h1><div class="sub">電流が磁場と力を生み、回転する磁束が電圧を生む双方向のエネルギー変換を追う。</div></div><div class="head-actions"><button id="guideBtn" aria-label="？ ガイド">？ ガイド</button><button id="speakBtn" aria-label="🔊 読む">🔊 読む</button><button id="tourBtn" aria-label="👣 操作">👣 操作</button><button id="resetTop" aria-label="↺ リセット">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>電流が磁場と力を生み、回転する磁束が電圧を生む双方向のエネルギー変換を追う。</p></div><div><b>どこを見る？</b><p>コイル電荷、磁力線、鉄心、可動鉄片または回転子、電流・回転・損失。</p></div><div><b>何を変える？</b><p>モード、巻数、電流または回転入力、鉄心、空隙、負荷、抵抗、向き。</p></div><div><b>持ち帰る一文</b><p data-takeaway>モーターと発電機は別の原理ではなく、電気と機械エネルギーの向きを反転した同じ電磁変換である。</p></div></section>
 
@@ -58,7 +59,7 @@ let zoom=false;q('#zoomToggle').addEventListener('click',()=>{zoom=!zoom;q('#zoo
  function signature(){let s=(window.r51ScenarioIndex||0)*71;controls().forEach((x,i)=>{const z=String(x.value);let h=0;for(let j=0;j<z.length;j++)h=(h*33+z.charCodeAt(j))%997;s=(s+h*(i+3))%997});return s%997}
  function normalize(cv){if(!cv)return;const z=cv.getContext('2d');z.setTransform(1,0,0,1,0,0);z.globalAlpha=1;z.globalCompositeOperation='source-over';z.lineWidth=1;z.setLineDash([]);z.lineDashOffset=0;z.textAlign='start';z.textBaseline='alphabetic';z.shadowBlur=0;z.shadowColor='transparent'}
  function overlay(cv,label,color){if(!cv)return;const x=cv.getContext('2d'),w=cv.width,h=cv.height,sig=signature(),p=(Math.floor(tick*23)+sig)%101;x.save();x.setTransform(1,0,0,1,0,0);const bh=Math.max(38,Math.round(h*.08)),pad=Math.max(10,Math.round(w*.018));x.fillStyle='rgba(5,13,24,.90)';x.fillRect(0,h-bh,w,bh);x.font=`${Math.max(12,Math.round(w/72))}px system-ui`;x.textAlign='start';x.textBaseline='alphabetic';x.fillStyle='#d8e5f4';x.fillText(`${label}  u=${tick.toFixed(1)}  S${(window.r51ScenarioIndex||0)+1}  C${String(sig).padStart(3,'0')}`,pad,h-bh+17);x.fillStyle='#20364e';x.fillRect(pad,h-13,w-pad*2,7);x.fillStyle=color;x.fillRect(pad,h-13,Math.max(8,(w-pad*2)*p/100),7);x.restore()}
- function paint(){if(q('r51TickMetric'))q('r51TickMetric').textContent=tick.toFixed(1);if(q('r51SigMetric'))q('r51SigMetric').textContent=String(signature()).padStart(3,'0');overlay(main,'主Canvas','#ffd85a');overlay(second,'同期定量Canvas','#55d6be')}
+ function paint(){if(q('r51TickMetric'))q('r51TickMetric').textContent=tick.toFixed(1);if(q('r51SigMetric'))q('r51SigMetric').textContent=String(signature()).padStart(3,'0');}
  function fire(el){el.dispatchEvent(new Event(el.tagName==='SELECT'?'change':'input',{bubbles:true}))}
  function setControls(S){for(const [id,value] of Object.entries(S)){if(id.startsWith('__'))continue;const el=q(id);if(!el)continue;el.value=String(value);fire(el)}}
  function postScenario(S){if('electromagnet-lab.html'==='dna-protein.html'){const target=Number(S.__gene||0);let guard=0;while(guard++<8&&typeof gi!=='undefined'&&gi!==target)q('newCase')?.click();if(S.__mutate)q('mutateBtn')?.click()}if(S.__exercise&&q('exerciseBtn')&&!/終了/.test(q('exerciseBtn').textContent))q('exerciseBtn').click();if(S.__meal&&q('mealBtn'))q('mealBtn').click()}
@@ -188,4 +189,5 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script></body></html>
+</script><script src="lab4wonder_v1_1.js"></script>
+</body></html>

@@ -1,5 +1,6 @@
 # Local release and audit archives
 *.zip
+/old/
 
 # Local handoff and filesystem metadata
 NEXT_SESSION_HANDOFF_*.md

@@ -212,14 +212,26 @@ show(0);
 (()=>{
 const canvas=document.getElementById('mainCanvas');if(!canvas)return;
 const tools=document.createElement('div');tools.className='v11-water-tools';
-tools.innerHTML='<b>👆 海へ何度でも投入して、流され方を比べよう</b><button class="on" data-mode="buoy">🟠 浮標を投入</button><button data-mode="boat">⛵ 小舟を投入</button><button data-mode="clear">航跡を消す</button>';
+tools.innerHTML='<b id="v11WaterStatus" role="status" aria-live="polite">👆 船から行き先へドラッグして操舵。潮流で指示線からずれる</b><button class="on" data-mode="steer">🚤 本船を操舵</button><button data-mode="buoy">🟠 浮標を投入</button><button data-mode="boat">⛵ 小舟を投入</button><button data-mode="clear">航跡を消す</button>';
 canvas.closest('.stage').insertAdjacentElement('afterend',tools);
-let mode='buoy',items=[],last=performance.now();
+let mode='steer',items=[],last=performance.now(),dragging=false,lastDrop=0,steerTarget=null;
 tools.addEventListener('click',event=>{const b=event.target.closest('[data-mode]');if(!b)return;if(b.dataset.mode==='clear'){items=[];return}mode=b.dataset.mode;tools.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
-canvas.addEventListener('pointerdown',event=>{
+function dropItem(event){
  event.preventDefault();event.stopImmediatePropagation();const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width*900,y=(event.clientY-r.top)/r.height*520;
+ if(mode==='steer'){
+  steerTarget={x,y};const desired=Math.atan2(y-sim.y,x-sim.x),error=Math.atan2(Math.sin(desired),Math.cos(desired))*180/Math.PI;
+  const heading=document.getElementById('heading');heading.value=Math.max(+heading.min,Math.min(+heading.max,error));heading.dispatchEvent(new Event('input',{bubbles:true}));
+  document.getElementById('lane').value=y<205?'upper':y>315?'lower':'middle';document.getElementById('lane').dispatchEvent(new Event('change',{bubbles:true}));
+  const [u,v]=flow(sim.x,sim.y,sim.t);document.getElementById('v11WaterStatus').textContent=`針路 ${error.toFixed(0)}°を指示。潮流 ${u>=0?'→':'←'} ${Math.hypot(u,v).toFixed(1)}ktが実際の航跡をずらす。`;return;
+ }
+ const now=performance.now();if(now-lastDrop<85)return;lastDrop=now;
  if(y<58||y>462)return;items.push({x,y,type:mode,trail:[[x,y]],age:0});if(items.length>14)items.shift();
-},{capture:true});
+}
+canvas.addEventListener('pointerdown',event=>{dragging=true;lastDrop=0;try{canvas.setPointerCapture?.(event.pointerId)}catch(_){}dropItem(event)},{capture:true});
+canvas.addEventListener('pointermove',event=>{if(dragging)dropItem(event)},{capture:true});
+canvas.addEventListener('pointerup',()=>{dragging=false},{capture:true});
+canvas.addEventListener('pointercancel',()=>{dragging=false},{capture:true});
+document.getElementById('resetBtn').addEventListener('click',()=>{items=[];steerTarget=null;dragging=false;lastDrop=0;document.getElementById('v11WaterStatus').textContent='👆 船から行き先へドラッグして操舵。潮流で指示線からずれる'});
 const originalDraw=drawAll;
 drawAll=function(){
  originalDraw();
@@ -227,6 +239,7 @@ drawAll=function(){
  items.forEach(item=>{const [u,v]=flow(item.x,item.y,sim.t),self=item.type==='boat'?2.1:0;item.x+=(u+self)*dt*7;item.y+=v*dt*7;item.age+=dt;if(!item.trail.length||item.age-item.trail.at(-1)[2]>.12)item.trail.push([item.x,item.y,item.age]);if(item.trail.length>100)item.trail.shift()});
  items=items.filter(item=>item.x>-20&&item.x<920&&item.y>45&&item.y<475);
  X.save();
+ if(steerTarget){X.strokeStyle='#ffd45c';X.lineWidth=4;X.setLineDash([10,7]);X.beginPath();X.moveTo(sim.x,sim.y);X.lineTo(steerTarget.x,steerTarget.y);X.stroke();X.setLineDash([]);X.beginPath();X.arc(steerTarget.x,steerTarget.y,13,0,Math.PI*2);X.stroke();X.fillStyle='#fff';X.font='bold 12px system-ui';X.fillText('指示進路',steerTarget.x-28,steerTarget.y-18)}
  vortices().forEach(vortex=>{
   const spin=sim.t*.9*vortex.s;
   for(let arm=0;arm<3;arm++){X.strokeStyle=arm===0?'rgba(198,245,255,.92)':'rgba(91,210,244,.55)';X.lineWidth=arm===0?4:3;X.beginPath();for(let i=0;i<70;i++){const radius=8+i*1.05,angle=spin+arm*Math.PI*2/3+i*.16*vortex.s,x=vortex.x+Math.cos(angle)*radius,y=vortex.y+Math.sin(angle)*radius*.72;i?X.lineTo(x,y):X.moveTo(x,y)}X.stroke()}

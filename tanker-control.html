@@ -206,23 +206,29 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
-<style id="v11-tanker-style">.v11-helm{display:flex;gap:7px;flex-wrap:wrap;margin:7px 0;padding:9px;border:2px solid #ffd45c;border-radius:13px;background:#10263a}.v11-helm b{flex:1 1 100%;font-size:13px}.v11-helm button{flex:1;min-width:120px}.stage canvas{cursor:crosshair;touch-action:none}</style>
+<style id="v11-tanker-style">.v11-helm{display:flex;gap:7px;flex-wrap:wrap;margin:7px 0;padding:9px;border:2px solid #ffd45c;border-radius:13px;background:#10263a}.v11-helm b,.v11-helm-status{flex:1 1 100%;font-size:13px}.v11-helm-status{color:#bfe8ff}.v11-helm button{flex:1;min-width:120px}.stage canvas{cursor:crosshair;touch-action:none}</style>
 <script id="v11-tanker-interaction">
 (()=>{
 const canvas=document.getElementById('mainCanvas');if(!canvas)return;
 const helm=document.createElement('div');helm.className='v11-helm';
-helm.innerHTML='<b>👆 港の行きたい場所をタップ：船長として進路を指示（船はすぐには曲がらない）</b><button data-helm="-28">↶ 左へ</button><button data-helm="0">↑ 舵を戻す</button><button data-helm="28">右へ ↷</button><button data-helm="reverse">⏪ 逆進！</button>';
+helm.innerHTML='<b>👆 港をドラッグして進路を指示（船首と航跡は遅れて曲がる）</b><span id="v11HelmStatus" class="v11-helm-status" role="status" aria-live="polite">黄色の指示線、船首、白い航跡の順に反応を見よう。</span><button data-helm="-28">↶ 左へ</button><button data-helm="0">↑ 舵を戻す</button><button data-helm="28">右へ ↷</button><button data-helm="reverse">⏪ 逆進！</button>';
 canvas.closest('.stage').insertAdjacentElement('afterend',helm);
-let target={x:760,y:260},pulse=0;
+let target={x:760,y:260},pulse=0,dragging=false;
 function setControl(id,value){const input=document.getElementById(id);input.value=Math.max(+input.min,Math.min(+input.max,value));input.dispatchEvent(new Event('input',{bubbles:true}))}
 function commandRudder(value){pulse=28;if(value==='reverse'){setControl('throttle',-100)}else{setControl('rudder',value);if(+document.getElementById('throttle').value<5)setControl('throttle',25)}drawAll()}
 helm.addEventListener('click',event=>{const b=event.target.closest('[data-helm]');if(b)commandRudder(b.dataset.helm==='reverse'?'reverse':+b.dataset.helm)});
-canvas.addEventListener('pointerdown',event=>{
+function pointHelm(event){
  event.preventDefault();event.stopImmediatePropagation();const r=canvas.getBoundingClientRect();target={x:(event.clientX-r.left)/r.width*900,y:(event.clientY-r.top)/r.height*520};
  const desired=Math.atan2(target.y-sim.y,target.x-sim.x),error=Math.atan2(Math.sin(desired-sim.heading),Math.cos(desired-sim.heading)),ahead=Math.cos(error)>0;
- if(!ahead){commandRudder('reverse');return}
- commandRudder(Math.max(-35,Math.min(35,error*180/Math.PI*1.8)));
-},{capture:true});
+ if(!ahead){commandRudder('reverse');document.getElementById('v11HelmStatus').textContent='船尾側への指示なので逆進。停止距離が縮むまで船体は前へ滑る。';return}
+ const rudder=Math.max(-35,Math.min(35,error*180/Math.PI*1.8));commandRudder(rudder);
+ const wind=+document.getElementById('wind').value,current=+document.getElementById('current').value;
+ document.getElementById('v11HelmStatus').textContent=`舵 ${rudder.toFixed(0)}°を指示。風 ${wind>=0?'右':'左'}、潮流 ${current>=0?'右':'左'}へ船体を流す。`;
+}
+canvas.addEventListener('pointerdown',event=>{dragging=true;try{canvas.setPointerCapture?.(event.pointerId)}catch(_){}pointHelm(event)},{capture:true});
+canvas.addEventListener('pointermove',event=>{if(dragging)pointHelm(event)},{capture:true});
+canvas.addEventListener('pointerup',()=>{dragging=false},{capture:true});
+canvas.addEventListener('pointercancel',()=>{dragging=false},{capture:true});
 const originalReset=resetModel;
 resetModel=function(){originalReset();target={x:760,y:260}};
 const originalDraw=drawMain;

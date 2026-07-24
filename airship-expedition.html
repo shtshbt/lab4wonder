@@ -213,14 +213,22 @@ for(const id of (CFG.partitionControls||[])){const x=el(id);if(x)x.addEventListe
 render();
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
-<style id="v11-airship-style">.v11-air-tools{display:flex;gap:7px;flex-wrap:wrap;margin:7px 0;padding:9px;border:2px solid #ffd85a;border-radius:13px;background:#14263a}.v11-air-tools b{flex:1 1 100%;font-size:13px}.v11-air-tools button{flex:1;min-width:130px}.stage canvas{cursor:pointer;touch-action:none}</style>
+<style id="v11-airship-style">.v11-air-tools{display:flex;gap:7px;flex-wrap:wrap;margin:7px 0;padding:9px;border:2px solid #ffd85a;border-radius:13px;background:#14263a}.v11-air-tools b,.v11-air-status{flex:1 1 100%;font-size:13px}.v11-air-status{color:#bfe8ff}.v11-air-tools button{flex:1;min-width:130px}.stage canvas{cursor:crosshair;touch-action:none}</style>
 <script id="v11-airship-interaction">
 (()=>{
 const canvas=document.getElementById('mainCanvas');if(!canvas)return;
 const tools=document.createElement('div');tools.className='v11-air-tools';
-tools.innerHTML='<b>👆 飛行船へ直接介入（変化は機体と矢印にすぐ現れる）</b><button data-air="cargo">📦 荷物を降ろす</button><button data-air="ballast">🪨 バラスト投下</button><button data-air="gas">🎈 ガスを抜く</button><button data-air="wind">💨 風を受け流す</button>';
+tools.innerHTML='<b>👆 空をドラッグして進路を指示。機体は風を受けながらゆっくり向きを変える</b><span id="v11AirStatus" class="v11-air-status" role="status" aria-live="polite">水色の風矢印と、黄色の指示線に対する機体の遅れを見よう。</span><button data-air="cargo">📦 荷物を降ろす</button><button data-air="ballast">🪨 バラスト投下</button><button data-air="gas">🎈 ガスを抜く</button><button data-air="wind">💨 風を受け流す</button>';
 canvas.closest('.stage').insertAdjacentElement('afterend',tools);
-let effect='',pulse=0;
+let effect='',pulse=0,manualTarget=null,dragging=false;
+const baseAdvance=advance;
+advance=function(){
+ baseAdvance();
+ if(!manualTarget)return;
+ const dx=manualTarget.x-s.x,dy=manualTarget.y-s.y,d=Math.max(1,Math.hypot(dx,dy)),turn=.55;
+ s.vx=s.vx*(1-turn)+dx/d*2.2*turn;s.vy=s.vy*(1-turn)+dy/d*2.2*turn;
+ if(d<32){manualTarget=null;document.getElementById('v11AirStatus').textContent='指示点へ到達。次の観測点へ向かう自動航法に戻った。'}
+};
 function changeInput(id,delta){const input=document.getElementById(id);input.value=Math.max(+input.min,Math.min(+input.max,+input.value+delta));input.dispatchEvent(new Event('input',{bubbles:true}))}
 function intervene(kind){
  effect=kind;pulse=30;
@@ -231,10 +239,18 @@ function intervene(kind){
  advance();drawAll();
 }
 tools.addEventListener('click',event=>{const b=event.target.closest('[data-air]');if(b)intervene(b.dataset.air)});
-canvas.addEventListener('pointerdown',event=>{
- event.preventDefault();event.stopImmediatePropagation();const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width;
- intervene(x<.25?'cargo':x<.5?'ballast':x<.75?'gas':'wind');
-},{capture:true});
+function steer(event){
+ event.preventDefault();event.stopImmediatePropagation();const r=canvas.getBoundingClientRect();
+ manualTarget={x:(event.clientX-r.left)/r.width*800,y:(event.clientY-r.top)/r.height*430};
+ const [wx,wy]=windAt(s.x,s.y,s.alt,s.t),side=manualTarget.y<s.y?'上':'下';
+ document.getElementById('v11AirStatus').textContent=`${side}側へ進路指示。風 ${wx>=0?'→':'←'} ${Math.hypot(wx,wy).toFixed(1)}、機体は慣性を残して旋回中。`;
+ pulse=24;drawAll();
+}
+canvas.addEventListener('pointerdown',event=>{dragging=true;try{canvas.setPointerCapture?.(event.pointerId)}catch(_){}steer(event)},{capture:true});
+canvas.addEventListener('pointermove',event=>{if(dragging)steer(event)},{capture:true});
+canvas.addEventListener('pointerup',()=>{dragging=false},{capture:true});
+canvas.addEventListener('pointercancel',()=>{dragging=false},{capture:true});
+for(const id of ['resetBtn','sameSeedBtn'])document.getElementById(id).addEventListener('click',()=>{manualTarget=null;dragging=false});
 const originalDraw=drawMain;
 drawMain=function(){
  originalDraw();
@@ -248,6 +264,7 @@ drawMain=function(){
  const lift=+C.lift.value,payload=+C.payload.value;
  ctx.fillStyle='rgba(5,17,30,.88)';ctx.fillRect(14,38,275,91);ctx.fillStyle='#fff';ctx.font='bold 13px system-ui';ctx.fillText(`🎈 ガスの浮く力 ${lift}%`,27,62);ctx.fillText(`📦 荷物の重さ ${payload}kg`,27,84);ctx.fillStyle=lift>payload?'#69e0b0':'#ff9d79';ctx.fillText(lift>payload?'↑ 浮く力が優勢':'↓ 重さが優勢',27,108);
  const wx=windAt(s.x,s.y,s.alt,s.t)[0];ctx.strokeStyle='#5fd3ff';ctx.fillStyle='#5fd3ff';ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(s.x-80,s.y-48);ctx.lineTo(s.x-80+wx*20,s.y-48);ctx.stroke();ctx.font='bold 12px system-ui';ctx.fillText('風',s.x-80,s.y-58);
+ if(manualTarget){ctx.strokeStyle='#ffd85a';ctx.lineWidth=4;ctx.setLineDash([10,7]);ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(manualTarget.x,manualTarget.y);ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.arc(manualTarget.x,manualTarget.y,13,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#fff';ctx.fillText('指示進路',manualTarget.x-28,manualTarget.y-18)}
  if(pulse>0){ctx.strokeStyle=effect==='gas'?'#ff8d8d':'#ffd85a';ctx.globalAlpha=pulse/30;ctx.lineWidth=7;ctx.beginPath();ctx.arc(s.x,s.y,70-pulse,0,Math.PI*2);ctx.stroke();pulse--}
  ctx.restore();
 };

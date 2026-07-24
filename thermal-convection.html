@@ -197,4 +197,21 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="v11-convection-style">.v11-direct-fluid{display:flex;gap:7px;flex-wrap:wrap;margin:7px 0;padding:9px;border:2px solid #ffd85a;border-radius:13px;background:#14283b;font-size:13px;font-weight:850}.v11-direct-fluid span{border-radius:999px;padding:4px 8px;color:#081522}.v11-hot{background:#ff8066}.v11-cold{background:#78d9ff}.stage canvas{cursor:crosshair;touch-action:none}</style>
+<script id="v11-convection-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv');if(!canvas)return;
+const guide=document.createElement('div');guide.className='v11-direct-fluid';guide.innerHTML='👆 水槽をタップ／ドラッグ：下側へ熱、上側へ冷たさを入れる <span class="v11-hot">赤＝温水・上昇</span><span class="v11-cold">青＝冷水・下降</span><span style="background:#ffd85a">黄い粒＝熱を運ぶ</span>';
+canvas.closest('.stage').insertAdjacentElement('afterend',guide);
+let marks=[],dragging=false,lastMark=0;
+function setControl(id,value){const el=document.getElementById(id);el.value=Math.max(+el.min,Math.min(+el.max,value));el.dispatchEvent(new Event('input',{bubbles:true}))}
+function inject(event){event.preventDefault();event.stopImmediatePropagation();const now=performance.now();if(now-lastMark<90)return;lastMark=now;const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width*900,y=(event.clientY-r.top)/r.height*520,hot=y>260;marks.push({x,y,hot,life:32});if(marks.length>24)marks.shift();setControl(hot?'c1':'c2',+(document.getElementById(hot?'c1':'c2').value)+(hot?5:-5));for(let i=0;i<4;i++)advance(APP.step);drawAll()}
+canvas.addEventListener('pointerdown',event=>{dragging=true;lastMark=0;try{canvas.setPointerCapture?.(event.pointerId)}catch(_){}inject(event)},{capture:true});
+canvas.addEventListener('pointermove',event=>{if(dragging)inject(event)},{capture:true});
+canvas.addEventListener('pointerup',()=>{dragging=false},{capture:true});canvas.addEventListener('pointercancel',()=>{dragging=false},{capture:true});
+document.getElementById('resetBtn').addEventListener('click',()=>{marks=[];dragging=false});
+const baseDraw=drawAll;drawAll=function(){baseDraw();const g=canvas.getContext('2d');g.save();marks=marks.filter(m=>m.life-->0);marks.forEach(m=>{g.globalAlpha=m.life/32;g.fillStyle=m.hot?'#ff6b55':'#70d8ff';g.beginPath();g.arc(m.x,m.y,42-m.life*.65,0,Math.PI*2);g.fill();g.strokeStyle='#fff';g.lineWidth=4;g.beginPath();g.moveTo(m.x,m.y);g.lineTo(m.x,m.y+(m.hot?-70:70));g.stroke()});g.globalAlpha=1;g.fillStyle='rgba(5,15,25,.86)';g.fillRect(18,55,245,63);g.font='bold 14px system-ui';g.fillStyle='#ff9a82';g.fillText('温水 ↑ 密度が小さく上昇',32,80);g.fillStyle='#8de3ff';g.fillText('冷水 ↓ 密度が大きく下降',32,104);g.restore()};
+drawAll();
+})();
+</script>
 </body></html>

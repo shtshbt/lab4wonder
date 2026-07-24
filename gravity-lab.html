@@ -40,7 +40,7 @@ function handleCollisions(){for(let i=s.b.length-1;i>=0;i--){const a=s.b[i];if(a
 function energy(){let e=0,G=Number(C.gravity.value)/100,eps=Number(C.soft.value);for(const b of s.b)e+=.5*b.m*(b.vx*b.vx+b.vy*b.vy);for(let i=0;i<s.b.length;i++)for(let j=i+1;j<s.b.length;j++)e-=G*s.b[i].m*s.b[j].m/Math.sqrt((s.b[i].x-s.b[j].x)**2+(s.b[i].y-s.b[j].y)**2+eps*eps);return e}
 function momentum(){return s.b.reduce((z,b)=>[z[0]+b.m*b.vx,z[1]+b.m*b.vy],[0,0])}
 function center(){const m=s.b.reduce((z,b)=>z+b.m,0)||1;return{x:s.b.reduce((z,b)=>z+b.m*b.x,0)/m,y:s.b.reduce((z,b)=>z+b.m*b.y,0)/m,vx:s.b.reduce((z,b)=>z+b.m*b.vx,0)/m,vy:s.b.reduce((z,b)=>z+b.m*b.vy,0)/m}}
-function drawMain(){clearCanvas(ctx,800,430,'#030914');for(const b of s.b){line(ctx,b.tr,'rgba(110,183,241,.45)',1);ctx.fillStyle=b.m>100?'#ffd85a':'#6eb7f1';ctx.beginPath();ctx.arc(b.x,b.y,3+Math.log2(b.m+1),0,Math.PI*2);ctx.fill()}const cm=center();ctx.strokeStyle='#ef796e';ctx.beginPath();ctx.moveTo(cm.x-7,cm.y);ctx.lineTo(cm.x+7,cm.y);ctx.moveTo(cm.x,cm.y-7);ctx.lineTo(cm.x,cm.y+7);ctx.stroke();ctx.fillStyle='#fff';ctx.font='bold 14px sans-serif';ctx.fillText('質量中心を赤十字で表示',18,28)}
+function drawMain(){clearCanvas(ctx,800,430,'#030914');ctx.fillStyle='#9fcdf5';ctx.font='12px sans-serif';ctx.fillText('青=小天体　黄=大質量　ドラッグで初速度を与える',18,28);for(const b of s.b){line(ctx,b.tr,'rgba(110,183,241,.45)',1);ctx.fillStyle=b.m>100?'#ffd85a':'#6eb7f1';ctx.beginPath();ctx.arc(b.x,b.y,3+Math.log2(b.m+1),0,Math.PI*2);ctx.fill();if(grabbed===b){ctx.strokeStyle='#ff8f8f';ctx.lineWidth=3;ctx.beginPath();ctx.arc(b.x,b.y,12+Math.log2(b.m+1),0,Math.PI*2);ctx.stroke()}}const cm=center();ctx.strokeStyle='#ef796e';ctx.beginPath();ctx.moveTo(cm.x-7,cm.y);ctx.lineTo(cm.x+7,cm.y);ctx.moveTo(cm.x,cm.y-7);ctx.lineTo(cm.x,cm.y+7);ctx.stroke();ctx.fillStyle='#fff';ctx.font='bold 14px sans-serif';ctx.fillText('赤十字=質量中心',18,46);if(grabbed&&start&&current){ctx.strokeStyle='#ff8f8f';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(start.x,start.y);ctx.lineTo(current.x,current.y);ctx.stroke();ctx.fillStyle='#ff8f8f';ctx.fillText('速度を与える',current.x+8,current.y-8)}}
 function drawChart(){clearCanvas(cctx,800,240,'#0d1b2d');const H=s.hist;if(!H.length)return;const x=i=>35+i/Math.max(1,H.length-1)*740;line(cctx,H.map((d,i)=>[x(i),120-clamp(d.drift,-.1,.1)/.1*80]),'#ef796e',2);line(cctx,H.map((d,i)=>[x(i),210-clamp(d.p,0,20)/20*80]),'#ffd85a',2);cctx.fillStyle='#fff';cctx.font='12px sans-serif';cctx.fillText('相対エネルギー誤差',40,20);cctx.fillText('全運動量',180,20)}
 function drawAll(){drawMain();drawChart();const e=energy(),p=momentum(),cm=center(),dr=(e-s.E0)/Math.max(1,Math.abs(s.E0));[fmt(dr*100,3)+'%',fmt(Math.hypot(...p),2),fmt(Math.hypot(cm.vx,cm.vy),3),s.b.length,s.collisions,s.escaped].forEach((v,i)=>$('m'+i).textContent=v);let msg='外力がない模型では全運動量と質量中心運動が保たれ、数値積分誤差はエネルギー差に表れる。',cls='callout ok';if(Math.abs(dr)>.03){msg='エネルギー誤差が大きい。時間刻みを下げる、軟化を上げる、積分法を変える。';cls='callout warn'}$('explain').className=cls;$('explain').textContent=msg;$('chartNote').textContent='主図は軌道と質量中心、第二ビューは保存量の数値誤差。衝突合体時は力学的エネルギーが保存されない。'}
 function formatControl(el){if(el.id==='gravity')return fmt(el.value/100,2);if(el.id==='dt')return fmt(el.value/20,2);return el.value}
@@ -57,6 +57,38 @@ $('saveA').onclick=()=>{snapA=makeSnapshot();$('snapA').textContent=snapshotText
 function updateDiff(){if(snapA&&snapB)$('diff').textContent=compareSnapshots(snapA,snapB)}
 function setupModal(){const back=$('guideBack');$('guideBtn').onclick=$('tourBtn').onclick=()=>back.classList.add('show');$('guideClose').onclick=()=>back.classList.remove('show');back.onclick=e=>{if(e.target===back)back.classList.remove('show')};$('speakBtn').onclick=()=>{if(!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(document.querySelector('h1').textContent+'。'+document.querySelector('.take').textContent);u.lang='ja-JP';u.rate=.92;speechSynthesis.speak(u)}}setupModal();
 function frame(t){if(!lastTime)lastTime=t;const dt=Math.min(100,t-lastTime);lastTime=t;if(playing){acc+=dt*speed;let guard=0;while(acc>=500&&guard++<20){advance();acc-=500}drawAll()}requestAnimationFrame(frame)}requestAnimationFrame(frame);
+</script><script id="direct-gravity-play">
+(()=>{
+let grabbed=null,start=null,current=null,directResult='青または黄の天体をドラッグして、初速度を与える',tapMarks=[];
+const baseDrawMain=drawMain;
+drawMain=function(){
+  baseDrawMain();
+  ctx.save();
+  if(grabbed&&start&&current){ctx.strokeStyle='#ff8f8f';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(start.x,start.y);ctx.lineTo(current.x,current.y);ctx.stroke();ctx.fillStyle='#ff8f8f';ctx.fillText('速度を与える',current.x+8,current.y-8)}
+  ctx.fillStyle='rgba(3,9,20,.9)';ctx.fillRect(14,380,560,36);ctx.fillStyle='#ffd85a';ctx.font='bold 13px sans-serif';ctx.fillText(directResult,24,404);
+  ctx.fillStyle='#dce8f3';ctx.fillText('青線：軌跡　赤矢印：与える速度　赤十字：質量中心',390,28);
+  ctx.restore();
+};
+function point(event){const r=main.getBoundingClientRect();return{x:(event.clientX-r.left)*800/r.width,y:(event.clientY-r.top)*430/r.height}}
+main.addEventListener('pointerdown',event=>{
+  const p=point(event);let best=null,distance=45;
+  s.b.forEach(body=>{const d=Math.hypot(body.x-p.x,body.y-p.y);if(d<distance){best=body;distance=d}});
+  tapMarks.push({x:p.x,y:p.y,r:12,color:'#ffdb5b'});if(tapMarks.length>5)tapMarks.shift();
+  if(!best){directResult='青か黄の天体を押してドラッグすると、初速度を与えられます';drawAll();return}
+  grabbed=best;start={x:best.x,y:best.y};current=p;directResult=`選択: ${best.m>100?'黄の大質量':'青の小天体'}。ひっぱって速度を与える`;setPlay(false);main.setPointerCapture?.(event.pointerId);event.preventDefault();drawAll();
+});
+main.addEventListener('pointermove',event=>{if(!grabbed)return;current=point(event);directResult=`操作中：速度矢印 (${fmt((current.x-start.x)*.025,1)}, ${fmt((current.y-start.y)*.025,1)})`;drawAll()});
+function finish(){
+  if(!grabbed||!start||!current)return;
+  grabbed.vx=(current.x-start.x)*.025;grabbed.vy=(current.y-start.y)*.025;grabbed.tr=[];
+  directResult=`結果：初速度 (${fmt(grabbed.vx,1)}, ${fmt(grabbed.vy,1)}) を設定。再生または一段で軌道を見る`;
+  grabbed=start=current=null;drawAll();
+}
+main.addEventListener('pointerup',finish);main.addEventListener('pointercancel',finish);
+const baseResetSim=resetSim;
+resetSim=function(seed){grabbed=start=current=null;tapMarks=[];directResult='青または黄の天体をドラッグして、初速度を与える';return baseResetSim(seed)};
+drawAll();
+})();
 </script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
 const ready=()=>{

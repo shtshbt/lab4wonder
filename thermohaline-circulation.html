@@ -195,4 +195,19 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="v11-thermohaline-style">.v11-ocean-direct{display:flex;gap:7px;flex-wrap:wrap;margin:7px 0;padding:9px;border:2px solid #ffd85a;border-radius:13px;background:#10283b;font-size:13px;font-weight:850}.v11-ocean-direct span{border-radius:999px;padding:4px 8px;color:#071522}.v11-fresh{background:#70e5ff}.v11-dense{background:#e8f4ff}.stage canvas{cursor:crosshair;touch-action:none}</style>
+<script id="v11-thermohaline-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv');if(!canvas)return;
+const guide=document.createElement('div');guide.className='v11-ocean-direct';guide.innerHTML='👆 海をタップ／ドラッグ：右上は淡水、右下は冷たく塩辛い水、左は風混合 <span class="v11-fresh">水色＝淡水・沈みにくい</span><span class="v11-dense">白＝高密度・沈む</span>';
+canvas.closest('.stage').insertAdjacentElement('afterend',guide);
+let marks=[],dragging=false,lastMark=0;
+function setControl(id,value){const el=document.getElementById(id);el.value=Math.max(+el.min,Math.min(+el.max,value));el.dispatchEvent(new Event('input',{bubbles:true}))}
+function inject(event){event.preventDefault();event.stopImmediatePropagation();const now=performance.now();if(now-lastMark<95)return;lastMark=now;const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width*900,y=(event.clientY-r.top)/r.height*520;let kind;if(x<450){kind='wind';setControl('c3',+document.getElementById('c3').value+10)}else if(y<260){kind='fresh';setControl('c4',+document.getElementById('c4').value+12)}else{kind='dense';setControl('c2',+document.getElementById('c2').value+.4)}marks.push({x,y,kind,life:34});if(marks.length>22)marks.shift();for(let i=0;i<5;i++)advance(APP.step);drawAll()}
+canvas.addEventListener('pointerdown',event=>{dragging=true;lastMark=0;try{canvas.setPointerCapture?.(event.pointerId)}catch(_){}inject(event)},{capture:true});canvas.addEventListener('pointermove',event=>{if(dragging)inject(event)},{capture:true});canvas.addEventListener('pointerup',()=>{dragging=false},{capture:true});canvas.addEventListener('pointercancel',()=>{dragging=false},{capture:true});
+document.getElementById('resetBtn').addEventListener('click',()=>{marks=[];dragging=false});
+const baseDraw=drawAll;drawAll=function(){baseDraw();const g=canvas.getContext('2d');g.save();marks=marks.filter(m=>m.life-->0);marks.forEach(m=>{g.globalAlpha=m.life/34;g.fillStyle=m.kind==='fresh'?'#70e5ff':m.kind==='dense'?'#f4fbff':'#69e0b0';g.beginPath();g.arc(m.x,m.y,36-m.life*.55,0,Math.PI*2);g.fill();g.strokeStyle=m.kind==='dense'?'#fff':'#173b50';g.lineWidth=4;g.beginPath();g.moveTo(m.x,m.y);g.lineTo(m.x+(m.kind==='wind'?75:0),m.y+(m.kind==='dense'?75:m.kind==='fresh'?-35:0));g.stroke()});g.globalAlpha=1;g.fillStyle='rgba(5,15,25,.88)';g.fillRect(18,45,285,69);g.font='bold 13px system-ui';g.fillStyle='#ffb35f';g.fillText('橙 → 表層暖流',32,68);g.fillStyle='#7de0ff';g.fillText('水色 ↓ 高密度水の沈み込み',32,90);g.fillStyle='#69e0b0';g.fillText('緑 ↑ 深層水の湧昇',32,109);g.restore()};
+drawAll();
+})();
+</script>
 </body></html>

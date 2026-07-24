@@ -78,6 +78,37 @@ $('guideBtn').onclick=()=>$('guideBack').classList.add('show');$('guideClose').o
 $('speakBtn').onclick=()=>{if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(APP.title+'。'+APP.sub+'。'+APP.first);u.lang='ja-JP';speechSynthesis.speak(u)}};
 function metricSnapshot(){return APP.metricLabels.map((x,i)=>x+'：'+$('m'+(i+1)).textContent).join('\n')}function record(which){const text=metricSnapshot();if(which==='A'){A=text;$('snapA').textContent=text}else{B=text;$('snapB').textContent=text}$('diffAB').textContent=A&&B?'条件と結果を見比べ、変えた入力が一つだけか確認してください。':'もう一方も記録してください。'}$('recA').onclick=()=>record('A');$('recB').onclick=()=>record('B');$('clearAB').onclick=()=>{A=B=null;$('snapA').textContent=$('snapB').textContent=$('diffAB').textContent=''};
 applyScenario(0);
+</script><script id="direct-inertia-play">
+(()=>{
+const canvas=$('mainCv');let dragging=false,startX=0,currentX=0,directResult='黄色い台車を左右へドラッグして力を加える';
+const baseDrawAll=drawAll;
+drawAll=function(){
+  baseDrawAll();
+  const m=canvas.getContext('2d');m.save();m.fillStyle='rgba(8,21,34,.92)';m.fillRect(22,34,520,38);
+  m.fillStyle='#ffd85a';m.font='bold 14px system-ui';m.fillText(directResult,34,59);
+  m.fillStyle='#eef5fb';m.fillText('水色矢印：速度　赤矢印：合力　黄線：速度の履歴',520,500);
+  m.restore();
+};
+function point(event){const r=canvas.getBoundingClientRect();return{x:(event.clientX-r.left)*900/r.width,y:(event.clientY-r.top)*520/r.height}}
+canvas.addEventListener('pointerdown',event=>{
+  const p=point(event),carX=450+((state.x*45)%760+760)%760-380;
+  if(Math.abs(p.x-carX)>90||p.y<300||p.y>420)return;
+  dragging=true;startX=currentX=p.x;running=false;$('playPause').textContent='▶ 再生';canvas.setPointerCapture?.(event.pointerId);event.preventDefault();
+});
+canvas.addEventListener('pointermove',event=>{
+  if(!dragging)return;currentX=point(event).x;const force=clamp((currentX-startX)/18,-12,12);
+  $('c3').value=Math.round(force);$('c3').dispatchEvent(new Event('input',{bubbles:true}));
+  directResult=`操作中：加える力 ${$('c3').value} N`;drawAll();
+});
+function finish(){
+  if(!dragging)return;dragging=false;advance(APP.step);
+  directResult=`結果：合力 ${$('m4').textContent} → 速度 ${$('m2').textContent}`;drawAll();
+}
+canvas.addEventListener('pointerup',finish);canvas.addEventListener('pointercancel',finish);
+const baseResetState=resetState;
+resetState=function(){dragging=false;directResult='黄色い台車を左右へドラッグして力を加える';return baseResetState()};
+drawAll();
+})();
 </script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
 const ready=()=>{

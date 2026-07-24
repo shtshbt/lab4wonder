@@ -27,6 +27,7 @@ const $=id=>document.getElementById(id),clamp=(x,a,b)=>Math.max(a,Math.min(b,x))
 function mulberry32(a){return function(){let t=a+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
 let baseSeed=360202,rng=mulberry32(baseSeed),playing=false,lastTime=0,acc=0,speed=1,snapA=null,snapB=null;
 const main=$('mainCanvas'),ctx=main.getContext('2d'),chart=$('chartCanvas'),cctx=chart.getContext('2d');
+let tapMarks=[];
 function clearCanvas(g,w,h,color='#0d1927'){g.clearRect(0,0,w,h);g.fillStyle=color;g.fillRect(0,0,w,h)}
 function line(g,pts,color='#fff',width=2){if(pts.length<2)return;g.beginPath();g.strokeStyle=color;g.lineWidth=width;pts.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.stroke()}
 function controlValues(){const out={};document.querySelectorAll('.control input,.control select,.checks input').forEach(el=>{out[el.id]=el.type==='checkbox'?el.checked:Number.isFinite(Number(el.value))?Number(el.value):el.value});return out}
@@ -41,7 +42,8 @@ function energy(o){const l1=1,l2=Number(C.length.value)/100,m1=1,m2=Number(C.mas
 function advance(){s.t++;for(let i=0;i<8;i++){rk(s.A,s.t,.015);rk(s.B,s.t,.015)}const pA=pos(s.A),pB=pos(s.B);s.A.trail.push([pA.x2,pA.y2]);s.B.trail.push([pB.x2,pB.y2]);if(s.A.trail.length>130)s.A.trail.shift();if(s.B.trail.length>130)s.B.trail.shift();const div=Math.hypot(pA.x2-pB.x2,pA.y2-pB.y2),e=energy(s.A),drift=e-s.energy0;s.hist.push({t:s.t,div,e,drift,a:s.A.a1,w:s.A.w1});if(s.hist.length>120)s.hist.shift()}
 function drawAll(){drawMain();drawChart();const h=s.hist.at(-1)||{div:0,e:energy(s.A),drift:0};[fmt(h.div,1),fmt(h.e,2),fmt(h.drift,3),fmt(s.A.w1,2),fmt(s.A.w2,2),fmt(Math.abs(s.A.a1-s.B.a1),3)].forEach((v,i)=>$('m'+i).textContent=v);let msg='AとBはほぼ同じ初期条件です。軌跡の分離がいつ急に増えるかを見てください。',cls='callout ok';if(h.div>160){msg='A/Bの軌跡が大きく分離しました。初期角度差が小さくても、非線形相互作用で予測誤差が増幅します。減衰を増やすと分離が遅くなる場合があります。';cls='callout warn'}else if(Math.abs(h.drift)>2&&Number(C.drive.value)===0&&Number(C.damping.value)===0){msg='数値積分によるエネルギー誤差が増えています。この模型は厳密保存ではなく、時間刻みの限界があります。';cls='callout warn'}$('explain').className=cls;$('explain').textContent=msg;$('chartNote').textContent='左はA/B先端距離、右は位相空間とエネルギー差。第二ビューは「いつ予測が崩れるか」を定量化する。'}
 function drawPend(o,color,alpha=1){const p=pos(o);ctx.strokeStyle=color;ctx.globalAlpha=alpha;ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(400,90);ctx.lineTo(p.x1,p.y1);ctx.lineTo(p.x2,p.y2);ctx.stroke();ctx.fillStyle=color;for(const [x,y,r] of [[p.x1,p.y1,11],[p.x2,p.y2,14]]){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1}
-function drawMain(){clearCanvas(ctx,800,430,'#0a1626');ctx.fillStyle='#dce8f3';ctx.font='bold 14px sans-serif';ctx.fillText('A 青　B 黄　時刻 '+s.t,20,26);line(ctx,s.A.trail,'rgba(110,183,241,.65)',2);line(ctx,s.B.trail,'rgba(255,216,90,.55)',2);ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(400,90,6,0,Math.PI*2);ctx.fill();drawPend(s.A,'#6eb7f1');drawPend(s.B,'#ffd85a',.78)}
+function drawMain(){clearCanvas(ctx,800,430,'#0a1626');ctx.fillStyle='#dce8f3';ctx.font='bold 14px sans-serif';ctx.fillText('A 青　B 黄　時刻 '+s.t,20,26);ctx.fillStyle='#9fd0ff';ctx.font='12px sans-serif';ctx.fillText('タップで押して、初期差を作る',20,44);line(ctx,s.A.trail,'rgba(110,183,241,.65)',2);line(ctx,s.B.trail,'rgba(255,216,90,.55)',2);ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(400,90,6,0,Math.PI*2);ctx.fill();drawPend(s.A,'#6eb7f1');drawPend(s.B,'#ffd85a',.78);for(const m of tapMarks){ctx.strokeStyle='rgba(255,216,90,'+m.life/18+')';ctx.lineWidth=3;ctx.beginPath();ctx.arc(m.x,m.y,12+(18-m.life)*2,0,Math.PI*2);ctx.stroke();ctx.fillStyle='rgba(255,216,90,'+m.life/18+')';ctx.fillText('押した',m.x+10,m.y-10)}tapMarks=tapMarks.map(m=>({...m,life:m.life-1})).filter(m=>m.life>0)}
+main.addEventListener('pointerdown',event=>{const r=main.getBoundingClientRect(),x=(event.clientX-r.left)/r.width*800,y=(event.clientY-r.top)/r.height*430;tapMarks.push({x,y,life:18});if(tapMarks.length>4)tapMarks.shift();const dx=(x-400)/260,dy=(y-90)/260;s.A.w1+=dx;s.A.w2+=dy;s.B.w1+=dx*0.82;s.B.w2+=dy*0.82;drawAll()},{passive:true});
 function drawChart(){clearCanvas(cctx,800,240,'#0d1b2d');const H=s.hist;if(!H.length)return;const x=i=>35+i/Math.max(1,H.length-1)*340,y=v=>205-clamp(v,0,260)/260*165;line(cctx,H.map((d,i)=>[x(i),y(d.div)]),'#ef796e',2);cctx.strokeStyle='#334b65';cctx.strokeRect(410,30,350,180);const px=a=>585+clamp(a,-Math.PI,Math.PI)/Math.PI*160,py=w=>120-clamp(w,-8,8)/8*80;line(cctx,H.map(d=>[px(d.a),py(d.w)]),'#6eb7f1',2);cctx.fillStyle='#ef796e';cctx.font='11px sans-serif';cctx.fillText('A/B先端距離',35,18);cctx.fillStyle='#6eb7f1';cctx.fillText('位相空間 θ₁−ω₁',420,18);cctx.fillStyle='#ffd85a';cctx.fillText('E差 '+fmt(H.at(-1).drift,3),650,18)}
 function formatControl(el){return ['theta1','theta2'].includes(el.id)?el.value+'°':el.id==='damping'||el.id==='drive'?el.value+'%':el.value+'%'}function onControlChange(){}
 function makeSnapshot(){const h=s.hist.at(-1)||{div:0,e:energy(s.A),drift:0};return{t:s.t,div:h.div,e:h.e,drift:h.drift,controls:controlText()}}
@@ -56,6 +58,34 @@ $('saveA').onclick=()=>{snapA=makeSnapshot();$('snapA').textContent=snapshotText
 function updateDiff(){if(snapA&&snapB)$('diff').textContent=compareSnapshots(snapA,snapB)}
 function setupModal(){const back=$('guideBack');$('guideBtn').onclick=$('tourBtn').onclick=()=>back.classList.add('show');$('guideClose').onclick=()=>back.classList.remove('show');back.onclick=e=>{if(e.target===back)back.classList.remove('show')};$('speakBtn').onclick=()=>{if(!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(document.querySelector('h1').textContent+'。'+document.querySelector('.take').textContent);u.lang='ja-JP';u.rate=.92;speechSynthesis.speak(u)}}setupModal();
 function frame(t){if(!lastTime)lastTime=t;const dt=Math.min(100,t-lastTime);lastTime=t;if(playing){acc+=dt*speed;let guard=0;while(acc>=500&&guard++<20){advance();acc-=500}drawAll()}requestAnimationFrame(frame)}requestAnimationFrame(frame);
+</script><script id="direct-pendulum-play">
+(()=>{
+let dragging=false,directResult='青い下のおもりをドラッグして、初期角度を変える';
+const baseDrawMain=drawMain;
+drawMain=function(){
+  baseDrawMain();
+  ctx.save();ctx.fillStyle='rgba(10,22,38,.9)';ctx.fillRect(14,378,560,36);
+  ctx.fillStyle='#ffd85a';ctx.font='bold 13px sans-serif';ctx.fillText(directResult,24,402);
+  ctx.fillStyle='#dce8f3';ctx.fillText('青：振り子Aと軌跡　黄：振り子Bと軌跡　赤：A/B分離',360,26);
+  ctx.restore();
+};
+function point(event){const r=main.getBoundingClientRect();return{x:(event.clientX-r.left)*800/r.width,y:(event.clientY-r.top)*430/r.height}}
+main.addEventListener('pointerdown',event=>{
+  const p=point(event),bob=pos(s.A);
+  if(Math.hypot(p.x-bob.x2,p.y-bob.y2)>55)return;
+  dragging=true;setPlay(false);main.setPointerCapture?.(event.pointerId);event.preventDefault();
+});
+main.addEventListener('pointermove',event=>{
+  if(!dragging)return;const p=point(event),joint=pos(s.A),deg=Math.atan2(p.x-joint.x1,p.y-joint.y1)*180/Math.PI;
+  C.theta2.value=Math.round(clamp(deg,-170,170));const out=$('theta2Out');if(out)out.textContent=C.theta2.value+'°';
+  baseResetSim(baseSeed);dragging=true;directResult=`操作中：下のおもりの初期角度 ${C.theta2.value}°`;drawAll();
+});
+function finish(){if(!dragging)return;dragging=false;directResult=`結果：初期角度 ${C.theta2.value}°。一段ずつ進めて青と黄の軌跡を比較`;drawAll()}
+main.addEventListener('pointerup',finish);main.addEventListener('pointercancel',finish);
+const baseResetSim=resetSim;
+resetSim=function(seed){dragging=false;directResult='青い下のおもりをドラッグして、初期角度を変える';return baseResetSim(seed)};
+drawAll();
+})();
 </script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
 const ready=()=>{

@@ -32,6 +32,43 @@
  window.r48Noise=(a,b=0)=>{let x=(Math.imul((Number(a)+1)>>>0,0x45d9f3b)^Math.imul((Number(b)+1)>>>0,0x27d4eb2d)^0x9e3779b9)>>>0;x^=x>>>16;x=Math.imul(x,0x7feb352d)>>>0;x^=x>>>15;return (x>>>0)/4294967296};
  window.r48SetSeed(window.r48SeedBase);
 })();
+</script><script id="direct-gas-play">
+addEventListener('DOMContentLoaded',()=>{
+let dragging=false,directResult='銀色のピストンを左右へドラッグして圧縮・膨張';
+const baseDraw=draw;
+draw=function(){
+  baseDraw();
+  c.save();
+  c.fillStyle='rgba(7,17,29,.92)';c.fillRect(22,490,515,38);
+  c.fillStyle='#ffd85a';c.font='bold 14px system-ui';c.fillText(directResult,34,515);
+  c.fillStyle='#fff';c.fillText('← ピストンをドラッグ →',Math.max(555,piston-80),510);
+  c.fillStyle='#9fcdf5';c.fillText('青〜赤の粒：気体分子　橙の丸：加熱',35,555);
+  c.restore();
+};
+function point(event){const r=cv.getBoundingClientRect();return{x:(event.clientX-r.left)*900/r.width,y:(event.clientY-r.top)*590/r.height}}
+cv.addEventListener('pointerdown',event=>{
+  const p=point(event);
+  if(Math.abs(p.x-piston)<75&&p.y>=35&&p.y<=500){
+    if($('mode').value==='fixedV'){directResult='結果：定積条件ではピストンは固定。拘束条件を変えよう';draw();return}
+    dragging=true;cv.setPointerCapture?.(event.pointerId);event.preventDefault();
+  }
+});
+cv.addEventListener('pointermove',event=>{
+  if(!dragging)return;
+  const p=point(event);piston=Math.max(175,Math.min(735,p.x));V=Math.max(14,Math.min(96,(piston-80)/690*100));vp=0;
+  directResult=`操作中：体積 ${V.toFixed(1)}、圧力 ${P.toFixed(2)} 相対`;
+  draw();
+});
+function finish(){
+  if(!dragging)return;
+  dragging=false;directResult=`結果：体積 ${V.toFixed(1)} → 圧力 ${P.toFixed(2)} 相対`;
+  draw();
+}
+cv.addEventListener('pointerup',finish);cv.addEventListener('pointercancel',finish);
+const baseReset=window.resetSimulation;
+window.resetSimulation=()=>{dragging=false;directResult='銀色のピストンを左右へドラッグして圧縮・膨張';return baseReset()};
+draw();
+});
 </script><script>
 const $=id=>document.getElementById(id),cv=$('mainCv'),c=cv.getContext('2d'),gv=$('graphCv'),g=gv.getContext('2d');let running=false,last=performance.now(),speed=1,time=0,T=320,V=55,P=1,piston=430,vp=0,parts=[],hist=[],push=0,heatPulse=0;
 function par(){return{mode:$('mode').value,heat:+$('heat').value,load:+$('load').value/35,n:+$('amount').value,leak:+$('leak').value/100,ex:+$('exchange').value/100}}

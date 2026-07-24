@@ -45,6 +45,43 @@ function step(dt){const p=par();t+=dt;for(const [i,e] of elect.entries()){e.angl
 function draw(){const p=par();c.clearRect(0,0,900,590);c.fillStyle='#07111d';c.fillRect(0,0,900,590);const cx=450,cy=290;for(let s=1;s<=3;s++){c.strokeStyle='#2f5878';c.lineWidth=2;c.setLineDash([7,8]);c.beginPath();c.ellipse(cx,cy,80*s,62*s,0,0,Math.PI*2);c.stroke()}c.setLineDash([]);const jitter=(Math.abs(p.n-p.p)*.8+1);for(let i=0;i<p.p+p.n;i++){const a=i*2.4+t*.15,r=8+Math.sqrt(i)*7;c.fillStyle=i<p.p?'#ef6d75':'#77a9d8';c.beginPath();c.arc(cx+Math.cos(a)*r+(r48Noise(i,Math.floor(t*20))-.5)*jitter,cy+Math.sin(a)*r+(r48Noise(i+97,Math.floor(t*20))-.5)*jitter,9,0,Math.PI*2);c.fill()}for(const e of elect){const r=80*e.shell,x=cx+Math.cos(e.angle)*r+p.f*35,y=cy+Math.sin(e.angle)*r;c.fillStyle=e.exc?'#ffd45f':'#7ed9ff';c.beginPath();c.arc(x,y,7,0,Math.PI*2);c.fill();c.strokeStyle='#bdefff';c.lineWidth=1;c.beginPath();c.arc(x,y,12+3*Math.sin(e.phase),0,Math.PI*2);c.stroke()}for(const q of photons){c.strokeStyle=q.col;c.lineWidth=4;c.beginPath();for(let k=0;k<28;k++){const x=q.x-k*5,y=q.y+Math.sin(k*.8+t*8)*5;k?c.lineTo(x,y):c.moveTo(x,y)}c.stroke()}c.fillStyle='#fff';c.font='bold 19px system-ui';c.fillText(`${names[p.p]||'未登録元素'} ${sym[p.p]||'?'}　陽子 ${p.p}・中性子 ${p.n}・電子 ${p.e}`,30,38);c.fillStyle='#9fcdf5';c.font='13px system-ui';c.fillText('青：電子　赤：陽子　水色：中性子　波：光子',30,565);const charge=p.p-p.e,val=p.e<=2?p.e:Math.min(8,(p.e-2)%8||8);$('elementM').textContent=names[p.p]||'Z='+p.p;$('isotopeM').textContent=(p.p+p.n)+(sym[p.p]||'');$('chargeM').textContent=charge===0?'中性':(charge>0?`+${charge}`:`${charge}`);$('valenceM').textContent=val;$('stateText').textContent=p.e>2+8+8?'この殻模型の収容範囲を超えています。電子数を18以下へ戻そう。':Math.abs(charge)>3?'大きな電荷を持つ模式イオンです。電子を陽子数へ近づけると中性になります。':stableText(p.p,p.n)+'。励起した電子が低い段階へ戻ると光子を放出します。';$('mission').textContent=mission||'元素ミッションで、指定された元素・同位体・イオンを作ろう。';drawGraph()}
 function drawGraph(){g.clearRect(0,0,900,330);g.fillStyle='#09131f';g.fillRect(0,0,900,330);const ys=[260,185,105];for(let i=0;i<3;i++){g.strokeStyle='#4b6985';g.lineWidth=2;g.beginPath();g.moveTo(60,ys[i]);g.lineTo(420,ys[i]);g.stroke();g.fillStyle='#9fcdf5';g.fillText(`殻 ${i+1}`,65,ys[i]-8)}for(const e of elect){const x=100+(elect.indexOf(e)%12)*25,y=ys[e.shell-1];g.fillStyle=e.exc?'#ffd45f':'#7ed9ff';g.beginPath();g.arc(x,y,5,0,Math.PI*2);g.fill()}g.fillStyle='#fff';g.fillText('最近の発光スペクトル',520,28);for(const [i,L] of lines.slice(-32).entries()){const x=520+(L.wl-350)/350*330,col=L.wl>560?'#ff8a72':L.wl>430?'#6bbcff':'#ad7cff';g.strokeStyle=col;g.globalAlpha=.3+.7*(i/32);g.beginPath();g.moveTo(x,60);g.lineTo(x,280);g.stroke()}g.globalAlpha=1;g.fillStyle='#9fcdf5';g.fillText('短波長',510,305);g.fillText('長波長',810,305)}
 function bind(id,out,fmt=v=>v){$(id).oninput=e=>{$(out).textContent=fmt(+e.target.value);if(['protons','neutrons','electrons'].includes(id))rebuild();draw()};$(id).dispatchEvent(new Event('input'))}bind('protons','pOut',v=>v);bind('neutrons','nOut',v=>v);bind('electrons','eOut',v=>v);bind('energy','energyOut',v=>v+'相対');bind('field','fieldOut',v=>v+'%');$('playPause').onclick=()=>{running=!running;$('playPause').textContent=running?'⏸ 一時停止':'▶ 再生'};$('stepBtn').onclick=()=>{step(.2);draw()};$('speedSel').onchange=e=>speed=+e.target.value;$('exciteBtn').onclick=()=>{excite();draw()};$('ionizeBtn').onclick=()=>{ionize();draw()};$('missionBtn').onclick=()=>{const M=[[1,0,1,'水素1の中性原子'],[2,2,2,'ヘリウム4の中性原子'],[6,6,6,'炭素12の中性原子'],[8,8,10,'酸化物イオン O²⁻'],[11,12,10,'ナトリウムイオン Na⁺'],[17,18,18,'塩化物イオン Cl⁻'],[8,10,8,'酸素18の中性原子']][Math.floor(r48Rand()*7)];mission=`作ってみよう：${M[3]}`;['protons','neutrons','electrons'].forEach((id,i)=>{$(id).value=Math.max(0,M[i]+(r48Rand()<.5?1:-1));$(id).dispatchEvent(new Event('input'))});draw()};function loop(now){const dt=Math.min(.04,(now-last)/1000);last=now;if(running)step(dt*speed);draw();requestAnimationFrame(loop)}reset();requestAnimationFrame(loop);window.getSnapshot=()=>({陽子:$('pOut').textContent,中性子:$('nOut').textContent,電子:$('eOut').textContent,元素:$('elementM').textContent,同位体:$('isotopeM').textContent,電荷:$('chargeM').textContent,価電子:$('valenceM').textContent,入射:$('energyOut').textContent});
+</script><script id="direct-atom-play">
+(()=>{
+let directResult='主図をタップ：原子核で中性子を追加／電子殻で光子を吸収';
+const tapMarks=[];
+const baseDraw=draw;
+draw=function(){
+  baseDraw();
+  c.save();
+  c.fillStyle='rgba(7,17,29,.9)';c.fillRect(22,48,450,38);
+  c.fillStyle='#ffd85a';c.font='bold 14px system-ui';c.fillText(directResult,34,73);
+  for(const m of tapMarks){c.strokeStyle=m.color;c.lineWidth=3;c.beginPath();c.arc(m.x,m.y,m.r,0,Math.PI*2);c.stroke();c.fillStyle=m.color;c.beginPath();c.arc(m.x,m.y,4,0,Math.PI*2);c.fill();}
+  c.restore();
+};
+function point(event){const r=cv.getBoundingClientRect();return{x:(event.clientX-r.left)*900/r.width,y:(event.clientY-r.top)*590/r.height}}
+cv.addEventListener('pointerdown',event=>{
+  const p=point(event),distance=Math.hypot(p.x-450,p.y-290);
+  tapMarks.push({x:p.x,y:p.y,r:12,color:'#ffd45f'});if(tapMarks.length>4)tapMarks.shift();
+  if(distance<72){
+    const input=$('neutrons'),next=Math.min(+input.max,+input.value+1);
+    input.value=next;input.dispatchEvent(new Event('input',{bubbles:true}));
+    directResult=`結果：中性子を追加 → 同位体 ${$('isotopeM').textContent}`;
+    tapMarks.at(-1).color='#77d8ff';
+  }else if(distance<270){
+    const before=elect.filter(e=>e.exc).length;excite();const after=elect.filter(e=>e.exc).length;
+    directResult=after>before?'成功：光子を吸収し、電子が黄色い高い殻へ励起':'結果：エネルギー不足。入射エネルギーを上げよう';
+    tapMarks.at(-1).color=after>before?'#ffd45f':'#8aa0b6';
+  }else{
+    const before=+$('electrons').value;ionize();
+    directResult=+$('electrons').value<before?'成功：電子が外れ、正のイオンになった':'結果：電子を外すには入射エネルギー65以上が必要';
+    tapMarks.at(-1).color=+$('electrons').value<before?'#ff8e8e':'#8aa0b6';
+  }
+  draw();
+});
+const baseReset=window.resetSimulation;
+window.resetSimulation=()=>{directResult='主図をタップ：原子核で中性子を追加／電子殻で光子を吸収';tapMarks.length=0;return baseReset()};
+draw();
+})();
 </script><script>
 (()=>{const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];const guide=q('#guideBack'),tray=q('#trayBack'),zoomBack=q('#zoomBack');q('#guideBtn').addEventListener('click',()=>guide.classList.add('show'));q('#guideClose').addEventListener('click',()=>guide.classList.remove('show'));guide.addEventListener('click',e=>{if(e.target===guide)guide.classList.remove('show')});q('#trayOpen').addEventListener('click',()=>tray.classList.add('show'));q('#trayClose').addEventListener('click',()=>tray.classList.remove('show'));tray.addEventListener('click',e=>{if(e.target===tray)tray.classList.remove('show')});q('#resetTop').addEventListener('click',()=>window.resetSimulation&&window.resetSimulation());q('#speakBtn').addEventListener('click',()=>{if(!('speechSynthesis'in window))return; speechSynthesis.cancel();const t=new SpeechSynthesisUtterance(q('h1').innerText+'。'+q('[data-takeaway]').innerText);t.lang='ja-JP';speechSynthesis.speak(t)});
 const tourTargets=['[data-tour="stage"]','[data-tour="controls"]','[data-tour="metrics"]'],tourTexts=['まず主図を見ます。動いているものが、時間とともに何を運び、変えているかを追います。','次に条件を一つだけ変えます。再生・停止・一段送りで違いを確かめます。','最後に数値や第二ビューを見ます。見た目の変化を量の変化として説明します。'];let ti=0;function showTour(){qa('.tourGlow').forEach(e=>e.classList.remove('tourGlow'));const el=q(tourTargets[ti]);if(el){el.classList.add('tourGlow');el.scrollIntoView({behavior:'smooth',block:'center'})}q('#tourText').textContent=tourTexts[ti];q('#tourCount').textContent=(ti+1)+' / 3';q('#tourBox').classList.add('show')}q('#tourBtn').addEventListener('click',()=>{ti=0;showTour()});q('#tourPrev').addEventListener('click',()=>{ti=(ti+2)%3;showTour()});q('#tourNext').addEventListener('click',()=>{if(ti===2){stopTour()}else{ti++;showTour()}});function stopTour(){qa('.tourGlow').forEach(e=>e.classList.remove('tourGlow'));q('#tourBox').classList.remove('show')}q('#tourStop').addEventListener('click',stopTour);

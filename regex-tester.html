@@ -159,4 +159,40 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="native-regex-style">
+.rx-native{margin:10px 0;padding:12px;border:2px solid #ffb85c;border-radius:16px;background:#101d2d}.rx-native h2{margin:0 0 5px;color:#ffd85a;font-size:17px}.rx-native p{margin:0 0 9px;color:#d9e9f6;font-size:12px}.rx-fields{display:grid;grid-template-columns:minmax(220px,.8fr) 1.2fr;gap:9px}.rx-native label{display:grid;gap:5px;color:#9dcdf5;font-size:12px;font-weight:850}.rx-native input[type=text],.rx-native textarea{width:100%;border:1px solid #496783;border-radius:10px;padding:10px;background:#07131f;color:#f4f8fc;font:14px/1.5 ui-monospace,SFMono-Regular,monospace}.rx-native textarea{min-height:110px;resize:vertical}.rx-options,.rx-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}.rx-options label{display:flex;gap:5px;align-items:center}.rx-result{margin-top:9px;min-height:74px;white-space:pre-wrap;overflow-wrap:anywhere;border:1px solid #3a526c;border-radius:10px;padding:10px;background:#07131f;color:#e8f2fb;font:14px/1.65 ui-monospace,monospace}.rx-result mark{padding:2px 1px;border-radius:3px;background:#ffd85a;color:#201900}.rx-trace{margin:8px 0 0;padding-left:21px;color:#cfe3f5;font-size:12px;line-height:1.6}.rx-status{margin-top:8px;font-size:12px;color:#8fe0a7}.rx-status.bad{color:#ff948a}@media(max-width:700px){.rx-fields{grid-template-columns:1fr}}
+</style>
+<script id="native-regex-workflow">
+(()=>{
+const stage=document.querySelector('.stage');if(!stage)return;
+const presets=[
+ {name:'メールらしき文字列',pattern:'[\\w.+-]+@[\\w.-]+\\.[A-Za-z]{2,}',text:'連絡先は lab@example.org と info@example.net です。',flags:'gi'},
+ {name:'日付',pattern:'\\b(\\d{4})-(\\d{2})-(\\d{2})\\b',text:'観察日は 2026-07-24、次回は 2026-08-03。',flags:'g'},
+ {name:'重なりを観察',pattern:'ana',text:'banana と ananas の中から ana を探す。',flags:'gi'}
+];
+const section=document.createElement('section');section.className='rx-native';section.setAttribute('aria-labelledby','rx-native-title');
+section.innerHTML='<h2 id="rx-native-title">🔎 正規表現を入力して、その場で試す</h2><p>一致箇所を黄色で表示します。危険な入れ子反復は実行前に止めます。</p><div class="rx-fields"><label>パターン（/ は不要）<input id="rx-pattern" type="text" maxlength="120" autocomplete="off" spellcheck="false"></label><label>テスト文字列<textarea id="rx-text" maxlength="1200" spellcheck="false"></textarea></label></div><div class="rx-options"><b>フラグ</b><label><input id="rx-g" type="checkbox" checked>g 全件</label><label><input id="rx-i" type="checkbox" checked>i 大小無視</label><label><input id="rx-m" type="checkbox">m 複数行</label></div><div class="rx-actions"><button id="rx-run" class="primary">一致を調べる</button><button id="rx-preset">次の見本</button><button id="rx-clear">空にする</button></div><div id="rx-status" class="rx-status" aria-live="polite"></div><div id="rx-result" class="rx-result"></div><ol id="rx-trace" class="rx-trace"></ol>';
+stage.insertAdjacentElement('beforebegin',section);
+const pattern=section.querySelector('#rx-pattern'),text=section.querySelector('#rx-text'),result=section.querySelector('#rx-result'),trace=section.querySelector('#rx-trace'),status=section.querySelector('#rx-status');let presetIndex=0,timer=0;
+function risky(value){return /\((?:[^()]|\\.)*[+*](?:[^()]|\\.)*\)\s*(?:[+*]|\{)/.test(value)||/\((?:[^()]|\\.)*\|(?:[^()]|\\.)*\)\s*(?:[+*]|\{)/.test(value)||/(?:\.\*){2,}|(?:\.\+){2,}/.test(value)}
+function appendText(value){result.append(document.createTextNode(value))}
+function run(){
+ clearTimeout(timer);result.replaceChildren();trace.replaceChildren();status.classList.remove('bad');
+ const source=pattern.value,body=text.value.slice(0,1200);if(!source){status.textContent='パターンを入力してください。';status.classList.add('bad');appendText(body);return}
+ if(risky(source)){status.textContent='安全のため、反復の中へ反復を重ねたパターンは実行しません。';status.classList.add('bad');appendText(body);return}
+ let flags=(section.querySelector('#rx-g').checked?'g':'')+(section.querySelector('#rx-i').checked?'i':'')+(section.querySelector('#rx-m').checked?'m':'');
+ let regex;try{regex=new RegExp(source,flags)}catch(error){status.textContent=`構文エラー：${error.message}`;status.classList.add('bad');appendText(body);return}
+ const scanFlags=flags.includes('g')?flags:flags+'g';const scan=new RegExp(regex.source,scanFlags);const matches=[];let match;
+ while((match=scan.exec(body))&&matches.length<200){matches.push(match);if(!flags.includes('g'))break;if(match[0]==='')scan.lastIndex++}
+ let cursor=0;for(const item of matches){appendText(body.slice(cursor,item.index));const mark=document.createElement('mark');mark.textContent=item[0]||'∅';mark.title=`位置 ${item.index}`;result.append(mark);cursor=item.index+item[0].length}appendText(body.slice(cursor));
+ matches.slice(0,20).forEach((item,index)=>{const li=document.createElement('li');li.textContent=`${index+1}. 位置${item.index}「${item[0]||'空文字'}」${item.length>1?'／群: '+item.slice(1).map(x=>x??'未一致').join(', '):''}`;trace.append(li)});
+ if(matches.length>20){const li=document.createElement('li');li.textContent=`ほか ${matches.length-20}件`;trace.append(li)}
+ status.textContent=`${matches.length}件一致${matches.length>=200?'（表示上限200件）':''}・入力${body.length}文字`;
+}
+function loadPreset(index){const preset=presets[index];pattern.value=preset.pattern;text.value=preset.text;section.querySelector('#rx-g').checked=preset.flags.includes('g');section.querySelector('#rx-i').checked=preset.flags.includes('i');section.querySelector('#rx-m').checked=preset.flags.includes('m');run()}
+function schedule(){clearTimeout(timer);timer=setTimeout(run,90)}
+[pattern,text,...section.querySelectorAll('.rx-options input')].forEach(control=>control.addEventListener('input',schedule));section.querySelector('#rx-run').onclick=run;section.querySelector('#rx-preset').onclick=()=>{presetIndex=(presetIndex+1)%presets.length;loadPreset(presetIndex);pattern.focus()};section.querySelector('#rx-clear').onclick=()=>{pattern.value='';text.value='';run();pattern.focus()};
+loadPreset(0);
+})();
+</script>
 </body></html>

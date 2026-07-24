@@ -154,4 +154,45 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="native-cipher-style">
+.cp-native{margin:10px 0;padding:12px;border:2px solid #79d9a0;border-radius:16px;background:#101d2d}.cp-native h2{margin:0 0 5px;color:#ffd85a;font-size:17px}.cp-native p{margin:0 0 9px;color:#d9e9f6;font-size:12px}.cp-fields{display:grid;grid-template-columns:1fr 150px;gap:9px}.cp-native label{display:grid;gap:5px;color:#9dcdf5;font-size:12px;font-weight:850}.cp-native textarea,.cp-native input,.cp-native select{width:100%;border:1px solid #496783;border-radius:9px;padding:9px;background:#07131f;color:#f4f8fc;font:14px/1.45 ui-monospace,SFMono-Regular,monospace}.cp-native textarea{min-height:78px;resize:vertical}.cp-map{display:grid;grid-template-columns:repeat(13,minmax(42px,1fr));gap:5px;margin:8px 0}.cp-map label{padding:4px;border:1px solid #344b63;border-radius:7px;text-align:center;font-size:10px}.cp-map select{padding:4px;min-height:34px}.cp-actions{display:flex;gap:7px;flex-wrap:wrap;margin:9px 0}.cp-stream{min-height:54px;display:flex;gap:4px;align-items:center;flex-wrap:wrap;padding:8px;border:1px solid #3d5871;border-radius:10px;background:#07131f}.cp-char{display:inline-grid;place-items:center;min-width:27px;height:34px;border-radius:6px;background:#243950;color:#fff;font:14px ui-monospace,monospace}.cp-char.on{background:#ffd85a;color:#201900;transform:translateY(-3px)}.cp-result{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}.cp-status{margin-top:8px;color:#8fe0a7;font-size:12px}.cp-status.bad{color:#ff948a}.cp-attempts{color:#ffd85a}@media(max-width:700px){.cp-fields{grid-template-columns:1fr}.cp-map{grid-template-columns:repeat(6,1fr)}.cp-result{grid-template-columns:1fr}}
+</style>
+<script id="native-cipher-workflow">
+(()=>{
+const stage=document.querySelector('.stage');if(!stage)return;
+const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ',examples=[['MEET AT THE OLD BRIDGE',7],['OBSERVE ONE CHANGE',3],['FOLLOW THE YELLOW STAR',11]];
+const section=document.createElement('section');section.className='cp-native';section.setAttribute('aria-labelledby','cp-native-title');
+section.innerHTML='<h2 id="cp-native-title">🔐 平文と鍵から暗号文を作り、復号に挑戦</h2><p>鍵で置換表を作れます。各文字の対応も直接変更できます（同じ文字を重ねると暗号化できません）。</p><div class="cp-fields"><label>平文（英字）<textarea id="cp-plain" maxlength="160" spellcheck="false">MEET AT THE OLD BRIDGE</textarea></label><label>シフト鍵 0–25<input id="cp-key" type="number" min="0" max="25" step="1" value="7" inputmode="numeric"><button id="cp-apply-key">鍵を置換表へ反映</button></label></div><div id="cp-map" class="cp-map" aria-label="AからZの置換対応"></div><div class="cp-actions"><button id="cp-encrypt" class="primary">文字ごとに暗号化</button><button id="cp-example">別の平文</button><button id="cp-challenge">復号の挑戦問題</button><button id="cp-reset-map">標準の鍵へ戻す</button></div><div id="cp-stream" class="cp-stream" aria-live="polite">暗号化すると文字が順に現れます。</div><div class="cp-result"><label>復号した平文を入力<input id="cp-guess" type="text" maxlength="160" autocomplete="off" spellcheck="false"></label><button id="cp-check">答え合わせ</button></div><div id="cp-status" class="cp-status"></div><div id="cp-attempts" class="cp-attempts"></div>';
+stage.insertAdjacentElement('beforebegin',section);
+const plain=section.querySelector('#cp-plain'),key=section.querySelector('#cp-key'),mapEl=section.querySelector('#cp-map'),stream=section.querySelector('#cp-stream'),guess=section.querySelector('#cp-guess'),status=section.querySelector('#cp-status'),attemptsEl=section.querySelector('#cp-attempts');let mapping=[...alphabet],target='',ciphertext='',attempts=0,exampleIndex=0,timers=[];
+function setStatus(message,bad=false){status.textContent=message;status.classList.toggle('bad',bad)}
+function normalize(value){return value.toUpperCase().replace(/[^A-Z]+/g,' ').trim().replace(/\s+/g,' ')}
+function buildMap(){
+ mapEl.replaceChildren();[...alphabet].forEach((letter,index)=>{const label=document.createElement('label');label.append(document.createTextNode(letter+' → '));const select=document.createElement('select');select.setAttribute('aria-label',`${letter}の置換先`);[...alphabet].forEach(optionLetter=>{const option=document.createElement('option');option.value=optionLetter;option.textContent=optionLetter;select.append(option)});select.value=mapping[index];select.onchange=()=>{mapping[index]=select.value;validateMap()};label.append(select);mapEl.append(label)});
+}
+function validateMap(){
+ const unique=new Set(mapping),valid=unique.size===26;setStatus(valid?'置換表は1対1です。暗号化できます。':`置換先が重複しています（${26-unique.size}個不足）。1対1に直してください。`,!valid);return valid
+}
+function applyKey(){
+ const shift=Number(key.value);if(!Number.isInteger(shift)||shift<0||shift>25){setStatus('鍵は0から25の整数で入力してください。',true);key.focus();return false}
+ mapping=[...alphabet].map((_,index)=>alphabet[(index+shift)%26]);buildMap();validateMap();return true
+}
+function transform(value){return value.toUpperCase().replace(/[A-Z]/g,letter=>mapping[alphabet.indexOf(letter)])}
+function animate(value){
+ timers.forEach(clearTimeout);timers=[];stream.replaceChildren();[...value].forEach((char,index)=>{const span=document.createElement('span');span.className='cp-char';span.textContent=char===' '?'·':char;span.style.opacity='.22';stream.append(span);timers.push(setTimeout(()=>{span.style.opacity='1';span.classList.add('on');setTimeout(()=>span.classList.remove('on'),170)},index*55))});
+}
+function encrypt(){
+ const normalized=normalize(plain.value);if(!normalized){setStatus('英字の平文を入力してください。',true);plain.focus();return}if(!validateMap())return;target=normalized;ciphertext=transform(normalized);attempts=0;attemptsEl.textContent='';guess.value='';animate(ciphertext);setStatus(`暗号文 ${ciphertext.length}文字。下へ復号した平文を入力して何度でも試せます。`);
+}
+function check(){
+ if(!target){setStatus('先に暗号化するか、挑戦問題を選んでください。',true);return}const answer=normalize(guess.value);if(!answer){setStatus('復号したと思う平文を入力してください。',true);guess.focus();return}attempts++;const correct=answer===target;setStatus(correct?`正解！ ${attempts}回で復号できました。`:`まだ違います。${attempts}回目：文字数や繰り返しを手掛かりに再挑戦しよう。`,!correct);attemptsEl.textContent=correct?'★ 別の平文でも試そう。':`挑戦回数 ${attempts}回`;if(!correct)guess.select();
+}
+function loadExample(index){const [value,shift]=examples[index];plain.value=value;key.value=shift;applyKey();target='';ciphertext='';guess.value='';attempts=0;stream.textContent='「文字ごとに暗号化」を押してください。';setStatus('新しい平文と鍵を読み込みました。')}
+function challenge(){
+ exampleIndex=(exampleIndex+1)%examples.length;const [value,shift]=examples[exampleIndex];key.value=shift;applyKey();target=value;ciphertext=transform(value);plain.value='';plain.placeholder='挑戦中：元の平文は隠れています';guess.value='';attempts=0;animate(ciphertext);setStatus(`挑戦問題：鍵${shift}の暗号文を復号してください。`,false);attemptsEl.textContent='挑戦回数 0回';
+}
+section.querySelector('#cp-apply-key').onclick=applyKey;section.querySelector('#cp-encrypt').onclick=encrypt;section.querySelector('#cp-check').onclick=check;section.querySelector('#cp-example').onclick=()=>{exampleIndex=(exampleIndex+1)%examples.length;plain.placeholder='';loadExample(exampleIndex)};section.querySelector('#cp-challenge').onclick=challenge;section.querySelector('#cp-reset-map').onclick=applyKey;key.addEventListener('change',applyKey);guess.addEventListener('keydown',event=>{if(event.key==='Enter')check()});
+applyKey();
+})();
+</script>
 </body></html>

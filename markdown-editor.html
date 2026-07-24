@@ -153,4 +153,47 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="native-markdown-style">
+.md-native{margin:10px 0;padding:12px;border:2px solid #68c8ff;border-radius:16px;background:#101d2d}.md-native h2{margin:0 0 5px;color:#ffd85a;font-size:17px}.md-native .md-lead{margin:0 0 9px;color:#d9e9f6;font-size:12px}.md-native-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.md-native label{display:grid;gap:5px;color:#9dcdf5;font-size:12px;font-weight:850}.md-native textarea{width:100%;min-height:260px;resize:vertical;border:1px solid #496783;border-radius:11px;padding:11px;background:#07131f;color:#f4f8fc;font:14px/1.55 ui-monospace,SFMono-Regular,monospace}.md-preview{min-height:260px;overflow:auto;border:1px solid #b6aa91;border-radius:11px;padding:12px;background:#fffaf0;color:#28231c;font:14px/1.55 system-ui}.md-preview h1,.md-preview h2,.md-preview h3{color:#28231c;margin:.55em 0 .25em}.md-preview pre{overflow:auto;padding:8px;border-radius:7px;background:#202a34;color:#f5f7fa}.md-preview code{padding:1px 4px;border-radius:4px;background:#e8e1d4}.md-preview pre code{padding:0;background:none}.md-preview blockquote{margin:7px 0;padding-left:9px;border-left:4px solid #777;color:#555}.md-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.md-status{margin-top:8px;font-size:12px;color:#bfe1ff}.md-status.bad{color:#ff9b91}@media(max-width:700px){.md-native-grid{grid-template-columns:1fr}.md-native textarea,.md-preview{min-height:210px}}
+</style>
+<script id="native-markdown-workflow">
+(()=>{
+const stage=document.querySelector('.stage');if(!stage)return;
+const starter='# 観察メモ\n\n## 今日わかったこと\n\n- 主図で変化したもの\n- 変えた条件\n\n**大事な点**を一文で書く。\n\n`再生` と `一段` を比べる。';
+const samples=[
+  starter,
+  '# 実験計画\n\n> 一度に変える条件は一つだけ。\n\n1. 条件Aを記録\n2. 一つだけ変える\n3. 条件Bと比較\n\n結果は **数値** と見た目の両方で説明する。',
+  '# コードメモ\n\n```js\nconst result = observe(change);\n```\n\n詳しくは [MDN](https://developer.mozilla.org/) を参照。'
+];
+const section=document.createElement('section');section.className='md-native';section.setAttribute('aria-labelledby','md-native-title');
+section.innerHTML='<h2 id="md-native-title">✍️ Markdownを書いて、すぐプレビュー</h2><p class="md-lead">左へ入力すると右が更新されます。HTMLは文字として表示し、実行しません。</p><div class="md-native-grid"><label>Markdownソース<textarea id="md-source" maxlength="6000" spellcheck="true"></textarea></label><label>安全なプレビュー<div id="md-preview" class="md-preview" aria-live="polite"></div></label></div><div class="md-actions"><button id="md-starter" class="primary">スターターへ戻す</button><button id="md-sample">別の見本</button><button id="md-clear">空にする</button></div><div id="md-status" class="md-status"></div>';
+stage.insertAdjacentElement('beforebegin',section);
+const source=section.querySelector('#md-source'),preview=section.querySelector('#md-preview'),status=section.querySelector('#md-status');let sampleIndex=0;
+const escapeHtml=value=>value.replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+function inline(text){
+ let out=escapeHtml(text);
+ out=out.replace(/`([^`\n]+)`/g,'<code>$1</code>').replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>').replace(/\*([^*\n]+)\*/g,'<em>$1</em>');
+ out=out.replace(/\[([^\]\n]+)\]\((https?:\/\/[^)\s]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+ return out;
+}
+function render(){
+ const value=source.value.replace(/\r\n?/g,'\n').slice(0,6000),lines=value.split('\n');let html='',list='',inCode=false,code=[];
+ const closeList=()=>{if(list){html+=`</${list}>`;list=''}};
+ for(const line of lines){
+  if(line.startsWith('```')){closeList();if(inCode){html+=`<pre><code>${escapeHtml(code.join('\n'))}</code></pre>`;code=[]}inCode=!inCode;continue}
+  if(inCode){code.push(line);continue}
+  const heading=line.match(/^(#{1,3})\s+(.+)$/);const unordered=line.match(/^[-*]\s+(.+)$/);const ordered=line.match(/^\d+\.\s+(.+)$/);
+  if(heading){closeList();const level=heading[1].length;html+=`<h${level}>${inline(heading[2])}</h${level}>`}
+  else if(unordered||ordered){const type=unordered?'ul':'ol';if(list!==type){closeList();list=type;html+=`<${type}>`}html+=`<li>${inline((unordered||ordered)[1])}</li>`}
+  else{closeList();if(!line.trim())html+='<br>';else if(line.startsWith('> '))html+=`<blockquote>${inline(line.slice(2))}</blockquote>`;else html+=`<p>${inline(line)}</p>`}
+ }
+ closeList();if(inCode)html+=`<pre><code>${escapeHtml(code.join('\n'))}</code></pre>`;
+ preview.innerHTML=html||'<p style="color:#777">左へMarkdownを書いてください。</p>';
+ const headings=(value.match(/^#{1,3}\s/gm)||[]).length,links=(value.match(/\[[^\]]+\]\(https?:\/\/[^)]+\)/g)||[]).length;
+ status.textContent=`${value.length}文字・見出し${headings}個・リンク${links}個${inCode?'　⚠ コードブロックが閉じていません':''}`;status.classList.toggle('bad',inCode);
+}
+source.addEventListener('input',render);section.querySelector('#md-starter').onclick=()=>{source.value=starter;render();source.focus()};section.querySelector('#md-sample').onclick=()=>{sampleIndex=(sampleIndex+1)%samples.length;source.value=samples[sampleIndex];render();source.focus()};section.querySelector('#md-clear').onclick=()=>{source.value='';render();source.focus()};
+source.value=starter;render();
+})();
+</script>
 </body></html>

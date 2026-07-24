@@ -187,4 +187,19 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="v11-typhoon-style">.v11-storm-direct{display:flex;gap:7px;flex-wrap:wrap;margin:7px 0;padding:9px;border:2px solid #ffd85a;border-radius:13px;background:#14283b;font-size:13px;font-weight:850}.v11-storm-direct span{border-radius:999px;padding:4px 8px;color:#071522}.v11-heat{background:#ff9b63}.v11-vapor{background:#69e0b0}.v11-shear{background:#d4b0ff}.stage canvas{cursor:crosshair;touch-action:none}</style>
+<script id="v11-typhoon-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv');if(!canvas)return;
+const guide=document.createElement('div');guide.className='v11-storm-direct';guide.innerHTML='👆 タップ／ドラッグ：下の海で熱と水蒸気を供給、上空で横風を加える <span class="v11-heat">橙＝海の熱</span><span class="v11-vapor">緑＝水蒸気</span><span class="v11-shear">紫＝風切り・崩す</span>';
+canvas.closest('.stage').insertAdjacentElement('afterend',guide);
+let marks=[],dragging=false,lastMark=0;
+function setControl(id,value){const el=document.getElementById(id);el.value=Math.max(+el.min,Math.min(+el.max,value));el.dispatchEvent(new Event('input',{bubbles:true}))}
+function intervene(event){event.preventDefault();event.stopImmediatePropagation();const now=performance.now();if(now-lastMark<90)return;lastMark=now;const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width*900,y=(event.clientY-r.top)/r.height*520,kind=y>300?'ocean':'shear';if(kind==='ocean'){setControl('c1',+document.getElementById('c1').value+.5);setControl('c2',+document.getElementById('c2').value+5)}else setControl('c3',+document.getElementById('c3').value+3);marks.push({x,y,kind,life:32});if(marks.length>24)marks.shift();for(let i=0;i<5;i++)advance(APP.step);drawAll()}
+canvas.addEventListener('pointerdown',event=>{dragging=true;lastMark=0;try{canvas.setPointerCapture?.(event.pointerId)}catch(_){}intervene(event)},{capture:true});canvas.addEventListener('pointermove',event=>{if(dragging)intervene(event)},{capture:true});canvas.addEventListener('pointerup',()=>{dragging=false},{capture:true});canvas.addEventListener('pointercancel',()=>{dragging=false},{capture:true});
+document.getElementById('resetBtn').addEventListener('click',()=>{marks=[];dragging=false});
+const baseDraw=drawAll;drawAll=function(){baseDraw();const g=canvas.getContext('2d');g.save();g.fillStyle='#0d5675';g.globalAlpha=.32;g.fillRect(0,390,900,130);g.globalAlpha=1;g.fillStyle='#fff';g.font='bold 14px system-ui';g.fillText('海面：熱と水蒸気を供給 ↑',25,485);marks=marks.filter(m=>m.life-->0);marks.forEach(m=>{g.globalAlpha=m.life/32;g.strokeStyle=m.kind==='ocean'?'#ff9b63':'#d4b0ff';g.fillStyle=m.kind==='ocean'?'#69e0b0':'#d4b0ff';g.lineWidth=6;if(m.kind==='ocean'){g.beginPath();g.arc(m.x,m.y,34-m.life*.55,0,Math.PI*2);g.fill();g.beginPath();g.moveTo(m.x,m.y);g.lineTo(m.x,m.y-85);g.stroke()}else{g.beginPath();g.moveTo(m.x-65,m.y);g.lineTo(m.x+65,m.y+25);g.stroke()}});g.globalAlpha=1;g.fillStyle='rgba(5,15,25,.88)';g.fillRect(18,45,258,62);g.fillStyle='#69e0b0';g.fillText('供給 ↑ 暖気核を育てる',32,70);g.fillStyle='#d4b0ff';g.fillText('風切り → 渦を傾けて崩す',32,94);g.restore()};
+drawAll();
+})();
+</script>
 </body></html>

@@ -50,7 +50,8 @@ html,body{max-width:100%;overflow-x:hidden}canvas{max-width:100%;height:auto}.r5
 <div class="row" style="margin-bottom:10px"><button id="guideBtn" type="button" aria-label="👆 操作ガイド">👆 操作ガイド</button><button id="speakBtn" type="button" aria-label="🔊 読み上げ">🔊 読み上げ</button><span class="badge">★★★ 保存フィルターを探す</span></div>
 
 <div class="stage"><canvas id="geo" width="960" height="620" aria-label="複数の遺骸が埋没し化石として発見されるまでの地層断面。タップで追加、ドラッグで移動できます" role="img"></canvas><div id="geoLabel" class="stage-label">0 / 0 個が化石になった</div><div class="stage-help">👆 タップ：遺骸を追加（最大10）<br>↔ ドラッグ：保存場所を変える</div></div>
-<div class="legend" aria-label="化石候補の凡例"><span class="live">水色＝形成中</span><span class="lost">赤＝失われた（理由つき）</span><span class="fossil">金色＝発見できた化石</span><span>場所：左は静かな潟／中央は川の土砂／右は浅瀬</span></div>
+<div class="legend" aria-label="化石候補の凡例"><span class="live">水色＝形成中</span><span class="lost">赤＝失われた（タップで個別再挑戦）</span><span class="fossil">金色＝発見できた化石</span><span>場所：左は静かな潟／中央は川の土砂／右は浅瀬</span></div>
+<div id="specimenCompare" class="callout" aria-live="polite"><b>標本比較：</b>まだ標本がありません。</div>
 <div class="toolbar"><button id="play" class="primary pulse" type="button" aria-label="時間を進める">▶ 時間を進める</button><button id="step" type="button" aria-label="全個体を次の段階へ">全個体を1段階</button><select id="speed" aria-label="再生速度"><option value="1">×1</option><option value="8">×8</option><option value="40">×40</option></select><button id="cohortBtn" type="button" aria-label="同じ場所で10体を試す">10体を一斉配置</button><button id="newSpecimen" type="button" aria-label="遺骸を一つ追加">＋ 遺骸</button><button id="retry" type="button" aria-label="同じ配置でもう一度試す">同じ配置で再挑戦</button><button id="reset" type="button" aria-label="初期配置へ戻す">初期配置へ</button></div>
 <div id="timeline" class="timeline"></div>
 <div class="metrics"><div class="metric"><div class="k">模型時間</div><div id="mYears" class="v">0</div><div class="u">年相当</div></div><div class="metric"><div class="k">形成中</div><div id="mStage" class="v">0</div><div class="u">個体</div></div><div class="metric"><div class="k">実際に残った割合</div><div id="mChance" class="v">0%</div><div class="u">成功 / 終了個体</div></div><div class="metric"><div class="k">条件からの期待値</div><div id="mFound" class="v">—</div><div class="u">100体あたり</div></div></div>
@@ -199,6 +200,8 @@ function updateMetrics(){
   const active=specimens.filter(s=>s.status==='active').length,lost=specimens.filter(s=>s.status==='lost').length,success=specimens.filter(s=>s.status==='success').length,done=lost+success;
   mYears.textContent=years<1e4?Math.round(years).toLocaleString():years<1e6?(years/1e3).toFixed(0)+'千':(years/1e6).toFixed(1)+'百万';mStage.textContent=String(active);mChance.textContent=done?Math.round(success*100/done)+'%':'—';
   geoLabel.textContent=`${success} / ${specimens.length} 個が化石になった（形成中 ${active}）`;buildTimeline();drawFunnel();
+  const typeNames={fish:'魚',shell:'貝',leaf:'葉',bone:'骨'};
+  specimenCompare.innerHTML='<b>標本比較：</b> '+specimens.map(s=>`<span style="white-space:nowrap">#${s.id} ${typeNames[s.type]}・${positionName(s.x)}＝${s.status==='success'?'化石':s.status==='lost'?'失敗：'+s.reason:stages[s.stage]}</span>`).join(' ／ ');
   const ps=probs(),min=Math.min(...ps.slice(1)),idx=ps.indexOf(min);explain.textContent=`期待値で最大の関門は「${stages[idx]}」。実際の結果は 成功${success}・失敗${lost}・形成中${active}。失敗しても配置や条件を変えてすぐ再挑戦できます。`;
 }
 function draw(){drawLayers();updateMetrics()}
@@ -210,7 +213,7 @@ function nearestSpecimen(point){
 }
 geo.addEventListener('pointerdown',event=>{const point=canvasPoint(event),target=nearestSpecimen(point);drag={target,start:point,moved:false};if(target)geo.setPointerCapture(event.pointerId)});
 geo.addEventListener('pointermove',event=>{if(!drag?.target)return;const point=canvasPoint(event);if(Math.hypot(point.x-drag.start.x,point.y-drag.start.y)>5)drag.moved=true;drag.target.x=clamp(point.x,45,915);drag.target.y=clamp(point.y,150,565);if(drag.target.status!=='active')Object.assign(drag.target,{stage:0,progress:0,status:'active',reason:''})});
-geo.addEventListener('pointerup',event=>{if(!drag)return;const point=canvasPoint(event);if(!drag.target)addSpecimen(point.x,point.y);else if(drag.moved)cause.textContent=`個体${drag.target.id}を${positionName(drag.target.x)}へ移動。移動した個体は形成をやり直します。`;drag=null;draw()});
+geo.addEventListener('pointerup',event=>{if(!drag)return;const point=canvasPoint(event);if(!drag.target)addSpecimen(point.x,point.y);else if(drag.moved)cause.textContent=`個体${drag.target.id}を${positionName(drag.target.x)}へ移動。移動した個体は形成をやり直します。`;else if(drag.target.status!=='active'){Object.assign(drag.target,{stage:0,progress:0,status:'active',reason:''});cause.textContent=`個体${drag.target.id}だけを同じ場所で再挑戦します。ほかの標本の結果は残ります。`}drag=null;draw()});
 geo.addEventListener('pointercancel',()=>{drag=null});
 play.onclick=()=>{if(!specimens.some(s=>s.status==='active'))retrySpecimens();running=!running;play.textContent=running?'⏸ 一時停止':'▶ 時間を進める'};
 step.onclick=()=>{running=false;play.textContent='▶ 時間を進める';specimens.filter(s=>s.status==='active').forEach(advanceSpecimen);draw()};

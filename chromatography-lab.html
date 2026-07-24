@@ -76,6 +76,32 @@ $('guideBtn').onclick=()=>$('guideBack').classList.add('show');$('guideClose').o
 $('speakBtn').onclick=()=>{if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(APP.title+'。'+APP.sub+'。'+APP.first);u.lang='ja-JP';speechSynthesis.speak(u)}};
 function metricSnapshot(){const c=compute();return APP.metricLabels.map((x,i)=>x+'：'+c.metrics[i]).join('\n')}function record(which){const text=metricSnapshot();if(which==='A'){A=text;$('snapA').textContent=text}else{B=text;$('snapB').textContent=text}$('diffAB').textContent=A&&B?'変えた入力が一つだけか確認し、結果の因果方向を説明してください。':'もう一方も記録してください。'}$('recA').onclick=()=>record('A');$('recB').onclick=()=>record('B');$('clearAB').onclick=()=>{A=B=null;$('snapA').textContent=$('snapB').textContent=$('diffAB').textContent=''};
 applyScenario(0);
+</script><script id="direct-chromatography-play">
+(()=>{
+const canvas=$('mainCv');let directResult='左の注入口をタップして、青A＋黄Bの試料を注入';
+const baseDrawAll=drawAll;
+drawAll=function(){
+  baseDrawAll();
+  const m=canvas.getContext('2d');m.save();
+  m.fillStyle='#5fd3ff';m.beginPath();m.arc(98,105,12,0,Math.PI*2);m.fill();
+  m.fillStyle='#ffd85a';m.beginPath();m.arc(98,135,12,0,Math.PI*2);m.fill();
+  m.fillStyle='rgba(8,21,34,.92)';m.fillRect(18,452,620,42);
+  m.fillStyle='#eef5fb';m.font='bold 13px system-ui';m.fillText('青い帯：成分A　黄色い帯：成分B　灰色：固定相　上部：移動相',30,470);
+  m.fillStyle='#ffd85a';m.fillText(directResult,30,488);m.restore();
+};
+function point(event){const r=canvas.getBoundingClientRect();return{x:(event.clientX-r.left)*900/r.width,y:(event.clientY-r.top)*520/r.height}}
+canvas.addEventListener('pointerdown',event=>{
+  const p=point(event);
+  if(p.x>40&&p.x<175&&p.y>55&&p.y<205){
+    state.time=0;state.hist=[];manualUpdates++;
+    directResult=`成功：試料を再注入。分離判定は「${compute().metrics[5]}」`;drawAll();
+  }else directResult='左端の青・黄の試料アイコンをタップしよう';
+  drawAll();
+});
+const baseResetState=resetState;
+resetState=function(){directResult='左の注入口をタップして、青A＋黄Bの試料を注入';return baseResetState()};
+drawAll();
+})();
 </script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
 const ready=()=>{

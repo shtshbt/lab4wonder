@@ -76,6 +76,33 @@ $('guideBtn').onclick=()=>$('guideBack').classList.add('show');$('guideClose').o
 $('speakBtn').onclick=()=>{if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(APP.title+'。'+APP.sub+'。'+APP.first);u.lang='ja-JP';speechSynthesis.speak(u)}};
 function metricSnapshot(){const c=compute();return APP.metricLabels.map((x,i)=>x+'：'+c.metrics[i]).join('\n')}function record(which){const text=metricSnapshot();if(which==='A'){A=text;$('snapA').textContent=text}else{B=text;$('snapB').textContent=text}$('diffAB').textContent=A&&B?'変えた入力が一つだけか確認し、結果の因果方向を説明してください。':'もう一方も記録してください。'}$('recA').onclick=()=>record('A');$('recB').onclick=()=>record('B');$('clearAB').onclick=()=>{A=B=null;$('snapA').textContent=$('snapB').textContent=$('diffAB').textContent=''};
 applyScenario(0);
+</script><script id="direct-groundwater-play">
+(()=>{
+const canvas=$('mainCv');let sourceOffset=0,directResult='地層をタップして、その場所へ汚染物質を注入';
+const baseGroundCalc=groundCalc;
+groundCalc=function(){
+  const d=baseGroundCalc();d.center+=sourceOffset;d.metrics[0]=d.center.toFixed(1)+' m';
+  d.metrics[5]=d.center<20?'源近傍':d.center<80?'移流中':'下流到達';return d;
+};
+const baseDrawAll=drawAll;
+drawAll=function(){
+  baseDrawAll();const m=canvas.getContext('2d');m.save();
+  const sx=100+clamp(sourceOffset,0,120)/120*700;m.fillStyle='#ff8d8d';m.beginPath();m.moveTo(sx,155);m.lineTo(sx-12,125);m.lineTo(sx+12,125);m.closePath();m.fill();
+  m.fillStyle='rgba(35,27,20,.9)';m.fillRect(18,448,700,44);
+  m.fillStyle='#eef5fb';m.font='bold 13px system-ui';m.fillText('赤い印：注入源　黄〜赤の雲：汚染プルーム　水色矢印：地下水流路',30,467);
+  m.fillStyle='#ffd85a';m.fillText(directResult,30,486);m.restore();
+};
+function point(event){const r=canvas.getBoundingClientRect();return{x:(event.clientX-r.left)*900/r.width,y:(event.clientY-r.top)*520/r.height}}
+canvas.addEventListener('pointerdown',event=>{
+  const p=point(event);
+  if(p.y<115||p.y>430){directResult='茶色い地層の中をタップしよう';drawAll();return}
+  sourceOffset=clamp((p.x-100)/700*120,0,120);state.time=0;state.hist=[];manualUpdates++;
+  directResult=`成功：${sourceOffset.toFixed(1)} m地点へ注入。ここから地下水で移動する`;drawAll();
+});
+const baseResetState=resetState;
+resetState=function(){sourceOffset=0;directResult='地層をタップして、その場所へ汚染物質を注入';return baseResetState()};
+drawAll();
+})();
 </script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
 const ready=()=>{

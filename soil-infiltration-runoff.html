@@ -86,6 +86,31 @@ $('speakBtn').onclick=()=>{if('speechSynthesis'in window){speechSynthesis.cancel
 function frame(now){let dt=Math.min(.05,(now-last)/1000);last=now;if(running){domainStep(dt*speed());drawAll()}requestAnimationFrame(frame)}requestAnimationFrame(frame);
 window.r58TestResetCurrent=()=>resetState();window.r58TestAdvance=(n=1)=>{for(let i=0;i<n;i++){domainStep(APP.step*speed())}drawAll();return snapshot()};window.r58TestSnapshot=snapshot;window.r58TestSetScenario=setScenario;window.r58App=APP;
 updateOutputs();resetState();
+</script><script id="direct-rain-play">
+(()=>{
+const canvas=$('mainCv');let raining=false,lastDrop=0,directResult='空をタップ／なぞって、強い雨を追加';
+const baseDrawAll=drawAll;
+drawAll=function(){
+  baseDrawAll();const m=canvas.getContext('2d');m.save();
+  m.fillStyle='rgba(8,21,34,.9)';m.fillRect(18,34,680,42);
+  m.fillStyle='#eef5fb';m.font='bold 13px system-ui';m.fillText('水色の線：雨粒　青い土：浸透水　青い地表線：流出　緑：植生',30,53);
+  m.fillStyle='#ffd85a';m.fillText(directResult,30,71);m.restore();
+};
+function point(event){const r=canvas.getBoundingClientRect();return{x:(event.clientX-r.left)*900/r.width,y:(event.clientY-r.top)*520/r.height}}
+function rainPulse(event){
+  const p=point(event);if(p.y>200)return;
+  const now=performance.now();if(now-lastDrop<90)return;lastDrop=now;
+  const input=$('c1'),old=input.value;input.value='120';domainStep(.3);input.value=old;compute();
+  directResult=state.runoff>0?`結果：豪雨追加 → 流出 ${state.runoff.toFixed(1)} mm`:`結果：豪雨追加 → まず浸透・貯留（浸透 ${state.infil.toFixed(1)} mm）`;
+  drawAll();
+}
+canvas.addEventListener('pointerdown',event=>{if(point(event).y>200)return;raining=true;canvas.setPointerCapture?.(event.pointerId);event.preventDefault();rainPulse(event)});
+canvas.addEventListener('pointermove',event=>{if(raining)rainPulse(event)});
+canvas.addEventListener('pointerup',()=>{raining=false});canvas.addEventListener('pointercancel',()=>{raining=false});
+const baseResetState=resetState;
+resetState=function(){raining=false;directResult='空をタップ／なぞって、強い雨を追加';return baseResetState()};
+drawAll();
+})();
 </script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
 const ready=()=>{

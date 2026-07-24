@@ -191,9 +191,9 @@ show(0);
 (()=>{
 const canvas=document.getElementById('mainCv');if(!canvas)return;
 const tools=document.createElement('div');tools.className='v11-rain-tools';
-tools.innerHTML='<b>💧 雨粒のまわりへ直接さわろう</b><button data-rain="merge">💦 小粒をぶつける</button><button data-rain="up">⬆️ 上昇気流を送る</button><button data-rain="down">⬇️ 下降気流を送る</button>';
+tools.innerHTML='<b>💧 タップ／ドラッグ：中央で小粒を合体、上で上昇流、下で下降流</b><button data-rain="merge">💦 小粒をぶつける</button><button data-rain="up">⬆️ 上昇気流を送る</button><button data-rain="down">⬇️ 下降気流を送る</button>';
 canvas.closest('.stage').insertAdjacentElement('afterend',tools);
-let effect='',pulse=0;
+let effect='',pulse=0,dragging=false,lastAction=0;
 function setValue(id,value){const input=document.getElementById(id);input.value=Math.max(+input.min,Math.min(+input.max,value));input.dispatchEvent(new Event('input',{bubbles:true}))}
 function intervene(kind){
  effect=kind;pulse=25;
@@ -204,11 +204,17 @@ function intervene(kind){
  drawAll();
 }
 tools.addEventListener('click',event=>{const button=event.target.closest('[data-rain]');if(button)intervene(button.dataset.rain)});
-canvas.addEventListener('pointerdown',event=>{
+function touchCloud(event){
  event.preventDefault();event.stopImmediatePropagation();
  const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width,y=(event.clientY-r.top)/r.height;
+ const now=performance.now();if(now-lastAction<90)return;lastAction=now;
  intervene(x>.32&&x<.68?'merge':y<.5?'up':'down');
-},{capture:true});
+}
+canvas.addEventListener('pointerdown',event=>{dragging=true;lastAction=0;try{canvas.setPointerCapture?.(event.pointerId)}catch(_){}touchCloud(event)},{capture:true});
+canvas.addEventListener('pointermove',event=>{if(dragging)touchCloud(event)},{capture:true});
+canvas.addEventListener('pointerup',()=>{dragging=false},{capture:true});
+canvas.addEventListener('pointercancel',()=>{dragging=false},{capture:true});
+document.getElementById('resetBtn').addEventListener('click',()=>{effect='';pulse=0;dragging=false});
 const originalDraw=drawAll;
 drawAll=function(){
  originalDraw();

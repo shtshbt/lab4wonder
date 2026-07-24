@@ -155,4 +155,20 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="v11-enigma-style">.v11-enigma-tip{display:flex;gap:7px;flex-wrap:wrap;margin:7px 0;padding:9px;border:2px solid #ffd85a;border-radius:13px;background:#17283a;font-size:13px;font-weight:850}.v11-enigma-tip span{border-radius:999px;padding:4px 8px}.stage canvas{cursor:crosshair;touch-action:none}</style>
+<script id="v11-enigma-interaction">
+(()=>{
+const canvas=document.getElementById('mainCanvas');if(!canvas)return;
+const guide=document.createElement('div');guide.className='v11-enigma-tip';guide.innerHTML='👆 主図を上下にタップ／ドラッグして A〜Z を入力 <span style="background:#68c8ff;color:#07121f">青＝入力</span><span style="background:#ffd85a;color:#241c00">黄＝ローター往路・復路</span><span style="background:#75df96;color:#07121f">緑＝暗号出力</span>';
+canvas.closest('.stage').insertAdjacentElement('afterend',guide);
+const basePlain=MODEL.plain;let dragging=false,lastLetter='',pulse=0;
+function typeLetter(event){event.preventDefault();event.stopImmediatePropagation();const r=canvas.getBoundingClientRect(),y=(event.clientY-r.top)/r.height,index=Math.max(0,Math.min(25,Math.floor(y*26))),letter=MODEL.alpha[index];if(letter===lastLetter&&dragging)return;lastLetter=letter;const pos=state.t%MODEL.plain.length;MODEL.plain=MODEL.plain.slice(0,pos)+letter+MODEL.plain.slice(pos+1);stepN(1);pulse=24}
+canvas.addEventListener('pointerdown',event=>{dragging=true;lastLetter='';try{canvas.setPointerCapture?.(event.pointerId)}catch(_){}typeLetter(event)},{capture:true});canvas.addEventListener('pointermove',event=>{if(dragging)typeLetter(event)},{capture:true});canvas.addEventListener('pointerup',()=>{dragging=false;lastLetter=''},{capture:true});canvas.addEventListener('pointercancel',()=>{dragging=false;lastLetter=''},{capture:true});
+function clearTyping(){MODEL.plain=basePlain;dragging=false;lastLetter='';pulse=0}
+document.getElementById('resetBtn').addEventListener('click',clearTyping);
+document.getElementById('scenarioSel').addEventListener('change',clearTyping);
+const baseRender=render;render=function(){baseRender();mc.save();if(state.t===0){mc.setLineDash([8,7]);mc.strokeStyle='#ffd85a88';mc.lineWidth=3;mc.beginPath();mc.moveTo(32,215);for(let i=1;i<11;i++)mc.lineTo(32+i*(736/10),i%2?145:285);mc.stroke();mc.setLineDash([])}mc.fillStyle='rgba(5,15,25,.9)';mc.fillRect(8,52,70,332);mc.font='bold 10px monospace';mc.textAlign='center';for(let i=0;i<26;i++){mc.fillStyle=i===state.last.i&&state.t?'#68c8ff':'#dbe9f5';mc.fillText(MODEL.alpha[i],43,66+i*12.2)}mc.textAlign='left';mc.fillStyle='#fff';mc.font='bold 13px system-ui';mc.fillText(state.t?'入力→交換盤→3ローター→反射板→復路→出力':'A〜Zをタップすると黄色い経路が現れる',92,405);if(pulse>0){mc.strokeStyle='#75df96';mc.globalAlpha=pulse/24;mc.lineWidth=6;mc.strokeRect(680,365,105,42);pulse--}mc.restore()};
+render();
+})();
+</script>
 </body></html>

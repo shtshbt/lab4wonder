@@ -164,4 +164,17 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="v11-dungeon-style">.v11-dungeon-tools{display:flex;gap:7px;flex-wrap:wrap;margin:7px 0;padding:9px;border:2px solid #ffd85a;border-radius:13px;background:#17283a;font-size:13px;font-weight:850}.v11-dungeon-tools span{border-radius:999px;padding:4px 8px}.stage canvas{cursor:crosshair;touch-action:none}</style>
+<script id="v11-dungeon-interaction">
+(()=>{
+const canvas=document.getElementById('mainCanvas');if(!canvas)return;
+const guide=document.createElement('div');guide.className='v11-dungeon-tools';guide.innerHTML='👆 格子をタップ／ドラッグ：部屋を掘り、直前の部屋へ通路をつなぐ <span style="background:#81715a">茶＝床・部屋</span><span style="background:#202833">紺＝壁</span><span style="background:#ffd85a;color:#241c00">黄＝宝箱</span>';
+canvas.closest('.stage').insertAdjacentElement('afterend',guide);
+let dragging=false,lastCell='',placed=0;
+function place(event){event.preventDefault();event.stopImmediatePropagation();const r=canvas.getBoundingClientRect(),px=(event.clientX-r.left)/r.width*800,py=(event.clientY-r.top)/r.height*430,cx=Math.floor((px-40)/18),cy=Math.floor((py-18)/18),key=cx+','+cy;if(key===lastCell||cx<3||cx>W-4||cy<3||cy>H-4)return;lastCell=key;const room={x:cx-2,y:cy-2,w:5,h:4,cx,cy};if(overlap(room))return;const previous=s.rs.at(-1);s.rs.push(room);carveRoom(room);if(previous){carveLine({x:previous.cx,y:previous.cy},{x:room.cx,y:room.cy});s.edges.push([s.rs.length-2,s.rs.length-1])}if(++placed%3===0)s.treasures.push([cx,cy]);advance();drawAll()}
+canvas.addEventListener('pointerdown',event=>{dragging=true;lastCell='';try{canvas.setPointerCapture?.(event.pointerId)}catch(_){}place(event)},{capture:true});canvas.addEventListener('pointermove',event=>{if(dragging)place(event)},{capture:true});canvas.addEventListener('pointerup',()=>{dragging=false;lastCell=''},{capture:true});canvas.addEventListener('pointercancel',()=>{dragging=false;lastCell=''},{capture:true});
+document.getElementById('resetBtn').addEventListener('click',()=>{dragging=false;lastCell='';placed=0;setTimeout(()=>{for(let i=0;i<4;i++)advance();drawAll()},0)});
+for(let i=0;i<4;i++)advance();drawAll();
+})();
+</script>
 </body></html>

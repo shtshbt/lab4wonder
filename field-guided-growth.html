@@ -175,4 +175,18 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="v11-growth-style">.v11-growth-tools{display:flex;gap:7px;flex-wrap:wrap;margin:7px 0;padding:9px;border:2px solid #ffd85a;border-radius:13px;background:#14283b}.v11-growth-tools b{flex:1 1 100%;font-size:13px}.v11-growth-tools button.on{background:#ffd85a;color:#251d00}.stage canvas{cursor:crosshair;touch-action:none}</style>
+<script id="v11-growth-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv');if(!canvas)return;
+const tools=document.createElement('div');tools.className='v11-growth-tools';tools.innerHTML='<b>👆 組織をタップ／ドラッグ：因子の源を置く、または傷を作って回復を見る</b><button class="on" data-mode="source">🟣 因子の源を置く</button><button data-mode="wound">⚫ 傷を作る</button><span>赤＝高濃度細胞　黄＝中濃度細胞　青＝低濃度細胞</span>';
+canvas.closest('.stage').insertAdjacentElement('afterend',tools);
+let mode='source',dragging=false,lastApply=0;
+tools.addEventListener('click',event=>{const b=event.target.closest('[data-mode]');if(!b)return;mode=b.dataset.mode;tools.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
+function apply(event){event.preventDefault();event.stopImmediatePropagation();const now=performance.now();if(now-lastApply<100)return;lastApply=now;const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width*W,y=((event.clientY-r.top)/r.height*590-60)/500*H;if(x<0||x>=W||y<0||y>=H)return;if(mode==='source')extra={x,y};else wound={x,y,r:6};for(let i=0;i<5;i++)step(.28);draw()}
+canvas.addEventListener('pointerdown',event=>{dragging=true;lastApply=0;try{canvas.setPointerCapture?.(event.pointerId)}catch(_){}apply(event)},{capture:true});canvas.addEventListener('pointermove',event=>{if(dragging)apply(event)},{capture:true});canvas.addEventListener('pointerup',()=>{dragging=false},{capture:true});canvas.addEventListener('pointercancel',()=>{dragging=false},{capture:true});
+const resetButton=document.getElementById('resetTop');resetButton.addEventListener('click',()=>{mode='source';dragging=false;tools.querySelectorAll('button').forEach((b,i)=>b.classList.toggle('on',i===0));setTimeout(()=>{for(let i=0;i<5;i++)step(.3);draw()},0)});
+for(let i=0;i<5;i++)step(.3);draw();
+})();
+</script>
 </body></html>

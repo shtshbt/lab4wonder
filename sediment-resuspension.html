@@ -194,5 +194,48 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
+</script><script id="sediment-direct-interaction">
+(()=>{
+ const canvas=document.getElementById('mainCv');if(!canvas)return;
+ const style=document.createElement('style');
+ style.textContent='.sediment-touch-panel{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:8px 0 0;padding:10px 12px;border:1px solid #5fd3ff88;border-radius:12px;background:#10263a;font-size:13px;line-height:1.65}.sediment-touch-panel b{color:#ffd85a}.sediment-touch-panel .status{color:#bcecff;font-weight:800}';
+ document.head.append(style);
+ const panel=document.createElement('div');panel.className='sediment-touch-panel';
+ panel.innerHTML='<b>👆 水槽をタップ／こする：</b><span>触れた場所の底泥が舞い上がる。青い小粒・黄の中粒・橙の大粒で、沈む速さを比べよう。</span><span class="status" role="status" aria-live="polite">底をタップして再懸濁を起こそう。</span>';
+ canvas.closest('.stage').insertAdjacentElement('afterend',panel);
+ const status=panel.querySelector('.status');
+ let bursts=[],dragging=false,disturbances=0;
+ const point=event=>{const rect=canvas.getBoundingClientRect();return{x:(event.clientX-rect.left)*canvas.width/rect.width,y:(event.clientY-rect.top)*canvas.height/rect.height}};
+ function disturb(event){
+  const q=point(event),center=clamp((q.x-45)/810,0,1);let lifted=0;
+  const candidates=state.parts.filter(p=>p.phase==='bed').sort((a,b)=>Math.abs(a.x-center)-Math.abs(b.x-center));
+  for(const p of candidates.slice(0,Math.min(18,candidates.length))){
+   if(Math.abs(p.x-center)>.2&&lifted>=7)break;
+   p.phase='suspended';p.x=clamp(center+(rnd()-.5)*.16,0,1);p.y=.035+rnd()*.05;p.v=.42+rnd()*.42;lifted++;
+  }
+  if(!lifted)return;
+  bursts.push({x:q.x,y:445,life:1});bursts=bursts.slice(-8);disturbances++;
+  status.textContent=`再懸濁！ ${lifted}粒が舞い上がった。小粒と大粒の沈む順番を見よう（${disturbances}回）`;
+  running=true;document.getElementById('playPause').textContent='⏸ 一時停止';drawAll();
+ }
+ canvas.addEventListener('pointerdown',event=>{if(event.button!==undefined&&event.button!==0)return;dragging=true;canvas.setPointerCapture?.(event.pointerId);event.preventDefault();event.stopImmediatePropagation();disturb(event)},{capture:true});
+ canvas.addEventListener('pointermove',event=>{if(!dragging)return;event.preventDefault();event.stopImmediatePropagation();disturb(event)},{capture:true});
+ const stop=()=>{dragging=false};canvas.addEventListener('pointerup',stop,{capture:true});canvas.addEventListener('pointercancel',stop,{capture:true});
+ const baseDraw=drawAll;
+ drawAll=function(){
+  baseDraw();const ctx=canvas.getContext('2d');ctx.save();
+  ctx.fillStyle='rgba(5,16,27,.88)';ctx.beginPath();ctx.roundRect(48,102,314,66,12);ctx.fill();
+  ctx.fillStyle='#dff5ff';ctx.font='bold 14px system-ui';ctx.fillText('↑ 再懸濁：底泥が水中へ舞い上がる',64,126);
+  ctx.fillText('↓ 沈降：重い・大きい粒ほど底へ',64,151);
+  ctx.fillStyle='rgba(5,16,27,.88)';ctx.beginPath();ctx.roundRect(565,102,282,82,12);ctx.fill();
+  [['#5fd3ff','小粒：ゆっくり'],['#ffd85a','中粒'],['#ff9a66','大粒：速く沈む']].forEach((item,i)=>{ctx.fillStyle=item[0];ctx.beginPath();ctx.arc(583,122+i*23,5+i*1.5,0,Math.PI*2);ctx.fill();ctx.fillStyle='#eef5fb';ctx.font='bold 13px system-ui';ctx.fillText(item[1],599,127+i*23)});
+  for(const p of state.parts){const x=45+p.x*810,y=445-p.y*390,r=clamp(3+p.s*num('c1')/250,3,10),color=p.s<.9?'#5fd3ff':p.s>1.1?'#ff9a66':'#ffd85a';ctx.fillStyle=color;ctx.strokeStyle=p.phase==='suspended'?'#eafaff':p.phase==='bedload'?'#fff3aa':'#5d3a20';ctx.lineWidth=p.phase==='suspended'?2:1;ctx.beginPath();ctx.ellipse(x,y,r,Math.max(2,r*num('c3')),p.x*3,0,Math.PI*2);ctx.fill();ctx.stroke()}
+  bursts.forEach(b=>{ctx.globalAlpha=b.life;ctx.strokeStyle='#b8f2ff';ctx.lineWidth=4;ctx.beginPath();ctx.arc(b.x,b.y,(1-b.life)*85+18,Math.PI,Math.PI*2);ctx.stroke();b.life-=.035});bursts=bursts.filter(b=>b.life>0);ctx.globalAlpha=1;
+  ctx.fillStyle='#fff';ctx.font='bold 14px system-ui';ctx.fillText('堆積（底に止まる）',55,486);ctx.fillStyle='#ffd85a';ctx.fillText('床面移動 →',700,486);ctx.restore();
+ };
+ const baseReset=resetState;
+ resetState=function(){bursts=[];disturbances=0;status.textContent='底をタップして再懸濁を起こそう。';baseReset()};
+ drawAll();
+})();
 </script><script src="lab4wonder_v1_1.js"></script>
 </body></html>

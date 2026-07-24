@@ -87,7 +87,7 @@ let zoom=false;q('#zoomToggle').addEventListener('click',()=>{zoom=!zoom;q('#zoo
  function loop(now){const dt=Math.min(.1,(now-last)/1000);last=now;if(isPlaying())tick+=dt*Number(speedSel?.value||1);paint();requestAnimationFrame(loop)}
  applyScenario(0);requestAnimationFrame(loop);
 })();
-</script><script id="r59-common-ui-script">
+</script><script src="direct_play_patch.js"></script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
 const ready=()=>{
  const title=(document.querySelector('h1')?.textContent||document.title||'このアプリ').trim();

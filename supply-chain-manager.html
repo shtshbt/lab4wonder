@@ -81,7 +81,7 @@ function updateDiff(){if(snapA&&snapB)$('diff').textContent=compareSnapshots(sna
 function setupModal(){const back=$('guideBack');$('guideBtn').onclick=$('tourBtn').onclick=()=>back.classList.add('show');$('guideClose').onclick=()=>back.classList.remove('show');back.onclick=e=>{if(e.target===back)back.classList.remove('show')};$('speakBtn').onclick=()=>{if(!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(document.querySelector('h1').textContent+'。'+document.querySelector('.take').textContent);u.lang='ja-JP';u.rate=.92;speechSynthesis.speak(u)}}setupModal();
 function frame(t){if(!lastTime)lastTime=t;const dt=Math.min(100,t-lastTime);lastTime=t;if(playing){acc+=dt*speed;let guard=0;while(acc>=500&&guard++<20){advance();acc-=500}drawAll()}requestAnimationFrame(frame)}
 requestAnimationFrame(frame);
-</script><script id="r59-common-ui-script">
+</script><script src="direct_play_patch.js"></script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
 const ready=()=>{
  const title=(document.querySelector('h1')?.textContent||document.title||'このアプリ').trim();

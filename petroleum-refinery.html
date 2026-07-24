@@ -173,4 +173,20 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="direct-refinery-style">#refineryDirectStatus{margin-top:7px;border-left:4px solid #ffd85a}.stage canvas{touch-action:none;cursor:crosshair}</style>
+<script id="direct-refinery-interaction">
+(()=>{
+const canvas=document.getElementById('mainCanvas'),stage=canvas?.closest('.stage');if(!canvas||!stage)return;
+const status=document.createElement('div');status.id='refineryDirectStatus';status.className='callout';status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.textContent='分留塔を上下ドラッグして炉温を変える。原油タンクや製品タンクをタップして流れを調整する。';stage.append(status);
+let drag=null,focus=null,pulse=0;
+const point=e=>{const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*800/r.width,y:(e.clientY-r.top)*430/r.height}};
+function setInput(el,value){el.value=Math.max(+el.min,Math.min(+el.max,value));el.dispatchEvent(new Event('input',{bubbles:true}))}
+canvas.addEventListener('pointerdown',e=>{e.preventDefault();const p=point(e);if(p.x>350&&p.x<490&&p.y>55&&p.y<340){drag={startY:p.y,startTemp:+C.furnace.value};focus={x:420,y:195,label:'分留塔'};canvas.setPointerCapture?.(e.pointerId);return}if(p.x>190&&p.x<320&&p.y>105&&p.y<270){setInput(C.feed,+C.feed.value+10);focus={x:252,y:185,label:'原油流量'};status.textContent=`原油タンクを開いた。流量 ${C.feed.value}単位/時。在庫が減りすぎないか見よう。`}else if(p.x>535&&p.x<770){const i=Math.max(0,Math.min(4,Math.floor((p.y-72)/65)));focus={x:650,y:92+i*65,label:['ガス等','ガソリン','灯油','軽油','残油'][i]};if(i<=1){setInput(C.reflux,+C.reflux.value+10);status.textContent=`${focus.label}を選択。還流 ${C.reflux.value}%で軽い留分の分離を強めた（エネルギーも増える）。`}else if(i===4){setInput(C.recycle,+C.recycle.value+12);status.textContent=`残油を再処理 ${C.recycle.value}%へ。軽い製品へ戻す一方、エネルギーを使う。`}else{setInput(C.furnace,365);status.textContent=`${focus.label}を選択。炉温を中間留分の基準365℃へ調整した。`}}else if(p.x>20&&p.x<165&&p.y>80&&p.y<290){setInput(C.maturity,+C.maturity.value+8);focus={x:90,y:185,label:'根源岩'};status.textContent=`根源岩の成熟度 ${C.maturity.value}%。原油のできやすさは最適域を越えると単純には増えない。`}else return;pulse=24;advance();drawAll()},{capture:true});
+canvas.addEventListener('pointermove',e=>{if(!drag)return;const p=point(e),temp=drag.startTemp+(drag.startY-p.y)*.8;setInput(C.furnace,temp);pulse=18;status.textContent=`炉温 ${C.furnace.value}℃。上げると軽い留分が増えやすいが、エネルギーと排出も増える。`;drawAll()},{capture:true});
+canvas.addEventListener('pointerup',()=>{drag=null},{capture:true});canvas.addEventListener('pointercancel',()=>{drag=null},{capture:true});
+const baseDraw=drawMain;
+drawMain=function(){baseDraw();ctx.save();ctx.fillStyle='rgba(5,17,29,.88)';ctx.fillRect(320,340,450,43);ctx.fillStyle='#fff';ctx.font='bold 12px system-ui';ctx.fillText('塔を↕drag＝炉温　タンクtap＝流量／製品の調整',335,367);ctx.strokeStyle='#ff9a79';ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(345,310);ctx.lineTo(345,90);ctx.stroke();ctx.fillStyle='#ff9a79';ctx.fillText(`${C.furnace.value}℃`,315,80);if(focus&&pulse>0){ctx.strokeStyle='#ffd85a';ctx.globalAlpha=pulse/24;ctx.lineWidth=7;ctx.beginPath();ctx.arc(focus.x,focus.y,55-pulse/2,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#fff';ctx.fillText(focus.label,focus.x-25,focus.y-62);pulse--}ctx.restore()};
+drawAll();
+})();
+</script>
 </body></html>

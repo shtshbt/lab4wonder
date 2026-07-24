@@ -164,4 +164,21 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="direct-balloon-style">#balloonDirectStatus{margin-top:7px;border-left:4px solid #ffd85a}.stage canvas{touch-action:none;cursor:grab}</style>
+<script id="direct-balloon-interaction">
+(()=>{
+const canvas=document.getElementById('mainCanvas'),stage=canvas?.closest('.stage');if(!canvas||!stage)return;
+const status=document.createElement('div');status.id='balloonDirectStatus';status.className='callout';status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.textContent='気球を左右にドラッグして体積を変える。かごをタップすると荷物を1kg降ろす。';stage.append(status);
+let drag=null,pulse=0;
+const point=e=>{const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*800/r.width,y:(e.clientY-r.top)*430/r.height}};
+function balloonY(){return 350-clamp(s.h/3000,0,1)*290}
+function setInput(el,value){el.value=Math.max(+el.min,Math.min(+el.max,value));el.dispatchEvent(new Event('input',{bubbles:true}))}
+canvas.addEventListener('pointerdown',e=>{e.preventDefault();const p=point(e),y=balloonY(),radius=clamp(25+Number(C.volume.value)/3,28,65),onEnvelope=Math.hypot((p.x-400)/.8,p.y-y)<radius,onBasket=Math.abs(p.x-400)<38&&p.y>y+radius&&p.y<y+radius+75;if(onBasket){setInput(C.payload,+C.payload.value-1);pulse=24;status.textContent=`荷物を1kg降ろした。積載 ${C.payload.value}kg、正味浮力 ${fmt(calc().net/9.81,1)}kgf。`;advance();drawAll();return}if(onEnvelope){drag={startX:p.x,startVolume:+C.volume.value};canvas.setPointerCapture?.(e.pointerId)}},{capture:true});
+canvas.addEventListener('pointermove',e=>{if(!drag)return;const p=point(e),volume=drag.startVolume+(p.x-drag.startX)*.16;setInput(C.volume,volume);pulse=16;status.textContent=`気球の体積 ${C.volume.value}m³。大きいほど押しのける空気が増えるが、気体も必要。`;drawAll()},{capture:true});
+canvas.addEventListener('pointerup',()=>{drag=null},{capture:true});canvas.addEventListener('pointercancel',()=>{drag=null},{capture:true});
+const baseDraw=drawMain;
+drawMain=function(){baseDraw();ctx.save();const y=balloonY(),q=calc(),lift=q.net/9.81,r=clamp(25+Number(C.volume.value)/3,28,65);ctx.fillStyle='#8b5a35';ctx.fillRect(385,y+r+36,30,22);ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.strokeRect(385,y+r+36,30,22);ctx.fillStyle='rgba(5,17,29,.86)';ctx.fillRect(18,68,270,67);ctx.fillStyle='#fff';ctx.font='bold 12px system-ui';ctx.fillText('↔ 気球drag＝体積',30,91);ctx.fillText('かごtap＝荷物を降ろす',30,112);ctx.fillStyle=lift>=0?'#8ce6a1':'#ff9a79';ctx.fillText(lift>=0?`↑ 上向き ${fmt(lift,1)}kgf`:`↓ 下向き ${fmt(-lift,1)}kgf`,560,80);ctx.strokeStyle=lift>=0?'#8ce6a1':'#ff9a79';ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(500,y);ctx.lineTo(500,y+(lift>=0?-55:55));ctx.stroke();if(pulse>0){ctx.strokeStyle='#ffd85a';ctx.globalAlpha=pulse/24;ctx.lineWidth=7;ctx.beginPath();ctx.arc(400,y,80-pulse,0,Math.PI*2);ctx.stroke();pulse--}ctx.restore()};
+drawAll();
+})();
+</script>
 </body></html>

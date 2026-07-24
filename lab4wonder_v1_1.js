@@ -285,18 +285,82 @@
     toast.timer = setTimeout(() => node.classList.remove("show"), 1400);
   }
 
-  function moveMainTarget(target, stage) {
-    const margin = 18;
-    const width = target.offsetWidth || 70;
-    const height = target.offsetHeight || 70;
+  function motionKindFor(encounter) {
+    const icon = encounter?.icon || "";
+    const group = encounter?.group || "";
+    if (icon === "🪼" || /刺胞|有櫛/.test(group)) return "rise";
+    if (/🐟|🦑|🦐/.test(icon) || /魚|頭足|甲殻/.test(group)) return "cross";
+    if (page === "constellation-guide.html") return "glow";
+    return "drift";
+  }
+
+  function moveMainTarget(target, stage, encounter) {
+    const margin = 20;
+    const width = target.offsetWidth || 74;
+    const height = target.offsetHeight || 74;
     const maxX = Math.max(margin, stage.clientWidth - width - margin);
-    const maxY = Math.max(72, stage.clientHeight - height - margin);
-    target.style.left = `${margin + Math.random() * Math.max(1, maxX - margin)}px`;
-    target.style.top = `${58 + Math.random() * Math.max(1, maxY - 58)}px`;
+    const maxY = Math.max(82, stage.clientHeight - height - margin);
+    const spanX = Math.max(1, maxX - margin);
+    const spanY = Math.max(1, maxY - 82);
+    const kind = motionKindFor(encounter);
+    const duration = kind === "cross" ? 11000 : kind === "rise" ? 12500 : 9000;
+    const start = { x: margin + spanX * 0.28, y: 82 + spanY * 0.62 };
+    const end = { x: margin + spanX * 0.68, y: 82 + spanY * 0.38 };
+
+    if (kind === "cross") {
+      start.x = margin;
+      end.x = maxX;
+      start.y = end.y = 82 + spanY * (0.3 + Math.random() * 0.42);
+    } else if (kind === "rise") {
+      start.x = end.x = margin + spanX * (0.25 + Math.random() * 0.5);
+      start.y = maxY;
+      end.y = 82 + spanY * 0.08;
+    } else if (kind === "glow") {
+      start.x = end.x = margin + spanX * (0.2 + Math.random() * 0.6);
+      start.y = end.y = 82 + spanY * (0.18 + Math.random() * 0.5);
+    } else {
+      start.x = margin + spanX * (0.2 + Math.random() * 0.25);
+      start.y = 82 + spanY * (0.35 + Math.random() * 0.35);
+      end.x = Math.min(maxX, start.x + Math.max(36, spanX * 0.22));
+      end.y = Math.max(82, start.y - Math.max(18, spanY * 0.12));
+    }
+
+    target.dataset.motion = kind;
+    target.style.setProperty("--lw-travel-ms", `${duration}ms`);
+    target.style.transition = "none";
+    target.style.left = `${start.x}px`;
+    target.style.top = `${start.y}px`;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        target.style.transition = "";
+        target.style.left = `${end.x}px`;
+        target.style.top = `${end.y}px`;
+      });
+    });
   }
 
   function installMainExploration(atlasRoot) {
     if (document.querySelector(".lw-main-exploration")) return;
+    const nativeStatus = document.querySelector("#creatureStatus,#animalStatus,#organismStatus");
+    if (nativeStatus) {
+      const atlasOpen = document.querySelector("#r60-atlas-open,#r59-atlas-open");
+      const atlasScan = atlasRoot.querySelector("#r60-atlas-scan,#r59-atlas-scan");
+      const atlasRandom = atlasRoot.querySelector("#r60-atlas-random,#r59-atlas-random");
+      if (atlasOpen) {
+        atlasOpen.textContent = "📚 みつけた図鑑";
+        atlasOpen.setAttribute("aria-label", "メイン画面で見つけたものの図鑑を開く");
+      }
+      if (atlasScan) atlasScan.hidden = true;
+      if (atlasRandom) atlasRandom.hidden = true;
+      const intro = atlasRoot.querySelector(".intro");
+      if (intro && !intro.querySelector(".lw-atlas-viewer-note")) {
+        const note = document.createElement("p");
+        note.className = "lw-atlas-viewer-note";
+        note.textContent = "発見は研究モードの主画面で行います。ここは見つけたカードを確かめる図鑑です。";
+        intro.appendChild(note);
+      }
+      return;
+    }
     const canvas = document.querySelector("#mainCv,#mainCanvas,#geo");
     const stage = canvas?.closest(".stage") || canvas?.parentElement;
     if (!canvas || !stage || !window.__lwAtlas) return;
@@ -329,7 +393,6 @@
     const atlasScan = atlasRoot.querySelector("#r60-atlas-scan,#r59-atlas-scan");
     const atlasRandom = atlasRoot.querySelector("#r60-atlas-random,#r59-atlas-random");
     let encounter = null;
-    let movementTimer = 0;
     const mainInstruction = document.body.dataset.first || "主画面に現れるものをタップして発見しよう。";
     const syncCoachInstruction = () => {
       const coach = document.querySelector("#r66-coach");
@@ -359,15 +422,11 @@
     }
 
     const stopMovement = () => {
-      window.clearInterval(movementTimer);
-      movementTimer = 0;
+      target.style.transition = "none";
     };
     const startMovement = () => {
       stopMovement();
-      const rarity = Number(encounter?.rarity) || 1;
-      movementTimer = window.setInterval(() => {
-        if (!target.hidden) moveMainTarget(target, stage);
-      }, Math.max(720, 1500 - rarity * 120));
+      moveMainTarget(target, stage, encounter);
     };
     const startEncounter = () => {
       encounter = window.__lwAtlas?.getEncounter?.() || null;
@@ -382,9 +441,13 @@
       target.dataset.name = encounter.name || "";
       target.dataset.rarity = String(encounter.rarity || 1);
       target.setAttribute("aria-label", `メイン画面に現れた${encounter.group || "発見対象"}`);
-      status.textContent = `${encounter.zone || "この環境"}に何か現れた。動く姿をタップ！`;
+      const movement = motionKindFor(encounter) === "rise"
+        ? "下からゆっくり浮かんでくる"
+        : motionKindFor(encounter) === "cross"
+          ? "画面をゆっくり横切る"
+          : "景色の中をゆっくり動く";
+      status.textContent = `${encounter.zone || "この環境"}に何か現れた。${movement}姿をタップしよう。`;
       requestAnimationFrame(() => {
-        moveMainTarget(target, stage);
         startMovement();
       });
     };
@@ -427,6 +490,7 @@
 
   function installSlimeTouch() {
     if (page !== "slime-mold.html") return;
+    if (document.querySelector("#biology-interaction-v1")) return;
     const canvas = document.querySelector("#mainCv");
     const blockButton = document.querySelector("#blockBtn");
     if (!canvas || !blockButton) return;

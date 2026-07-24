@@ -218,7 +218,20 @@ show(0);
   panel.innerHTML='<div class="bio-tools" role="toolbar" aria-label="粘菌の配置道具"><button data-tool="food" class="on">🍚 餌を置く</button><button data-tool="block">🪨 障害物を置く</button><button data-tool="erase">🧽 近くを消す</button></div><div class="bio-mission"><b>最短ネットワーク挑戦：</b>餌と岩を好きな場所へ置こう。粘菌は枝を伸ばし、岩を回り、餌へ到着した枝を太くして、使わない枝を細くする。配置を変えて全部の餌を短く結べるかな？<div class="bio-key"><span>黄い太い管＝よく使う輸送路</span><span>細い枝＝探索中</span><span>緑＝餌</span><span>灰＝通れない岩</span></div></div>';
   canvas.closest('.stage').insertAdjacentElement('afterend',panel);
   let tool='food';
-  panel.querySelectorAll('[data-tool]').forEach(button=>button.onclick=()=>{tool=button.dataset.tool;panel.querySelectorAll('[data-tool]').forEach(b=>b.classList.toggle('on',b===button))});
+  const foodButton=document.getElementById('foodBtn');
+  const blockButton=document.getElementById('blockBtn');
+  foodButton.dataset.tool='food';
+  blockButton.dataset.tool='block';
+  foodButton.textContent='🍚 餌を置く';
+  blockButton.textContent='🪨 障害物を置く';
+  const toolButtons=[foodButton,blockButton,...panel.querySelectorAll('[data-tool]')];
+  function selectTool(next){
+    tool=next;
+    toolButtons.forEach(button=>button.classList.toggle('on',button.dataset.tool===tool));
+    canvas.setAttribute('aria-label',`${tool==='food'?'餌':tool==='block'?'障害物':'消したいもの'}を置く場所をタップする粘菌キャンバス`);
+  }
+  toolButtons.forEach(button=>button.onclick=()=>selectTool(button.dataset.tool));
+  selectTool('food');
   const baseDraw=draw;
   function route(food){
     const start={x:450,y:295};let blocker=null;
@@ -250,7 +263,7 @@ show(0);
     }
     running=true;document.getElementById('playPause').textContent='⏸ 一時停止';draw();
   }
-  canvas.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;e.preventDefault();e.stopImmediatePropagation();canvas.setPointerCapture?.(e.pointerId);act(point(e))},{capture:true});
+  canvas.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;e.preventDefault();e.stopImmediatePropagation();try{canvas.setPointerCapture?.(e.pointerId)}catch(_error){}act(point(e))},{capture:true});
   canvas.addEventListener('pointermove',e=>{if(!canvas.hasPointerCapture?.(e.pointerId)||tool!=='block')return;e.preventDefault();const p=point(e),lastBlock=blocks.at(-1);if(lastBlock&&Math.hypot(lastBlock.x-p.x,lastBlock.y-p.y)>45){blocks.push({x:p.x,y:p.y,r:25});draw()}},{capture:true});
   draw();
 })();

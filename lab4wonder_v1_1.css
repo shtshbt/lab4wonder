@@ -222,8 +222,11 @@ body.lw-v1-1 {
     0 0 0 3px rgba(255, 255, 255, 0.58),
     0 0 22px rgba(255, 216, 90, 0.72);
   touch-action: manipulation;
-  transition: left 480ms ease, top 480ms ease, transform 120ms ease;
-  animation: lw-main-creature 1.15s ease-in-out infinite alternate;
+  transition:
+    left var(--lw-travel-ms, 9s) linear,
+    top var(--lw-travel-ms, 9s) ease-in-out,
+    transform 160ms ease;
+  animation: lw-main-creature 3.8s ease-in-out infinite alternate;
 }
 
 .lw-main-hunt-target[data-rarity="4"],
@@ -236,6 +239,18 @@ body.lw-v1-1 {
 
 .lw-main-hunt-target:active {
   transform: scale(0.78) rotate(-8deg);
+}
+
+.lw-main-hunt-target[data-motion="rise"] {
+  animation-duration: 4.8s;
+}
+
+.lw-main-hunt-target[data-motion="cross"] {
+  animation-duration: 5.6s;
+}
+
+.lw-main-hunt-target[data-motion="glow"] {
+  animation: lw-main-glow 3.6s ease-in-out infinite alternate;
 }
 
 .lw-main-hunt-target[hidden] {
@@ -310,12 +325,23 @@ body.lw-v1-1 {
 
 @keyframes lw-main-creature {
   from {
-    rotate: -4deg;
-    scale: 0.96;
+    rotate: -2deg;
+    scale: 0.98;
   }
   to {
-    rotate: 5deg;
-    scale: 1.05;
+    rotate: 2deg;
+    scale: 1.03;
+  }
+}
+
+@keyframes lw-main-glow {
+  from {
+    opacity: 0.68;
+    filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.42));
+  }
+  to {
+    opacity: 1;
+    filter: drop-shadow(0 3px 8px rgba(255, 231, 128, 0.86));
   }
 }
 

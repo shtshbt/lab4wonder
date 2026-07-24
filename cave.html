@@ -17,12 +17,13 @@ input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 a[href="index.html"],a[href="kids-index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
 </style><meta name="r60-explicit-accessibility" content="static-control-labels"><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
-</head><body data-first="図鑑探索を開き、洞窟区画を選んでライト探索をしよう。研究モードでは雨水条件を一つ変えよう。">
+</head><body data-first="洞窟断面に現れる生物や地形をタップして発見し、酸性水を流して鍾乳石を育てよう。">
 <header class="hdr"><div><span class="badge">r33・地学・地球化学・動的探究版</span><h1>洞窟・石灰岩溶解・鍾乳石ラボ</h1><div class="sub">土壌CO₂を含む雨水が石灰岩の割れ目を溶かして空洞を広げ、空気中の滴下点で方解石が沈殿する。</div></div><div class="head-actions"><button id="guideBtn" aria-label="？ ガイド">？ ガイド</button><button id="speakBtn" aria-label="🔊 読む">🔊 読む</button><button id="tourBtn" aria-label="👣 操作">👣 操作</button><button id="resetTop" aria-label="↺ リセット">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>土壌CO₂を含む雨水が石灰岩の割れ目を溶かして空洞を広げ、空気中の滴下点で方解石が沈殿する。</p></div><div><b>どこを見る？</b><p>地下水位、割れ目流、空洞拡大、滴下、鍾乳石・石筍の成長、溶解と沈殿の履歴。</p></div><div><b>何を変える？</b><p>降水、土壌CO₂、割れ目幅、水の硬度、換気、酸性水、崩落。</p></div><div><b>持ち帰る一文</b><p data-takeaway>同じ炭酸カルシウムでも、水中での溶解と空気へ開いた洞内での沈殿が、CO₂と水流の条件によって切り替わる。</p></div></section>
 
 <section class="toolbar" data-tour="controls"><button id="playPause" class="primary" aria-label="▶ 再生">▶ 再生</button><button id="stepBtn" aria-label="100年">100年</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1">×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="acidBtn" aria-label="酸性水を増やす">酸性水を増やす</button><button id="collapseBtn" aria-label="天井崩落">天井崩落</button><button id="scenarioBtn" aria-label="別の石灰岩">別の石灰岩</button></section>
-<section class="stage" data-tour="stage"><canvas id="mainCv" width="900" height="590" aria-label="雨水が石灰岩の割れ目を溶かして洞窟を広げ、滴下水から鍾乳石と石筍が成長する断面アニメーション" role="img"></canvas></section>
+<section class="stage" data-tour="stage"><canvas id="mainCv" width="900" height="590" aria-label="地表、土壌、石灰岩、雨水の割れ目、洞窟空洞、地下水位、鍾乳石、石筍、石柱を示す断面図。触れた場所へ酸性水を流せます" role="img"></canvas></section>
+<div id="caveDirectGuide" class="callout" aria-live="polite" style="margin-top:8px;border-color:#5ea7c9;background:#10283a"><b>👆 洞窟を直接つくろう：</b> 地表から洞窟の天井までをタップ、または左右へなぞると、その場所へ酸性水が流れます。割れ目を育て、鍾乳石と石筍をつないで「石柱」をつくろう。</div>
 <div class="panel grid2"><section class="card"><h2>水と石灰岩の条件</h2><label class="control">降水量 <output id="rainOut"></output><input id="rain" type="range" min="5" max="100" value="58" aria-label="降水量"></label><label class="control">土壌CO₂ <output id="co2Out"></output><input id="co2" type="range" min="5" max="100" value="66" aria-label="土壌CO₂"></label><label class="control">割れ目の幅 <output id="crackOut"></output><input id="crack" type="range" min="5" max="100" value="42" aria-label="割れ目の幅"></label><label class="control">水の硬度 <output id="hardOut"></output><input id="hard" type="range" min="5" max="100" value="62" aria-label="水の硬度"></label><label class="control">洞内換気 <output id="ventOut"></output><input id="vent" type="range" min="0" max="100" value="40" aria-label="洞内換気"></label><div class="callout" id="explain" aria-live="polite"></div></section><section class="card" data-tour="metrics"><h2>洞窟の計器</h2><div class="metrics"><div class="metric"><b>空洞体積</b><strong id="volumeM"></strong></div><div class="metric"><b>滴下速度</b><strong id="dripM"></strong></div><div class="metric"><b>溶解速度</b><strong id="dissolveM"></strong></div><div class="metric"><b>沈殿速度</b><strong id="depositM"></strong></div></div><div class="callout" id="stateText"></div></section></div>
 <section class="deep"><h2>地下水位・水質・洞窟成長</h2><canvas id="graphCv" width="900" height="330" aria-label="空洞体積、地下水位、溶解速度、方解石沈殿速度の時間変化" role="img"></canvas><p>石灰岩は土壌CO₂を含む水で溶けます。空洞が空気に開くと、滴下水からCO₂が抜けて方解石が沈殿し、鍾乳石・石筍が育ちます。</p></section>
 
@@ -33,13 +34,293 @@ a[href="index.html"],a[href="kids-index.html"]{display:inline-flex;align-items:c
 <script>
 let r46Scenario=0,r46Seed=123456789;function r46ResetSeed(){r46Seed=(123456789+r46Scenario*9973)>>>0}function r46rand(){r46Seed=(Math.imul(r46Seed,1664525)+1013904223)>>>0;return r46Seed/4294967296}
 const $=id=>document.getElementById(id),cv=$('mainCv'),c=cv.getContext('2d'),gv=$('graphCv'),g=gv.getContext('2d');
-let year=0,running=false,last=performance.now(),speed=1,volume=.22,water=.55,stal=0.08,stag=0.05,acidPulse=0,collapse=0,drips=[],hist=[];
+let year=0,running=false,last=performance.now(),speed=1,volume=.22,water=.55,stal=0.08,stag=0.05,acidPulse=0,collapse=0,drips=[],hist=[],directCrack=0,activeFormation=3,directMarks=0;
+let formations=Array.from({length:7},(_,i)=>({top:.045+(i%3)*.012,bottom:.035+((i+1)%3)*.01}));
 function par(){return{rain:+$('rain').value/100,co2:+$('co2').value/100,crack:+$('crack').value/100,hard:+$('hard').value/100,vent:+$('vent').value/100}}
-function reset(){r46ResetSeed();year=0;volume=.22;water=.55;stal=.08;stag=.05;acidPulse=0;collapse=0;drips=[];hist=[];running=false;$('playPause').textContent='▶ 再生';draw()}window.resetSimulation=reset;
-function step(dt){const p=par(),acid=(.2+.8*p.co2)*(p.rain+.5*acidPulse),flow=p.rain*(.25+.75*p.crack),dissolve=acid*flow*(1-.35*p.hard)*.00016,deposit=p.hard*(.25+.75*p.vent)*flow*(volume>.25?1:.2)*.00007;volume=Math.min(1,volume+dissolve*dt-collapse*.003*dt);water+=dt*(p.rain*.002-flow*.0012-water*.0008);water=Math.max(.12,Math.min(.9,water));stal=Math.min(.85,stal+deposit*dt*.85);stag=Math.min(.85,stag+deposit*dt*.95);acidPulse=Math.max(0,acidPulse-dt*.004);collapse=Math.max(0,collapse-dt*.03);if(r46rand()<dt*flow*.04)drips.push({x:360+r46rand()*180,y:170+stal*180,vy:35+r46rand()*30});for(const q of drips){q.y+=q.vy*dt*.08;q.life=(q.life||1)-dt*.02}drips=drips.filter(q=>q.y<510&&q.life>0);year+=dt*100;const st={dissolve,deposit,flow};if(!hist.length||year-hist.at(-1).y>50){hist.push({y:year,volume,water,dissolve,deposit});if(hist.length>300)hist.shift()}}
-function draw(){const p=par(),acid=(.2+.8*p.co2)*(p.rain+.5*acidPulse),flow=p.rain*(.25+.75*p.crack),dissolve=acid*flow*(1-.35*p.hard)*.00016,deposit=p.hard*(.25+.75*p.vent)*flow*(volume>.25?1:.2)*.00007;c.clearRect(0,0,900,590);c.fillStyle='#243445';c.fillRect(0,0,900,110);c.fillStyle='#7a6d58';c.fillRect(0,110,900,480);c.fillStyle='#3f352b';const rx=180+volume*230,ry=80+volume*130;c.beginPath();c.ellipse(450,350,rx,ry,0,0,6.28);c.fill();c.fillStyle='rgba(70,155,205,.55)';c.fillRect(450-rx,350+ry*(1-water),rx*2,ry*water);c.strokeStyle=`rgba(${Math.round(90+120*p.co2)},${Math.round(190-50*p.co2)},255,.9)`;c.lineWidth=2+8*p.crack;c.beginPath();c.moveTo(365,110);c.lineTo(395,210);c.lineTo(420,270);c.moveTo(545,110);c.lineTo(520,220);c.lineTo(500,275);c.stroke();for(let i=0;i<Math.round(p.rain*16);i++){c.fillStyle='rgba(120,205,255,.65)';c.fillRect(35+i*53,70+(i%3)*9,2,18)}if(p.vent>.08){c.strokeStyle='rgba(180,235,255,.55)';c.lineWidth=2;for(let i=0;i<4;i++){const y=300+i*38;c.beginPath();c.moveTo(290,y);c.quadraticCurveTo(450+Math.sin(year*.001+i)*70,y-25,610,y);c.stroke()}}c.fillStyle='#d9c7a1';for(let i=0;i<7;i++){const x=300+i*50,h=stal*(90+(i%3)*35);c.beginPath();c.moveTo(x,230);c.lineTo(x-10,230+h);c.lineTo(x+10,230+h);c.closePath();c.fill();const sh=stag*(70+((i+1)%3)*38);c.beginPath();c.moveTo(x-10,510);c.lineTo(x,510-sh);c.lineTo(x+10,510);c.closePath();c.fill()}for(const q of drips){c.fillStyle='#8edbff';c.beginPath();c.arc(q.x,q.y,3,0,6.28);c.fill()}c.fillStyle='#fff';c.font='bold 16px system-ui';c.fillText(`洞窟形成　${Math.round(year).toLocaleString()}年`,24,30);c.font='12px system-ui';c.fillStyle='#d8ebf5';c.fillText('溶解で空洞が広がり、空気中では方解石が沈殿する',24,51);$('volumeM').textContent=(volume*100).toFixed(1);$('dripM').textContent=(flow*10).toFixed(1)+'/h';$('dissolveM').textContent=(dissolve*1e5).toFixed(2);$('depositM').textContent=(deposit*1e5).toFixed(2);let msg=water>.78?'地下水位が高く、空洞の多くが水で満たされています。主に溶解が進みます。':deposit>dissolve*.5?'換気と硬度が高く、滴下点で方解石沈殿が進んでいます。':p.co2>.75?'土壌CO₂を多く含む水が石灰岩を溶かし、割れ目を広げています。':collapse>.1?'天井崩落で空洞形状が急変しました。':'水位より上と下で、沈殿と溶解の優勢が変わります。';$('stateText').textContent=msg;$('explain').textContent='降水と割れ目は流量、土壌CO₂は酸性度、水の硬度は溶存炭酸カルシウム、換気はCO₂脱離と沈殿を変えます。';drawGraph()}
+function reset(){r46ResetSeed();year=0;volume=.22;water=.55;stal=.08;stag=.05;acidPulse=0;collapse=0;drips=[];hist=[];directCrack=0;activeFormation=3;directMarks=0;formations=Array.from({length:7},(_,i)=>({top:.045+(i%3)*.012,bottom:.035+((i+1)%3)*.01}));running=false;$('playPause').textContent='▶ 再生';const guide=$('caveDirectGuide');if(guide)guide.innerHTML='<b>👆 洞窟を直接つくろう：</b> 地表から洞窟の天井までをタップ、または左右へなぞると、その場所へ酸性水が流れます。割れ目を育て、鍾乳石と石筍をつないで「石柱」をつくろう。';draw()}window.resetSimulation=reset;
+function step(dt){const p=par(),acid=(.2+.8*p.co2)*(p.rain+.5*acidPulse),flow=p.rain*(.25+.75*Math.min(1,p.crack+directCrack*.35)),dissolve=acid*flow*(1-.35*p.hard)*.00016,deposit=p.hard*(.25+.75*p.vent)*flow*(volume>.25?1:.2)*.00007;volume=Math.min(1,volume+dissolve*dt-collapse*.003*dt);water+=dt*(p.rain*.002-flow*.0012-water*.0008);water=Math.max(.12,Math.min(.9,water));formations.forEach((f,i)=>{const focus=i===activeFormation?1.8:1;f.top=Math.min(1,f.top+deposit*dt*13*focus);f.bottom=Math.min(1,f.bottom+deposit*dt*14*focus)});stal=formations.reduce((s,f)=>s+f.top,0)/formations.length;stag=formations.reduce((s,f)=>s+f.bottom,0)/formations.length;acidPulse=Math.max(0,acidPulse-dt*.004);directCrack=Math.max(0,directCrack-dt*.00012);collapse=Math.max(0,collapse-dt*.03);if(r46rand()<dt*flow*.08){const i=Math.floor(r46rand()*formations.length);drips.push({x:300+i*50,y:278+formations[i].top*115,vy:45+r46rand()*30,life:1})}for(const q of drips){q.y+=q.vy*dt*.08;q.life=(q.life||1)-dt*.02}drips=drips.filter(q=>q.y<515&&q.life>0);year+=dt*100;if(!hist.length||year-hist.at(-1).y>50){hist.push({y:year,volume,water,dissolve,deposit});if(hist.length>300)hist.shift()}}
+function cavePath(){
+  const spread=volume*42;
+  c.beginPath();
+  c.moveTo(205-spread,366);
+  c.bezierCurveTo(220-spread,295,278,251,350,266);
+  c.bezierCurveTo(410,235,483,246,536,263);
+  c.bezierCurveTo(626,245,692+spread,302,700+spread,372);
+  c.bezierCurveTo(716+spread,438,653,505,574,501);
+  c.bezierCurveTo(512,526,424,512,363,504);
+  c.bezierCurveTo(274,525,188-spread,461,205-spread,366);
+  c.closePath();
+}
+function label(text,x,y,tx,ty,color='#eef8ff'){
+  c.save();
+  c.font='bold 14px system-ui';
+  const width=c.measureText(text).width+16;
+  c.fillStyle='rgba(5,16,27,.88)';
+  c.strokeStyle=color;
+  c.lineWidth=1.5;
+  c.beginPath();
+  if(c.roundRect)c.roundRect(x,y-18,width,26,7);else c.rect(x,y-18,width,26);
+  c.fill();
+  c.stroke();
+  c.fillStyle=color;
+  c.fillText(text,x+8,y);
+  const sx=x+width/2,sy=y+8;
+  c.beginPath();
+  c.moveTo(sx,sy);
+  c.lineTo(tx,ty);
+  c.stroke();
+  const a=Math.atan2(ty-sy,tx-sx);
+  c.beginPath();
+  c.moveTo(tx,ty);
+  c.lineTo(tx-9*Math.cos(a-.45),ty-9*Math.sin(a-.45));
+  c.moveTo(tx,ty);
+  c.lineTo(tx-9*Math.cos(a+.45),ty-9*Math.sin(a+.45));
+  c.stroke();
+  c.restore();
+}
+function draw(){
+  const p=par(),acid=(.2+.8*p.co2)*(p.rain+.5*acidPulse),flow=p.rain*(.25+.75*Math.min(1,p.crack+directCrack*.35)),dissolve=acid*flow*(1-.35*p.hard)*.00016,deposit=p.hard*(.25+.75*p.vent)*flow*(volume>.25?1:.2)*.00007;
+  c.clearRect(0,0,900,590);
+
+  const sky=c.createLinearGradient(0,0,0,92);
+  sky.addColorStop(0,'#123957');
+  sky.addColorStop(1,'#5d91ad');
+  c.fillStyle=sky;
+  c.fillRect(0,0,900,92);
+  c.fillStyle='#274a2e';
+  c.beginPath();
+  c.moveTo(0,83);
+  for(let x=0;x<=900;x+=45)c.lineTo(x,79+Math.sin(x*.025)*7);
+  c.lineTo(900,105);
+  c.lineTo(0,105);
+  c.fill();
+
+  c.fillStyle='#674b31';
+  c.fillRect(0,92,900,63);
+  c.fillStyle='#927452';
+  for(let i=0;i<70;i++){
+    const x=(i*83)%900,y=101+(i*31)%45;
+    c.fillRect(x,y,3+(i%4),2);
+  }
+
+  const limestone=c.createLinearGradient(0,155,0,590);
+  limestone.addColorStop(0,'#a89b7c');
+  limestone.addColorStop(1,'#70654f');
+  c.fillStyle=limestone;
+  c.fillRect(0,155,900,435);
+  c.strokeStyle='rgba(57,49,38,.42)';
+  c.lineWidth=2;
+  for(let y=180;y<590;y+=38){
+    c.beginPath();
+    c.moveTo(0,y);
+    for(let x=0;x<=900;x+=90)c.lineTo(x,y+Math.sin((x+y)*.035)*5);
+    c.stroke();
+  }
+
+  const crackX=300+activeFormation*50;
+  const crackWidth=4+10*Math.min(1,p.crack+directCrack);
+  c.save();
+  c.strokeStyle=acidPulse>.05?'#70e5ff':'#70bdda';
+  c.shadowColor='#57d9ff';
+  c.shadowBlur=acidPulse>.05?12:4;
+  c.lineCap='round';
+  c.lineWidth=crackWidth;
+  c.beginPath();
+  c.moveTo(crackX-18,93);
+  c.lineTo(crackX+7,140);
+  c.lineTo(crackX-12,194);
+  c.lineTo(crackX+6,247);
+  c.lineTo(crackX,278);
+  c.stroke();
+  c.lineWidth=Math.max(2,crackWidth*.42);
+  c.beginPath();
+  c.moveTo(crackX-5,176);
+  c.lineTo(crackX-62,219);
+  c.moveTo(crackX,212);
+  c.lineTo(crackX+54,245);
+  c.stroke();
+  c.restore();
+
+  for(let i=0;i<Math.round(p.rain*20);i++){
+    const x=18+i*46+(i%2)*9,y=20+(i%4)*13;
+    c.strokeStyle='#8edcff';
+    c.lineWidth=2;
+    c.beginPath();
+    c.moveTo(x,y);
+    c.lineTo(x-4,y+13);
+    c.stroke();
+  }
+  c.fillStyle='#d9f5ff';
+  c.font='bold 13px system-ui';
+  c.fillText('雨水 ＋ 土のCO₂ → 弱い酸性水',18,27);
+
+  cavePath();
+  const caveGradient=c.createRadialGradient(450,375,45,450,385,340);
+  caveGradient.addColorStop(0,'#203c49');
+  caveGradient.addColorStop(.55,'#102630');
+  caveGradient.addColorStop(1,'#06131c');
+  c.fillStyle=caveGradient;
+  c.fill();
+  c.strokeStyle='#d0bd8d';
+  c.lineWidth=6;
+  c.stroke();
+
+  c.save();
+  cavePath();
+  c.clip();
+  const waterY=520-water*125;
+  const undergroundWater=c.createLinearGradient(0,waterY,0,540);
+  undergroundWater.addColorStop(0,'rgba(74,181,226,.62)');
+  undergroundWater.addColorStop(1,'rgba(21,88,131,.84)');
+  c.fillStyle=undergroundWater;
+  c.fillRect(120,waterY,660,160);
+  c.strokeStyle='#9deaff';
+  c.lineWidth=3;
+  c.beginPath();
+  c.moveTo(130,waterY);
+  for(let x=130;x<790;x+=20)c.lineTo(x,waterY+Math.sin(x*.08+year*.002)*3);
+  c.stroke();
+  c.restore();
+
+  if(p.vent>.08){
+    c.strokeStyle='rgba(175,231,236,.55)';
+    c.lineWidth=2;
+    for(let i=0;i<3;i++){
+      const y=330+i*42;
+      c.beginPath();
+      c.moveTo(215,y);
+      c.bezierCurveTo(340,y-25,510,y+18,678,y-8);
+      c.stroke();
+    }
+  }
+
+  let columns=0;
+  formations.forEach((f,i)=>{
+    const x=300+i*50,ceiling=270+Math.abs(i-3)*5,floor=502-Math.abs(i-3)*2;
+    const topH=Math.min(132,f.top*132),bottomH=Math.min(118,f.bottom*118);
+    const connected=ceiling+topH>=floor-bottomH-6;
+    if(connected)columns++;
+    const mineral=c.createLinearGradient(x-14,0,x+15,0);
+    mineral.addColorStop(0,'#8d754c');
+    mineral.addColorStop(.45,'#f3dfaa');
+    mineral.addColorStop(1,'#b29059');
+    c.fillStyle=mineral;
+    c.strokeStyle=i===activeFormation?'#fff0a8':'#7c6745';
+    c.lineWidth=i===activeFormation?2.5:1;
+    c.beginPath();
+    c.moveTo(x-12,ceiling);
+    c.bezierCurveTo(x-10,ceiling+topH*.52,x-6,ceiling+topH*.84,x,ceiling+topH);
+    c.bezierCurveTo(x+7,ceiling+topH*.82,x+10,ceiling+topH*.45,x+12,ceiling);
+    c.closePath();
+    c.fill();
+    c.stroke();
+    c.beginPath();
+    c.moveTo(x-13,floor);
+    c.bezierCurveTo(x-10,floor-bottomH*.4,x-7,floor-bottomH*.78,x,floor-bottomH);
+    c.bezierCurveTo(x+7,floor-bottomH*.77,x+11,floor-bottomH*.42,x+13,floor);
+    c.closePath();
+    c.fill();
+    c.stroke();
+    if(connected){
+      c.fillStyle='rgba(255,218,130,.28)';
+      c.fillRect(x-16,ceiling,32,floor-ceiling);
+    }
+    if(i===activeFormation){
+      c.fillStyle='#ffe278';
+      c.beginPath();
+      c.arc(x,ceiling-9,6+acidPulse*3,0,Math.PI*2);
+      c.fill();
+    }
+  });
+
+  for(const q of drips){
+    c.fillStyle='#9ee9ff';
+    c.shadowColor='#57d9ff';
+    c.shadowBlur=8;
+    c.beginPath();
+    c.ellipse(q.x,q.y,3.3,6,0,0,Math.PI*2);
+    c.fill();
+    c.shadowBlur=0;
+  }
+
+  c.fillStyle='rgba(7,18,29,.85)';
+  c.fillRect(12,46,282,35);
+  c.fillStyle='#f6fbff';
+  c.font='bold 16px system-ui';
+  c.fillText(`洞窟形成　${Math.round(year).toLocaleString()}年`,24,69);
+
+  label('地表',730,71,785,86,'#b9f49b');
+  label('CO₂を含む土壌',28,128,160,123,'#ffd29a');
+  label('石灰岩',735,181,696,212,'#f4dfaa');
+  label('酸性水の割れ目',36,206,crackX-6,199,'#78e8ff');
+  label('大きな洞窟空洞',22,338,222,362,'#f1f7ff');
+  label('鍾乳石（天井から）',560,305,500,305,'#ffe09a');
+  label('石筍（床から）',25,475,350,454,'#ffe09a');
+  label('地下水位',700,454,648,waterY,'#8be7ff');
+  if(columns)label('石柱 完成！',698,533,300+formations.findIndex((f,i)=>270+Math.abs(i-3)*5+f.top*132>=502-Math.abs(i-3)*2-f.bottom*118-6)*50,390,'#9ff59f');
+
+  const legendY=555;
+  c.fillStyle='rgba(4,14,24,.9)';
+  c.fillRect(12,536,876,43);
+  const legend=[['#674b31','土壌'],['#a89b7c','石灰岩'],['#70e5ff','酸性水'],['#9deaff','地下水'],['#f3dfaa','方解石']];
+  c.font='bold 12px system-ui';
+  legend.forEach(([color,text],i)=>{
+    const x=25+i*126;
+    c.fillStyle=color;
+    c.fillRect(x,legendY-10,16,12);
+    c.fillStyle='#edf7ff';
+    c.fillText(text,x+23,legendY);
+  });
+  c.fillStyle=columns?'#9ff59f':'#ffd86a';
+  c.fillText(columns?`達成：石柱 ${columns}本！ 別の場所も育てよう`:`目標：黄色い滴下点を育て、鍾乳石と石筍をつなごう（操作 ${directMarks}回）`,650,legendY);
+
+  $('volumeM').textContent=(volume*100).toFixed(1);
+  $('dripM').textContent=(flow*10).toFixed(1)+'/h';
+  $('dissolveM').textContent=(dissolve*1e5).toFixed(2);
+  $('depositM').textContent=(deposit*1e5).toFixed(2);
+  let msg=columns?`石柱が${columns}本できました。水みちを変えて、別の形もつくれます。`:water>.78?'地下水位が高く、空洞の多くが水で満たされています。主に溶解が進みます。':deposit>dissolve*.5?'換気と硬度が高く、滴下点で方解石沈殿が進んでいます。':p.co2>.75?'土壌CO₂を多く含む水が石灰岩を溶かし、割れ目を広げています。':collapse>.1?'天井崩落で空洞形状が急変しました。':'主図をタップして水みちを選ぶと、その場所の割れ目と鍾乳石・石筍が育ちます。';
+  $('stateText').textContent=msg;
+  $('explain').textContent='降水と割れ目は流量、土壌CO₂は酸性度、水の硬度は水が運ぶ方解石、換気はCO₂が抜けて沈殿する速さを変えます。';
+  drawGraph();
+}
 function drawGraph(){g.clearRect(0,0,900,330);g.fillStyle='#09131f';g.fillRect(0,0,900,330);if(hist.length>1){const y0=hist[0].y,y1=hist.at(-1).y,xx=v=>45+(v-y0)/Math.max(1,y1-y0)*810;function line(get,max,col){g.strokeStyle=col;g.lineWidth=3;g.beginPath();hist.forEach((h,i)=>{const x=xx(h.y),y=280-Math.min(max,get(h))/max*220;i?g.lineTo(x,y):g.moveTo(x,y)});g.stroke()}line(h=>h.volume,1,'#ffe0a2');line(h=>h.water,1,'#7fd5ff');line(h=>h.dissolve,.0002,'#ff9b79');line(h=>h.deposit,.00008,'#a9e9c2')}g.fillStyle='#ffe0a2';g.fillText('空洞',45,24);g.fillStyle='#7fd5ff';g.fillText('地下水位',90,24);g.fillStyle='#ff9b79';g.fillText('溶解',170,24);g.fillStyle='#a9e9c2';g.fillText('沈殿',215,24)}
-function bind(id,out,fmt=v=>v){$(id).oninput=e=>{$(out).textContent=fmt(+e.target.value);draw()};$(id).dispatchEvent(new Event('input'))}bind('rain','rainOut',v=>v+'%');bind('co2','co2Out',v=>v+'%');bind('crack','crackOut',v=>v+'%');bind('hard','hardOut',v=>v+'%');bind('vent','ventOut',v=>v+'%');$('playPause').onclick=()=>{running=!running;$('playPause').textContent=running?'⏸ 一時停止':'▶ 再生'};$('stepBtn').onclick=()=>{step(1);draw()};$('speedSel').onchange=e=>speed=+e.target.value;$('acidBtn').onclick=()=>acidPulse=1;$('collapseBtn').onclick=()=>collapse=1;$('scenarioBtn').onclick=()=>{r46Scenario++;r46ResetSeed();for(const id of ['rain','co2','crack','hard','vent']){const el=$(id);el.value=Math.round(+el.min+r46rand()*(+el.max-+el.min));el.dispatchEvent(new Event('input'))}reset()};function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(running)step(dt*speed);draw();requestAnimationFrame(loop)}reset();requestAnimationFrame(loop);window.getSnapshot=()=>({降水:$('rainOut').textContent,CO2:$('co2Out').textContent,割れ目:$('crackOut').textContent,硬度:$('hardOut').textContent,換気:$('ventOut').textContent,空洞:$('volumeM').textContent,滴下:$('dripM').textContent,溶解:$('dissolveM').textContent,沈殿:$('depositM').textContent});
+let caveDrawing=false,lastDirectAt=0,lastDirectIndex=-1;
+function applyAcidAt(e,force=false){
+  const now=performance.now();
+  const rect=cv.getBoundingClientRect();
+  const x=(e.clientX-rect.left)*cv.width/rect.width;
+  const y=(e.clientY-rect.top)*cv.height/rect.height;
+  if(x<150||x>750||y<70||y>530)return;
+  const index=Math.max(0,Math.min(6,Math.round((x-300)/50)));
+  if(!force&&index===lastDirectIndex&&now-lastDirectAt<85)return;
+  activeFormation=index;
+  lastDirectIndex=index;
+  lastDirectAt=now;
+  directMarks++;
+  directCrack=Math.min(1,directCrack+.085);
+  acidPulse=1;
+  volume=Math.min(1,volume+.006);
+  formations[index].top=Math.min(1,formations[index].top+.11);
+  formations[index].bottom=Math.min(1,formations[index].bottom+.115);
+  for(let j=0;j<4;j++)drips.push({x:300+index*50+(j-1.5)*2,y:255+j*11,vy:62+j*7,life:1});
+  const guide=$('caveDirectGuide');
+  const ceiling=270+Math.abs(index-3)*5,floor=502-Math.abs(index-3)*2;
+  const connected=ceiling+formations[index].top*132>=floor-formations[index].bottom*118-6;
+  if(guide)guide.innerHTML=connected
+    ?`<b>⭐ 石柱が完成！</b> ${index+1}番の鍾乳石と石筍がつながりました。別の水みちを育てても、条件を変えて比べてもかまいません。`
+    :`<b>💧 ${index+1}番の水みちへ酸性水！</b> 青い割れ目が広がり、真下の鍾乳石と石筍が育ちました。あと何回か同じ場所を触ると石柱になります。`;
+  draw();
+}
+cv.addEventListener('pointerdown',e=>{
+  if(e.button!==undefined&&e.button!==0)return;
+  caveDrawing=true;
+  try{cv.setPointerCapture?.(e.pointerId)}catch(_e){}
+  applyAcidAt(e,true);
+});
+cv.addEventListener('pointermove',e=>{if(caveDrawing)applyAcidAt(e)});
+cv.addEventListener('pointerup',e=>{caveDrawing=false;try{cv.releasePointerCapture?.(e.pointerId)}catch(_e){}});
+cv.addEventListener('pointercancel',()=>{caveDrawing=false});
+function bind(id,out,fmt=v=>v){$(id).oninput=e=>{$(out).textContent=fmt(+e.target.value);draw()};$(id).dispatchEvent(new Event('input'))}bind('rain','rainOut',v=>v+'%');bind('co2','co2Out',v=>v+'%');bind('crack','crackOut',v=>v+'%');bind('hard','hardOut',v=>v+'%');bind('vent','ventOut',v=>v+'%');$('playPause').onclick=()=>{running=!running;$('playPause').textContent=running?'⏸ 一時停止':'▶ 再生'};$('stepBtn').onclick=()=>{step(1);draw()};$('speedSel').onchange=e=>speed=+e.target.value;$('acidBtn').onclick=()=>{acidPulse=1;formations[activeFormation].top=Math.min(1,formations[activeFormation].top+.03);formations[activeFormation].bottom=Math.min(1,formations[activeFormation].bottom+.035)};$('collapseBtn').onclick=()=>collapse=1;$('scenarioBtn').onclick=()=>{r46Scenario++;r46ResetSeed();for(const id of ['rain','co2','crack','hard','vent']){const el=$(id);el.value=Math.round(+el.min+r46rand()*(+el.max-+el.min));el.dispatchEvent(new Event('input'))}reset()};function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(running)step(dt*speed);draw();requestAnimationFrame(loop)}reset();requestAnimationFrame(loop);window.getSnapshot=()=>({降水:$('rainOut').textContent,CO2:$('co2Out').textContent,割れ目:$('crackOut').textContent,硬度:$('hardOut').textContent,換気:$('ventOut').textContent,空洞:$('volumeM').textContent,滴下:$('dripM').textContent,溶解:$('dissolveM').textContent,沈殿:$('depositM').textContent,直接操作:directMarks+'回',石柱:formations.filter((f,i)=>270+Math.abs(i-3)*5+f.top*132>=502-Math.abs(i-3)*2-f.bottom*118-6).length+'本'});
 </script><script>
 (()=>{const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];const guide=q('#guideBack'),tray=q('#trayBack'),zoomBack=q('#zoomBack');q('#guideBtn').addEventListener('click',()=>guide.classList.add('show'));q('#guideClose').addEventListener('click',()=>guide.classList.remove('show'));guide.addEventListener('click',e=>{if(e.target===guide)guide.classList.remove('show')});q('#trayOpen').addEventListener('click',()=>tray.classList.add('show'));q('#trayClose').addEventListener('click',()=>tray.classList.remove('show'));tray.addEventListener('click',e=>{if(e.target===tray)tray.classList.remove('show')});q('#resetTop').addEventListener('click',()=>window.resetSimulation&&window.resetSimulation());q('#speakBtn').addEventListener('click',()=>{if(!('speechSynthesis'in window))return; speechSynthesis.cancel();const t=new SpeechSynthesisUtterance(q('h1').innerText+'。'+q('[data-takeaway]').innerText);t.lang='ja-JP';speechSynthesis.speak(t)});
 const tourTargets=['[data-tour="stage"]','[data-tour="controls"]','[data-tour="metrics"]'],tourTexts=['まず主図を見ます。動いているものが、時間とともに何を運び、変えているかを追います。','次に条件を一つだけ変えます。再生・停止・一段送りで違いを確かめます。','最後に数値や第二ビューを見ます。見た目の変化を量の変化として説明します。'];let ti=0;function showTour(){qa('.tourGlow').forEach(e=>e.classList.remove('tourGlow'));const el=q(tourTargets[ti]);if(el){el.classList.add('tourGlow');el.scrollIntoView({behavior:'smooth',block:'center'})}q('#tourText').textContent=tourTexts[ti];q('#tourCount').textContent=(ti+1)+' / 3';q('#tourBox').classList.add('show')}q('#tourBtn').addEventListener('click',()=>{ti=0;showTour()});q('#tourPrev').addEventListener('click',()=>{ti=(ti+2)%3;showTour()});q('#tourNext').addEventListener('click',()=>{if(ti===2){stopTour()}else{ti++;showTour()}});function stopTour(){qa('.tourGlow').forEach(e=>e.classList.remove('tourGlow'));q('#tourBox').classList.remove('show')}q('#tourStop').addEventListener('click',stopTour);
@@ -48,6 +329,7 @@ let zoom=false;q('#zoomToggle').addEventListener('click',()=>{zoom=!zoom;q('#zoo
 })();
 </script><script id="r46-current-standard-overlay">
 (()=>{
+  return;
   const main=document.getElementById('mainCv'), second=document.getElementById('graphCv');
   const play=document.getElementById('playPause'), step=document.getElementById('stepBtn'), speed=document.getElementById('speedSel');
   const scenarioBtn=document.getElementById('scenarioBtn'), resetBtn=document.getElementById('resetTop');
@@ -147,7 +429,7 @@ const zones=['すべて',...new Set(DATA.map(x=>x.zone))];
 const openDetail=x=>{const d=document.getElementById('r59-atlas-detail');d.innerHTML=`<button style="float:right" aria-label="閉じる">×</button><h2>${x.icon} ${ruby(x)}</h2><p><b>区画：</b>${esc(x.zone)}</p><p><b>分類：</b>${esc(x.group)}　<b>発見難度：</b><span style="color:#ffd85a">${'★'.repeat(x.rarity)}</span></p><p>${esc(x.fact)}</p><p style="color:#9fc5df">模型・図鑑は学習用の簡略表示です。実際の分布、保全状態、観察条件は地域と研究により異なります。</p>`;d.classList.add('open');d.querySelector('button').onclick=()=>d.classList.remove('open');};
 const render=()=>{const list=DATA.filter(x=>(zone==='すべて'||x.zone===zone)&&(!query||(x.name+x.reading+x.group+x.fact).includes(query))).sort((a,b)=>(found.has(b.name)?1:0)-(found.has(a.name)?1:0));const g=document.getElementById('r59-atlas-grid');g.innerHTML=list.map(x=>{const ok=found.has(x.name);return `<article class="r59-atlas-card ${ok?'':'locked'}"><span class="lock">${ok?'✓':'🔒'}</span><div class="icon">${ok?x.icon:'❔'}</div><h3>${ok?ruby(x):'未発見カード'}</h3><p>${ok?esc(x.zone):'探索して正体を確かめよう'}</p><p class="stars">${ok?'★'.repeat(x.rarity):'□□□□□'}</p>${ok?`<button type="button">くわしく見る</button>`:''}</article>`}).join('');[...g.querySelectorAll('article')].forEach((el,i)=>{const x=list[i];if(found.has(x.name))el.querySelector('button').onclick=()=>openDetail(x);});const n=found.size;document.getElementById('r59-atlas-count').textContent=`${n} / ${DATA.length}`;document.getElementById('r59-atlas-fill').style.width=`${100*n/DATA.length}%`;};
 const explore=()=>{let pool=DATA.filter(x=>!found.has(x.name)&&(zone==='すべて'||x.zone===zone));if(!pool.length){toast(zone==='すべて'?'全カード発見済み！':'この区画は発見済み！');return;}const how=Math.min(pool.length,Math.random()<.28?2:1);for(let i=0;i<how;i++){const j=Math.floor(Math.random()*pool.length);found.add(pool[j].name);pool.splice(j,1);}persist();render();toast(`新しい発見 +${how}`);};
-window.__lwAtlas={kind:KIND,getEncounter:()=>{const pool=DATA.filter(x=>!found.has(x.name)&&(zone==='すべて'||x.zone===zone));return pool.length?pool[Math.floor(Math.random()*pool.length)]:null;},collect:name=>{const x=DATA.find(item=>item.name===name);if(!x||found.has(name))return false;found.add(name);persist();render();openDetail(x);return true;}};
+window.__lwAtlas={kind:KIND,getEncounter:()=>{const pool=DATA.filter(x=>!found.has(x.name)&&(zone==='すべて'||x.zone===zone));return pool.length?pool[Math.floor(Math.random()*pool.length)]:null;},collect:(name,showDetail=true)=>{const x=DATA.find(item=>item.name===name);if(!x||found.has(name))return false;found.add(name);persist();render();if(showDetail)openDetail(x);return true;}};
 const build=()=>{load();const sec=document.createElement('section');sec.id='r59-atlas';sec.setAttribute('aria-label',TITLE);sec.innerHTML=`<div class="ah"><div class="title">🔎 ${TITLE}</div><button id="r59-atlas-close">研究モードへ</button></div><div class="wrap"><div class="intro">${DESC}<div class="savebox"><label><input id="r59-atlas-save" type="checkbox" aria-label="発見記録をこの端末へ保存" ${save?'checked':''}> この端末だけに発見記録を保存</label><button id="r59-atlas-clear">記録を消す</button></div></div><div class="controls"><select id="r59-atlas-zone" aria-label="探索区画">${zones.map(z=>`<option>${esc(z)}</option>`).join('')}</select><button class="primary" id="r59-atlas-scan">${ACTION}</button><button id="r59-atlas-random">発見済みを1枚</button><input id="r59-atlas-search" placeholder="名前・分類・特徴を検索" aria-label="図鑑検索"></div><div class="progress"><div><b>図鑑の進み具合</b><div class="track"><div class="fill" id="r59-atlas-fill"></div></div></div><strong id="r59-atlas-count"></strong></div><div class="zone-note">区画を変えると出会えるカードが変わります。保存OFFでは、このページを閉じると今回の発見を引き継ぎません。</div><div class="r59-atlas-grid" id="r59-atlas-grid"></div></div><div id="r59-atlas-detail"></div>`;document.body.appendChild(sec);const bar=document.getElementById('r59-globalbar');const op=document.createElement('button');op.id='r59-atlas-open';op.textContent='🔎 図鑑探索';op.setAttribute('aria-label','図鑑探索モードを開く');bar?.insertBefore(op,bar.querySelector('#r66-global-guide'));op.onclick=()=>{sec.classList.add('open');document.body.style.overflow='hidden';render();};sec.querySelector('#r59-atlas-close').onclick=()=>{sec.classList.remove('open');document.body.style.overflow='';};sec.querySelector('#r59-atlas-zone').onchange=e=>{zone=e.target.value;render();};sec.querySelector('#r59-atlas-search').oninput=e=>{query=e.target.value.trim();render();};sec.querySelector('#r59-atlas-scan').onclick=explore;sec.querySelector('#r59-atlas-random').onclick=()=>{const a=DATA.filter(x=>found.has(x.name));if(!a.length)toast('まず探索しよう');else openDetail(a[Math.floor(Math.random()*a.length)]);};sec.querySelector('#r59-atlas-save').onchange=e=>{save=e.target.checked;if(save)persist();else try{localStorage.removeItem(KEY)}catch(_e){};};sec.querySelector('#r59-atlas-clear').onclick=()=>{if(confirm('この図鑑の発見記録を消しますか？')){found.clear();try{localStorage.removeItem(KEY)}catch(_e){}render();}};render();};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',build,{once:true});else build();
 })();</script>

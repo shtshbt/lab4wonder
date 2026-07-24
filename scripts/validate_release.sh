@@ -55,6 +55,21 @@ atlas_api_count=$(rg -l 'window\.__lwAtlas=' \
   "$repo_dir/fossil-formation.html" "$repo_dir/jungle.html" "$repo_dir/tidepool.html" | wc -l)
 check_equal "tap-to-collect atlas APIs" "$atlas_api_count" "6"
 
+if ! rg -q 'function installMainExploration' "$repo_dir/lab4wonder_v1_1.js"; then
+  printf 'error: main-scene exploration installer is missing\n' >&2
+  failures=$((failures + 1))
+elif rg -q 'function installExplorationHunt' "$repo_dir/lab4wonder_v1_1.js"; then
+  printf 'error: legacy separate exploration hunt remains active\n' >&2
+  failures=$((failures + 1))
+else
+  printf 'ok: discoveries are integrated into the main scene\n'
+fi
+
+atlas_silent_collect_count=$(rg -l 'collect:\(name,showDetail=true\)' \
+  "$repo_dir/abyss.html" "$repo_dir/cave.html" "$repo_dir/constellation-guide.html" \
+  "$repo_dir/fossil-formation.html" "$repo_dir/jungle.html" "$repo_dir/tidepool.html" | wc -l)
+check_equal "main-scene collection without forced detail modal" "$atlas_silent_collect_count" "6"
+
 audit_row_count=$(rg -o '^\| `[^`]+\.html` \|' "$repo_dir/docs/app_quality_audit_v1_1.md" | wc -l)
 check_equal "quality audit app rows" "$audit_row_count" "183"
 

@@ -285,104 +285,137 @@
     toast.timer = setTimeout(() => node.classList.remove("show"), 1400);
   }
 
-  function moveHuntTarget(target, stage) {
+  function moveMainTarget(target, stage) {
     const margin = 18;
-    const maxX = Math.max(margin, stage.clientWidth - target.offsetWidth - margin);
-    const maxY = Math.max(62, stage.clientHeight - target.offsetHeight - margin);
-    target.style.left = `${margin + Math.random() * (maxX - margin)}px`;
-    target.style.top = `${54 + Math.random() * (maxY - 54)}px`;
+    const width = target.offsetWidth || 70;
+    const height = target.offsetHeight || 70;
+    const maxX = Math.max(margin, stage.clientWidth - width - margin);
+    const maxY = Math.max(72, stage.clientHeight - height - margin);
+    target.style.left = `${margin + Math.random() * Math.max(1, maxX - margin)}px`;
+    target.style.top = `${58 + Math.random() * Math.max(1, maxY - 58)}px`;
   }
 
-  function createHunt(scan) {
-    const stage = document.createElement("div");
-    stage.className = "lw-hunt";
-    stage.dataset.world = page.replace(".html", "");
-    stage.hidden = true;
-    const message = document.createElement("p");
-    message.className = "lw-hunt-message";
-    message.textContent = "動いたものを見つけてタップしよう。";
+  function installMainExploration(atlasRoot) {
+    if (document.querySelector(".lw-main-exploration")) return;
+    const canvas = document.querySelector("#mainCv,#mainCanvas,#geo");
+    const stage = canvas?.closest(".stage") || canvas?.parentElement;
+    if (!canvas || !stage || !window.__lwAtlas) return;
+
+    stage.classList.add("lw-main-hunt-stage");
     const target = document.createElement("button");
     target.type = "button";
-    target.className = "lw-hunt-target";
-    target.setAttribute("aria-label", "動いている発見対象");
-    stage.append(message, target);
-    scan.closest(".controls")?.insertAdjacentElement("afterend", stage);
-    return { stage, message, target };
-  }
+    target.className = "lw-main-hunt-target";
+    target.hidden = true;
+    target.setAttribute("aria-label", "メイン画面に現れた発見対象");
+    stage.appendChild(target);
 
-  function installExplorationHunt(root) {
-    const scan = root.querySelector("#r60-atlas-scan,#r59-atlas-scan");
-    if (!scan || scan.dataset.lwHunt) return;
-    scan.dataset.lwHunt = "true";
-    scan.textContent = "探索をはじめる";
-    root.querySelector("#r60-atlas-random,#r59-atlas-random")?.setAttribute("hidden", "");
-    const hunt = createHunt(scan);
-    if (!hunt.stage.parentElement) return;
-    let misses = 0;
+    const panel = document.createElement("section");
+    panel.className = "lw-main-exploration";
+    panel.setAttribute("aria-label", "メイン画面で探索");
+    panel.innerHTML = [
+      '<div class="lw-main-exploration-copy">',
+      '<b>🔎 この画面で探索</b>',
+      '<span class="lw-main-exploration-status" aria-live="polite">環境の中に現れるものを見つけてタップしよう。</span>',
+      "</div>",
+      '<button type="button" class="lw-main-exploration-next">つぎを探す</button>',
+      '<button type="button" class="lw-main-exploration-book">📚 みつけた図鑑</button>',
+    ].join("");
+    stage.insertAdjacentElement("afterend", panel);
+
+    const status = panel.querySelector(".lw-main-exploration-status");
+    const nextButton = panel.querySelector(".lw-main-exploration-next");
+    const bookButton = panel.querySelector(".lw-main-exploration-book");
+    const atlasOpen = document.querySelector("#r60-atlas-open,#r59-atlas-open");
+    const atlasScan = atlasRoot.querySelector("#r60-atlas-scan,#r59-atlas-scan");
+    const atlasRandom = atlasRoot.querySelector("#r60-atlas-random,#r59-atlas-random");
     let encounter = null;
     let movementTimer = 0;
+    const mainInstruction = document.body.dataset.first || "主画面に現れるものをタップして発見しよう。";
+    const syncCoachInstruction = () => {
+      const coach = document.querySelector("#r66-coach");
+      if (!coach || coach.dataset.stage !== "0") return;
+      const compactText = coach.querySelector(".r66-compact-text span");
+      const missionText = coach.querySelector(".r66-mission");
+      if (compactText) compactText.textContent = mainInstruction;
+      if (missionText) missionText.textContent = mainInstruction;
+    };
+    document.querySelectorAll("#r66-coach .r66-tab").forEach((button) => {
+      button.addEventListener("click", () => requestAnimationFrame(syncCoachInstruction));
+    });
+    syncCoachInstruction();
+
+    if (atlasOpen) {
+      atlasOpen.textContent = "📚 みつけた図鑑";
+      atlasOpen.setAttribute("aria-label", "メイン画面で見つけたものの図鑑を開く");
+    }
+    if (atlasScan) atlasScan.hidden = true;
+    if (atlasRandom) atlasRandom.hidden = true;
+    const intro = atlasRoot.querySelector(".intro");
+    if (intro && !intro.querySelector(".lw-atlas-viewer-note")) {
+      const note = document.createElement("p");
+      note.className = "lw-atlas-viewer-note";
+      note.textContent = "発見は研究モードのメイン画面で行います。ここは見つけたカードを確かめる図鑑です。";
+      intro.appendChild(note);
+    }
 
     const stopMovement = () => {
       window.clearInterval(movementTimer);
       movementTimer = 0;
     };
-
     const startMovement = () => {
       stopMovement();
       const rarity = Number(encounter?.rarity) || 1;
       movementTimer = window.setInterval(() => {
-        if (!hunt.stage.hidden) moveHuntTarget(hunt.target, hunt.stage);
-      }, Math.max(650, 1350 - rarity * 110));
+        if (!target.hidden) moveMainTarget(target, stage);
+      }, Math.max(720, 1500 - rarity * 120));
     };
-
-    scan.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      const atlas = window.__lwAtlas;
-      encounter = atlas?.getEncounter?.() || null;
+    const startEncounter = () => {
+      encounter = window.__lwAtlas?.getEncounter?.() || null;
       if (!encounter) {
-        hunt.stage.hidden = false;
-        hunt.target.hidden = true;
-        hunt.message.textContent = "この区画の発見は完了！ 区画を変えて探してみよう。";
+        target.hidden = true;
         stopMovement();
+        status.textContent = "この環境で見つけられるものは集めました。図鑑を見てみよう。";
         return;
       }
-      misses = 0;
-      hunt.target.hidden = false;
-      hunt.target.textContent = encounter.icon || "？";
-      hunt.target.setAttribute("aria-label", `動いている${encounter.group || "発見対象"}`);
-      hunt.message.textContent = `「${encounter.group || "なにか"}」がかくれている。動く姿をタップ！`;
-      hunt.stage.hidden = false;
+      target.hidden = false;
+      target.textContent = encounter.icon || "？";
+      target.dataset.name = encounter.name || "";
+      target.dataset.rarity = String(encounter.rarity || 1);
+      target.setAttribute("aria-label", `メイン画面に現れた${encounter.group || "発見対象"}`);
+      status.textContent = `${encounter.zone || "この環境"}に何か現れた。動く姿をタップ！`;
       requestAnimationFrame(() => {
-        moveHuntTarget(hunt.target, hunt.stage);
+        moveMainTarget(target, stage);
         startMovement();
       });
-    }, true);
+    };
 
-    hunt.stage.addEventListener("pointerdown", (event) => {
-      if (event.target === hunt.target) return;
-      misses += 1;
-      hunt.message.textContent = misses < 3
-        ? "そこにはいないようです。動く姿を目で追おう。"
-        : `ヒント：${encounter?.zone || "選んだ区画"}にくらす${encounter?.group || "もの"}です。`;
-    });
-
-    hunt.target.addEventListener("click", (event) => {
+    nextButton.addEventListener("click", startEncounter);
+    bookButton.addEventListener("click", () => atlasOpen?.click());
+    target.addEventListener("pointerdown", (event) => event.stopPropagation());
+    target.addEventListener("click", (event) => {
+      event.preventDefault();
       event.stopPropagation();
       if (!encounter) return;
-      const collected = window.__lwAtlas?.collect?.(encounter.name);
+      const found = encounter;
+      const collected = window.__lwAtlas?.collect?.(found.name, false);
       stopMovement();
-      hunt.stage.hidden = true;
-      if (collected) toast(`発見！ ${encounter.name}を図鑑に記録`);
+      target.hidden = true;
+      target.dataset.name = "";
       encounter = null;
+      if (collected) {
+        status.textContent = `発見！ ${found.icon || ""} ${found.name} — ${found.fact || "図鑑に記録しました。"}`;
+        toast(`${found.name}を図鑑に記録`);
+      }
     });
+
+    window.setTimeout(startEncounter, 650);
   }
 
   function watchExplorationAtlas() {
     if (!explorationPages.has(page)) return;
     const install = () => {
       const atlas = document.querySelector("#r60-atlas,#r59-atlas");
-      if (atlas) installExplorationHunt(atlas);
+      if (atlas) installMainExploration(atlas);
       return Boolean(atlas);
     };
     if (install()) return;

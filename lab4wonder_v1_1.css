@@ -199,6 +199,126 @@ body.lw-v1-1 {
   opacity: 1;
 }
 
+.lw-main-hunt-stage {
+  position: relative !important;
+}
+
+.lw-main-hunt-target {
+  position: absolute;
+  z-index: 12;
+  width: 74px;
+  height: 74px;
+  min-height: 74px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 42% 58% 48% 52% !important;
+  background: rgba(5, 18, 28, 0.3) !important;
+  color: #fff !important;
+  font-size: 46px !important;
+  line-height: 1 !important;
+  filter: drop-shadow(0 5px 4px rgba(0, 0, 0, 0.48));
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.58),
+    0 0 22px rgba(255, 216, 90, 0.72);
+  touch-action: manipulation;
+  transition: left 480ms ease, top 480ms ease, transform 120ms ease;
+  animation: lw-main-creature 1.15s ease-in-out infinite alternate;
+}
+
+.lw-main-hunt-target[data-rarity="4"],
+.lw-main-hunt-target[data-rarity="5"] {
+  width: 62px;
+  height: 62px;
+  min-height: 62px !important;
+  font-size: 38px !important;
+}
+
+.lw-main-hunt-target:active {
+  transform: scale(0.78) rotate(-8deg);
+}
+
+.lw-main-hunt-target[hidden] {
+  display: none !important;
+}
+
+.lw-main-exploration {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 8px 0 11px;
+  padding: 9px 10px;
+  border: 2px solid rgba(255, 216, 90, 0.72);
+  border-radius: 13px;
+  background: linear-gradient(135deg, rgba(35, 69, 52, 0.94), rgba(12, 35, 48, 0.96));
+  color: #f5fbff;
+}
+
+.lw-main-exploration-copy {
+  display: grid;
+  flex: 1 1 300px;
+  gap: 3px;
+  min-width: 0;
+}
+
+.lw-main-exploration-copy b {
+  color: var(--lw-accent);
+  font-size: 13px;
+}
+
+.lw-main-exploration-status {
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.lw-main-exploration-status strong {
+  color: #fff0a8;
+}
+
+.lw-main-exploration button {
+  min-height: 42px !important;
+  margin: 0 !important;
+  padding: 7px 10px !important;
+  border-radius: 10px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+.lw-main-exploration-next {
+  background: var(--lw-accent) !important;
+  color: #211a00 !important;
+}
+
+.lw-atlas-viewer-note {
+  margin: 9px 0 0;
+  padding: 8px 10px;
+  border-left: 4px solid #ffd85a;
+  border-radius: 8px;
+  background: rgba(255, 216, 90, 0.09);
+  color: #f5f8fb;
+  font-weight: 800;
+}
+
+#r60-atlas-scan[hidden],
+#r59-atlas-scan[hidden],
+#r60-atlas-random[hidden],
+#r59-atlas-random[hidden] {
+  display: none !important;
+}
+
+@keyframes lw-main-creature {
+  from {
+    rotate: -4deg;
+    scale: 0.96;
+  }
+  to {
+    rotate: 5deg;
+    scale: 1.05;
+  }
+}
+
 .lw-hunt {
   position: relative;
   height: min(42vh, 330px);

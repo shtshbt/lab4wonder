@@ -201,4 +201,21 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="direct-breathing-style">#breathingDirectStatus{margin-top:7px;border-left:4px solid #7dd7ff}.stage canvas{touch-action:none;cursor:grab}</style>
+<script id="direct-breathing-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv'),stage=canvas?.closest('.stage');if(!canvas||!stage)return;
+const status=document.createElement('div');status.id='breathingDirectStatus';status.className='callout';status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.textContent='肺胞の内側を上下ドラッグして換気量を変える。外側の血管リングをタップして左右の血流を配分する。';stage.append(status);
+let active=null,pulse=0;
+const point=e=>{const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*900/r.width,y:(e.clientY-r.top)*590/r.height}};
+function locate(p){for(const [side,cx] of [[0,270],[1,630]]){const d=Math.hypot(p.x-cx,p.y-345);if(d<105)return{side,kind:'alveolus',cx};if(d<155)return{side,kind:'vessel',cx}}return null}
+function immediate(){step(.35);draw()}
+canvas.addEventListener('pointerdown',e=>{e.preventDefault();const p=point(e),hit=locate(p);if(!hit)return;active={...hit,startY:p.y,startDepth:+document.getElementById('depth').value};canvas.setPointerCapture?.(e.pointerId);if(hit.kind==='vessel'){const perf=document.getElementById('perfusion'),next=hit.side===0?Math.min(90,+perf.value+12):Math.max(10,+perf.value-12);perf.value=next;perf.dispatchEvent(new Event('input',{bubbles:true}));pulse=24;status.textContent=`${hit.side===0?'左':'右'}肺の血管をタップ。左肺血流を ${next}%へ配分し、V/Qと動脈O₂を再計算した。`;immediate()}else{const depth=document.getElementById('depth'),next=Math.min(+depth.max,+depth.value+8);depth.value=next;depth.dispatchEvent(new Event('input',{bubbles:true}));pulse=20;status.textContent=`${hit.side===0?'左':'右'}肺胞を押して吸気を追加。一回換気量 ${next}%でO₂応答を再計算した。上下ドラッグで続けて調整できる。`;immediate()}},{capture:true});
+canvas.addEventListener('pointermove',e=>{if(!active||active.kind!=='alveolus')return;const p=point(e),depth=document.getElementById('depth'),next=Math.max(+depth.min,Math.min(+depth.max,active.startDepth+(active.startY-p.y)*.6));depth.value=next;depth.dispatchEvent(new Event('input',{bubbles:true}));pulse=18;status.textContent=`${active.side===0?'左':'右'}肺胞を動かし、一回換気量を ${next.toFixed(0)}%へ変更。青い吸気O₂とV/Qの応答を見よう。`;immediate()},{capture:true});
+canvas.addEventListener('pointerup',()=>{active=null},{capture:true});canvas.addEventListener('pointercancel',()=>{active=null},{capture:true});
+const baseDraw=draw;
+draw=function(){baseDraw();c.save();c.fillStyle='rgba(5,17,29,.86)';c.fillRect(20,48,390,50);c.font='bold 12px system-ui';c.fillStyle='#7dd7ff';c.fillText('肺胞内 drag＝換気　外側の青い血管 tap＝灌流',32,71);c.fillStyle='#fff';c.fillText(`左血流 ${document.getElementById('perfusion').value}%　動脈O₂ ${Math.max(20,gas.pa).toFixed(0)}`,32,91);if(pulse>0){c.strokeStyle='#ffd45f';c.globalAlpha=pulse/24;c.lineWidth=7;for(const x of [270,630]){c.beginPath();c.arc(x,345,145-pulse/2,0,Math.PI*2);c.stroke()}pulse--}c.restore()};
+draw();
+})();
+</script>
 </body></html>

@@ -213,4 +213,24 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="direct-mitosis-style">#mitosisDirectStatus{margin-top:7px;border-left:4px solid #ffd45f}.stage canvas{touch-action:none;cursor:crosshair}</style>
+<script id="direct-mitosis-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv'),stage=canvas?.closest('.stage');if(!canvas||!stage)return;
+const status=document.createElement('div');status.id='mitosisDirectStatus';status.className='callout';status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.textContent='染色体の左側をタップすると損傷、右側をタップすると修復。黄色い極から中央へドラッグすると紡錘糸が付着する。';stage.append(status);
+let down=null,dragLine=null,pulse=0;
+const point=e=>{const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*900/r.width,y:(e.clientY-r.top)*590/r.height}};
+canvas.addEventListener('pointerdown',e=>{e.preventDefault();down=point(e);dragLine={...down,to:{...down}};canvas.setPointerCapture?.(e.pointerId)},{capture:true});
+canvas.addEventListener('pointermove',e=>{if(!down)return;dragLine.to=point(e);draw()},{capture:true});
+canvas.addEventListener('pointerup',e=>{
+ if(!down)return;const p=point(e),move=Math.hypot(p.x-down.x,p.y-down.y),fromPole=Math.min(Math.hypot(down.x-170,down.y-290),Math.hypot(down.x-730,down.y-290))<85;dragLine=null;
+ if(move>35&&fromPole){phase=4;prog=.35;const i=Math.max(0,Math.min(chrom.length-1,Math.round((p.y-140)/300*Math.max(1,chrom.length-1))));chrom[i].attached=true;chrom[i].lag=false;checkpoint();pulse=24;status.textContent=blocked?`染色体${i+1}へ付着したが、${blocked}。残りも極からドラッグして接続しよう。`:`染色体${i+1}へ紡錘糸が付着。チェックポイントを通過できる状態になった。`;draw()}
+ else if(Math.hypot(p.x-450,p.y-290)<175){if(p.x<450){damageNow=Math.min(100,damageNow+25);phase=Math.max(phase,2);prog=.45;checkpoint();status.textContent=`DNA損傷を追加（${damageNow.toFixed(0)}%）。${blocked||'検査中'}。`}else{damageNow=Math.max(0,damageNow-25);checkpoint();status.textContent=`DNAを修復（残り${damageNow.toFixed(0)}%）。${blocked||'チェックポイント通過可能'}。`}pulse=24;draw()}down=null;
+},{capture:true});
+canvas.addEventListener('pointercancel',()=>{down=null;dragLine=null},{capture:true});
+const baseDraw=draw;
+draw=function(){baseDraw();c.save();c.fillStyle='rgba(5,17,29,.88)';c.fillRect(20,78,350,55);c.font='bold 12px system-ui';c.fillStyle='#ff9a9a';c.fillText('染色体 左側tap＝DNA損傷',34,100);c.fillStyle='#8ce6a1';c.fillText('右側tap＝修復　極からdrag＝紡錘糸付着',34,122);if(dragLine){c.strokeStyle='#ffd45f';c.lineWidth=5;c.beginPath();c.moveTo(dragLine.x,dragLine.y);c.lineTo(dragLine.to.x,dragLine.to.y);c.stroke()}if(pulse>0){c.strokeStyle=blocked?'#ff8e8e':'#8ce6a1';c.globalAlpha=pulse/24;c.lineWidth=7;c.beginPath();c.arc(450,290,190-pulse,0,Math.PI*2);c.stroke();pulse--}c.restore()};
+draw();
+})();
+</script>
 </body></html>

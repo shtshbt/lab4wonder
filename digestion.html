@@ -193,4 +193,17 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="direct-digestion-style">#digestionDirectStatus{margin-top:7px;border-left:4px solid #ffd45f}.stage canvas{touch-action:none;cursor:pointer}</style>
+<script id="direct-digestion-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv'),stage=canvas?.closest('.stage');if(!canvas||!stage)return;
+const status=document.createElement('div');status.id='digestionDirectStatus';status.className='callout';status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.textContent='口をタップして食塊を入れる。胃・小腸・大腸をタップすると、その部位の分解・吸収を確認できる。';stage.append(status);
+let focus=null,pulse=0;
+const organs=[{name:'口',x:90,y:100,r:65,text:()=>`咀嚼 ${document.getElementById('chew').value}%：粒を小さくして表面積を増やす。`},{name:'胃',x:300,y:245,r:95,text:()=>`胃酸 ${document.getElementById('acid').value}%：主にたんぱく質分解を進める。`},{name:'小腸',x:565,y:280,r:180,text:()=>`膵酵素 ${document.getElementById('enzyme').value}%、胆汁 ${document.getElementById('bile').value}%：糖・アミノ酸は門脈、脂質はリンパへ。`},{name:'大腸',x:820,y:430,r:100,text:()=>`未吸収物 ${colon.toFixed(0)}：水分回収後に残った物が到達する。`}];
+canvas.addEventListener('pointerdown',e=>{e.preventDefault();const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)*900/r.width,y=(e.clientY-r.top)*590/r.height;const hit=organs.find(o=>Math.hypot(x-o.x,y-o.y)<o.r);if(!hit)return;focus=hit;pulse=24;if(hit.name==='口'){addMeal();status.textContent=`食塊を投入。黄=炭水化物、赤=たんぱく質、紫=脂質。${hit.text()}`}else status.textContent=`${hit.name}に注目：${hit.text()}`;draw()},{capture:true});
+const baseDraw=draw;
+draw=function(){baseDraw();c.save();c.font='bold 12px system-ui';c.fillStyle='rgba(5,17,29,.86)';c.fillRect(18,18,365,45);c.fillStyle='#fff';c.fillText('直接tap：口=食事投入／器官=酵素と吸収を確認',30,46);if(focus){c.strokeStyle='#ffd45f';c.lineWidth=6;c.globalAlpha=pulse>0?.55+pulse/55:.55;c.beginPath();c.arc(focus.x,focus.y,Math.min(focus.r,85),0,Math.PI*2);c.stroke();c.globalAlpha=1;c.fillStyle='#ffd45f';c.fillText(focus.name,focus.x-18,focus.y-Math.min(focus.r,85)-12);pulse=Math.max(0,pulse-1)}c.restore()};
+draw();
+})();
+</script>
 </body></html>

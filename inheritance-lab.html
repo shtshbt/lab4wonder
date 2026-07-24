@@ -211,4 +211,30 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="direct-inheritance-style">#inheritDirectStatus{margin-top:7px;border-left:4px solid #ffd45f}.stage canvas{touch-action:none;cursor:grab}</style>
+<script id="direct-inheritance-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv'),stage=canvas?.closest('.stage');if(!canvas||!stage)return;
+const status=document.createElement('div');status.id='inheritDirectStatus';status.className='callout';status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.textContent='染色体をドラッグして対合 → 重なりをタップして交差 → 配偶子をタップして選び、もう一度タップして受精。';stage.append(status);
+let down=null,selected=-1,crossSet=false,pulse=0;
+const point=e=>{const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*900/r.width,y:(e.clientY-r.top)*590/r.height}};
+function fertilizeSelected(){
+ const p=par(),father=gametes(p.fa,p.link,p.r)[selected],gm=pick(gametes(p.mo,p.link,p.r)),gf=father[0];
+ const a=[gf[0],gm[0]].sort((x,y)=>x===x.toUpperCase()?-1:1).join(''),b=[gf[1],gm[1]].sort((x,y)=>x===x.toUpperCase()?-1:1).join('');
+ lastChild=a+b;const ph=phenotype(lastChild,p.dom);counts[ph]=(counts[ph]||0)+1;children++;if(father[1]<.24)recombSeen++;phase=6;prog=.82;pulse=24;
+ status.textContent=`父の配偶子 ${gf} と母の配偶子 ${gm} が受精し、子 ${lastChild} ができた。`;draw();
+}
+canvas.addEventListener('pointerdown',e=>{e.preventDefault();const p=point(e),sep=phase===1?70:phase===2?45:130;p.chrom=phase<=2&&Math.min(Math.hypot(p.x-(450-sep),p.y-270),Math.hypot(p.x-(450+sep),p.y-270))<85;down=p;canvas.setPointerCapture?.(e.pointerId)},{capture:true});
+canvas.addEventListener('pointerup',e=>{
+ if(!down)return;const start=down,p=point(e),move=Math.hypot(p.x-start.x,p.y-start.y);down=null;
+ if(move>18&&start.chrom&&phase<=2){phase=2;prog=.45;crossSet=false;pulse=20;status.textContent='相同染色体が対合した。中央の重なりをタップして交差を起こそう。';draw();return}
+ if(phase===2&&Math.abs(p.x-450)<100&&Math.abs(p.y-270)<115){if(!crossSet){crossSet=true;prog=Math.max(.2,Math.min(.95,Math.abs(p.y-270)/90+.2));pulse=22;status.textContent=`交差位置を選んだ。組換え率は条件どおり ${document.getElementById('recomb').value}%（位置と発生確率は別）。もう一度タップして4配偶子を見る。`}else{phase=5;prog=0;selected=-1;status.textContent='4配偶子ができた。使う配偶子をタップして選ぼう。'}draw();return}
+ if(phase===5){const i=Math.max(0,Math.min(3,Math.round((p.x-135)/210)));if(Math.abs(p.y-270)>100)return;if(selected===i){fertilizeSelected()}else{selected=i;const gs=gametes(par().fa,par().link,par().r);pulse=20;status.textContent=`配偶子 ${gs[i][0]}（期待頻度 ${(gs[i][1]*100).toFixed(0)}%）を選択。もう一度タップすると受精する。`;draw()}}
+},{capture:true});
+const baseDraw=draw;
+draw=function(){baseDraw();c.save();c.font='bold 13px system-ui';c.fillStyle='#fff';c.fillText(phase<=2?'ドラッグ：対合　タップ：交差':phase===5?'配偶子をタップ：選択／受精':'直接操作の結果',28,82);if(phase===5&&selected>=0){const x=135+selected*210;c.strokeStyle='#ffd45f';c.lineWidth=6;c.beginPath();c.arc(x,270,83,0,Math.PI*2);c.stroke();c.fillStyle='#ffd45f';c.fillText('選択中',x-24,375)}if(pulse>0){c.strokeStyle='#ffd45f';c.globalAlpha=pulse/24;c.lineWidth=7;c.beginPath();c.arc(450,270,105-pulse,0,Math.PI*2);c.stroke();pulse--}c.restore()};
+document.getElementById('resetTop')?.addEventListener('click',()=>{selected=-1;crossSet=false;status.textContent='染色体をドラッグして対合 → 重なりをタップして交差 → 配偶子をタップして選び、もう一度タップして受精。'});
+draw();
+})();
+</script>
 </body></html>

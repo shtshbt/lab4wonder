@@ -212,10 +212,10 @@ show(0);
   const canvas=document.getElementById('mainCv');
   if(!canvas)return;
   const style=document.createElement('style');
-  style.textContent='.bio-tools{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}.bio-tools button{flex:1 1 130px}.bio-tools button.on{background:#f6e77b;color:#211b00}.bio-mission{padding:9px 11px;border:1px solid #f6e77b88;border-radius:12px;background:#142237;font-size:12px;line-height:1.65}.bio-key{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}.bio-key span{padding:3px 7px;border-radius:999px;background:#091522}';
+  style.textContent='.bio-tools{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}.bio-tools button{flex:1 1 130px}.bio-tools button.on{background:#f6e77b;color:#211b00}.bio-template{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 10px;align-items:center;margin:8px 0;padding:9px 11px;border:1px solid #557391;border-radius:12px;background:#0d1b2b;font-size:12px}.bio-template select{min-height:42px;border:1px solid #557391;border-radius:10px;background:#071523;color:#fff;padding:7px}.bio-template small{grid-column:1/-1;color:#bcd0e5;line-height:1.6}.bio-mission{padding:9px 11px;border:1px solid #f6e77b88;border-radius:12px;background:#142237;font-size:12px;line-height:1.65}.bio-key{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}.bio-key span{padding:3px 7px;border-radius:999px;background:#091522}@media(max-width:440px){.bio-template{grid-template-columns:1fr}.bio-template small{grid-column:auto}}';
   document.head.append(style);
   const panel=document.createElement('div');
-  panel.innerHTML='<div class="bio-tools" role="toolbar" aria-label="粘菌の配置道具"><button data-tool="food" class="on">🍚 餌を置く</button><button data-tool="block">🪨 障害物を置く</button><button data-tool="erase">🧽 近くを消す</button></div><div class="bio-mission"><b>最短ネットワーク挑戦：</b>餌と岩を好きな場所へ置こう。粘菌は枝を伸ばし、岩を回り、餌へ到着した枝を太くして、使わない枝を細くする。配置を変えて全部の餌を短く結べるかな？<div class="bio-key"><span>黄い太い管＝よく使う輸送路</span><span>細い枝＝探索中</span><span>緑＝餌</span><span>灰＝通れない岩</span></div></div>';
+  panel.innerHTML='<label class="bio-template"><b>🗺️ 背景テンプレート</b><select id="slimeTemplate" aria-label="粘菌実験の背景テンプレート"><option value="free">自由な実験場</option><option value="tokyo">東京の駅と交通網</option><option value="river">川と橋のある町</option></select><small id="templateHint" aria-live="polite">自由に餌と障害物を置く実験場。背景は粘菌の動きに影響しません。</small></label><div class="bio-tools" role="toolbar" aria-label="粘菌の配置道具"><button data-tool="food" class="on">🍚 餌を置く</button><button data-tool="block">🪨 障害物を置く</button><button data-tool="erase">🧽 近くを消す</button></div><div class="bio-mission"><b>最短ネットワーク挑戦：</b>餌と岩を好きな場所へ置こう。粘菌は枝を伸ばし、岩を回り、餌へ到着した枝を太くして、使わない枝を細くする。配置を変えて全部の餌を短く結べるかな？<div class="bio-key"><span>黄い太い管＝粘菌が作る道</span><span>水色の細線＝人が作った道・鉄道（比較用）</span><span>緑＝餌／地図では主要地点</span><span>灰＝通れない岩</span></div></div>';
   canvas.closest('.stage').insertAdjacentElement('afterend',panel);
   let tool='food';
   const foodButton=document.getElementById('foodBtn');
@@ -232,7 +232,136 @@ show(0);
   }
   toolButtons.forEach(button=>button.onclick=()=>selectTool(button.dataset.tool));
   selectTool('food');
+  const templateSelect=panel.querySelector('#slimeTemplate');
+  const templateHint=panel.querySelector('#templateHint');
+  let activeTemplate='free';
+  const templateData={
+    tokyo:{
+      foods:[
+        ['立川',105,270],['吉祥寺',210,270],['池袋',355,155],['新宿',350,265],
+        ['渋谷',365,355],['品川',455,440],['横浜',320,520],['上野',540,155],
+        ['東京',540,275],['千葉',760,270]
+      ],
+      links:[[0,1],[1,3],[2,3],[2,7],[3,4],[3,8],[4,5],[5,6],[7,8],[8,9]],
+      hint:'緑の餌は主要駅、水色の線は人が作った鉄道・幹線の模式図。黄色い粘菌の網が、どの駅をどう結び直すか比べよう。'
+    },
+    river:{
+      foods:[
+        ['北の町',170,150],['学校',360,185],['駅',670,145],
+        ['市場',215,420],['病院',535,420],['南の町',760,455]
+      ],
+      links:[[0,1],[1,2],[0,3],[1,4],[2,5],[3,4],[4,5]],
+      hint:'緑の餌は町の主要地点、水色の線は道路、青い帯は川、白い短線は橋。背景は比較用で、置いた灰色の障害物だけが粘菌を止めます。'
+    }
+  };
+
+  function seedAgents(){
+    agents=[];
+    for(let i=0;i<190;i++){
+      const angle=r46rand()*Math.PI*2;
+      agents.push({x:450+Math.cos(angle)*24*r46rand(),y:295+Math.sin(angle)*24*r46rand(),a:angle,hit:-1});
+    }
+  }
+
+  function applyTemplate(name){
+    activeTemplate=templateData[name]?name:'free';
+    trail=new Float32Array(tw*th);
+    blocks=[];
+    t=0;
+    hist=[];
+    if(activeTemplate==='free'){
+      foods=[{x:120,y:130,n:1},{x:760,y:120,n:1},{x:760,y:455,n:1},{x:170,y:470,n:1}];
+      templateHint.textContent='自由に餌と障害物を置く実験場。背景は粘菌の動きに影響しません。';
+    }else{
+      foods=templateData[activeTemplate].foods.map(([label,x,y])=>({x,y,n:1,label}));
+      templateHint.textContent=templateData[activeTemplate].hint;
+    }
+    seedAgents();
+    running=false;
+    document.getElementById('playPause').textContent='▶ 再生';
+    draw();
+  }
+
   const baseDraw=draw;
+  function drawReferenceLinks(data){
+    c.save();
+    c.strokeStyle='rgba(116,205,245,.52)';
+    c.lineWidth=3;
+    c.setLineDash([10,7]);
+    for(const [from,to] of data.links){
+      const a=data.foods[from];
+      const b=data.foods[to];
+      if(!a||!b)continue;
+      c.beginPath();
+      c.moveTo(a[1],a[2]);
+      c.lineTo(b[1],b[2]);
+      c.stroke();
+    }
+    c.setLineDash([]);
+    c.restore();
+  }
+
+  function drawRiver(){
+    c.save();
+    c.strokeStyle='rgba(53,165,224,.32)';
+    c.lineWidth=82;
+    c.beginPath();
+    c.moveTo(470,70);
+    c.bezierCurveTo(350,190,575,335,425,575);
+    c.stroke();
+    c.strokeStyle='rgba(234,245,255,.82)';
+    c.lineWidth=9;
+    for(const [x,y,angle] of [[409,206,-.65],[502,367,-.62]]){
+      c.translate(x,y);
+      c.rotate(angle);
+      c.beginPath();
+      c.moveTo(-42,0);
+      c.lineTo(42,0);
+      c.stroke();
+      c.rotate(-angle);
+      c.translate(-x,-y);
+    }
+    c.fillStyle='#bfeaff';
+    c.font='800 14px system-ui';
+    c.fillText('川（背景）',470,130);
+    c.fillStyle='#ffffff';
+    c.fillText('橋',372,180);
+    c.fillText('橋',520,350);
+    c.restore();
+  }
+
+  function drawTemplateOverlay(){
+    const data=templateData[activeTemplate];
+    if(!data)return;
+    if(activeTemplate==='tokyo'){
+      c.fillStyle='rgba(36,121,168,.18)';
+      c.beginPath();
+      c.moveTo(520,365);
+      c.lineTo(900,330);
+      c.lineTo(900,590);
+      c.lineTo(515,590);
+      c.closePath();
+      c.fill();
+      c.fillStyle='#8bd7ff';
+      c.font='800 14px system-ui';
+      c.fillText('東京湾（背景）',690,520);
+    }else if(activeTemplate==='river'){
+      drawRiver();
+    }
+    drawReferenceLinks(data);
+    c.font='800 13px system-ui';
+    for(const [label,x,y] of data.foods){
+      c.fillStyle='rgba(4,14,23,.88)';
+      c.fillRect(x+20,y-22,c.measureText(label).width+12,23);
+      c.fillStyle='#ffffff';
+      c.fillText(label,x+25,y-6);
+    }
+    c.fillStyle='rgba(4,14,23,.9)';
+    c.fillRect(18,66,360,31);
+    c.fillStyle='#a9e6ff';
+    c.fillText('水色の線＝人が作った道・鉄道（粘菌との比較用）',29,87);
+  }
+
   function route(food){
     const start={x:450,y:295};let blocker=null;
     for(const b of blocks){const dx=food.x-start.x,dy=food.y-start.y,len=Math.hypot(dx,dy)||1;const u=((b.x-start.x)*dx+(b.y-start.y)*dy)/(len*len);if(u>0&&u<1){const px=start.x+u*dx,py=start.y+u*dy;if(Math.hypot(b.x-px,b.y-py)<b.r+20){blocker=b;break}}}
@@ -243,6 +372,7 @@ show(0);
   }
   draw=function(){
     baseDraw();const st=stats(),progress=Math.min(1,t/18);c.save();c.lineCap='round';
+    drawTemplateOverlay();
     c.strokeStyle=`rgba(255,236,102,${.22+.62*progress})`;c.shadowColor='#f6df55';c.shadowBlur=10;c.lineWidth=4+8*progress;
     foods.forEach(route);c.shadowBlur=0;
     c.fillStyle='#f8dc67';c.beginPath();c.arc(450,295,23+Math.sin(t*2)*2,0,Math.PI*2);c.fill();c.fillStyle='#4b3900';c.font='bold 11px system-ui';c.textAlign='center';c.fillText('粘菌',450,299);
@@ -265,7 +395,24 @@ show(0);
   }
   canvas.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;e.preventDefault();e.stopImmediatePropagation();try{canvas.setPointerCapture?.(e.pointerId)}catch(_error){}act(point(e))},{capture:true});
   canvas.addEventListener('pointermove',e=>{if(!canvas.hasPointerCapture?.(e.pointerId)||tool!=='block')return;e.preventDefault();const p=point(e),lastBlock=blocks.at(-1);if(lastBlock&&Math.hypot(lastBlock.x-p.x,lastBlock.y-p.y)>45){blocks.push({x:p.x,y:p.y,r:25});draw()}},{capture:true});
-  draw();
+  templateSelect.addEventListener('change',()=>applyTemplate(templateSelect.value));
+  document.getElementById('scenarioBtn').addEventListener('click',()=>{
+    activeTemplate='free';
+    templateSelect.value='free';
+    templateHint.textContent='ランダムな餌配置です。背景なしで、粘菌が作る網そのものを観察できます。';
+  });
+  const baseResetSimulation=window.resetSimulation;
+  window.resetSimulation=()=>{
+    if(activeTemplate==='free')baseResetSimulation();
+    else applyTemplate(activeTemplate);
+  };
+  const requestedTemplate=new URLSearchParams(location.search).get('template');
+  if(templateData[requestedTemplate]){
+    templateSelect.value=requestedTemplate;
+    applyTemplate(requestedTemplate);
+  }else{
+    draw();
+  }
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
 </body></html>

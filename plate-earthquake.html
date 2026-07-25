@@ -165,6 +165,9 @@ function drawBoundaryExplanation(p){
   const source=sourcePoint(p);
   c.save();
   if(p.type==='transform'){
+    c.fillStyle='rgba(91,74,59,.98)';
+    c.fillRect(35,180,320,225);
+    c.fillRect(545,180,320,225);
     drawLabel('プレートA',95,245);
     drawLabel('プレートB',650,245);
     drawArrow(280,385,280,270,'ずれる向き');

@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>プレート境界・地震発生ラボ</title><style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}body{background:#08101a;color:#edf4fb;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;max-width:980px;margin:auto;padding:12px 12px calc(92px + env(safe-area-inset-bottom));touch-action:manipulation}button,input,select,textarea{font:inherit}button{min-height:42px;border:1px solid #38506b;border-radius:11px;background:#17263a;color:#f3f7fb;padding:8px 11px;font-weight:800}button.primary{background:#ffd85a;color:#241c00;border-color:#d4b53b}button.on{outline:3px solid #ffd85a;outline-offset:1px}button:disabled{opacity:.45}.hdr{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}.hdr h1{font-size:21px;line-height:1.45;margin:0}.sub{color:#9eb0c6;font-size:12px;line-height:1.7;margin-top:4px}.badge{display:inline-block;background:#21344d;color:#b8dcff;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800;margin-bottom:5px}.head-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.head-actions button{font-size:11px;padding:7px 9px}.learn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:0 0 10px}.learn>div{border:1px solid #2a3d55;border-radius:13px;background:#111c2a;padding:9px;min-height:90px}.learn b{display:block;color:#ffd85a;font-size:11px;margin-bottom:4px}.learn p{margin:0;color:#d9e3ef;font-size:12px;line-height:1.65}.toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:0 0 10px;padding:9px;border:1px solid #2b415b;border-radius:13px;background:#101b2a}.toolbar select{min-height:42px;border:1px solid #38506b;border-radius:10px;background:#0b1624;color:#fff;padding:7px}.stage{border:1px solid #2c4058;border-radius:17px;background:#07111d;overflow:hidden;position:relative}.stage canvas,.stage svg{display:block;width:100%;height:auto;touch-action:none}canvas,svg{max-width:100%;height:auto}.panel{display:grid;gap:10px;margin-top:10px}.grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.card{border:1px solid #2a3d55;border-radius:14px;background:#111c2a;padding:11px}.card h2,.card h3{font-size:15px;margin:0 0 8px;color:#ffd85a}.control{display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center;margin:8px 0;font-size:12px}.control output{color:#ffd85a;font:12px ui-monospace,monospace}.control input,.control select{grid-column:1/-1;width:100%}.control select{min-height:40px;background:#0b1624;color:#fff;border:1px solid #38506b;border-radius:9px;padding:7px}.row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.metric{background:#0b1624;border:1px solid #293e57;border-radius:11px;padding:8px;min-width:0}.metric b{display:block;color:#9fcdf5;font-size:10px}.metric strong{display:block;color:#ffdb5b;font:17px/1.35 ui-monospace,monospace;margin-top:3px;word-break:break-word}.callout{background:#15283d;border:1px solid #385a79;border-radius:11px;padding:9px;font-size:12px;line-height:1.75}.hint{font-size:12px;line-height:1.75;color:#aab8ca}.legend{display:flex;gap:7px;flex-wrap:wrap;font-size:11px;margin-top:7px}.legend span{background:#1a2b40;border-radius:999px;padding:4px 7px}.deep{margin-top:10px;border:1px solid #35516e;border-radius:14px;background:#101b29;padding:11px}.deep h2{font-size:16px;margin:0 0 6px;color:#ffd85a}.deep p{font-size:12px;line-height:1.7;color:#aebed0}.bar{height:11px;background:#24364b;border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;background:#ffd85a;width:0;transition:width .2s}.mini-table{width:100%;border-collapse:collapse;font-size:11px}.mini-table th,.mini-table td{padding:5px;border-bottom:1px solid #2d4159;text-align:left}.mini-table th{color:#9fcdf5}.ok{color:#89e6a7}.warn{color:#ffbe79}.bad{color:#ff8f8f}.small{font-size:11px;color:#90a2ba;line-height:1.65}ruby{ruby-position:over}rt{font-size:.55em}.hidden{display:none!important}.tourGlow{outline:4px solid #ffdb5b!important;outline-offset:3px!important;position:relative;z-index:20}.sheetBack,.modalBack{position:fixed;inset:0;background:#000c;z-index:70;display:none;padding:18px;overflow:auto}.sheetBack.show,.modalBack.show{display:flex;align-items:flex-end;justify-content:center}.sheet{width:min(780px,100%);max-height:88vh;overflow:auto;background:#0e1a29;border:1px solid #405978;border-radius:18px;padding:14px}.sheet h2{font-size:17px;margin:0}.sheet h3{font-size:14px;color:#ffdb5b;margin:14px 0 6px}.sheet p,.sheet li{font-size:12px;line-height:1.8;color:#d7e2ef}.sheetHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.sheetHead button{font-size:20px;min-width:42px}.tourBox{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:90;background:#0d1927;border:2px solid #ffdb5b;border-radius:14px;padding:10px;display:none}.tourBox.show{display:block}.tourBox .row{justify-content:space-between}.trayOpen{position:fixed;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:55;background:#ffdb5b;color:#211b00}.traySection{border-top:1px solid #2f455f;padding-top:10px;margin-top:10px}.terms{display:flex;gap:6px;flex-wrap:wrap}.term{background:#1b2c42;border-radius:999px;padding:5px 8px;font-size:12px}.snapGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.snap{background:#0a1421;border:1px solid #2d415a;border-radius:10px;padding:8px}.snap pre{white-space:pre-wrap;font:11px/1.55 ui-monospace,monospace;margin:5px 0 0}.noteGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.noteGrid label{font-size:12px}.noteGrid textarea{width:100%;min-height:76px;background:#0a1421;color:#edf4fb;border:1px solid #38506c;border-radius:9px;padding:8px;margin-top:4px}.zoomBody{background:#07101a;border-radius:12px;padding:8px}.zoomBody svg,.zoomBody img{width:100%;height:auto;max-height:72vh;object-fit:contain}.zoomOn{cursor:zoom-in}.pulse{animation:pulse 1s ease-in-out infinite alternate}@keyframes pulse{to{opacity:.35}}@media(max-width:700px){.learn{grid-template-columns:1fr 1fr}.grid2,.grid3{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.hdr{display:block}.head-actions{justify-content:flex-start;margin-top:8px}}@media(max-width:390px){body{padding-left:8px;padding-right:8px}.learn{grid-template-columns:1fr}.hdr h1{font-size:18px}.metrics{grid-template-columns:1fr 1fr}.snapGrid,.noteGrid{grid-template-columns:1fr}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}body{background:#08101a;color:#edf4fb;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;max-width:980px;margin:auto;padding:12px 12px calc(92px + env(safe-area-inset-bottom));touch-action:manipulation}button,input,select,textarea{font:inherit}button{min-height:42px;border:1px solid #38506b;border-radius:11px;background:#17263a;color:#f3f7fb;padding:8px 11px;font-weight:800}button.primary{background:#ffd85a;color:#241c00;border-color:#d4b53b}button.on{outline:3px solid #ffd85a;outline-offset:1px}button:disabled{opacity:.45}.hdr{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}.hdr h1{font-size:21px;line-height:1.45;margin:0}.sub{color:#9eb0c6;font-size:12px;line-height:1.7;margin-top:4px}.badge{display:inline-block;background:#21344d;color:#b8dcff;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800;margin-bottom:5px}.head-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.head-actions button{font-size:11px;padding:7px 9px}.learn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:0 0 10px}.learn>div{border:1px solid #2a3d55;border-radius:13px;background:#111c2a;padding:9px;min-height:90px}.learn b{display:block;color:#ffd85a;font-size:11px;margin-bottom:4px}.learn p{margin:0;color:#d9e3ef;font-size:12px;line-height:1.65}.toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:0 0 10px;padding:9px;border:1px solid #2b415b;border-radius:13px;background:#101b2a}.toolbar select{min-height:42px;border:1px solid #38506b;border-radius:10px;background:#0b1624;color:#fff;padding:7px}.stage{border:1px solid #2c4058;border-radius:17px;background:#07111d;overflow:hidden;position:relative}.stage canvas,.stage svg{display:block;width:100%;height:auto;touch-action:none}.stageHelp{display:grid;gap:6px;padding:10px 12px;background:#122438;border-bottom:1px solid #3c5b7a;font-size:12px;line-height:1.55}.processLegend{display:flex;gap:6px;flex-wrap:wrap}.processLegend span{padding:4px 7px;border:1px solid #49637e;border-radius:999px;background:#0a1726}.interactionStatus{min-height:38px;padding:8px 12px;background:#fff4be;color:#2b2300;border-bottom:2px solid #d9b837;font-size:13px;font-weight:850;line-height:1.55}canvas,svg{max-width:100%;height:auto}.panel{display:grid;gap:10px;margin-top:10px}.grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.card{border:1px solid #2a3d55;border-radius:14px;background:#111c2a;padding:11px}.card h2,.card h3{font-size:15px;margin:0 0 8px;color:#ffd85a}.control{display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center;margin:8px 0;font-size:12px}.control output{color:#ffd85a;font:12px ui-monospace,monospace}.control input,.control select{grid-column:1/-1;width:100%}.control select{min-height:40px;background:#0b1624;color:#fff;border:1px solid #38506b;border-radius:9px;padding:7px}.row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.metric{background:#0b1624;border:1px solid #293e57;border-radius:11px;padding:8px;min-width:0}.metric b{display:block;color:#9fcdf5;font-size:10px}.metric strong{display:block;color:#ffdb5b;font:17px/1.35 ui-monospace,monospace;margin-top:3px;word-break:break-word}.callout{background:#15283d;border:1px solid #385a79;border-radius:11px;padding:9px;font-size:12px;line-height:1.75}.hint{font-size:12px;line-height:1.75;color:#aab8ca}.legend{display:flex;gap:7px;flex-wrap:wrap;font-size:11px;margin-top:7px}.legend span{background:#1a2b40;border-radius:999px;padding:4px 7px}.deep{margin-top:10px;border:1px solid #35516e;border-radius:14px;background:#101b29;padding:11px}.deep h2{font-size:16px;margin:0 0 6px;color:#ffd85a}.deep p{font-size:12px;line-height:1.7;color:#aebed0}.bar{height:11px;background:#24364b;border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;background:#ffd85a;width:0;transition:width .2s}.mini-table{width:100%;border-collapse:collapse;font-size:11px}.mini-table th,.mini-table td{padding:5px;border-bottom:1px solid #2d4159;text-align:left}.mini-table th{color:#9fcdf5}.ok{color:#89e6a7}.warn{color:#ffbe79}.bad{color:#ff8f8f}.small{font-size:11px;color:#90a2ba;line-height:1.65}ruby{ruby-position:over}rt{font-size:.55em}.hidden{display:none!important}.tourGlow{outline:4px solid #ffdb5b!important;outline-offset:3px!important;position:relative;z-index:20}.sheetBack,.modalBack{position:fixed;inset:0;background:#000c;z-index:70;display:none;padding:18px;overflow:auto}.sheetBack.show,.modalBack.show{display:flex;align-items:flex-end;justify-content:center}.sheet{width:min(780px,100%);max-height:88vh;overflow:auto;background:#0e1a29;border:1px solid #405978;border-radius:18px;padding:14px}.sheet h2{font-size:17px;margin:0}.sheet h3{font-size:14px;color:#ffdb5b;margin:14px 0 6px}.sheet p,.sheet li{font-size:12px;line-height:1.8;color:#d7e2ef}.sheetHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.sheetHead button{font-size:20px;min-width:42px}.tourBox{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:90;background:#0d1927;border:2px solid #ffdb5b;border-radius:14px;padding:10px;display:none}.tourBox.show{display:block}.tourBox .row{justify-content:space-between}.trayOpen{position:fixed;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:55;background:#ffdb5b;color:#211b00}.traySection{border-top:1px solid #2f455f;padding-top:10px;margin-top:10px}.terms{display:flex;gap:6px;flex-wrap:wrap}.term{background:#1b2c42;border-radius:999px;padding:5px 8px;font-size:12px}.snapGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.snap{background:#0a1421;border:1px solid #2d415a;border-radius:10px;padding:8px}.snap pre{white-space:pre-wrap;font:11px/1.55 ui-monospace,monospace;margin:5px 0 0}.noteGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.noteGrid label{font-size:12px}.noteGrid textarea{width:100%;min-height:76px;background:#0a1421;color:#edf4fb;border:1px solid #38506c;border-radius:9px;padding:8px;margin-top:4px}.zoomBody{background:#07101a;border-radius:12px;padding:8px}.zoomBody svg,.zoomBody img{width:100%;height:auto;max-height:72vh;object-fit:contain}.zoomOn{cursor:zoom-in}.pulse{animation:pulse 1s ease-in-out infinite alternate}@keyframes pulse{to{opacity:.35}}@media(max-width:700px){.learn{grid-template-columns:1fr 1fr}.grid2,.grid3{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.hdr{display:block}.head-actions{justify-content:flex-start;margin-top:8px}}@media(max-width:390px){body{padding-left:8px;padding-right:8px}.learn{grid-template-columns:1fr}.hdr h1{font-size:18px}.metrics{grid-template-columns:1fr 1fr}.snapGrid,.noteGrid{grid-template-columns:1fr}}
 </style><style>
 html,body{max-width:100%;overflow-x:hidden}canvas{max-width:100%;height:auto}.r52-limit{margin:14px 0;padding:14px;border:1px solid #30465e;border-radius:14px;background:#0b1725}.r52-limit h2{font-size:1rem;margin:0 0 7px}.r52-limit p{margin:0}@media(max-width:340px){.toolbar{gap:6px}.toolbar button,.toolbar select{font-size:12px;padding:8px 9px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}.metric{min-width:0}.metric .v,.metric strong{overflow-wrap:anywhere}canvas{width:100%!important}}
 </style><style id="r59-common-ui-style">
@@ -18,11 +18,11 @@ body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
 </style><meta name="r60-explicit-accessibility" content="static-control-labels"><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
 </head><body data-first="境界の種類を切り替え、地震と火山が生じる場所を見よう。">
-<header class="hdr"><div><span class="badge">r52・地学・地震・動的探究版</span><h1>プレート境界・地震発生ラボ</h1><div class="sub">プレート運動、境界の固着、応力蓄積、破壊、地震波の伝播を時間順に結びつける。</div></div><div class="head-actions"><button id="guideBtn" aria-label="？ ガイド">？ ガイド</button><button id="speakBtn" aria-label="🔊 読む">🔊 読む</button><button id="tourBtn" aria-label="👣 操作">👣 操作</button><button id="resetTop" aria-label="↺ リセット">↺ リセット</button></div></header>
+<header class="hdr"><div><span class="badge">地学・地震・触って探究</span><h1>プレート境界・地震発生ラボ</h1><div class="sub">プレート運動、境界の固着、応力蓄積、破壊、地震波の伝播を時間順に結びつける。</div></div><div class="head-actions"><button id="guideBtn" aria-label="？ ガイド">？ ガイド</button><button id="speakBtn" aria-label="🔊 読む">🔊 読む</button><button id="tourBtn" aria-label="👣 操作">👣 操作</button><button id="resetTop" aria-label="↺ リセット">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>プレート運動、境界の固着、応力蓄積、破壊、地震波の伝播を時間順に結びつける。</p></div><div><b>どこを見る？</b><p>岩盤のたわみ、震源から広がるP波とS波、観測点の地震計波形。</p></div><div><b>何を変える？</b><p>境界型、移動速度、固着、震源深さ、観測距離。</p></div><div><b>持ち帰る一文</b><p data-takeaway>地震はプレートが動くたびに起こるのではなく、固着した岩盤に蓄積した弾性変形が破壊で解放される。</p></div></section>
 
 <section class="toolbar" data-tour="controls"><button id="playPause" class="primary" aria-label="▶ 再生">▶ 再生</button><button id="stepBtn" aria-label="1年">1年</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="4">×4</option><option value="15">×15</option></select><button id="triggerBtn" aria-label="小さなゆさぶり">小さなゆさぶり</button><button id="scenarioBtn" aria-label="別の境界">別の境界</button></section>
-<section class="stage" data-tour="stage"><div class="stageHelp"><strong>👆 断層面をタップ／ドラッグ：その場にゆさぶりを入れて応力をためる</strong><div class="processLegend"><span class="erosionKey">赤＝応力のたまり</span><span class="transportKey">青＝P波</span><span class="depositKey">黄＝S波・観測点</span></div></div><canvas id="mainCv" width="900" height="590" aria-label="プレート境界で応力が蓄積し破壊後に地震波が伝わるアニメーション" role="img"></canvas></section>
+<section class="stage" data-tour="stage"><div class="stageHelp"><strong>👆 黄色い「固着域」をタップ／なぞる：岩盤を押して応力をためる</strong><div class="processLegend"><span>赤＝応力</span><span>水色＝速いP波</span><span>桃色＝遅いS波</span><span>黄色い家＝観測点</span></div></div><div id="interactionStatus" class="interactionStatus" role="status" aria-live="polite">まず黄色い固着域をタップ。赤い応力メーターが増える様子を見よう。</div><canvas id="mainCv" width="900" height="590" aria-label="黄色い固着域をタップまたはドラッグすると応力が増え、破壊後にP波とS波が観測点へ伝わる模型" role="img"></canvas></section>
 <div class="panel grid2"><section class="card"><h2>プレート境界の条件</h2><label class="control">境界の型<select id="type" aria-label="境界の型"><option value="transform">横ずれ</option><option value="subduction">沈み込み</option><option value="divergent">広がる境界</option></select></label><label class="control">移動速度 <output id="speedOut"></output><input id="plateSpeed" type="range" min="1" max="10" value="5" aria-label="移動速度"></label><label class="control">固着の強さ <output id="lockOut"></output><input id="locking" type="range" min="20" max="100" value="65" aria-label="固着の強さ"></label><label class="control">震源の深さ <output id="depthOut"></output><input id="depth" type="range" min="5" max="120" value="25" aria-label="震源の深さ"></label><label class="control">観測点の距離 <output id="distOut"></output><input id="distance" type="range" min="20" max="400" value="160" aria-label="観測点の距離"></label><div class="callout" id="explain" aria-live="polite"></div></section><section class="card" data-tour="metrics"><h2>地震計器</h2><div class="metrics"><div class="metric"><b>蓄積応力</b><strong id="stressM"></strong></div><div class="metric"><b>すべり量</b><strong id="slipM"></strong></div><div class="metric"><b>規模</b><strong id="magM"></strong></div><div class="metric"><b>S-P時間</b><strong id="spM"></strong></div></div><div class="callout" id="stateText"></div></section></div>
 <section class="deep"><h2>観測点の地震波形</h2><canvas id="graphCv" width="900" height="300" aria-label="P波とS波が到着する地震計波形" role="img"></canvas><p>プレートは滑らかに動いていても、境界が固着すると岩盤に弾性変形が蓄積します。破壊後、P波が先に、S波が後に観測点へ届きます。</p></section>
 
@@ -33,8 +33,325 @@ body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px
 <script>
 (()=>{let state=520001;window.r52ScenarioIndex=0;window.r52SeedBase=520001;window.r52SetSeed=v=>{state=(Number(v)>>>0)||1;window.r52Seed=state;return state};window.r52Rand=()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;window.r52Seed=state;return state/4294967296};window.r52Noise=(a,b=0)=>{let x=(Math.imul((Number(a)+1)>>>0,0x45d9f3b)^Math.imul((Number(b)+1)>>>0,0x27d4eb2d)^0x9e3779b9)>>>0;x^=x>>>16;x=Math.imul(x,0x7feb352d)>>>0;x^=x>>>15;return (x>>>0)/4294967296};window.r52SetSeed(window.r52SeedBase)})();
 </script><script>
-const cv=mainCv,c=cv.getContext('2d'),gv=graphCv,g=gv.getContext('2d'),$=id=>document.getElementById(id);let years=0,running=false,last=performance.now(),speed=1,stress=0,slip=0,event=null,waves=[],seis=[],jitter=0,taps=[];function reset(){years=0;stress=0;slip=0;event=null;waves=[];seis=[];jitter=0;taps=[];running=false;$('playPause').textContent='▶ 再生';draw()}window.resetSimulation=reset;function par(){return{type:$('type').value,v:+$('plateSpeed').value,lock:+$('locking').value/100,depth:+$('depth').value,dist:+$('distance').value}}function tapPoint(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*cv.width,y:(e.clientY-r.top)/r.height*cv.height}}function poke(x,y){const p=par(),faultX=p.type==='subduction'?560:450,nearFault=Math.abs(x-faultX)<140&&y>155;const boost=(nearFault?14:6)+(p.type==='divergent'?2:0);stress=Math.max(0,stress+boost);jitter+=nearFault?.45:.2;waves.push({r:0,v:nearFault?4.5:3.2,type:'P'});taps.push({x,y,r:14,life:1});if(taps.length>18)taps.shift();if(nearFault&&stress>((p.type==='divergent'?22:38)+62*p.lock)*.82)rupture()}function stepCore(dt){const p=par();years+=dt;const coupling=p.type==='divergent'?.18:.35+.65*p.lock,buildup=p.v*coupling*(p.type==='subduction'?.82:p.type==='transform'?.68:.16);stress=Math.max(0,stress+dt*buildup);const threshold=(p.type==='divergent'?22:38)+62*p.lock;if(!event&&stress>=threshold)rupture();if(event){event.age+=dt;for(const w of waves)w.r+=dt*w.v*7;if(event.age>18)event=null}jitter*=Math.exp(-dt*2.8);const amp=event?Math.max(0,1-event.age/18)*(slip*.06):0;if(event){const d=Math.hypot(p.dist,p.depth),tp=d/6,ts=d/3.5,age=event.age*5;if(Math.abs(age-tp)<2)jitter+=amp*.7;if(Math.abs(age-ts)<3)jitter+=amp*1.4}for(const t of taps)t.life-=dt*.9;taps=taps.filter(t=>t.life>0);seis.push({x:years,y:jitter+(r52Rand()-.5)*.03*Math.sqrt(Math.max(.02,dt))});if(seis.length>320)seis.shift()}function step(dt){const n=Math.max(1,Math.ceil(Math.abs(dt)/.05)),h=dt/n;for(let i=0;i<n;i++)stepCore(h)}function rupture(){const p=par();slip=stress*(.25+.45*p.lock)*(p.type==='subduction'?1.25:p.type==='divergent'?.15:1);const mag=Math.max(2.5,Math.log10(Math.max(1,slip*p.depth))*1.7+2.2);event={age:0,mag};waves=[{r:0,v:6,type:'P'},{r:0,v:3.5,type:'S'}];stress*=p.type==='divergent'?.75:.12}function draw(){const p=par();c.clearRect(0,0,900,590);c.fillStyle='#07111d';c.fillRect(0,0,900,590);c.fillStyle='#31556b';c.fillRect(0,0,900,155);c.fillStyle='#5b4a3b';if(p.type==='transform'){c.fillRect(0,155,430,435);c.fillRect(470,155,430,435);c.strokeStyle='#ffd85a';c.lineWidth=5;c.beginPath();c.moveTo(450,155);c.lineTo(450,590);c.stroke();c.fillStyle='#fff';c.font='bold 15px system-ui';c.fillText('← プレート',120,210);c.fillText('プレート →',650,210)}else if(p.type==='subduction'){c.beginPath();c.moveTo(0,155);c.lineTo(440,155);c.lineTo(760,590);c.lineTo(0,590);c.fill();c.fillStyle='#725747';c.beginPath();c.moveTo(440,155);c.lineTo(900,155);c.lineTo(900,590);c.lineTo(760,590);c.closePath();c.fill();c.strokeStyle='#ffd85a';c.lineWidth=5;c.beginPath();c.moveTo(440,155);c.lineTo(760,590);c.stroke()}else{c.fillRect(0,155,390,435);c.fillRect(510,155,390,435);c.fillStyle='#d55b42';c.beginPath();c.moveTo(390,590);c.lineTo(450,180);c.lineTo(510,590);c.closePath();c.fill();c.fillStyle='#fff';c.font='bold 15px system-ui';c.fillText('←',300,210);c.fillText('→',590,210)}for(const t of taps){c.strokeStyle=`rgba(255,216,90,${Math.max(.1,t.life)})`;c.lineWidth=3;c.beginPath();c.arc(t.x,t.y,t.r,0,Math.PI*2);c.stroke();c.fillStyle=`rgba(255,216,90,${Math.max(.04,t.life*.08)})`;c.beginPath();c.arc(t.x,t.y,Math.max(5,t.r*.45),0,Math.PI*2);c.fill()}const fx=p.type==='subduction'?560:450,fy=155+p.depth*3;const deform=Math.min(70,stress);c.strokeStyle='#ff9a79';c.lineWidth=3;for(let i=0;i<12;i++){const y=200+i*28;c.beginPath();c.moveTo(fx-120,y);c.quadraticCurveTo(fx,y+Math.sin(i)*deform*.3,fx+120,y);c.stroke()}if(event){c.fillStyle='#fff';c.beginPath();c.arc(fx,fy,10,0,Math.PI*2);c.fill();for(const w of waves){c.strokeStyle=w.type==='P'?'#7fd5ff':'#ff8f8f';c.lineWidth=4;c.beginPath();c.arc(fx,fy,w.r,0,Math.PI*2);c.stroke()}}const stationX=Math.min(850,fx+p.dist),stationY=140;c.fillStyle='#e7f1ff';c.fillRect(stationX-8,stationY-25,16,25);c.fillStyle='#fff';c.font='12px system-ui';c.fillText('観測点',stationX-25,stationY-32);c.fillStyle='#9fcdf5';c.fillText('橙の曲線：固着でたわむ岩盤　青=P波　赤=S波',35,560);const d=Math.hypot(p.dist,p.depth),sp=d/3.5-d/6,mag=event?event.mag:Math.max(0,Math.log10(Math.max(1,slip*p.depth))*1.7+2.2);$('stressM').textContent=stress.toFixed(0)+'%';$('slipM').textContent=slip.toFixed(1)+' m相対';$('magM').textContent=event?event.mag.toFixed(1):'—';$('spM').textContent=sp.toFixed(1)+'秒';$('stateText').textContent=p.type==='divergent'?'広がる境界では新しい地殻ができ、小規模な破壊が多い模型です。':event?'破壊が起きました。波面と地震計でP波とS波の到着差を追おう。':stress>70?'応力が高い状態ですが、正確な発生時刻はこの模型でも決められません。':'プレート運動は続いています。境界が固着している間、岩盤の変形が増えます。';$('explain').textContent='移動速度は応力蓄積速度、固着は閾値とすべり、深さと距離は観測される波の到着差を変えます。';drawGraph()}
+const cv=mainCv,c=cv.getContext('2d'),gv=graphCv,g=gv.getContext('2d'),$=id=>document.getElementById(id);let years=0,running=false,last=performance.now(),speed=1,stress=0,slip=0,event=null,waves=[],seis=[],jitter=0,taps=[];function reset(){years=0;stress=0;slip=0;event=null;waves=[];seis=[];jitter=0;taps=[];running=false;$('playPause').textContent='▶ 再生';draw()}window.resetSimulation=reset;function par(){return{type:$('type').value,v:+$('plateSpeed').value,lock:+$('locking').value/100,depth:+$('depth').value,dist:+$('distance').value}}function tapPoint(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*cv.width,y:(e.clientY-r.top)/r.height*cv.height}}function poke(x,y){const p=par(),faultX=p.type==='subduction'?560:450,nearFault=Math.abs(x-faultX)<140&&y>155;const boost=(nearFault?14:6)+(p.type==='divergent'?2:0);stress=Math.max(0,stress+boost);jitter+=nearFault?.45:.2;waves.push({r:0,v:nearFault?4.5:3.2,type:'P'});taps.push({x,y,r:14,life:1});if(taps.length>18)taps.shift();if(nearFault&&stress>((p.type==='divergent'?22:38)+62*p.lock)*.82)rupture()}function stepCore(dt){const p=par();years+=dt;const coupling=p.type==='divergent'?.18:.35+.65*p.lock,buildup=p.v*coupling*(p.type==='subduction'?.82:p.type==='transform'?.68:.16);stress=Math.max(0,stress+dt*buildup);const threshold=(p.type==='divergent'?22:38)+62*p.lock;if(!event&&stress>=threshold)rupture();if(event){event.age+=dt;for(const w of waves)w.r+=dt*w.v*7;if(event.age>18)event=null}jitter*=Math.exp(-dt*2.8);const amp=event?Math.max(0,1-event.age/18)*(slip*.06):0;if(event){const d=Math.hypot(p.dist,p.depth),tp=d/6,ts=d/3.5,age=event.age*5;if(Math.abs(age-tp)<2)jitter+=amp*.7;if(Math.abs(age-ts)<3)jitter+=amp*1.4}for(const t of taps)t.life-=dt*.9;taps=taps.filter(t=>t.life>0);seis.push({x:years,y:jitter+(r52Rand()-.5)*.03*Math.sqrt(Math.max(.02,dt))});if(seis.length>320)seis.shift()}function step(dt){const n=Math.max(1,Math.ceil(Math.abs(dt)/.05)),h=dt/n;for(let i=0;i<n;i++)stepCore(h)}function rupture(){const p=par();slip=stress*(.25+.45*p.lock)*(p.type==='subduction'?1.25:p.type==='divergent'?.15:1);const mag=Math.max(2.5,Math.log10(Math.max(1,slip*p.depth))*1.7+2.2);event={age:0,mag};waves=[{r:0,v:6,type:'P'},{r:0,v:3.5,type:'S'}];stress*=p.type==='divergent'?.75:.12}function draw(){const p=par();c.clearRect(0,0,900,590);c.fillStyle='#07111d';c.fillRect(0,0,900,590);c.fillStyle='#31556b';c.fillRect(0,0,900,155);c.fillStyle='#5b4a3b';if(p.type==='transform'){c.fillRect(0,155,430,435);c.fillRect(470,155,430,435);c.strokeStyle='#ffd85a';c.lineWidth=5;c.beginPath();c.moveTo(450,155);c.lineTo(450,590);c.stroke()}else if(p.type==='subduction'){c.beginPath();c.moveTo(0,155);c.lineTo(440,155);c.lineTo(760,590);c.lineTo(0,590);c.fill();c.fillStyle='#725747';c.beginPath();c.moveTo(440,155);c.lineTo(900,155);c.lineTo(900,590);c.lineTo(760,590);c.closePath();c.fill();c.strokeStyle='#ffd85a';c.lineWidth=5;c.beginPath();c.moveTo(440,155);c.lineTo(760,590);c.stroke()}else{c.fillRect(0,155,390,435);c.fillRect(510,155,390,435);c.fillStyle='#d55b42';c.beginPath();c.moveTo(390,590);c.lineTo(450,180);c.lineTo(510,590);c.closePath();c.fill();c.fillStyle='#fff';c.font='bold 15px system-ui';c.fillText('←',300,210);c.fillText('→',590,210)}for(const t of taps){c.strokeStyle=`rgba(255,216,90,${Math.max(.1,t.life)})`;c.lineWidth=3;c.beginPath();c.arc(t.x,t.y,t.r,0,Math.PI*2);c.stroke();c.fillStyle=`rgba(255,216,90,${Math.max(.04,t.life*.08)})`;c.beginPath();c.arc(t.x,t.y,Math.max(5,t.r*.45),0,Math.PI*2);c.fill()}const fx=p.type==='subduction'?560:450,fy=155+p.depth*3;const deform=Math.min(70,stress);c.strokeStyle='#ff9a79';c.lineWidth=3;for(let i=0;i<12;i++){const y=200+i*28;c.beginPath();c.moveTo(fx-120,y);c.quadraticCurveTo(fx,y+Math.sin(i)*deform*.3,fx+120,y);c.stroke()}if(event){c.fillStyle='#fff';c.beginPath();c.arc(fx,fy,10,0,Math.PI*2);c.fill();for(const w of waves){c.strokeStyle=w.type==='P'?'#7fd5ff':'#ff8f8f';c.lineWidth=4;c.beginPath();c.arc(fx,fy,w.r,0,Math.PI*2);c.stroke()}}const stationX=Math.min(850,fx+p.dist),stationY=140;c.fillStyle='#e7f1ff';c.fillRect(stationX-8,stationY-25,16,25);c.fillStyle='#fff';c.font='12px system-ui';c.fillText('観測点',stationX-25,stationY-32);c.fillStyle='#9fcdf5';c.fillText('橙の曲線：固着でたわむ岩盤　青=P波　赤=S波',35,560);const d=Math.hypot(p.dist,p.depth),sp=d/3.5-d/6,mag=event?event.mag:Math.max(0,Math.log10(Math.max(1,slip*p.depth))*1.7+2.2);$('stressM').textContent=stress.toFixed(0)+'%';$('slipM').textContent=slip.toFixed(1)+' m相対';$('magM').textContent=event?event.mag.toFixed(1):'—';$('spM').textContent=sp.toFixed(1)+'秒';$('stateText').textContent=p.type==='divergent'?'広がる境界では新しい地殻ができ、小規模な破壊が多い模型です。':event?'破壊が起きました。波面と地震計でP波とS波の到着差を追おう。':stress>70?'応力が高い状態ですが、正確な発生時刻はこの模型でも決められません。':'プレート運動は続いています。境界が固着している間、岩盤の変形が増えます。';$('explain').textContent='移動速度は応力蓄積速度、固着は閾値とすべり、深さと距離は観測される波の到着差を変えます。';drawGraph()}
 function drawGraph(){g.clearRect(0,0,900,300);g.fillStyle='#0a1421';g.fillRect(0,0,900,300);g.strokeStyle='#2d4159';g.beginPath();g.moveTo(35,150);g.lineTo(875,150);g.stroke();if(seis.length<2)return;const x0=seis[0].x,x1=seis.at(-1).x;g.strokeStyle='#ffd85a';g.lineWidth=2;g.beginPath();seis.forEach((h,i)=>{const x=35+(h.x-x0)/Math.max(.1,x1-x0)*840,y=150-h.y*90;i?g.lineTo(x,y):g.moveTo(x,y)});g.stroke();g.fillStyle='#9fcdf5';g.fillText('観測点の上下動（模式）',45,25)}function bind(id,out,fmt=v=>v){$(id).oninput=e=>{$(out).textContent=fmt(e.target.value);draw()};$(id).dispatchEvent(new Event('input'))}bind('plateSpeed','speedOut',v=>v+' cm/年');bind('locking','lockOut',v=>v+'%');bind('depth','depthOut',v=>v+' km');bind('distance','distOut',v=>v+' km');$('type').onchange=reset;$('playPause').onclick=()=>{running=!running;$('playPause').textContent=running?'⏸ 一時停止':'▶ 再生'};$('stepBtn').onclick=()=>{step(1);draw()};$('speedSel').onchange=e=>speed=+e.target.value;$('triggerBtn').onclick=()=>{stress+=8;draw()};$('scenarioBtn').onclick=()=>{const types=['transform','subduction','divergent'];$('type').value=types[Math.floor(r52Rand()*3)];['plateSpeed','locking','depth','distance'].forEach((id,i)=>{const ranges=[[2,10],[25,95],[5,110],[40,380]][i];$(id).value=Math.round(ranges[0]+r52Rand()*(ranges[1]-ranges[0]));$(id).dispatchEvent(new Event('input'))});reset()};function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(running)step(dt*speed);draw();requestAnimationFrame(loop)}reset();requestAnimationFrame(loop);window.getSnapshot=()=>({境界:$('type').selectedOptions[0].text,速度:$('speedOut').textContent,固着:$('lockOut').textContent,深さ:$('depthOut').textContent,距離:$('distOut').textContent,応力:$('stressM').textContent,すべり:$('slipM').textContent,規模:$('magM').textContent,SP時間:$('spM').textContent});
+</script><script id="direct-tectonics">
+(()=>{
+const status=$('interactionStatus');
+const baseDraw=draw;
+const baseDrawGraph=drawGraph;
+const baseRupture=rupture;
+let pointerId=null;
+let lastPoint=null;
+let lastPokeAt=0;
+let directWaveStarted=0;
+let directSeismogram=false;
+
+function thresholdFor(p){
+  return (p.type==='divergent'?22:38)+62*p.lock;
+}
+
+function sourcePoint(p){
+  const y=Math.min(525,155+p.depth*3);
+  if(p.type==='subduction')return{x:440+(y-155)*320/435,y};
+  return{x:450,y};
+}
+
+function distanceToBoundary(x,y,p){
+  if(y<145)return Infinity;
+  if(p.type!=='subduction')return Math.abs(x-450);
+  const lineX=440+(Math.max(155,Math.min(590,y))-155)*320/435;
+  return Math.abs(x-lineX);
+}
+
+function announce(message){
+  status.textContent=message;
+}
+
+function addDirectSeismogram(p){
+  const start=years;
+  const amplitude=Math.max(.7,slip*.035);
+  seis=[];
+  for(let i=0;i<=120;i++){
+    const t=i/12;
+    const pWave=Math.exp(-Math.pow((t-2.2)/.65,2))*Math.sin(t*18)*amplitude*.48;
+    const sWave=Math.exp(-Math.pow((t-5.4)/1.05,2))*Math.sin(t*13)*amplitude;
+    seis.push({x:start+t,y:pWave+sWave});
+  }
+  directSeismogram=true;
+}
+
+rupture=function(){
+  baseRupture();
+  directWaveStarted=performance.now();
+  addDirectSeismogram(par());
+  announce('⚡ 固着域が破壊！ 白い星が震源です。水色のP波が先、桃色のS波が後から黄色い観測点へ届きます。');
+};
+
+poke=function(x,y){
+  if(!Number.isFinite(x)||!Number.isFinite(y))return;
+  const p=par();
+  const px=Math.max(0,Math.min(cv.width,x));
+  const py=Math.max(0,Math.min(cv.height,y));
+  if(event){
+    taps.push({x:px,y:py,r:15,life:1});
+    if(taps.length>18)taps.shift();
+    announce('⚡ 地震が発生中。水色のP波が先、桃色のS波が後から黄色い観測点へ届く様子を追おう。');
+    return;
+  }
+  const near=distanceToBoundary(px,py,p)<125;
+  const boost=(near?14:5)+(p.type==='divergent'?2:0);
+  stress=Math.max(0,stress+boost);
+  jitter+=near?.45:.16;
+  taps.push({x:px,y:py,r:near?20:13,life:1});
+  if(taps.length>18)taps.shift();
+  const threshold=thresholdFor(p);
+  if(!event&&near&&stress>=threshold*.82){
+    rupture();
+    return;
+  }
+  const ratio=Math.min(100,Math.round(stress/threshold*100));
+  announce(near
+    ?`固着域を押しました。応力は破壊までの ${ratio}% 。赤いメーターと岩盤のたわみが増えました。`
+    :`岩盤が少し揺れました（破壊まで ${ratio}%）。黄色い固着域を押すと、もっと強く応力がたまります。`);
+};
+
+function drawArrow(x1,y1,x2,y2,label){
+  const angle=Math.atan2(y2-y1,x2-x1);
+  c.strokeStyle='#ffffff';
+  c.fillStyle='#ffffff';
+  c.lineWidth=5;
+  c.beginPath();
+  c.moveTo(x1,y1);
+  c.lineTo(x2,y2);
+  c.stroke();
+  c.beginPath();
+  c.moveTo(x2,y2);
+  c.lineTo(x2-16*Math.cos(angle-.55),y2-16*Math.sin(angle-.55));
+  c.lineTo(x2-16*Math.cos(angle+.55),y2-16*Math.sin(angle+.55));
+  c.closePath();
+  c.fill();
+  c.font='800 15px system-ui';
+  c.fillText(label,Math.min(x1,x2),Math.min(y1,y2)-10);
+}
+
+function drawLabel(text,x,y,color='#ffffff',background='rgba(4,12,21,.86)'){
+  c.font='800 15px system-ui';
+  const width=c.measureText(text).width+18;
+  c.fillStyle=background;
+  c.fillRect(x-6,y-19,width,27);
+  c.fillStyle=color;
+  c.fillText(text,x+3,y);
+}
+
+function drawStressMeter(p){
+  const threshold=thresholdFor(p);
+  const ratio=Math.max(0,Math.min(1,stress/threshold));
+  c.fillStyle='rgba(4,12,21,.9)';
+  c.fillRect(20,14,330,76);
+  c.fillStyle='#ffffff';
+  c.font='800 16px system-ui';
+  c.fillText(`応力：破壊まで ${Math.round(ratio*100)}%`,32,38);
+  c.fillStyle='#24364b';
+  c.fillRect(32,50,292,22);
+  c.fillStyle=ratio>.78?'#ff5d58':'#ff9a79';
+  c.fillRect(32,50,292*ratio,22);
+  c.strokeStyle='#ffffff';
+  c.lineWidth=2;
+  c.strokeRect(32,50,292,22);
+}
+
+function drawBoundaryExplanation(p){
+  const source=sourcePoint(p);
+  c.save();
+  if(p.type==='transform'){
+    drawLabel('プレートA',95,245);
+    drawLabel('プレートB',650,245);
+    drawArrow(280,385,280,270,'ずれる向き');
+    drawArrow(620,270,620,385,'ずれる向き');
+  }else if(p.type==='subduction'){
+    drawLabel('海のプレート',105,230);
+    drawLabel('陸のプレート',650,230);
+    drawArrow(150,275,360,275,'陸へ進む');
+    drawArrow(505,255,590,365,'下へ沈む');
+  }else{
+    drawLabel('プレートA',90,245);
+    drawLabel('プレートB',665,245);
+    drawArrow(365,290,185,290,'左右へ広がる');
+    drawArrow(535,290,715,290,'左右へ広がる');
+    drawLabel('マグマが上がる',378,500,'#fff4be','rgba(91,25,15,.88)');
+  }
+  c.strokeStyle='#ffd85a';
+  c.lineWidth=14;
+  c.setLineDash([16,9]);
+  c.beginPath();
+  if(p.type==='subduction'){
+    c.moveTo(source.x-48,source.y-65);
+    c.lineTo(source.x+48,source.y+65);
+  }else{
+    c.moveTo(450,Math.max(170,source.y-75));
+    c.lineTo(450,Math.min(565,source.y+75));
+  }
+  c.stroke();
+  c.setLineDash([]);
+  drawLabel('👆 固着域（ひっかかる所）',Math.max(18,source.x-135),Math.max(185,source.y-88),'#241c00','#ffd85a');
+  c.restore();
+}
+
+function drawStation(p){
+  const source=sourcePoint(p);
+  const x=Math.min(835,source.x+p.dist);
+  c.fillStyle='#ffd85a';
+  c.fillRect(x-15,105,30,34);
+  c.fillStyle='#181200';
+  c.beginPath();
+  c.moveTo(x-21,105);
+  c.lineTo(x,84);
+  c.lineTo(x+21,105);
+  c.closePath();
+  c.fill();
+  drawLabel('観測点：ゆれを記録',Math.max(615,x-105),74,'#241c00','#ffd85a');
+}
+
+function drawDirectWaves(p){
+  if(!directWaveStarted)return;
+  const elapsed=(performance.now()-directWaveStarted)/1000;
+  if(elapsed>5.8){
+    directWaveStarted=0;
+    return;
+  }
+  const source=sourcePoint(p);
+  const rings=[
+    {radius:elapsed*125,color:'#72ddff',label:'P波（速い）'},
+    {radius:elapsed*74,color:'#ff9fca',label:'S波（遅い）'}
+  ];
+  for(const ring of rings){
+    c.strokeStyle=ring.color;
+    c.lineWidth=8;
+    c.beginPath();
+    c.arc(source.x,source.y,ring.radius,0,Math.PI*2);
+    c.stroke();
+    if(ring.radius>45&&ring.radius<360)drawLabel(ring.label,source.x+ring.radius*.68,source.y-ring.radius*.68,ring.color);
+  }
+}
+
+function drawEpicenter(p){
+  if(!event&&!directWaveStarted)return;
+  const source=sourcePoint(p);
+  c.save();
+  c.translate(source.x,source.y);
+  c.fillStyle='#ffffff';
+  c.strokeStyle='#ff3b30';
+  c.lineWidth=4;
+  c.beginPath();
+  for(let i=0;i<10;i++){
+    const radius=i%2?8:20;
+    const angle=-Math.PI/2+i*Math.PI/5;
+    c.lineTo(Math.cos(angle)*radius,Math.sin(angle)*radius);
+  }
+  c.closePath();
+  c.fill();
+  c.stroke();
+  c.restore();
+  drawLabel('震源：破壊の始点',Math.max(15,source.x-86),Math.min(570,source.y+50),'#ffffff','#a51e22');
+}
+
+function drawClarity(){
+  const p=par();
+  drawStressMeter(p);
+  drawBoundaryExplanation(p);
+  drawDirectWaves(p);
+  drawEpicenter(p);
+  drawStation(p);
+  c.fillStyle='rgba(4,12,21,.91)';
+  c.fillRect(15,542,870,37);
+  c.font='800 14px system-ui';
+  c.fillStyle='#72ddff';
+  c.fillText('水色 P波＝先に届く',28,567);
+  c.fillStyle='#ff9fca';
+  c.fillText('桃色 S波＝あとに届き、大きくゆらす',225,567);
+  c.fillStyle='#ffd85a';
+  c.fillText('黄色＝触る固着域／観測点',570,567);
+}
+
+draw=function(){
+  baseDraw();
+  drawClarity();
+};
+
+drawGraph=function(){
+  baseDrawGraph();
+  if(!directSeismogram)return;
+  const marks=[
+    {x:35+840*.22,text:'P波 到着',color:'#72ddff'},
+    {x:35+840*.54,text:'S波 到着',color:'#ff9fca'}
+  ];
+  for(const mark of marks){
+    g.strokeStyle=mark.color;
+    g.lineWidth=2;
+    g.beginPath();
+    g.moveTo(mark.x,42);
+    g.lineTo(mark.x,265);
+    g.stroke();
+    g.fillStyle=mark.color;
+    g.font='800 15px system-ui';
+    g.fillText(mark.text,mark.x+7,55);
+  }
+};
+
+function interactAt(e){
+  const point=tapPoint(e);
+  poke(point.x,point.y);
+  draw();
+  lastPoint=point;
+  lastPokeAt=performance.now();
+}
+
+cv.addEventListener('pointerdown',e=>{
+  if(e.button!==undefined&&e.button!==0)return;
+  pointerId=e.pointerId;
+  try{cv.setPointerCapture(pointerId)}catch(_){}
+  e.preventDefault();
+  interactAt(e);
+});
+
+cv.addEventListener('pointermove',e=>{
+  if(pointerId!==e.pointerId||!lastPoint)return;
+  const point=tapPoint(e);
+  const moved=Math.hypot(point.x-lastPoint.x,point.y-lastPoint.y);
+  if(moved<22||performance.now()-lastPokeAt<70)return;
+  e.preventDefault();
+  interactAt(e);
+});
+
+function finishPointer(e){
+  if(pointerId!==e.pointerId)return;
+  try{cv.releasePointerCapture(pointerId)}catch(_){}
+  pointerId=null;
+  lastPoint=null;
+}
+
+cv.addEventListener('pointerup',finishPointer);
+cv.addEventListener('pointercancel',finishPointer);
+$('triggerBtn').onclick=()=>{
+  const source=sourcePoint(par());
+  poke(source.x,source.y);
+  draw();
+};
+$('type').addEventListener('change',()=>{
+  directWaveStarted=0;
+  directSeismogram=false;
+  announce('境界の型を変えました。白い矢印で動く向きを見て、黄色い固着域をタップしよう。');
+});
+const baseReset=window.resetSimulation;
+window.resetSimulation=()=>{
+  baseReset();
+  directWaveStarted=0;
+  directSeismogram=false;
+  announce('リセットしました。黄色い固着域をタップして応力をためよう。');
+};
+draw();
+})();
 </script><script>
 (()=>{const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];const guide=q('#guideBack'),tray=q('#trayBack'),zoomBack=q('#zoomBack');q('#guideBtn').addEventListener('click',()=>guide.classList.add('show'));q('#guideClose').addEventListener('click',()=>guide.classList.remove('show'));guide.addEventListener('click',e=>{if(e.target===guide)guide.classList.remove('show')});q('#trayOpen').addEventListener('click',()=>tray.classList.add('show'));q('#trayClose').addEventListener('click',()=>tray.classList.remove('show'));tray.addEventListener('click',e=>{if(e.target===tray)tray.classList.remove('show')});q('#resetTop').addEventListener('click',()=>window.resetSimulation&&window.resetSimulation());q('#speakBtn').addEventListener('click',()=>{if(!('speechSynthesis'in window))return; speechSynthesis.cancel();const t=new SpeechSynthesisUtterance(q('h1').innerText+'。'+q('[data-takeaway]').innerText);t.lang='ja-JP';speechSynthesis.speak(t)});
 const tourTargets=['[data-tour="stage"]','[data-tour="controls"]','[data-tour="metrics"]'],tourTexts=['まず主図を見ます。動いているものが、時間とともに何を運び、変えているかを追います。','次に条件を一つだけ変えます。再生・停止・一段送りで違いを確かめます。','最後に数値や第二ビューを見ます。見た目の変化を量の変化として説明します。'];let ti=0;function showTour(){qa('.tourGlow').forEach(e=>e.classList.remove('tourGlow'));const el=q(tourTargets[ti]);if(el){el.classList.add('tourGlow');el.scrollIntoView({behavior:'smooth',block:'center'})}q('#tourText').textContent=tourTexts[ti];q('#tourCount').textContent=(ti+1)+' / 3';q('#tourBox').classList.add('show')}q('#tourBtn').addEventListener('click',()=>{ti=0;showTour()});q('#tourPrev').addEventListener('click',()=>{ti=(ti+2)%3;showTour()});q('#tourNext').addEventListener('click',()=>{if(ti===2){stopTour()}else{ti++;showTour()}});function stopTour(){qa('.tourGlow').forEach(e=>e.classList.remove('tourGlow'));q('#tourBox').classList.remove('show')}q('#tourStop').addEventListener('click',stopTour);

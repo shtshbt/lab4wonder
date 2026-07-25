@@ -45,8 +45,48 @@ function record(){let A=0,mean=0,fitm=0;const p=par();pop.forEach(i=>{A+=i.g;mea
 function step(dt){ghosts.forEach(x=>x.life-=dt*.8);ghosts=ghosts.filter(x=>x.life>0);pop.forEach(i=>{i.age=Math.min(1,i.age+dt*.5);const tx=i.side?650:250;i.x+=(tx-i.x)*dt*.15+(r51Rand()-.5)*20*dt;i.y+=(300-i.y)*dt*.08+(r51Rand()-.5)*28*dt});if(dt>=.95)nextGen()}
 function genotypeColor(g){return g===0?'#f6dfa7':g===1?'#56d1e2':'#174d78'}
 function genotypeName(g){return g===0?'aa 明るい':g===1?'Aa 中間':'AA 暗い'}
-function drawPill(text,x,y,background,color='#fff'){c.font='bold 13px system-ui';const width=c.measureText(text).width+18;c.fillStyle=background;c.fillRect(x,y-19,width,25);c.fillStyle=color;c.fillText(text,x+9,y);return width}
-function drawIndividuals(items,side,y,showLoss=false){const sideItems=items.filter(item=>item.side===side),shown=showLoss?[...sideItems.filter(item=>!item.kept).slice(0,12),...sideItems.filter(item=>item.kept).slice(0,12)]:sideItems.slice(0,24),start=side?488:53;shown.forEach((item,index)=>{const x=start+(index%12)*29,yy=y+Math.floor(index/12)*31;c.fillStyle=genotypeColor(item.g);c.beginPath();c.arc(x,yy,10,0,Math.PI*2);c.fill();c.strokeStyle='#fff';c.lineWidth=1.5;c.stroke();if(showLoss&&!item.kept){c.strokeStyle='#ff5f61';c.lineWidth=4;c.beginPath();c.moveTo(x-8,yy-8);c.lineTo(x+8,yy+8);c.moveTo(x+8,yy-8);c.lineTo(x-8,yy+8);c.stroke()}});c.fillStyle='#dbe8f5';c.font='12px system-ui';c.fillText(`${sideItems.length}匹（代表${shown.length}匹を表示）`,side?488:53,y+59)}
+// Individuals are drawn as a generic winged insect silhouette. Only three
+// genotype colours exist, so each silhouette is rasterised once into an
+// offscreen canvas and blitted per individual to keep the frame rate.
+const INSECT_BOX=13,INSECT_SIZE=24,INSECT_EDGE='rgba(126,138,154,.55)';
+let insectSprites=null,insectSpriteScale=0,insectSpriteFailed=false;
+function shadeHex(hex,amount){const n=parseInt(hex.slice(1),16);if(!Number.isFinite(n))return hex;const mix=v=>Math.max(0,Math.min(255,Math.round(amount<0?v*(1+amount):v+(255-v)*amount)));return `rgb(${mix(n>>16&255)},${mix(n>>8&255)},${mix(n&255)})`}
+function insectForewing(x,s){x.beginPath();x.moveTo(0,-6);x.bezierCurveTo(s*5.4,-9.6,s*11.6,-8,s*12,-1.6);x.bezierCurveTo(s*12.2,3,s*7.2,5.2,s*1.6,2.4);x.closePath()}
+function insectHindwing(x,s){x.beginPath();x.moveTo(0,.5);x.bezierCurveTo(s*6,1.5,s*10.2,4.6,s*8,8.6);x.bezierCurveTo(s*6.2,11.4,s*2,11,s*.8,6.6);x.closePath()}
+function paintInsect(x,color){
+ // Wings carry the body colour so camouflage against the habitat reads at a glance.
+ const hind=shadeHex(color,-.22),body=shadeHex(color,-.45);
+ x.lineJoin='round';x.lineCap='round';x.strokeStyle=INSECT_EDGE;x.lineWidth=1.1;
+ for(const s of[-1,1]){insectHindwing(x,s);x.fillStyle=hind;x.fill();x.stroke()}
+ for(const s of[-1,1]){insectForewing(x,s);x.fillStyle=color;x.fill();x.stroke()}
+ x.strokeStyle=body;x.lineWidth=1.5;
+ for(const s of[-1,1]){x.beginPath();x.moveTo(s*.9,-9.2);x.quadraticCurveTo(s*3.8,-12.1,s*6.4,-12.2);x.stroke()}
+ x.fillStyle=body;x.beginPath();x.ellipse(0,.6,2.3,8.2,0,0,Math.PI*2);x.fill();x.strokeStyle=INSECT_EDGE;x.lineWidth=.9;x.stroke();
+ x.beginPath();x.arc(0,-8.2,2.7,0,Math.PI*2);x.fill();x.stroke()
+}
+function insectSpriteScaleNow(){const shown=cv.clientWidth||cv.width,ratio=(window.devicePixelRatio||1)*(shown/cv.width);return Math.min(4,Math.max(2,Math.round(ratio*2)/2))}
+function insectSprite(g){
+ if(insectSpriteFailed)return null;
+ if(!insectSprites){
+  try{
+   insectSpriteScale=insectSpriteScaleNow();
+   const span=Math.max(8,Math.ceil(INSECT_BOX*2*insectSpriteScale));
+   insectSprites=[0,1,2].map(k=>{const off=document.createElement('canvas');off.width=off.height=span;const x=off.getContext('2d');if(!x)throw new Error('offscreen 2d context unavailable');x.setTransform(insectSpriteScale,0,0,insectSpriteScale,span/2,span/2);paintInsect(x,genotypeColor(k));return off})
+  }catch(err){insectSprites=null;insectSpriteFailed=true;console.warn('insect sprite build failed, falling back to discs',err);return null}
+ }
+ return insectSprites[g]||null
+}
+function drawInsect(ctx,g,x,y,size=INSECT_SIZE){
+ const sprite=insectSprite(g);
+ if(sprite){ctx.drawImage(sprite,x-size/2,y-size/2,size,size);return}
+ ctx.fillStyle=genotypeColor(g);ctx.beginPath();ctx.arc(x,y,size*.42,0,Math.PI*2);ctx.fill();ctx.strokeStyle=INSECT_EDGE;ctx.lineWidth=1.4;ctx.stroke()
+}
+// Rebuild sprites only when the raster scale really changed. iOS Safari fires
+// resize on every address bar nudge, and dropping three canvases each time
+// would churn the GC for nothing.
+window.addEventListener('resize',()=>{if(insectSprites&&insectSpriteScaleNow()!==insectSpriteScale)insectSprites=null});
+function drawPill(text,x,y,background,color='#fff',genotype=null){c.font='bold 13px system-ui';const icon=genotype===null?0:21,width=c.measureText(text).width+18+icon;c.fillStyle=background;c.fillRect(x,y-19,width,25);if(genotype!==null)drawInsect(c,genotype,x+17,y-6.5,19);c.fillStyle=color;c.fillText(text,x+9+icon,y);return width}
+function drawIndividuals(items,side,y,showLoss=false){const sideItems=items.filter(item=>item.side===side),shown=showLoss?[...sideItems.filter(item=>!item.kept).slice(0,12),...sideItems.filter(item=>item.kept).slice(0,12)]:sideItems.slice(0,24),start=side?488:53;shown.forEach((item,index)=>{const x=start+(index%12)*29,yy=y+Math.floor(index/12)*31;drawInsect(c,item.g,x,yy);if(showLoss&&!item.kept){c.strokeStyle='#ff5f61';c.lineWidth=4;c.beginPath();c.moveTo(x-8,yy-8);c.lineTo(x+8,yy+8);c.moveTo(x+8,yy-8);c.lineTo(x-8,yy+8);c.stroke()}});c.fillStyle='#dbe8f5';c.font='12px system-ui';c.fillText(`${sideItems.length}匹（代表${shown.length}匹を表示）`,side?488:53,y+59)}
 function transitionReason(t,p){if(!t)return'まだ選択前です。左右の環境をタップして、隠れ場所の明暗を変えてみよう。';const delta=t.childMean-t.parentMean,word=Math.abs(delta)<1?'ほぼ同じ':delta>0?'暗い特徴が増えた':'明るい特徴が増えた';const survivorRate=Math.round(t.survivors.length/t.parents.length*100);return`親${t.parents.length}匹 → 生き残り${t.survivors.length}匹（${survivorRate}%）→ 子${t.children.length}匹。${word}（平均形質 ${t.parentMean.toFixed(1)} → ${t.childMean.toFixed(1)}）。背景に近い体色ほど捕食者に見つかりにくかった。`}
 function draw(){
  const p=par(),t=lastTransition;
@@ -58,7 +98,7 @@ function draw(){
  c.fillStyle='#06121de8';c.fillRect(20,8,860,70);
  c.fillStyle='#fff';c.font='bold 14px system-ui';c.fillText(`左の隠れ場所：${p.lo<50?'明るい':'暗い'}（合う形質 ${p.lo}）`,32,30);c.fillText(`右の隠れ場所：${p.ro<50?'明るい':'暗い'}（合う形質 ${p.ro}）`,487,30);
  c.font='12px system-ui';c.fillText('👆 左右どちらかをタップ：明るい ↔ 暗いを切替え、すぐ1世代進める',180,58);
- drawPill('aa＝明るい体色',34,104,'#5a4829');drawPill('Aa＝中間色',170,104,'#176273');drawPill('AA＝暗い体色',286,104,'#102f4b');
+ let legendX=34;legendX+=drawPill('aa＝明るい体色',legendX,104,'#5a4829',undefined,0)+8;legendX+=drawPill('Aa＝中間色',legendX,104,'#176273',undefined,1)+8;drawPill('AA＝暗い体色',legendX,104,'#102f4b',undefined,2);
  drawPill(`選択要因：捕食者（強さ ${Math.round(p.sel*100)}%）`,487,104,'#752d37');
  const parents=t?t.parents:pop.map(item=>({...item,kept:true})),survivors=t?t.survivors:[],children=t?t.children:[];
  c.fillStyle='#07111dcc';c.fillRect(28,120,844,111);c.fillRect(28,247,844,111);c.fillRect(28,374,844,111);
@@ -127,7 +167,7 @@ let zoom=false;q('#zoomToggle').addEventListener('click',()=>{zoom=!zoom;q('#zoo
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
 const ready=()=>{
  const title=(document.querySelector('h1')?.textContent||document.title||'このアプリ').trim();
- const ref=(document.referrer||'').split('/').pop(); const home=ref==='kids-index.html'?'kids-index.html':'index.html';
+ const ref=(document.referrer||'').split('/').pop(); const LIST_PAGES=['kids-index.html','explore.html']; let savedList=''; try{savedList=localStorage.getItem('lab4wonder_list')||'';}catch(err){} const home=LIST_PAGES.indexOf(ref)>=0?ref:(LIST_PAGES.indexOf(savedList)>=0?savedList:'index.html'); const kidsHome=home==='kids-index.html'; const homeText=kidsHome?'← いちらん':'← 一覧'; const homeLabel=kidsHome?'いちらんに もどる':'一覧へ戻る'; const otherHome=kidsHome?'explore.html':'kids-index.html'; const otherText=kidsHome?'おとな一覧':'こども一覧'; const otherLabel=kidsHome?'大人向け一覧を開く':'子ども向け一覧を開く';
  let first='まず一つだけ条件を変え、画面の変化を観察しよう。';
  const cleanText=(txt)=>String(txt||'').replace(/\s+/g,' ').trim();
  const pickFirst=()=>{
@@ -153,7 +193,7 @@ const ready=()=>{
  };
  first=pickFirst();
  const bar=document.createElement('nav');bar.id='r59-globalbar';bar.setAttribute('aria-label','共通ナビゲーション');
- bar.innerHTML=`<a class="r59-home" href="${home}" aria-label="一覧へ戻る">← 一覧</a><a href="kids-index.html" aria-label="子ども向け一覧を開く">こども一覧</a><span class="r63-package" aria-label="配布パッケージ r70">配布 r70</span><button type="button" id="r66-global-guide" aria-label="任意のミッションを開く">🔎 ミッション</button>`;
+ bar.innerHTML=`<a class="r59-home" href="${home}" aria-label="${homeLabel}">${homeText}</a><a href="${otherHome}" aria-label="${otherLabel}">${otherText}</a><span class="r63-package" aria-label="配布パッケージ r70">配布 r70</span><button type="button" id="r66-global-guide" aria-label="任意のミッションを開く">🔎 ミッション</button>`;
  document.body.insertBefore(bar,document.body.firstChild);
  bar.querySelector('#r66-global-guide').onclick=()=>window.dispatchEvent(new CustomEvent('r66-open-coach'));
  const labelFrom=(el)=>{let x=el.getAttribute('aria-label')||el.title||el.placeholder||'';if(x)return x.trim();const id=el.id;if(id){const lab=document.querySelector(`label[for="${CSS.escape(id)}"]`);if(lab)x=lab.textContent||'';}if(!x){const p=el.closest('label,.control,.row,.field,.setting');if(p)x=(p.querySelector('span,b,strong,label')?.textContent||'').trim();}if(!x&&el.tagName==='BUTTON')x=(el.textContent||'').trim();return x||({range:'値を調整',checkbox:'切り替え',number:'数値入力'}[el.type]||'操作');};

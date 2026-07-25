@@ -56,6 +56,20 @@
 | 持続可能な釣り | 主画面の親魚・幼魚を直接釣る／逃がす。保護区も画面上に置き、釣果と次世代見通しを即時表示する |
 | 感染拡大と制御 | 主画面の人を検査・隔離・ワクチンで直接介入し、早い／遅い介入と感染経路の変化を即時表示する |
 
+## v1.4.0 直接操作の横断改修
+
+基準監査で「再生を眺めるだけ」になっていた35本を再確認し、主Canvas上のタップ／ドラッグを実モデルへ接続した。操作説明はCanvas直下へ常時表示し、操作後は変化した量または起きた現象を同じ場所へ返す。既存の再生、リセット、詳細パラメータは残している。
+
+| 分野 | 対象アプリ | 主画面から変えられる実状態 |
+|---|---|---|
+| パターン・地形 | `reaction-diffusion.html`、`ising.html`、`game-of-life.html`、`particle-life.html`、`terrain-gen.html` | 反応物、スピン、生死セル、粒子、標高 |
+| 生物・地球 | `circulation.html`、`dna-protein.html`、`photosynthesis-factory.html`、`volcano.html` | 血球の酸素量と経路、塩基配列、光・水・気孔、マグマ・圧力・火口 |
+| 物理・物質 | `gravity.html`、`fluid.html`、`water-states.html`、`electromagnet-lab.html`、`heat-transfer.html`、`fault-stick-slip.html`、`capillary-porous.html`、`vortex-street.html` | 天体と初速度、流体粒子、熱、磁性体／回転、温度、断層応力、濡れ前線、渦列 |
+| 数学・光学 | `complex-plane.html`、`derivative-lab.html`、`integral-lab.html`、`vector-dot-product.html`、`matrix-transform.html`、`image-formation.html`、`optics-lab.html`、`vision-lab.html`、`moon-phases.html` | 複素数、微分点、積分区間、ベクトル、基底、物体と像、スクリーン、視距離、月齢 |
+| 軌道・運動・飛行 | `eclipse-lab.html`、`seasons-axis.html`、`rotation-torque.html`、`momentum-collision.html`、`newton-cart.html`、`projectile-gravity.html`、`kite-lab.html`、`flight.html`、`balloon.html` | 月と影、公転日、力点、台車、発射ベクトル、たこ、飛行機、気球 |
+
+完成判定は、各ページで操作前後の実状態が異なること、画面内の結果表示が更新されること、JavaScript例外がないこと、iPad相当幅で横方向へはみ出さないこととする。
+
 ## 全183本の基準値
 
 `再生差`、`タップ差`、`ドラッグ差`は変化ピクセル率。これは個別改修前の基準値であり、v1.1.0完成判定には個別改修後の再監査を用いる。

@@ -32,6 +32,7 @@ h1{font-size:clamp(20px,4.8vw,30px);line-height:1.35;margin:0}
 #forwardBtn{background:#ffd75c;color:#231b00;border-color:#cba930;font-size:20px}
 .secondary-controls{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:8px 0}
 .secondary-controls button,.secondary-controls select{width:100%;font-size:12px;padding:7px 5px}
+.button-panel{margin:9px 0;border:1px solid #2f4c66;border-radius:12px;background:#0e1d2c;padding:0 9px}.button-panel summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:#bfe2ff;font-size:12px;font-weight:900}.button-panel[open]{padding-bottom:9px}.button-panel:not([open]) .controls,.button-panel:not([open]) .secondary-controls{display:none}
 .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:9px 0}
 .metric{padding:8px 9px;border:1px solid #304d68;border-radius:12px;background:#0f2030;min-width:0}
 .metric b{display:block;color:#9fcff3;font-size:10px}.metric strong{display:block;margin-top:2px;color:#ffd75c;font:17px/1.3 ui-monospace,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -75,22 +76,25 @@ h1{font-size:clamp(20px,4.8vw,30px);line-height:1.35;margin:0}
     <div class="back-guide" id="backPassage" aria-hidden="true">↓ もどる</div>
   </section>
 
-  <div class="controls" aria-label="移動ボタン">
-    <button class="move" id="leftBtn" type="button" aria-label="左を向く">↶ 左</button>
-    <button class="move" id="forwardBtn" type="button" aria-label="前へ一歩進む">↑ 前へ</button>
-    <button class="move" id="rightBtn" type="button" aria-label="右を向く">右 ↷</button>
-  </div>
-  <div class="secondary-controls">
-    <button id="backBtn" type="button">↓ もどる</button>
-    <button id="footBtn" type="button">👣 足あと</button>
-    <button id="mapBtn" type="button" aria-pressed="true">🗺 地図を隠す</button>
-    <select id="sizeSelect" aria-label="迷路の大きさ">
-      <option value="6">やさしい</option>
-      <option value="8" selected>ふつう</option>
-      <option value="10">むずかしい</option>
-    </select>
-    <button id="newBtn" type="button">🎲 新しい迷路</button>
-  </div>
+  <details class="button-panel">
+    <summary>ボタン操作・迷路設定を開く</summary>
+    <div class="controls" aria-label="移動ボタン">
+      <button class="move" id="leftBtn" type="button" aria-label="左を向く">↶ 左</button>
+      <button class="move" id="forwardBtn" type="button" aria-label="前へ一歩進む">↑ 前へ</button>
+      <button class="move" id="rightBtn" type="button" aria-label="右を向く">右 ↷</button>
+    </div>
+    <div class="secondary-controls">
+      <button id="backBtn" type="button">↓ もどる</button>
+      <button id="footBtn" type="button">👣 足あと</button>
+      <button id="mapBtn" type="button" aria-pressed="true">🗺 地図を隠す</button>
+      <select id="sizeSelect" aria-label="迷路の大きさ">
+        <option value="6">やさしい</option>
+        <option value="8" selected>ふつう</option>
+        <option value="10">むずかしい</option>
+      </select>
+      <button id="newBtn" type="button">🎲 新しい迷路</button>
+    </div>
+  </details>
 
   <section class="metrics" aria-label="探索の記録">
     <div class="metric"><b>歩いた数</b><strong id="stepMetric">0 歩</strong></div>

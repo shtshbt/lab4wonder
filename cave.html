@@ -123,6 +123,12 @@ function drawCaveFauna(){
 }
 function draw(){
   const p=par(),acid=(.2+.8*p.co2)*(p.rain+.5*acidPulse),flow=p.rain*(.25+.75*Math.min(1,p.crack+directCrack*.35)),dissolve=acid*flow*(1-.35*p.hard)*.00016,deposit=p.hard*(.25+.75*p.vent)*flow*(volume>.25?1:.2)*.00007;
+  c.setTransform(1,0,0,1,0,0);
+  c.globalAlpha=1;
+  c.globalCompositeOperation='source-over';
+  c.shadowBlur=0;
+  c.textAlign='start';
+  c.textBaseline='alphabetic';
   c.clearRect(0,0,900,590);
 
   const sky=c.createLinearGradient(0,0,0,92);

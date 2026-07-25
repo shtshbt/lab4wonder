@@ -16,7 +16,7 @@ a[href="index.html"],a[href="kids-index.html"]{display:inline-flex;align-items:c
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
 </style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
 </head><body data-first="日射だけを変え、植物量から捕食者までの遅れを予想しよう。">
-<header class="hdr"><div><span class="badge">r31・生物・生態・動的探究版</span><h1>食物網・エネルギー流・物質循環ラボ</h1><div class="sub">生産者、草食動物、捕食者、分解者を通るエネルギーの一方向流と、栄養塩の循環を同時に追う。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetTop">↺ リセット</button></div></header>
+<header class="hdr"><div><span class="badge">生物・生態</span><h1>食物網・エネルギー流・物質循環ラボ</h1><div class="sub">生産者、草食動物、捕食者、分解者を通るエネルギーの一方向流と、栄養塩の循環を同時に追う。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetTop">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>生産者、草食動物、捕食者、分解者を通るエネルギーの一方向流と、栄養塩の循環を同時に追う。</p></div><div><b>どこを見る？</b><p>個体群、捕食、遺骸、分解、栄養塩の戻り、時間差をもつ増減曲線。</p></div><div><b>何を変える？</b><p>日射、栄養塩、段階間効率、捕食圧、分解速度、収穫。</p></div><div><b>持ち帰る一文</b><p data-takeaway>エネルギーは各栄養段階で減りながら流れるが、物質は分解を通して生産者へ戻る。</p></div></section>
 
 <section class="toolbar" data-tour="controls"><button id="playPause" class="primary">▶ 再生</button><button id="stepBtn">1日</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1">×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="disturbBtn">干ばつを起こす</button><button id="scenarioBtn">別の生態系</button></section>
@@ -39,7 +39,7 @@ function step(dt){const p=par();day+=dt;drought=Math.max(0,drought-dt);const wat
 energySpawn+=production*1.5;while(energySpawn>=1&&energyPackets.length<90){energyPackets.push({stage:0,t:0,x:energyRoute[0].x,y:energyRoute[0].y});energySpawn--}for(let i=0;i<Math.ceil(recycled*.6);i++)nutPackets.push({x:450+r46rand()*300,y:520});energyPackets.forEach(q=>{if(!Number.isFinite(q.stage)){q.stage=0;q.t=0}q.t+=dt*.72;const a=energyRoute[q.stage],b=energyRoute[q.stage+1],u=Math.min(1,q.t),arc=Math.sin(u*Math.PI)*34;q.x=a.x+(b.x-a.x)*u;q.y=a.y+(b.y-a.y)*u-arc;if(q.t>=1){if(q.stage<2&&r46rand()<Math.max(.28,p.eff*2.8)){q.stage++;q.t=0}else{heatPackets.push({x:q.x,y:q.y,life:1});q.done=true}}});energyPackets=energyPackets.filter(q=>!q.done);heatPackets.forEach(q=>{q.y-=dt*45;q.x+=Math.sin(day*2+q.y*.04)*dt*12;q.life-=dt*.42});heatPackets=heatPackets.filter(q=>q.life>0).slice(-80);nutPackets.forEach(q=>{q.y-=dt*45;q.x+=Math.sin(day+q.y*.03)*dt*12});nutPackets=nutPackets.filter(q=>q.y>330);animals.forEach(a=>{const mult=a.kind==='H'?(P>10?1:0.25):(H>3?1:0.2);a.x+=a.vx*dt*mult;a.y+=a.vy*dt;if(r46rand()<.02*dt*20){a.vx=(r46rand()-.5)*32;a.vy=(r46rand()-.5)*18}if(a.x<90||a.x>820)a.vx*=-1;if(a.y<300||a.y>500)a.vy*=-1});
 if(!hist.length||day-hist.at(-1).t>.3){hist.push({t:day,P,H,R,D,N});if(hist.length>280)hist.shift()}}
 function draw(){const p=par();c.clearRect(0,0,900,590);c.fillStyle=drought?'#5d4a2b':'#16334b';c.fillRect(0,0,900,260);c.fillStyle=drought?'#8a6b39':'#365d35';c.fillRect(0,260,900,330);c.fillStyle='#ffd85a';c.beginPath();c.arc(85,75,35,0,6.28);c.fill();if(drought){c.fillStyle='#d7b06a';c.font='bold 16px system-ui';c.fillText('干ばつ中',145,80)}// plants
-const plants=Math.min(55,Math.round(P*.55));for(let i=0;i<plants;i++){const x=30+(i*67)%840,y=505-(i%3)*12;c.strokeStyle='#234d25';c.lineWidth=3;c.beginPath();c.moveTo(x,y);c.lineTo(x,y-35-Math.sin(i)*8);c.stroke();c.fillStyle='#62b85a';c.beginPath();c.ellipse(x-8,y-28,9,5,-.4,0,6.28);c.ellipse(x+8,y-40,9,5,.4,0,6.28);c.fill()}animals.forEach((a,i)=>{if(a.kind==='H'&&i>Math.round(H*.7)+3)return;if(a.kind==='R'&&i-15>Math.round(R)+2)return;c.fillStyle=a.kind==='H'?'#d9c59a':'#e27b63';c.beginPath();c.ellipse(a.x,a.y,a.kind==='H'?12:15,a.kind==='H'?8:9,0,0,6.28);c.fill();c.fillStyle='#fff';c.beginPath();c.arc(a.x+7,a.y-3,2,0,6.28);c.fill()});energyPackets.forEach(q=>{c.fillStyle='#ffd85a';c.beginPath();c.arc(q.x,q.y,5,0,6.28);c.fill()});nutPackets.forEach(q=>{c.fillStyle='#7dd7ff';c.fillRect(q.x-4,q.y-4,8,8)});c.fillStyle='#6e4931';for(let i=0;i<Math.min(28,detritus);i++)c.fillRect(390+(i%14)*18,530-Math.floor(i/14)*12,10,7);c.fillStyle='#fff';c.font='bold 17px system-ui';c.fillText('太陽 → 生産者 → 草食動物 → 捕食者',28,32);c.fillStyle='#9fcdf5';c.font='12px system-ui';c.fillText('黄：光から食べ物へ渡るエネルギー　橙：呼吸で出る熱　青：土へ戻る栄養塩',28,565);drawEnergyGuide();
+const plants=Math.min(55,Math.round(P*.55));for(let i=0;i<plants;i++){const x=30+(i*67)%840,y=505-(i%3)*12;c.strokeStyle='#234d25';c.lineWidth=3;c.beginPath();c.moveTo(x,y);c.lineTo(x,y-35-Math.sin(i)*8);c.stroke();c.fillStyle='#62b85a';c.beginPath();c.ellipse(x-8,y-28,9,5,-.4,0,6.28);c.ellipse(x+8,y-40,9,5,.4,0,6.28);c.fill()}animals.forEach((a,i)=>{if(window.foodWebInteraction)return;if(a.kind==='H'&&i>Math.round(H*.7)+3)return;if(a.kind==='R'&&i-15>Math.round(R)+2)return;c.fillStyle=a.kind==='H'?'#d9c59a':'#e27b63';c.beginPath();c.ellipse(a.x,a.y,a.kind==='H'?12:15,a.kind==='H'?8:9,0,0,6.28);c.fill();c.fillStyle='#fff';c.beginPath();c.arc(a.x+7,a.y-3,2,0,6.28);c.fill()});energyPackets.forEach(q=>{c.fillStyle='#ffd85a';c.beginPath();c.arc(q.x,q.y,5,0,6.28);c.fill()});nutPackets.forEach(q=>{c.fillStyle='#7dd7ff';c.fillRect(q.x-4,q.y-4,8,8)});c.fillStyle='#6e4931';for(let i=0;i<Math.min(28,detritus);i++)c.fillRect(390+(i%14)*18,530-Math.floor(i/14)*12,10,7);c.fillStyle='#fff';c.font='bold 17px system-ui';c.fillText('太陽 → 生産者 → 草食動物 → 捕食者',28,32);c.fillStyle='#9fcdf5';c.font='12px system-ui';c.fillText('黄：光から食べ物へ渡るエネルギー　橙：呼吸で出る熱　青：土へ戻る栄養塩',28,565);drawEnergyGuide();
 $('plantM').textContent=P.toFixed(1);$('herbM').textContent=H.toFixed(1);$('predM').textContent=R.toFixed(1);$('nutM').textContent=N.toFixed(0)+'%';let msg='個体群は増減に時間差があり、捕食者は餌の変化より遅れて反応します。';if(P<8)msg='生産者が不足しています。日射・栄養塩を増やすか、草食・収穫圧を下げよう。';else if(H<1&&R>1)msg='草食動物がほぼ消え、捕食者も遅れて減少する見込みです。';else if(N<10)msg='土の利用可能栄養塩が不足しています。分解速度か外部供給を上げよう。';$('stateText').textContent=msg;$('explain').textContent='日射と栄養塩は植物生産、効率は上位段階へ渡る量、捕食圧は草食・捕食者の振動、分解は物質循環、収穫は系外への持ち出しを変えます。';drawGraph()}
 function drawEnergyGuide(){const p=par(),pct=[100,Math.round(p.eff*100),Math.max(1,Math.round(p.eff*p.eff*100))];c.save();c.lineCap='round';for(let i=0;i<3;i++){const a=energyRoute[i],b=energyRoute[i+1];c.strokeStyle='rgba(255,216,90,.55)';c.lineWidth=Math.max(2,8-i*2);c.beginPath();c.moveTo(a.x,a.y);c.quadraticCurveTo((a.x+b.x)/2,(a.y+b.y)/2-34,b.x,b.y);c.stroke();const angle=Math.atan2(b.y-a.y,b.x-a.x);c.fillStyle='#ffd85a';c.beginPath();c.moveTo(b.x,b.y);c.lineTo(b.x-Math.cos(angle-.5)*16,b.y-Math.sin(angle-.5)*16);c.lineTo(b.x-Math.cos(angle+.5)*16,b.y-Math.sin(angle+.5)*16);c.closePath();c.fill()}energyRoute.slice(1).forEach((q,i)=>{c.fillStyle='rgba(7,17,29,.9)';c.beginPath();c.roundRect(q.x-55,q.y-58,110,34,9);c.fill();c.fillStyle='#fff';c.font='bold 13px system-ui';c.textAlign='center';c.fillText(`${q.label}：${pct[i]}%`,q.x,q.y-36)});c.fillStyle='rgba(7,17,29,.92)';c.beginPath();c.roundRect(215,48,445,48,12);c.fill();c.fillStyle='#fff4b0';c.font='bold 14px system-ui';c.fillText('黄色い粒 = 太陽の光を植物が糖にたくわえたエネルギー',438,68);c.fillStyle='#ffd3a0';c.font='12px system-ui';c.fillText('食べられると次へ進み、進まなかった分は動く・呼吸する熱になる',438,87);heatPackets.forEach(q=>{c.globalAlpha=Math.max(0,q.life);c.fillStyle='#ff9c54';c.beginPath();c.arc(q.x,q.y,4,0,Math.PI*2);c.fill()});c.globalAlpha=1;c.fillStyle='#ffb06a';c.textAlign='left';c.font='bold 12px system-ui';c.fillText('↑ 熱として空気へ',685,265);c.restore()}
 function drawGraph(){g.clearRect(0,0,900,340);g.fillStyle='#09131f';g.fillRect(0,0,900,340);g.strokeStyle='#294158';for(let y=45;y<315;y+=55){g.beginPath();g.moveTo(40,y);g.lineTo(570,y);g.stroke()}if(hist.length>1){const t0=hist[0].t,t1=hist.at(-1).t,xx=v=>40+(v-t0)/Math.max(.1,t1-t0)*520;function line(k,max,col){g.strokeStyle=col;g.lineWidth=3;g.beginPath();hist.forEach((h,i)=>{const x=xx(h.t),y=300-Math.min(1,h[k]/max)*235;i?g.lineTo(x,y):g.moveTo(x,y)});g.stroke()}line('P',100,'#6ed36f');line('H',45,'#e6cf9a');line('R',18,'#ed7d68');line('N',100,'#6fcfff')}g.fillStyle='#6ed36f';g.fillText('植物',44,22);g.fillStyle='#e6cf9a';g.fillText('草食',90,22);g.fillStyle='#ed7d68';g.fillText('捕食',135,22);g.fillStyle='#6fcfff';g.fillText('栄養塩',180,22);const p=par();const e0=Math.max(1,P*10),e1=e0*p.eff,e2=e1*p.eff;[['生産者',e0,'#6ed36f'],['草食動物',e1,'#e6cf9a'],['捕食者',e2,'#ed7d68']].forEach((b,i)=>{const w=260*Math.sqrt(b[1]/e0),x=720-w/2,y=235-i*65;g.fillStyle=b[2];g.fillRect(x,y,w,45);g.fillStyle='#fff';g.fillText(`${b[0]} ${b[1].toFixed(1)}`,610,y+27)})}
@@ -209,18 +209,40 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
-</script><script id="biology-interaction-v1">
+</script><script id="biology-interaction-v2">
 (()=>{
   const canvas=document.getElementById('mainCv');
-  if(!canvas)return;
+  const stage=canvas?.closest('.stage');
+  if(!canvas||!stage)return;
   const style=document.createElement('style');
-  style.textContent='.bio-tools{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}.bio-tools button{flex:1 1 125px}.bio-tools button.on{background:#ffd85a;color:#201900}.bio-mission{padding:9px 11px;border:1px solid #ffd85a77;border-radius:12px;background:#142237;font-size:12px;line-height:1.65}.bio-key{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}.bio-key span{padding:3px 7px;border-radius:999px;background:#091522}';
+  style.textContent='.bio-direct{margin:0 0 9px;padding:9px;border:1px solid #4d6887;border-radius:14px;background:#101e30}.bio-tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.bio-tools button{min-width:0;padding:8px 5px}.bio-tools button.on{background:#ffd85a;color:#201900;outline:3px solid #fff3aa;outline-offset:1px}.bio-status{margin-top:7px;padding:7px 9px;border-radius:10px;background:#091522;color:#eaf5ff;font-size:12px;line-height:1.6}.bio-status b{color:#ffd85a}.bio-mission{margin-top:7px;font-size:12px;line-height:1.65;color:#cbd9e9}.bio-key{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.bio-key span{padding:3px 7px;border-radius:999px;background:#091522}.stage.bio-active{box-shadow:0 0 0 3px #ffd85a77}.stage.bio-active canvas{cursor:crosshair}@media(max-width:560px){.bio-tools{grid-template-columns:1fr 1fr}.bio-tools button{font-size:12px}}';
   document.head.append(style);
-  const panel=document.createElement('div');
-  panel.innerHTML='<div class="bio-tools" role="toolbar" aria-label="生態系へ置くもの"><button data-kind="plant" class="on">🌱 植物を育てる</button><button data-kind="herb">🐇 草食動物を放す</button><button data-kind="pred">🦊 捕食者を放す</button></div><div class="bio-mission"><b>生態系を作ろう：</b>置くものを選び、草原の好きな場所をタップ。黄色い粒を太陽から植物、ウサギ、キツネへ追い、途中で橙の熱になる粒も見つけよう。<div class="bio-key"><span>緑＝植物（生産者）</span><span>白＝植物を食べるウサギ</span><span>橙＝ウサギを追うキツネ</span><span>黄＝光から食べ物へ渡るエネルギー</span><span>橙の粒＝呼吸で空気へ出る熱</span></div></div>';
-  canvas.closest('.stage').insertAdjacentElement('afterend',panel);
-  let tool='plant';
-  panel.querySelectorAll('[data-kind]').forEach(button=>button.onclick=()=>{tool=button.dataset.kind;panel.querySelectorAll('[data-kind]').forEach(b=>b.classList.toggle('on',b===button))});
+  const panel=document.createElement('section');
+  panel.className='bio-direct';
+  panel.setAttribute('aria-label','画面タップで生態系へ介入');
+  panel.innerHTML='<div class="bio-tools" role="toolbar" aria-label="画面タップで行うこと"><button type="button" data-kind="sun" class="on" aria-pressed="true">☀️ 光をとどける</button><button type="button" data-kind="plant" aria-pressed="false">🌱 植物を植える</button><button type="button" data-kind="herb" aria-pressed="false">🐇 ウサギを放す</button><button type="button" data-kind="pred" aria-pressed="false">🦊 キツネを放す</button></div><div id="bioStatus" class="bio-status" role="status" aria-live="polite"><b>いま：☀️ 光をとどける</b> — 下の生態系をタップすると、黄色いエネルギーが太陽から植物へ流れます。</div><div class="bio-mission"><b>① 上で選ぶ → ② 下の草原をタップ。</b> 数の変化は右下の計器にもすぐ表れます。自動再生中も何度でも介入できます。<div class="bio-key"><span>黄＝使えるエネルギー</span><span>橙＝使われて空気へ出る熱</span><span>青＝土へ戻る栄養塩</span></div></div>';
+  stage.insertAdjacentElement('beforebegin',panel);
+  stage.classList.add('bio-active');
+  const status=panel.querySelector('#bioStatus');
+  const toolLabels={
+    sun:['☀️ 光をとどける','下の生態系をタップすると、黄色いエネルギーが太陽から植物へ流れます。'],
+    plant:['🌱 植物を植える','草原のタップした場所に植物が芽生え、生産者が増えます。'],
+    herb:['🐇 ウサギを放す','草原のタップした場所に、植物を食べるウサギが現れます。'],
+    pred:['🦊 キツネを放す','草原のタップした場所に、ウサギを追うキツネが現れます。']
+  };
+  let tool='sun';
+  const planted=[],marks=[];
+  function selectTool(kind){
+    if(!toolLabels[kind])return;
+    tool=kind;
+    panel.querySelectorAll('[data-kind]').forEach(button=>{
+      const selected=button.dataset.kind===tool;
+      button.classList.toggle('on',selected);
+      button.setAttribute('aria-pressed',String(selected));
+    });
+    status.innerHTML=`<b>いま：${toolLabels[tool][0]}</b> — ${toolLabels[tool][1]}`;
+  }
+  panel.querySelectorAll('[data-kind]').forEach(button=>button.addEventListener('click',()=>selectTool(button.dataset.kind)));
   const baseDraw=draw;
   function rabbit(a){
     c.save();c.translate(a.x,a.y);
@@ -236,37 +258,78 @@ show(0);
     c.fillStyle='#ef7f48';c.strokeStyle='#5b2e1d';c.lineWidth=1.7;
     c.beginPath();c.ellipse(-2,2,17,9,0,0,Math.PI*2);c.fill();c.stroke();
     c.beginPath();c.arc(13,-2,9,0,Math.PI*2);c.fill();c.stroke();
-    c.beginPath();c.moveTo(7,-8);c.lineTo(9,-18);c.lineTo(15,-10);c.moveTo(15,-10);c.lineTo(20,-17);c.lineTo(21,-6);c.fill();c.stroke();
+    c.beginPath();c.moveTo(7,-8);c.lineTo(9,-18);c.lineTo(15,-10);c.lineTo(20,-17);c.lineTo(21,-6);c.closePath();c.fill();c.stroke();
     c.beginPath();c.moveTo(19,-2);c.lineTo(29,2);c.lineTo(19,5);c.closePath();c.fill();c.stroke();
     c.beginPath();c.moveTo(-18,1);c.quadraticCurveTo(-34,-14,-40,-2);c.quadraticCurveTo(-35,13,-19,8);c.fill();c.stroke();
     c.fillStyle='#fff7e6';c.beginPath();c.arc(28,2,2,0,Math.PI*2);c.fill();c.beginPath();c.arc(-37,-1,4,0,Math.PI*2);c.fill();
     c.strokeStyle='#5b2e1d';c.beginPath();c.moveTo(-8,8);c.lineTo(-8,15);c.moveTo(7,8);c.lineTo(7,15);c.stroke();
     c.fillStyle='#17202a';c.beginPath();c.arc(16,-4,1.5,0,Math.PI*2);c.fill();c.restore();
   }
+  function sprout(plant){
+    c.save();c.translate(plant.x,plant.y);c.strokeStyle='#215d32';c.lineWidth=4;c.beginPath();c.moveTo(0,0);c.lineTo(0,-32);c.stroke();
+    c.fillStyle='#80df71';for(const [x,y,r] of [[-9,-22,-.45],[9,-31,.45]]){c.beginPath();c.ellipse(x,y,11,6,r,0,Math.PI*2);c.fill()}c.restore();
+  }
   draw=function(){
     baseDraw();c.save();
-    animals.forEach((a,i)=>{if(a.kind==='H'&&i<=Math.round(H*.7)+3)rabbit(a);if(a.kind==='R'&&i-15<=Math.round(R)+2)fox(a)});
-    c.fillStyle='#ffffffdd';c.font='bold 13px system-ui';c.fillText(`植物 ${Math.round(P)}　🐇 ${Math.round(H)}　🦊 ${Math.round(R)}`,655,30);
-    if(P>12&&H>3&&R>1){c.fillStyle='#92f0a8';c.fillText('★ 3段階がつながっている！',655,52)}
+    planted.forEach(sprout);
+    const rabbits=animals.filter(a=>a.kind==='H').slice(0,Math.max(1,Math.min(18,Math.ceil(H*.55))));
+    const foxes=animals.filter(a=>a.kind==='R').slice(0,Math.max(1,Math.min(10,Math.ceil(R*.7))));
+    rabbits.forEach(rabbit);foxes.forEach(fox);
+    for(let i=marks.length-1;i>=0;i--){const mark=marks[i];mark.life-=.025;if(mark.life<=0){marks.splice(i,1);continue}c.globalAlpha=mark.life;c.strokeStyle=mark.color;c.lineWidth=5;c.beginPath();c.arc(mark.x,mark.y,18+(1-mark.life)*42,0,Math.PI*2);c.stroke()}
+    c.globalAlpha=1;c.fillStyle='rgba(7,17,29,.88)';c.beginPath();c.roundRect(628,9,257,52,11);c.fill();
+    c.fillStyle='#fff';c.font='bold 13px system-ui';c.textAlign='left';c.fillText(`🌱 ${Math.round(P)}　🐇 ${Math.round(H)}　🦊 ${Math.round(R)}`,646,31);
+    c.fillStyle=P>12&&H>3&&R>1?'#92f0a8':'#ffd6a2';c.fillText(P>12&&H>3&&R>1?'● 3段階がつながっている':'● 足りない段階をタップで追加',646,51);
+    c.fillStyle='rgba(7,17,29,.9)';c.beginPath();c.roundRect(20,526,410,42,10);c.fill();
+    c.fillStyle='#fff4b0';c.font='bold 13px system-ui';c.fillText(`${toolLabels[tool][0]}：ここをタップして介入`,36,552);
     c.restore();
   };
-  function point(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*canvas.width,y:(e.clientY-r.top)/r.height*canvas.height}}
-  canvas.addEventListener('pointerdown',e=>{
-    if(e.button!==undefined&&e.button!==0)return;
-    e.preventDefault();e.stopImmediatePropagation();const p=point(e);
-    if(tool==='plant'){
-      P=Math.min(120,P+16);N=Math.max(0,N-3);
-      for(let i=0;i<12;i++)energyPackets.push({stage:0,t:Math.random()*.4,x:energyRoute[0].x,y:energyRoute[0].y});
-      window.r67Toast?.(canvas,'植物が芽吹き、太陽のエネルギーをためた');
-    }else if(tool==='herb'){
-      H=Math.min(55,H+4);for(let i=0;i<4;i++)animals.push({kind:'H',x:p.x+(Math.random()-.5)*35,y:Math.max(300,Math.min(510,p.y)),vx:(Math.random()-.5)*25,vy:(Math.random()-.5)*12});
-      window.r67Toast?.(canvas,'ウサギが植物を食べ始めた');
-    }else{
-      R=Math.min(22,R+2);for(let i=0;i<2;i++)animals.push({kind:'R',x:p.x+(Math.random()-.5)*25,y:Math.max(300,Math.min(510,p.y)),vx:(Math.random()-.5)*28,vy:(Math.random()-.5)*12});
-      window.r67Toast?.(canvas,'キツネが近くのウサギを追い始めた');
+  function point(event){
+    const rect=canvas.getBoundingClientRect();
+    return{x:(event.clientX-rect.left)/rect.width*canvas.width,y:(event.clientY-rect.top)/rect.height*canvas.height};
+  }
+  function addAnimal(kind,x,y,count){
+    for(let i=0;i<count;i++)animals.push({
+      kind,
+      x:Math.max(80,Math.min(830,x+(r46rand()-.5)*45)),
+      y:Math.max(300,Math.min(505,y+(r46rand()-.5)*24)),
+      vx:(r46rand()-.5)*28,
+      vy:(r46rand()-.5)*12
+    });
+  }
+  function intervene(kind,p){
+    let message='';
+    if(kind==='sun'){
+      P=Math.min(120,P+5);energySpawn+=6;
+      for(let i=0;i<22;i++)energyPackets.push({stage:0,t:i/55,x:energyRoute[0].x,y:energyRoute[0].y});
+      marks.push({x:energyRoute[0].x,y:energyRoute[0].y,life:1,color:'#fff08a'});
+      message='☀️ 黄色い粒が植物へ向かいました。生産者 +5';
+    }else if(kind==='plant'){
+      const y=Math.max(330,Math.min(510,p.y));
+      P=Math.min(120,P+12);N=Math.max(0,N-2);planted.push({x:Math.max(35,Math.min(865,p.x)),y});
+      if(planted.length>24)planted.shift();
+      for(let i=0;i<10;i++)energyPackets.push({stage:0,t:i/35,x:energyRoute[0].x,y:energyRoute[0].y});
+      marks.push({x:p.x,y,life:1,color:'#8cf48c'});message='🌱 タップした場所に植物が芽生えました。生産者 +12';
+    }else if(kind==='herb'){
+      H=Math.min(55,H+4);addAnimal('H',p.x,p.y,4);
+      marks.push({x:p.x,y:Math.max(300,Math.min(505,p.y)),life:1,color:'#fff4d5'});message='🐇 ウサギが現れました。草食動物 +4';
+    }else if(kind==='pred'){
+      R=Math.min(22,R+2);addAnimal('R',p.x,p.y,2);
+      marks.push({x:p.x,y:Math.max(300,Math.min(505,p.y)),life:1,color:'#ff9b68'});message='🦊 キツネが現れました。捕食者 +2';
     }
+    status.innerHTML=`<b>${message}</b> — 計器と黄色いエネルギーの行き先を見よう。`;
     running=true;document.getElementById('playPause').textContent='⏸ 一時停止';draw();
-  },{capture:true});
+    return{tool:kind,P,H,R,N,energy:energyPackets.length};
+  }
+  canvas.addEventListener('pointerdown',event=>{
+    if(event.button!==undefined&&event.button!==0)return;
+    event.preventDefault();
+    intervene(tool,point(event));
+  });
+  window.foodWebInteraction={
+    selectTool,
+    intervene:(kind,x=450,y=410)=>intervene(kind,{x,y}),
+    snapshot:()=>({tool,P,H,R,N,energyPackets:energyPackets.length,heatPackets:heatPackets.length,animals:animals.length,planted:planted.length,status:status.textContent})
+  };
   draw();
 })();
 </script><script src="lab4wonder_v1_1.js"></script>

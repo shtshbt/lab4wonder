@@ -17,7 +17,7 @@ body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
 </style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
 </head><body data-first="ミルクウィードだけを減らすと、北上距離と総個体数のどちらが先に変わるか予想しよう。">
-<header class="hdr"><div><span class="badge">r55・生態・渡り</span><h1 id="title">オオカバマダラの<ruby>渡り<rt>わたり</rt></ruby>と<ruby>世代交代<rt>せだいこうたい</rt></ruby></h1><div class="sub">北米を複数世代で北上し、秋の長寿命世代が越冬地へ戻る一年を、気温・食草・干ばつ・風・生息地から追う。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="resetBtn">↺ リセット</button></div></header>
+<header class="hdr"><div><span class="badge">生態・渡り</span><h1 id="title">オオカバマダラの<ruby>渡り<rt>わたり</rt></ruby>と<ruby>世代交代<rt>せだいこうたい</rt></ruby></h1><div class="sub">北米を複数世代で北上し、秋の長寿命世代が越冬地へ戻る一年を、気温・食草・干ばつ・風・生息地から追う。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>春の北上</b><p>一匹が往復するのでなく、複数世代が順番に北へ広がる。</p></div><div><b>秋の帰還</b><p>秋世代は長寿命で、メキシコの越冬地へ長距離移動する。</p></div><div><b>食草</b><p>幼虫にはミルクウィードが必要で、量は増殖率を制限する。</p></div><div><b>複合条件</b><p>気温だけでなく、干ばつ、追い風、越冬地損失が成功率を変える。</p></div></section><div class="steps"><span class="step"><strong>1 予想</strong> 変える量と結果を予想</span><span class="step"><strong>2 操作</strong> 一つだけ変える</span><span class="step"><strong>3 比較</strong> 条件A/Bを記録</span></div>
 <section class="toolbar"><button id="playPause" class="primary">▶ 再生</button><button id="stepBtn">一段進める</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="scenarioBtn">課題 S1</button></section>
 <section class="stage"><canvas id="mainCv" width="900" height="520" aria-label="オオカバマダラ・渡りと世代交代の中心模型"></canvas></section>
@@ -81,72 +81,124 @@ $('guideBtn').onclick=()=>$('guideBack').classList.add('show');$('guideClose').o
 $('speakBtn').onclick=()=>{if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(APP.title+'。'+APP.subtitle+'。'+APP.first);u.lang='ja-JP';speechSynthesis.speak(u)}};
 function record(which){const text=metricSnapshot();if(which==='A'){A=text;$('snapA').textContent=text}else{B=text;$('snapB').textContent=text}$('diffAB').textContent=A&&B?'条件と結果を見比べ、変えた入力が一つだけか確認してください。':'もう一方も記録してください。'}$('recA').onclick=()=>record('A');$('recB').onclick=()=>record('B');$('clearAB').onclick=()=>{A=B=null;$('snapA').textContent=$('snapB').textContent=$('diffAB').textContent=''};
 applyScenario(0);
-</script><script id="v1-1-monarch-direct-play">
+</script><script id="v1-3-monarch-route-habitat">
 (()=>{
  const canvas=document.getElementById('mainCv'),ctx=canvas?.getContext('2d');
  if(!canvas||!ctx)return;
  const tools=[
-  {id:'flower',label:'花畑',icon:'✿',color:'#ff9ccc'},
-  {id:'wind',label:'追い風',icon:'➜',color:'#7ee6f2'},
-  {id:'danger',label:'危険',icon:'!',color:'#ff846e'}
+  {id:'nectar',label:'蜜の花畑',icon:'✿',color:'#ff9ccc',help:'成虫が蜜を補給して長旅を続ける'},
+  {id:'milkweed',label:'トウワタ',icon:'♧',color:'#82dda0',help:'北上世代が卵を産み、次の世代へつなぐ'}
  ];
- let selected='flower',marks=[],pointerDown=false,lastPlace=0;
- const baseDraw=drawAll;
- function rounded(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
- function routePoints(){
-  const sorted=[...marks].sort((a,b)=>b.y-a.y),points=[[390,388]];
-  let shift=0;
-  sorted.forEach(mark=>{
-   if(mark.tool==='wind')shift+=mark.x<450?-42:42;
-   const dodge=mark.tool==='danger'?(mark.x<450?100:-100):0;
-   points.push([clamp(mark.x+shift+dodge,220,680),mark.y]);
-  });
-  points.push([600+shift*.35,52]);return points;
+ const corridorWidth=55;
+ let selected='nectar',marks=[],hover=null,status='黄色い帯の中に、生息地を置いてみよう。',trip=0,lastDay=0;
+ const baseDraw=drawAll,baseStep=domainStep,baseReset=resetState;
+ function cubic(a,b,c,d,t){const u=1-t;return u*u*u*a+3*u*u*t*b+3*u*t*t*c+t*t*t*d}
+ function baseRoute(){
+  const points=[];
+  for(let i=0;i<=36;i++){const t=i/36;points.push([cubic(390,340,420,470,t),cubic(388,315,225,165,t)])}
+  for(let i=1;i<=24;i++){const t=i/24;points.push([cubic(470,520,570,600,t),cubic(165,108,78,52,t)])}
+  return points;
  }
+ const route=baseRoute();
+ function nearestRoute(p){
+  let best={distance:Infinity,x:0,y:0,index:0};
+  route.forEach((r,index)=>{const distance=Math.hypot(p.x-r[0],p.y-r[1]);if(distance<best.distance)best={distance,x:r[0],y:r[1],index}});
+  return best;
+ }
+ function displayRoute(){
+  return route.map(point=>{
+   let shift=0,weight=0;
+   marks.filter(mark=>mark.active).forEach(mark=>{
+    const influence=Math.max(0,1-Math.abs(point[1]-mark.y)/58);
+    shift+=(mark.x-mark.routeX)*influence*influence;weight+=influence*influence;
+   });
+   return[point[0]+(weight?shift/Math.max(1,weight):0),point[1]];
+  });
+ }
+ function currentPosition(){
+  const targetY=388-(state.lat-19.5)/30*336;
+  return displayRoute().reduce((best,p)=>Math.abs(p[1]-targetY)<Math.abs(best[1]-targetY)?p:best,displayRoute()[0]);
+ }
+ function drawPath(points,color,width,dash=[]){
+  ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineJoin='round';ctx.lineCap='round';ctx.setLineDash(dash);ctx.beginPath();
+  points.forEach((p,index)=>index?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();ctx.setLineDash([]);
+ }
+ function rounded(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
  function drawMapLayer(){
   ctx.save();
-  const points=routePoints();
-  ctx.strokeStyle='#fff6a6';ctx.lineWidth=10;ctx.globalAlpha=.28;ctx.lineJoin='round';ctx.beginPath();
-  points.forEach((point,index)=>index?ctx.lineTo(point[0],point[1]):ctx.moveTo(point[0],point[1]));ctx.stroke();
-  ctx.globalAlpha=1;ctx.strokeStyle='#ffe46b';ctx.lineWidth=3;ctx.setLineDash([12,8]);ctx.stroke();ctx.setLineDash([]);
+  drawPath(route,'rgba(255,224,105,.18)',corridorWidth*2);
+  drawPath(route,'rgba(255,244,166,.55)',2,[6,9]);
+  const shownRoute=displayRoute();drawPath(shownRoute,'#ffe46b',4,[13,8]);
   marks.forEach(mark=>{
-   ctx.fillStyle=tools.find(tool=>tool.id===mark.tool).color;ctx.strokeStyle='#fff';ctx.lineWidth=2;
-   ctx.beginPath();ctx.arc(mark.x,mark.y,23,0,Math.PI*2);ctx.fill();ctx.stroke();
-   ctx.fillStyle='#13202b';ctx.font='bold 22px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';
-   ctx.fillText(tools.find(tool=>tool.id===mark.tool).icon,mark.x,mark.y);
+   const tool=tools.find(item=>item.id===mark.tool);
+   ctx.fillStyle=mark.active?tool.color:'#394b59';ctx.strokeStyle=mark.active?'#fff':'#ff846e';ctx.lineWidth=2;
+   ctx.beginPath();ctx.arc(mark.x,mark.y,22,0,Math.PI*2);ctx.fill();ctx.stroke();
+   ctx.fillStyle=mark.active?'#13202b':'#ffb0a5';ctx.font='bold 21px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';
+   ctx.fillText(mark.active?tool.icon:'×',mark.x,mark.y);
+   if(mark.visits>0){ctx.fillStyle='#fff';ctx.font='bold 11px system-ui';ctx.fillText(`${mark.visits}回`,mark.x,mark.y+34)}
   });
-  ctx.fillStyle='rgba(4,12,20,.94)';ctx.fillRect(16,438,868,66);
+  if(hover&&hover.y<425){
+   const near=nearestRoute(hover),valid=near.distance<=corridorWidth;
+   ctx.strokeStyle=valid?'#83e7a3':'#ff846e';ctx.fillStyle=valid?'rgba(131,231,163,.2)':'rgba(255,132,110,.16)';ctx.lineWidth=3;
+   ctx.beginPath();ctx.arc(hover.x,hover.y,25,0,Math.PI*2);ctx.fill();ctx.stroke();
+   ctx.fillStyle=valid?'#b9ffd0':'#ffc0b7';ctx.font='bold 13px system-ui';ctx.textAlign='center';
+   ctx.fillText(valid?'ここなら立ち寄れる':'ルートから遠く効果なし',hover.x,hover.y-33);
+  }
+  const butterfly=currentPosition();
+  drawMonarch(ctx,butterfly[0],butterfly[1],.9,Math.sin(state.day*.04)*.18);
+  ctx.fillStyle='rgba(4,12,20,.95)';ctx.fillRect(16,432,868,74);
   tools.forEach((tool,i)=>{
-   const x=28+i*150,w=138,on=tool.id===selected;
-   rounded(x,446,w,42,11);ctx.fillStyle=on?tool.color:'#172b3d';ctx.fill();ctx.strokeStyle=on?'#fff':'#486781';ctx.lineWidth=on?3:1;ctx.stroke();
-   ctx.fillStyle=on?'#101820':'#eef6fc';ctx.font='bold 14px system-ui';ctx.fillText(`${tool.icon} ${tool.label}`,x+w/2,467);
+   const x=28+i*172,w=160,on=tool.id===selected;
+   rounded(x,442,w,42,11);ctx.fillStyle=on?tool.color:'#172b3d';ctx.fill();ctx.strokeStyle=on?'#fff':'#486781';ctx.lineWidth=on?3:1;ctx.stroke();
+   ctx.fillStyle=on?'#101820':'#eef6fc';ctx.font='bold 14px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(`${tool.icon} ${tool.label}`,x+w/2,463);
   });
-  ctx.textAlign='left';ctx.fillStyle='#e3edf5';ctx.font='bold 13px system-ui';ctx.fillText('地図に置くと渡り道が変わる',500,457);
-  ctx.fillStyle=marks.length>=5?'#83e7a3':'#ffd85a';
-  ctx.fillText(marks.length>=5?'★ 達成：ちがう渡り道を作れた！':`目標：花・風・危険を5個置く（${marks.length}/5）`,500,480);
+  ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.fillStyle='#e8f1f8';ctx.font='bold 12px system-ui';
+  ctx.fillText(status,382,453,488);ctx.fillStyle='#b8c9d8';ctx.font='12px system-ui';
+  ctx.fillText(tools.find(item=>item.id===selected).help,382,477,488);
+  ctx.fillStyle='#ffe46b';ctx.fillText(`有効な生息地 ${marks.filter(mark=>mark.active).length}か所・立ち寄り ${marks.reduce((sum,mark)=>sum+mark.visits,0)}回`,382,496);
   ctx.restore();
  }
  drawAll=function(){baseDraw();drawMapLayer()};
+ function visitHabitats(dt){
+  if(state.day<lastDay)trip++;lastDay=state.day;
+  const position=currentPosition(),days=dt*30,phase=state.day/365;
+  marks.filter(mark=>mark.active).forEach(mark=>{
+   const distance=Math.hypot(position[0]-mark.x,position[1]-mark.y);
+   if(distance>34)return;
+   const key=`${trip}-${state.gen}-${phase<.58?'north':'south'}`;
+   if(mark.lastVisit!==key){mark.lastVisit=key;mark.visits++;status=mark.tool==='nectar'?'花の蜜を補給。帰還の体力が上がった！':'トウワタで産卵。次の世代が増えた！'}
+   if(mark.tool==='nectar'){
+    state.pop=clamp(state.pop*Math.exp(.012*days/7),2,5000);
+    if(phase>=.58)state.returnSuccess=clamp(state.returnSuccess+.5*days,0,100);
+   }else if(phase<.58){
+    state.pop=clamp(state.pop*Math.exp(.02*days/7),2,5000);
+   }
+  });
+ }
+ domainStep=function(dt){baseStep(dt);visitHabitats(dt)};
  function point(event){const rect=canvas.getBoundingClientRect();return{x:(event.clientX-rect.left)*canvas.width/rect.width,y:(event.clientY-rect.top)*canvas.height/rect.height}}
- function place(event){
-  const p=point(event);
-  if(p.y>=438){
-   const index=Math.floor((p.x-28)/150);if(index>=0&&index<tools.length){selected=tools[index].id;drawAll()}return;
+ function place(p){
+  if(p.y>=432){
+   const index=Math.floor((p.x-28)/172);
+   if(index>=0&&index<tools.length){selected=tools[index].id;status=`${tools[index].label}を選択。黄色い帯の中へ置こう。`;drawAll()}
+   return;
   }
   if(p.x<180||p.x>700||p.y<28||p.y>420)return;
-  const now=performance.now();if(now-lastPlace<180)return;lastPlace=now;
-  marks.push({tool:selected,x:p.x,y:p.y});if(marks.length>18)marks.shift();
-  if(selected==='flower'){state.pop=clamp(state.pop*1.08+12,2,5000);document.getElementById('c2').value=clamp(num('c2')+5,20,140)}
-  if(selected==='wind'){state.lat=clamp(state.lat+1.4,19.5,49.5);document.getElementById('c4').value=clamp(num('c4')+5,-40,50)}
-  if(selected==='danger'){state.pop=clamp(state.pop*.88,2,5000);document.getElementById('c3').value=clamp(num('c3')+5,0,100)}
+  const near=nearestRoute(p),active=near.distance<=corridorWidth;
+  marks.push({tool:selected,x:p.x,y:p.y,routeX:near.x,active,visits:0,lastVisit:''});
+  if(marks.length>12)marks.shift();
+  status=active?'有効：蝶が近づくと立ち寄り、個体数や帰還成功率に反映。':'効果なし：渡りルートから遠すぎる。黄色い帯の中へ置こう。';
   manualUpdates++;drawAll();
  }
- canvas.addEventListener('pointerdown',event=>{event.stopImmediatePropagation();pointerDown=true;try{canvas.setPointerCapture?.(event.pointerId)}catch(_){/* synthetic pointer */}place(event)});
- canvas.addEventListener('pointermove',event=>{if(pointerDown&&event.buttons)place(event)});
- canvas.addEventListener('pointerup',()=>{pointerDown=false});
- canvas.addEventListener('pointercancel',()=>{pointerDown=false});
- const baseReset=resetState;
- resetState=function(){marks=[];selected='flower';baseReset()};
+ canvas.addEventListener('pointermove',event=>{hover=point(event);drawAll()});
+ canvas.addEventListener('pointerleave',()=>{hover=null;drawAll()});
+ canvas.addEventListener('pointerdown',event=>{event.preventDefault();event.stopImmediatePropagation();place(point(event))});
+ resetState=function(){marks=[];selected='nectar';hover=null;status='黄色い帯の中に、生息地を置いてみよう。';trip=0;lastDay=0;baseReset()};
+ window.__monarchRouteTest={
+  place:(x,y,tool='nectar')=>{selected=tools.some(item=>item.id===tool)?tool:'nectar';place({x,y})},
+  advance:steps=>{for(let i=0;i<steps;i++)advance(APP.step)},
+  snapshot:()=>({marks:marks.map(mark=>({...mark})),pop:state.pop,returnSuccess:state.returnSuccess,status})
+ };
  drawAll();
 })();
 </script><script id="r59-common-ui-script">

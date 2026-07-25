@@ -51,6 +51,9 @@ button.primary,button.on{border-color:#d6b43d;background:#ffd85a;color:#211a00}
   <label for="term_count">回る円の数</label>
   <output id="term_output">30個</output>
   <input id="term_count" type="range" min="1" max="100" value="30">
+  <label for="speed_input">描き直す速さ</label>
+  <output id="speed_output">1倍</output>
+  <input id="speed_input" type="range" min="0.25" max="4" step="0.25" value="1">
 </section>
 
 <div class="buttons">
@@ -84,6 +87,8 @@ button.primary,button.on{border-color:#d6b43d;background:#ffd85a;color:#211a00}
   const context = canvas.getContext("2d");
   const termInput = document.getElementById("term_count");
   const termOutput = document.getElementById("term_output");
+  const speedInput = document.getElementById("speed_input");
+  const speedOutput = document.getElementById("speed_output");
   const prompt = document.getElementById("prompt");
   const explanation = document.getElementById("explanation");
   const center = { x: canvas.width / 2, y: canvas.height * 0.46 };
@@ -93,6 +98,8 @@ button.primary,button.on{border-color:#d6b43d;background:#ffd85a;color:#211a00}
   let drawing = false;
   let paused = false;
   let time = 0;
+  let previousFrameTime = null;
+  const baseCyclesPerSecond = 60 / 850;
 
   function resample(points, count) {
     if (points.length < 2) return [];
@@ -259,13 +266,17 @@ button.primary,button.on{border-color:#d6b43d;background:#ffd85a;color:#211a00}
     context.fill();
   }
 
-  function frame() {
+  function frame(frameTime) {
+    const deltaSeconds = previousFrameTime === null
+      ? 0
+      : Math.min(0.1, Math.max(0, (frameTime - previousFrameTime) / 1000));
+    previousFrameTime = frameTime;
     context.fillStyle = "#080d14";
     context.fillRect(0, 0, canvas.width, canvas.height);
     drawOriginal();
     if (!drawing && coefficients.length) {
       drawEpicycles();
-      if (!paused) time = (time + 1 / 850) % 1;
+      if (!paused) time = (time + deltaSeconds * baseCyclesPerSecond * Number(speedInput.value)) % 1;
     }
     requestAnimationFrame(frame);
   }
@@ -312,6 +323,15 @@ button.primary,button.on{border-color:#d6b43d;background:#ffd85a;color:#211a00}
     explanation.textContent = Number(termInput.value) < 12
       ? "円が少ないので、細かな角や曲がりが省かれています。"
       : "円を増やすほど、元の線の細かな形まで戻ってきます。";
+  });
+  speedInput.addEventListener("input", () => {
+    const speed = Number(speedInput.value);
+    speedOutput.textContent = `${Number.isInteger(speed) ? speed : speed.toFixed(2).replace(/0$/, "")}倍`;
+    explanation.textContent = speed < 1
+      ? "ゆっくり再生中です。円の回転と、先端が線を描く順番を追ってみよう。"
+      : speed > 1
+        ? "速く再生中です。全体の形が戻ってくる様子を見よう。"
+        : "標準の速さです。円の動きと水色の線を一緒に見よう。";
   });
   document.getElementById("draw_button").addEventListener("click", () => {
     coefficients = [];

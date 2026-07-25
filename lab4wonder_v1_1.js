@@ -190,6 +190,9 @@
     if (!reset || document.querySelector(".lw-reset-dock")) return;
     const dock = document.createElement("div");
     dock.className = "lw-reset-dock";
+    if (document.querySelector(".trayOpen,#trayOpen")) {
+      dock.classList.add("lw-reset-dock--with-tray");
+    }
     dock.setAttribute("aria-label", "共通操作");
     reset.textContent = "↺ はじめから";
     reset.setAttribute("aria-label", "このアプリを最初の状態へ戻す");

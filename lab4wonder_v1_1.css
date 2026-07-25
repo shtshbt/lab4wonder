@@ -59,6 +59,11 @@ body.lw-v1-1 {
   backdrop-filter: blur(10px);
 }
 
+.lw-reset-dock--with-tray {
+  right: auto;
+  left: 12px;
+}
+
 .lw-reset-dock button {
   min-height: 42px !important;
   margin: 0 !important;
@@ -483,6 +488,11 @@ body.lw-v1-1 {
   .lw-reset-dock {
     right: 8px;
     bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+
+  .lw-reset-dock--with-tray {
+    right: auto;
+    left: 8px;
   }
 
   .lw-reset-dock button {

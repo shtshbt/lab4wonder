@@ -194,5 +194,15 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
+</script><script id="direct-canvas-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv'),stage=canvas.closest('.stage');let pointer=null,lastY=0;
+const status=document.createElement('div');status.setAttribute('role','status');status.style.cssText='padding:9px 11px;background:#fff0a8;color:#261e00;font:800 12px/1.6 system-ui';status.textContent='👆 左の高温側／右の低温側を上下になぞり、温度を直接変えて三つの熱流を比べます。';stage.append(status);
+function point(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*900,y:(e.clientY-r.top)/r.height*585}}
+function change(p,delta){if(p.x<450)Th=Math.max(-20,Math.min(260,Th+delta));else Tc=Math.max(-20,Math.min(260,Tc+delta));packets.push({type:p.y<250?'cond':p.y<390?'conv':'rad',u:0,y:.5});status.textContent=`${p.x<450?'高温側':'低温側'}を ${delta>=0?'加熱':'冷却'}：温度差 ${(Th-Tc).toFixed(1)}℃、熱流が即時変化。`;step(.08);draw()}
+canvas.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;e.preventDefault();pointer=e.pointerId;try{canvas.setPointerCapture(pointer)}catch(_){}const p=point(e);lastY=p.y;change(p,p.x<450?8:-8)});
+canvas.addEventListener('pointermove',e=>{if(pointer!==e.pointerId)return;const p=point(e),delta=(lastY-p.y)*.08;if(Math.abs(delta)>.7){lastY=p.y;change(p,delta)}});
+canvas.addEventListener('pointerup',e=>{if(pointer===e.pointerId)pointer=null});
+})();
 </script><script src="lab4wonder_v1_1.js"></script>
 </body></html>

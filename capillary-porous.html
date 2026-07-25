@@ -189,5 +189,15 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
+</script><script id="direct-canvas-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv'),stage=canvas.closest('.stage');let pointer=null,lastY=0;
+const status=document.createElement('div');status.setAttribute('role','status');status.style.cssText='padding:9px 11px;background:#fff0a8;color:#261e00;font:800 12px/1.6 system-ui';status.textContent='👆 多孔質を上へなぞる：濡れ前線を進め、毛細管上昇の実時間を直接送ります。';stage.append(status);
+function yOf(e){const r=canvas.getBoundingClientRect();return(e.clientY-r.top)/r.height*520}
+function wet(amount){domainStep(amount);manualUpdates++;compute();status.textContent=`浸透を進めた：濡れ前線 ${(state.d.h*100).toFixed(1)} cm、速度 ${(state.d.v*1000).toFixed(2)} mm/s。`;drawAll()}
+canvas.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;e.preventDefault();pointer=e.pointerId;try{canvas.setPointerCapture(pointer)}catch(_){}lastY=yOf(e);wet(.35)});
+canvas.addEventListener('pointermove',e=>{if(pointer!==e.pointerId)return;const y=yOf(e),dy=lastY-y;if(Math.abs(dy)>10){lastY=y;wet(Math.max(.08,dy/80))}});
+canvas.addEventListener('pointerup',e=>{if(pointer===e.pointerId)pointer=null});
+})();
 </script><script src="lab4wonder_v1_1.js"></script>
 </body></html>

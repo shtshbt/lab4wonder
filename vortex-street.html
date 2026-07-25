@@ -198,5 +198,15 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
+</script><script id="direct-canvas-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv'),stage=canvas.closest('.stage');let pointer=null,last=null;
+const status=document.createElement('div');status.setAttribute('role','status');status.style.cssText='padding:9px 11px;background:#fff0a8;color:#261e00;font:800 12px/1.6 system-ui';status.textContent='👆 円柱の後ろをタップ／なぞる：実際の渦を流れへ放ち、揚力変動を変えます。';stage.append(status);
+function point(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*900,y:(e.clientY-r.top)/r.height*520}}
+function shed(p){const side=p.y<260?-1:1;state.vortices.push({x:Math.max(330,p.x),y:p.y,s:side,age:0});if(state.vortices.length>28)state.vortices.shift();state.phase+=side*.35;state.lastV=state.t;manualUpdates++;compute();status.textContent=`${side<0?'上':'下'}側へ渦を追加：渦数 ${state.vortices.length}、揚力係数 ${state.d.cl.toFixed(2)}。`;drawAll()}
+canvas.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;e.preventDefault();pointer=e.pointerId;try{canvas.setPointerCapture(pointer)}catch(_){}last=point(e);shed(last)});
+canvas.addEventListener('pointermove',e=>{if(pointer!==e.pointerId)return;const p=point(e);if(Math.hypot(p.x-last.x,p.y-last.y)>35){last=p;shed(p)}});
+canvas.addEventListener('pointerup',e=>{if(pointer===e.pointerId)pointer=null});
+})();
 </script><script src="lab4wonder_v1_1.js"></script>
 </body></html>

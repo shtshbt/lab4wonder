@@ -189,5 +189,15 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
+</script><script id="direct-canvas-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv'),stage=canvas.closest('.stage');let pointer=null,lastAngle=0;
+const status=document.createElement('div');status.setAttribute('role','status');status.style.cssText='padding:9px 11px;background:#fff0a8;color:#261e00;font:800 12px/1.6 system-ui';status.textContent='👆 電磁石は鉄片をドラッグ。モーター／発電機は回転子を円周方向になぞります。';stage.append(status);
+function point(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*900,y:(e.clientY-r.top)/r.height*590}}
+function act(p){const mode=P().mode;if(mode==='magnet'){arm=Math.max(0,Math.min(1,(765-p.x)/165));status.textContent=`鉄片を動かした：空隙の見かけ量 ${Math.round((1-arm)*100)}%。磁力との釣り合いが変化。`}else{const a=Math.atan2(p.y-285,p.x-450),delta=Math.atan2(Math.sin(a-lastAngle),Math.cos(a-lastAngle));omega+=delta*18;lastAngle=a;status.textContent=`回転子へ力を加えた：${Math.abs(omega*9.55).toFixed(0)} rpm。${mode==='generator'?'誘導電圧':'逆起電力'}が変化。`}running=true;document.getElementById('playPause').textContent='⏸ 一時停止';draw()}
+canvas.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;e.preventDefault();pointer=e.pointerId;try{canvas.setPointerCapture(pointer)}catch(_){}const p=point(e);lastAngle=Math.atan2(p.y-285,p.x-450);act(p)});
+canvas.addEventListener('pointermove',e=>{if(pointer===e.pointerId)act(point(e))});
+canvas.addEventListener('pointerup',e=>{if(pointer===e.pointerId)pointer=null});
+})();
 </script><script src="lab4wonder_v1_1.js"></script>
 </body></html>

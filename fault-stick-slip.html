@@ -187,5 +187,15 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
+</script><script id="direct-canvas-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv'),stage=canvas.closest('.stage');let pointer=null,lastX=0;
+const status=document.createElement('div');status.setAttribute('role','status');status.style.cssText='padding:9px 11px;background:#fff0a8;color:#261e00;font:800 12px/1.6 system-ui';status.textContent='👆 断層ブロックを右へ押す／なぞる：載荷位置とせん断応力を直接増やします。';stage.append(status);
+function xOf(e){const r=canvas.getBoundingClientRect();return(e.clientX-r.left)/r.width*900}
+function load(dx){state.driver+=Math.max(.05,dx/180);manualUpdates++;domainStep(.04);compute();status.textContent=`断層を押した：せん断応力 ${state.stress.toFixed(2)}、状態 ${state.mode}。限界を超えると実際に滑ります。`;drawAll()}
+canvas.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;e.preventDefault();pointer=e.pointerId;try{canvas.setPointerCapture(pointer)}catch(_){}lastX=xOf(e);load(18)});
+canvas.addEventListener('pointermove',e=>{if(pointer!==e.pointerId)return;const x=xOf(e),dx=x-lastX;if(Math.abs(dx)>8){lastX=x;load(Math.max(4,dx))}});
+canvas.addEventListener('pointerup',e=>{if(pointer===e.pointerId)pointer=null});
+})();
 </script><script src="lab4wonder_v1_1.js"></script>
 </body></html>

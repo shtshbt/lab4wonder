@@ -161,5 +161,15 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
+</script><script id="direct-canvas-interaction">
+(()=>{
+const cv=document.getElementById('mainCanvas'),stage=cv.closest('.stage');let active=null;
+const status=document.createElement('div');status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.style.cssText='padding:9px 11px;background:#fff0a8;color:#261e00;font:800 12px/1.6 system-ui';
+status.textContent='👆 タップで小天体を置く。ドラッグ方向が初速度になり、軌道が実際に変わります。';stage.append(status);
+function point(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*800-400,y:(e.clientY-r.top)/r.height*430-215}}
+cv.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(_){}const p=point(e),r=Math.max(30,Math.hypot(p.x,p.y)),v=Math.sqrt((.25+Number(C.gravity.value)/100*.9)*s.M/r);const b={x:p.x,y:p.y,vx:-p.y/r*v,vy:p.x/r*v,m:6,trail:[]};s.b.push(b);active={id:e.pointerId,start:p,b};status.textContent='小天体を追加。指を動かすと初速度ベクトルが変わります。';drawAll()});
+cv.addEventListener('pointermove',e=>{if(!active||active.id!==e.pointerId)return;const p=point(e);active.b.vx=(p.x-active.start.x)*.08;active.b.vy=(p.y-active.start.y)*.08;status.textContent=`初速度を変更：vx ${active.b.vx.toFixed(1)} / vy ${active.b.vy.toFixed(1)}。離すとこの軌道で進みます。`;drawAll()});
+cv.addEventListener('pointerup',e=>{if(active?.id===e.pointerId){active=null;setPlay(true)}});
+})();
 </script><script src="lab4wonder_v1_1.js"></script>
 </body></html>

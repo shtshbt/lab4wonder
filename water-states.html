@@ -208,5 +208,15 @@ done.onclick=offerNext;
 if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.contains('open'))return;const ts=targetsFor(stage);if(!ts.some(x=>x===e.target||x.contains(e.target)))return;if(e.target.closest?.('#r66-coach,#r59-globalbar'))return;offerNext()};['change','input','click','pointerdown'].forEach(ev=>document.addEventListener(ev,onMeaningful,true))}
 show(0);
 })();
+</script><script id="direct-canvas-interaction">
+(()=>{
+const canvas=document.getElementById('mainCv'),stage=canvas.closest('.stage');let pointer=null,lastY=0;
+const status=document.createElement('div');status.setAttribute('role','status');status.style.cssText='padding:9px 11px;background:#fff0a8;color:#261e00;font:800 12px/1.6 system-ui';status.textContent='👆 上へなぞると加熱、下へなぞると冷却。分子の速さ・温度・相の割合が変わります。';stage.append(status);
+function point(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*900,y:(e.clientY-r.top)/r.height*590}}
+function change(delta){energy+=delta*2.3*par().amt;temp=Math.max(-30,Math.min(160,temp+delta));heating=delta>=0;window.r50DomainState={temp,heating};status.textContent=`${delta>=0?'加熱':'冷却'} ${Math.abs(delta).toFixed(1)}℃：現在 ${temp.toFixed(1)}℃。粒子配置と相の割合を見よう。`;step(.08);draw()}
+canvas.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;e.preventDefault();pointer=e.pointerId;try{canvas.setPointerCapture(pointer)}catch(_){}lastY=point(e).y;change(point(e).x>450?8:-8)});
+canvas.addEventListener('pointermove',e=>{if(pointer!==e.pointerId)return;const y=point(e).y,delta=(lastY-y)*.08;if(Math.abs(delta)>.8){lastY=y;change(delta)}});
+canvas.addEventListener('pointerup',e=>{if(pointer===e.pointerId)pointer=null});
+})();
 </script><script src="lab4wonder_v1_1.js"></script>
 </body></html>

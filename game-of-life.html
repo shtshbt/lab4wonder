@@ -172,4 +172,8 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="direct-model-style">#directModelStatus{margin:8px 0;border-left:4px solid #7ed79a}.stage canvas{touch-action:none;cursor:crosshair}</style>
+<script id="direct-model-interaction">
+(()=>{const status=document.createElement('div');status.id='directModelStatus';status.className='callout';status.textContent='👆 タップ：マスの生／死を反転。ドラッグ：生きたマスを描く → 次世代で形が動く・増える・消える。';main.closest('.stage')?.insertAdjacentElement('afterend',status);let down=false,value=1,changed=0;const capture=(e,on)=>{try{on?main.setPointerCapture?.(e.pointerId):main.releasePointerCapture?.(e.pointerId)}catch{}};const cell=e=>{const r=main.getBoundingClientRect(),x=Math.floor(((e.clientX-r.left)*800/r.width-50)/14),y=Math.floor(((e.clientY-r.top)*430/r.height-18)/14);return x>=0&&x<s.w&&y>=0&&y<s.h?{x,y,i:y*s.w+x}:null};const paint=e=>{const q=cell(e);if(!q)return;s.g[q.i]=value;s.seen.clear();s.period=0;changed++;status.textContent=`${value?'生':'死'}のマスを${changed}個編集。再生／一段で8近傍ルールの結果を確かめよう。`;drawAll()};main.addEventListener('pointerdown',e=>{const q=cell(e);if(!q)return;down=true;value=s.g[q.i]?0:1;capture(e,true);paint(e)});main.addEventListener('pointermove',e=>{if(down)paint(e)});main.addEventListener('pointerup',e=>{down=false;capture(e,false)});main.addEventListener('pointercancel',()=>down=false)})();
+</script>
 </body></html>

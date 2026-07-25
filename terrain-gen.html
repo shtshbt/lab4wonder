@@ -169,4 +169,8 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="direct-model-style">#directModelStatus{margin:8px 0;border-left:4px solid #7ed79a}.stage canvas{touch-action:none;cursor:crosshair}</style>
+<script id="direct-model-interaction">
+(()=>{const status=document.createElement('div');status.id='directModelStatus';status.className='callout';status.textContent='👆 地形図をタップ／ドラッグ：指の場所へ尾根を盛る → 雨水の流路と侵食・堆積先が変わる。';main.closest('.stage')?.insertAdjacentElement('afterend',status);let down=false,raised=0,lastCell='';const capture=(e,on)=>{try{on?main.setPointerCapture?.(e.pointerId):main.releasePointerCapture?.(e.pointerId)}catch{}};const raise=e=>{const r=main.getBoundingClientRect(),x=Math.floor(((e.clientX-r.left)*800/r.width-210)/7.2),y=Math.floor(((e.clientY-r.top)*430/r.height-25)/7.2),key=x+':'+y;if(x<0||x>=N||y<0||y>=N||key===lastCell)return;lastCell=key;for(let yy=y-2;yy<=y+2;yy++)for(let xx=x-2;xx<=x+2;xx++){if(xx<0||xx>=N||yy<0||yy>=N)continue;const gain=Math.max(0,4-Math.hypot(xx-x,yy-y)*1.4);s.h[yy][xx]+=gain;s.water[yy][xx]=0}raised++;status.textContent=`尾根を${raised}か所へ追加。水は高所を避け、別の低所へ集まる。再生して新しい流域を見よう。`;drawAll()};main.addEventListener('pointerdown',e=>{down=true;lastCell='';capture(e,true);raise(e)});main.addEventListener('pointermove',e=>{if(down)raise(e)});main.addEventListener('pointerup',e=>{down=false;capture(e,false)});main.addEventListener('pointercancel',()=>down=false)})();
+</script>
 </body></html>

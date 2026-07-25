@@ -170,4 +170,8 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="direct-model-style">#directModelStatus{margin:8px 0;border-left:4px solid #ef796e}.stage canvas{touch-action:none;cursor:crosshair}</style>
+<script id="direct-model-interaction">
+(()=>{const status=document.createElement('div');status.id='directModelStatus';status.className='callout';status.textContent='👆 タップ／ドラッグ：その場所へ反応物V（赤）を置く → 周囲へ反応・拡散して新しい模様が育つ。';main.closest('.stage')?.insertAdjacentElement('afterend',status);let down=false,painted=0;const capture=(e,on)=>{try{on?main.setPointerCapture?.(e.pointerId):main.releasePointerCapture?.(e.pointerId)}catch{}};const paint=e=>{const r=main.getBoundingClientRect(),gx=Math.floor((e.clientX-r.left)/r.width*W),gy=Math.floor((e.clientY-r.top)/r.height*H);for(let y=gy-4;y<=gy+4;y++)for(let x=gx-4;x<=gx+4;x++){if(x<0||x>=W||y<0||y>=H||Math.hypot(x-gx,y-gy)>4)continue;const i=y*W+x;s.v[i]=.95;s.u[i]=.05}s.hist=[];painted++;status.textContent=`反応物Vを${painted}か所へ追加。赤い種から縞・斑点が広がる変化を見よう。`;drawAll()};main.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;down=true;capture(e,true);paint(e)});main.addEventListener('pointermove',e=>{if(down)paint(e)});main.addEventListener('pointerup',e=>{down=false;capture(e,false)});main.addEventListener('pointercancel',()=>down=false)})();
+</script>
 </body></html>

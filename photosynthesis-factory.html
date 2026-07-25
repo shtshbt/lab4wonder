@@ -217,4 +217,11 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="direct-model-style">#mainCv{touch-action:none}.direct-model-status{margin:6px 0 10px;padding:8px 11px;border:1px solid #8ce6a166;border-radius:10px;background:#8ce6a112;font-size:13px;font-weight:800}</style>
+<script id="direct-model-interaction">
+(()=>{const canvas=document.getElementById('mainCv');if(!canvas)return;const status=document.createElement('div');status.className='direct-model-status';status.setAttribute('role','status');status.textContent='👆 葉の上半分＝光を当てる ／ 左下の葉脈＝水を送る ／ 右下の気孔＝左右になぞって開閉';canvas.closest('.stage')?.insertAdjacentElement('afterend',status);let active=false,lastKey='';const capture=(e,on)=>{try{on?canvas.setPointerCapture?.(e.pointerId):canvas.releasePointerCapture?.(e.pointerId)}catch{}};
+function point(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*canvas.width,y:(e.clientY-r.top)/r.height*canvas.height}}
+function intervene(e){const p=point(e),key=Math.round(p.x/18)+':'+Math.round(p.y/18);if(key===lastKey)return;lastKey=key;if(p.y<330){flash=2;photons.push({x:p.x,y:p.y});step(.18);status.textContent='☀️ 光を当てた → 光反応が進み、ATP・NADPHと酸素が増える'}else if(p.x<560){waterStore=Math.min(100,waterStore+7);waterp.push({x:p.x,y:p.y});status.textContent='💧 葉脈へ水を送った → 葉内の水不足を補う'}else{const stoma=document.getElementById('stoma'),value=Math.round(Math.max(0,Math.min(100,(p.x-560)/280*100)));stoma.value=String(value);stoma.dispatchEvent(new Event('input',{bubbles:true}));status.textContent=`🌿 気孔を ${value}% 開いた → CO₂の入口と水の出口が同時に変わる`}draw()}
+canvas.addEventListener('pointerdown',e=>{active=true;lastKey='';capture(e,true);intervene(e);e.preventDefault()});canvas.addEventListener('pointermove',e=>{if(active)intervene(e)});const end=e=>{active=false;lastKey='';capture(e,false)};canvas.addEventListener('pointerup',end);canvas.addEventListener('pointercancel',end)})();
+</script>
 </body></html>

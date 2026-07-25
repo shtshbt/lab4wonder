@@ -172,4 +172,8 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+<style id="direct-model-style">#directModelStatus{margin:8px 0;border-left:4px solid #ffd85a}.stage canvas{touch-action:none;cursor:crosshair}</style>
+<script id="direct-model-interaction">
+(()=>{const status=document.createElement('div');status.id='directModelStatus';status.className='callout';status.textContent='👆 タップ／ドラッグ：場所と横位置で色を選び粒子を投入 → 近くの粒子との引力・斥力で群れが変わる。';main.closest('.stage')?.insertAdjacentElement('afterend',status);let down=false,added=0,lastAt=0;const capture=(e,on)=>{try{on?main.setPointerCapture?.(e.pointerId):main.releasePointerCapture?.(e.pointerId)}catch{}};const add=e=>{const now=performance.now();if(now-lastAt<35)return;lastAt=now;const r=main.getBoundingClientRect(),x=(e.clientX-r.left)*800/r.width,y=(e.clientY-r.top)*430/r.height,type=Math.max(0,Math.min(3,Math.floor(x/200)));for(let i=0;i<3;i++)s.p.push({x:x+(rng()-.5)*12,y:y+(rng()-.5)*12,vx:0,vy:0,type});added+=3;status.textContent=`色${type+1}の粒子を${added}個投入。新しい粒子が集団へ引かれるか、押し出されるか見よう。`;drawAll()};main.addEventListener('pointerdown',e=>{down=true;capture(e,true);add(e)});main.addEventListener('pointermove',e=>{if(down)add(e)});main.addEventListener('pointerup',e=>{down=false;capture(e,false)});main.addEventListener('pointercancel',()=>down=false)})();
+</script>
 </body></html>

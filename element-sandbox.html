@@ -73,7 +73,7 @@ h1{font-size:clamp(18px,4.8vw,27px);line-height:1.3;margin:0;color:var(--accent)
 <body>
 <nav id="r59-globalbar" aria-label="共通ナビゲーション">
   <a class="r59-home" id="homeLink" href="index.html" aria-label="一覧へ戻る">← 一覧</a>
-  <a href="kids-index.html" aria-label="子ども向け一覧を開く">こども一覧</a>
+  <a id="otherListLink" href="kids-index.html" aria-label="子ども向け一覧を開く">こども一覧</a>
   <span class="r63-package" aria-label="オフラインで遊べます">オフライン</span>
   <button type="button" id="missionOpen" aria-label="任意のミッションを開く">🔎 ミッション</button>
 </nav>
@@ -389,7 +389,7 @@ document.addEventListener('keydown',e=>{
     else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
   }
 });
-const ref=(document.referrer||'').split('/').pop();if(ref==='kids-index.html')document.getElementById('homeLink').href='kids-index.html';
+const ref=(document.referrer||'').split('/').pop();const LIST_PAGES=['kids-index.html','explore.html'];let savedList=''; try{savedList=localStorage.getItem('lab4wonder_list')||'';}catch(err){}const home=LIST_PAGES.indexOf(ref)>=0?ref:(LIST_PAGES.indexOf(savedList)>=0?savedList:'index.html');const kidsHome=home==='kids-index.html';const homeLink=document.getElementById('homeLink');homeLink.href=home;homeLink.textContent=kidsHome?'← いちらん':'← 一覧';homeLink.setAttribute('aria-label',kidsHome?'いちらんに もどる':'一覧へ戻る');const otherLink=document.getElementById('otherListLink');otherLink.href=kidsHome?'explore.html':'kids-index.html';otherLink.textContent=kidsHome?'おとな一覧':'こども一覧';otherLink.setAttribute('aria-label',kidsHome?'大人向け一覧を開く':'子ども向け一覧を開く');
 
 let resizeTimer=0;
 const scheduleResize=()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>resizeSimulation(true),120)};

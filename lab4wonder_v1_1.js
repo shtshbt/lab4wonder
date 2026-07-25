@@ -160,16 +160,41 @@
     });
   }
 
+  const LIST_PAGES = ["kids-index.html", "explore.html"];
+
+  // Which list the visitor arrived from. document.referrer is empty over file://
+  // and on direct opens, so the list pages also record the choice, and that
+  // record wins. Without this a child is always sent back to the adult portal.
+  function preferredList() {
+    let saved = "";
+    try {
+      saved = localStorage.getItem("lab4wonder_list") || "";
+    } catch (error) {
+      saved = "";
+    }
+    const referrer = (document.referrer || "").split("/").pop();
+    if (LIST_PAGES.indexOf(referrer) >= 0) return referrer;
+    if (LIST_PAGES.indexOf(saved) >= 0) return saved;
+    return "";
+  }
+
   function installNavigation() {
     if (document.querySelector("#r59-globalbar,.lw-globalbar")) return;
+    const list = preferredList();
+    const kids = list === "kids-index.html";
     const nav = document.createElement("nav");
     nav.className = "lw-globalbar";
-    nav.setAttribute("aria-label", "アプリ一覧へ戻る");
-    nav.innerHTML = [
-      '<a href="index.html">← 入口</a>',
-      '<a href="explore.html">すべての実験</a>',
-      '<a href="kids-index.html">こども一覧</a>',
-    ].join("");
+    nav.setAttribute("aria-label", kids ? "いちらんに もどる" : "アプリ一覧へ戻る");
+    nav.innerHTML = kids
+      ? [
+          '<a href="kids-index.html">← いちらん</a>',
+          '<a href="explore.html">おとな一覧</a>',
+        ].join("")
+      : [
+          '<a href="' + (list || "index.html") + '">← ' + (list ? "一覧" : "入口") + "</a>",
+          '<a href="explore.html">すべての実験</a>',
+          '<a href="kids-index.html">こども一覧</a>',
+        ].join("");
     document.body.prepend(nav);
   }
 

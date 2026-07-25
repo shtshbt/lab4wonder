@@ -21,8 +21,10 @@ h1{font-size:clamp(20px,4.8vw,30px);line-height:1.35;margin:0}
 .mission strong{color:#ffd75c}.mission span{font-size:13px;line-height:1.55}
 .stage{position:relative;overflow:hidden;border:2px solid #4a6e8d;border-radius:18px;background:#07101a;box-shadow:0 12px 36px #0008}
 #mazeCanvas{display:block;width:100%;height:auto;aspect-ratio:800/480;touch-action:none;cursor:pointer}
-.tap-guide{position:absolute;left:10px;right:10px;bottom:8px;display:grid;grid-template-columns:1fr 1fr 1fr;pointer-events:none;opacity:.78}
+.tap-guide{position:absolute;left:10px;right:10px;bottom:43px;display:grid;grid-template-columns:1fr 1fr 1fr;pointer-events:none;opacity:.82}
 .tap-guide span{text-align:center;color:#fff;font-size:11px;font-weight:900;text-shadow:0 2px 4px #000;padding:5px}
+.back-guide{position:absolute;left:50%;bottom:7px;translate:-50% 0;pointer-events:none;color:#fff;font-size:11px;font-weight:900;text-shadow:0 2px 4px #000;padding:5px 22px;border:1px solid #8eeaff;border-radius:999px;background:#125065e8}
+.stage[data-dead-end="true"] .back-guide{color:#241b00;border-color:#ffd75c;background:#ffd75c;text-shadow:none;box-shadow:0 0 18px #ffd75c88}
 .status-line{position:absolute;top:9px;left:10px;right:10px;display:flex;justify-content:space-between;gap:8px;pointer-events:none;font-size:12px;font-weight:850;text-shadow:0 2px 5px #000}
 #message{color:#ffe17c}
 .controls{display:grid;grid-template-columns:1fr 1.35fr 1fr;gap:8px;margin:10px 0}
@@ -62,14 +64,15 @@ h1{font-size:clamp(20px,4.8vw,30px);line-height:1.35;margin:0}
 </header>
 
 <section class="mission" aria-label="遊び方">
-  <strong>まず遊ぶ：</strong><span>画面下の「通れる」表示を直接タップすると、その通路へ一歩進みます。左・正面・右から一つ選ぼう。</span>
+  <strong>まず遊ぶ：</strong><span>画面の左・中央・右を直接タップすると、その通路へ一歩進みます。行き止まりでは画面下の「もどる」をタップしよう。</span>
 </section>
 
 <main>
   <section class="stage" aria-label="3D迷路">
-    <canvas id="mazeCanvas" width="800" height="480" tabindex="0" aria-label="一人称視点の3D迷路。画面下に表示される左、正面、右の通路を直接タップして進みます"></canvas>
+    <canvas id="mazeCanvas" width="800" height="480" tabindex="0" aria-label="一人称視点の3D迷路。画面の左、中央、右を直接タップして進み、画面下をタップして一歩戻れます"></canvas>
     <div class="status-line"><span id="message" role="status">金色の光を探そう</span><span id="compass">東を向いている</span></div>
     <div class="tap-guide" aria-hidden="true"><span id="leftPassage">左：確認中</span><span id="frontPassage">正面：確認中</span><span id="rightPassage">右：確認中</span></div>
+    <div class="back-guide" id="backPassage" aria-hidden="true">↓ もどる</div>
   </section>
 
   <div class="controls" aria-label="移動ボタン">
@@ -490,6 +493,8 @@ h1{font-size:clamp(20px,4.8vw,30px);line-height:1.35;margin:0}
 
   function drawPassageChoices() {
     const choices = [{relative: -1, label: '左へ進む', x: viewWidth * .17}, {relative: 0, label: '正面へ進む', x: viewWidth * .5}, {relative: 1, label: '右へ進む', x: viewWidth * .83}];
+    const deadEnd = choices.every(choice => !passageOpen(choice.relative));
+    const canReturn = passageOpen(2);
     ctx.save();
     ctx.textAlign = 'center';
     choices.forEach(choice => {
@@ -498,17 +503,32 @@ h1{font-size:clamp(20px,4.8vw,30px);line-height:1.35;margin:0}
       ctx.strokeStyle = open ? '#8eeaff' : '#71808b';
       ctx.lineWidth = open ? 4 : 2;
       ctx.beginPath();
-      ctx.roundRect(choice.x - 88, viewHeight - 74, 176, 50, 12);
+      ctx.roundRect(choice.x - 88, viewHeight - 118, 176, 48, 12);
       ctx.fill();
       ctx.stroke();
       ctx.fillStyle = open ? '#fff' : '#aeb9c2';
       ctx.font = '900 16px sans-serif';
-      ctx.fillText(open ? choice.label : '壁', choice.x, viewHeight - 43);
+      ctx.fillText(open ? choice.label : '壁', choice.x, viewHeight - 88);
     });
+    ctx.fillStyle = canReturn ? (deadEnd ? '#ffd75c' : 'rgba(18,80,101,.92)') : 'rgba(25,31,38,.82)';
+    ctx.strokeStyle = canReturn ? (deadEnd ? '#fff1a8' : '#8eeaff') : '#71808b';
+    ctx.lineWidth = canReturn && deadEnd ? 4 : 2;
+    ctx.beginPath();
+    ctx.roundRect(viewWidth / 2 - 106, viewHeight - 61, 212, 43, 12);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = canReturn && deadEnd ? '#241b00' : (canReturn ? '#fff' : '#aeb9c2');
+    ctx.font = '900 15px sans-serif';
+    ctx.fillText(canReturn ? (deadEnd ? '↓ 行き止まり：一歩もどる' : '↓ 一歩もどる') : 'スタート地点', viewWidth / 2, viewHeight - 34);
     ctx.restore();
     byId('leftPassage').textContent = passageOpen(-1) ? '左：通れる' : '左：壁';
     byId('frontPassage').textContent = passageOpen(0) ? '正面：通れる' : '正面：壁';
     byId('rightPassage').textContent = passageOpen(1) ? '右：通れる' : '右：壁';
+    byId('backPassage').textContent = canReturn ? (deadEnd ? '↓ 行き止まり：ここをタップしてもどる' : '↓ もどる') : 'スタート地点';
+    byId('backPassage').style.visibility = canReturn ? 'visible' : 'hidden';
+    canvas.closest('.stage').dataset.deadEnd = String(deadEnd && canReturn);
+    byId('forwardBtn').disabled = !passageOpen(0);
+    byId('backBtn').disabled = !canReturn;
   }
 
   function update() {
@@ -529,6 +549,15 @@ h1{font-size:clamp(20px,4.8vw,30px);line-height:1.35;margin:0}
       turns++;
     }
     walk(1);
+  }
+
+  function returnPassage() {
+    if (!passageOpen(2)) {
+      byId('message').textContent = 'ここはスタート地点。左・正面・右の通路を選ぼう';
+      update();
+      return;
+    }
+    walk(-1);
   }
 
   function turn(amount) {
@@ -580,7 +609,7 @@ h1{font-size:clamp(20px,4.8vw,30px);line-height:1.35;margin:0}
   byId('leftBtn').addEventListener('click', () => turn(-1));
   byId('rightBtn').addEventListener('click', () => turn(1));
   byId('forwardBtn').addEventListener('click', () => walk(1));
-  byId('backBtn').addEventListener('click', () => walk(-1));
+  byId('backBtn').addEventListener('click', returnPassage);
   byId('hintBtn').addEventListener('click', showHint);
   byId('resetBtn').addEventListener('click', () => resetMaze(false));
   byId('newBtn').addEventListener('click', () => resetMaze(true));
@@ -619,9 +648,8 @@ h1{font-size:clamp(20px,4.8vw,30px);line-height:1.35;margin:0}
     const bounds = canvas.getBoundingClientRect();
     const ratioX = (event.clientX - bounds.left) / bounds.width;
     const ratioY = (event.clientY - bounds.top) / bounds.height;
-    if (ratioY < .72) {
-      byId('message').textContent = '画面下の「通れる」をタップしよう';
-      update();
+    if (ratioY >= .87) {
+      returnPassage();
       return;
     }
     if (ratioX < .33) choosePassage(-1);

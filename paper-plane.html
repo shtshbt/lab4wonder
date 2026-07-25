@@ -50,7 +50,33 @@ function camera(){const gh=Array.isArray(window.r68PaperGhost)?window.r68PaperGh
 function worldToScreen(x,y){const cam=camera();return[cam.ox+x*cam.scale,cam.ground-y*cam.scale]}
 function drawArrow(x1,y1,x2,y2,color){ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();const a=Math.atan2(y2-y1,x2-x1);ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-14*Math.cos(a-.5),y2-14*Math.sin(a-.5));ctx.lineTo(x2-14*Math.cos(a+.5),y2-14*Math.sin(a+.5));ctx.closePath();ctx.fill()}
 function drawPlane(px,py,pitch){ctx.save();ctx.translate(px,py);ctx.rotate(-pitch);ctx.fillStyle='#fff';ctx.strokeStyle='#2c4052';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(28,0);ctx.lineTo(-20,-13);ctx.lineTo(-8,0);ctx.lineTo(-20,13);ctx.closePath();ctx.fill();ctx.stroke();const cg=-12+(Number(C.com.value)-35)/35*25;ctx.fillStyle='#ff6b5f';ctx.beginPath();ctx.arc(cg,0,4.5,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#ffd85a';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-17,9);ctx.lineTo(-10,9+Number(C.trim.value)*.65);ctx.stroke();ctx.restore()}
-function drawMain(){clearCanvas(ctx,800,430,'#7bb7df');ctx.fillStyle='#bfe5ff';ctx.fillRect(0,0,800,365);ctx.fillStyle='#2f6a3d';ctx.fillRect(0,365,800,65);for(let i=0;i<11;i++){const x=(i*83+s.t*24*Number(C.gust.value)/20)%840-20;ctx.strokeStyle='rgba(255,255,255,.34)';ctx.beginPath();ctx.moveTo(x,70+i*23);ctx.lineTo(x+28,70+i*23);ctx.stroke()}const gh=Array.isArray(window.r68PaperGhost)?window.r68PaperGhost:[];if(gh.length>1){ctx.save();ctx.setLineDash([8,7]);line(ctx,gh.map(p=>worldToScreen(p[0],p[1])),'rgba(115,215,255,.9)',3);ctx.restore();}line(ctx,s.trail.map(p=>worldToScreen(p[0],p[1])),'rgba(255,216,90,.68)',3);const [px,py]=worldToScreen(s.x,s.y);drawPlane(px,py,s.pitch);ctx.fillStyle='#163047';ctx.font='bold 14px sans-serif';ctx.fillText(s.landed?s.status:'飛行中',675,28);ctx.font='12px sans-serif';ctx.fillText(`赤点＝重心　黄線＝トリム　青点線＝自己ベスト　自動縮尺 ×${fmt(camera().scale,0)}`,18,24);if(drag){drawArrow(drag.x0,drag.y0,drag.x1,drag.y1,'#ffd85a');ctx.fillStyle='#163047';ctx.font='bold 14px sans-serif';ctx.fillText('離すと、この向きと強さで投げます',250,55)}else if(s.t===0){ctx.fillStyle='rgba(16,44,68,.92)';ctx.font='bold 19px sans-serif';ctx.textAlign='center';ctx.fillText('画面を右上へなぞって、指を離して投げよう',400,170);ctx.textAlign='left'}}
+function drawStartAndGoal(){
+ const [startX,startY]=worldToScreen(0,2.2),groundY=camera().ground,[goalX]=worldToScreen(10,0);
+ ctx.save();
+ ctx.strokeStyle='rgba(22,48,71,.72)';ctx.lineWidth=2;ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(startX,startY+19);ctx.lineTo(startX,groundY);ctx.stroke();ctx.setLineDash([]);
+ ctx.fillStyle='#fff3b0';ctx.strokeStyle='#8c6c14';ctx.lineWidth=2;ctx.beginPath();ctx.arc(startX,startY,11,0,Math.PI*2);ctx.fill();ctx.stroke();
+ ctx.fillStyle='#163047';ctx.font='bold 13px sans-serif';ctx.fillText('ここから投げる（0 m）',startX+16,startY+5);
+ const angle=Number(C.angle.value)*Math.PI/180,speed=Number(C.launch.value),arrowLength=clamp(54+speed*2.1,70,118);
+ drawArrow(startX,startY,startX+Math.cos(angle)*arrowLength,startY-Math.sin(angle)*arrowLength,'#e56a27');
+ ctx.fillStyle='#7b300a';ctx.font='bold 12px sans-serif';ctx.fillText(`初速 ${fmt(speed,0)} m/s・${fmt(Number(C.angle.value),0)}°`,startX+27,startY-26);
+ ctx.strokeStyle='#ffffff';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(goalX,groundY);ctx.lineTo(goalX,groundY-57);ctx.stroke();
+ const size=10;for(let row=0;row<4;row++)for(let col=0;col<3;col++){ctx.fillStyle=(row+col)%2?'#ffffff':'#202733';ctx.fillRect(goalX+col*size,groundY-57+row*size,size,size)}
+ ctx.fillStyle='#f7fbff';ctx.strokeStyle='#163047';ctx.lineWidth=3;ctx.font='bold 13px sans-serif';ctx.strokeText('ゴール 10 m',goalX-42,groundY-67);ctx.fillText('ゴール 10 m',goalX-42,groundY-67);
+ ctx.fillStyle='#e7f5df';ctx.font='bold 12px sans-serif';ctx.fillText('地面  y = 0 m',12,414);
+ ctx.restore();
+}
+function drawMain(){
+ clearCanvas(ctx,800,430,'#7bb7df');ctx.fillStyle='#bfe5ff';ctx.fillRect(0,0,800,365);ctx.fillStyle='#2f6a3d';ctx.fillRect(0,365,800,65);
+ for(let i=0;i<11;i++){const x=(i*83+s.t*24*Number(C.gust.value)/20)%840-20;ctx.strokeStyle='rgba(255,255,255,.34)';ctx.beginPath();ctx.moveTo(x,70+i*23);ctx.lineTo(x+28,70+i*23);ctx.stroke()}
+ const gh=Array.isArray(window.r68PaperGhost)?window.r68PaperGhost:[];if(gh.length>1){ctx.save();ctx.setLineDash([8,7]);line(ctx,gh.map(p=>worldToScreen(p[0],p[1])),'rgba(115,215,255,.9)',3);ctx.restore()}
+ drawStartAndGoal();
+ line(ctx,s.trail.map(p=>worldToScreen(p[0],p[1])),'rgba(255,216,90,.68)',3);
+ const [px,py]=worldToScreen(s.x,s.y);drawPlane(px,py,s.pitch);
+ ctx.fillStyle='#163047';ctx.font='bold 14px sans-serif';ctx.fillText(s.landed?s.status:(s.t===0?'発射前':'飛行中'),675,28);
+ ctx.font='12px sans-serif';ctx.fillText(`赤点＝重心　黄線＝トリム　青点線＝自己ベスト　自動縮尺 ×${fmt(camera().scale,0)}`,18,24);
+ if(drag){drawArrow(drag.x0,drag.y0,drag.x1,drag.y1,'#ffd85a');ctx.fillStyle='#163047';ctx.font='bold 14px sans-serif';ctx.fillText('離すと、この向きと強さで投げます',250,55)}
+ else if(s.t===0){ctx.fillStyle='rgba(16,44,68,.92)';ctx.font='bold 19px sans-serif';ctx.textAlign='center';ctx.fillText('出発点から右上へなぞって、指を離して投げよう',430,170);ctx.textAlign='left'}
+}
 function drawChart(){clearCanvas(cctx,800,240,'#0d1b2d');const h=s.hist;if(!h.length)return;const x=i=>38+i/Math.max(1,h.length-1)*735;const maxH=Math.max(4,...h.map(d=>d.y));line(cctx,h.map((d,i)=>[x(i),205-clamp(d.y/maxH,0,1)*165]),'#ffd85a',2);line(cctx,h.map((d,i)=>[x(i),205-clamp(d.v/30,0,1)*165]),'#6eb7f1',2);line(cctx,h.map((d,i)=>[x(i),205-clamp(d.err/.8,0,1)*165]),'#ef796e',2);cctx.fillStyle='#fff';cctx.font='12px sans-serif';cctx.fillText('高さ',38,20);cctx.fillText('速度',88,20);cctx.fillText('姿勢ずれ',138,20)}
 function stabilityIndex(){if(!s.hist.length)return 1;const rms=Math.sqrt(s.hist.reduce((a,d)=>a+d.err*d.err,0)/s.hist.length);return clamp(1-rms/0.65,0,1)}
 function currentGlide(){if(s.vy>=-.25||Math.abs(s.vx)<.2)return null;return Math.abs(s.vx/s.vy)}

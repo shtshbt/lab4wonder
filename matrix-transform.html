@@ -188,4 +188,6 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
-</body></html>
+<style>.stage canvas{touch-action:none;cursor:grab}.v13-direct{margin:7px 0;padding:8px 10px;border:2px solid #ffd85a;border-radius:12px;background:#14263a;font-weight:800;font-size:13px}</style><script id="v13-direct-drag">
+(()=>{const cv=$('mainCv'),tip=document.createElement('div');tip.className='v13-direct';tip.textContent='🔵 基底 e₁／🟢 基底 e₂ の矢印先をドラッグ：行列の列を直接変更し、格子と面積倍率を変える';cv.closest('.stage').after(tip);let handle=null;function pos(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*900,y:(e.clientY-r.top)/r.height*520}}function move(e){if(!handle)return;e.preventDefault();const p=pos(e),vx=clamp((p.x-450)/90,-2,2),vy=clamp((260-p.y)/90,-2,2),ids=handle==='e1'?['c1','c3']:['c2','c4'];$(ids[0]).value=vx;$(ids[1]).value=vy;state.p=1;manualUpdates++;drawAll();tip.textContent=`${handle}: (${vx.toFixed(1)}, ${vy.toFixed(1)}) → 格子・黄色い図形・行列式 ${compute().metrics[0]} が変化`}cv.addEventListener('pointerdown',e=>{const p=pos(e),a={x:450+num('c1')*90,y:260-num('c3')*90},b={x:450+num('c2')*90,y:260-num('c4')*90};handle=Math.hypot(p.x-a.x,p.y-a.y)<=Math.hypot(p.x-b.x,p.y-b.y)?'e1':'e2';try{cv.setPointerCapture(e.pointerId)}catch(_){}move(e)});cv.addEventListener('pointermove',move);cv.addEventListener('pointerup',()=>handle=null);cv.addEventListener('pointercancel',()=>handle=null);state.p=1;drawAll()})();
+</script></body></html>

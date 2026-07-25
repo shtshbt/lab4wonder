@@ -178,4 +178,6 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
-</body></html>
+<style>.stage canvas{touch-action:none;cursor:grab}.v13-direct{margin:7px 0;padding:8px 10px;border:2px solid #ffd85a;border-radius:12px;background:#14263a;font-weight:800;font-size:13px}</style><script id="v13-direct-drag">
+(()=>{const cv=$('mainCv'),tip=document.createElement('div');tip.className='v13-direct';tip.textContent='🟡 2つの点をドラッグ：左の点＝注目点 x、右の点＝差分 h。黄の割線が緑の接線へ近づく';cv.closest('.stage').after(tip);let handle=null;const toX=px=>-3.3+(px-55)/790*6.6;function point(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*900,y:(e.clientY-r.top)/r.height*520}}function move(e){if(!handle)return;e.preventDefault();const p=point(e),x=clamp(toX(p.x),-3,3);if(handle==='x')$('c2').value=x;else $('c3').value=clamp(x-num('c2'),.05,2);state.time=0;manualUpdates++;drawAll();tip.textContent=handle==='x'?`注目点 x=${num('c2').toFixed(1)}：曲線上の位置と接線の傾きが変化`:`差分 h=${num('c3').toFixed(2)}：2点間の黄の割線と近似誤差が変化`}cv.addEventListener('pointerdown',e=>{const p=point(e),e0=compute().extra,px=55+(e0.x+3.3)/6.6*790,px2=55+(e0.x+e0.h+3.3)/6.6*790;handle=Math.abs(p.x-px)<=Math.abs(p.x-px2)?'x':'h';try{cv.setPointerCapture(e.pointerId)}catch(_){}move(e)});cv.addEventListener('pointermove',move);cv.addEventListener('pointerup',()=>handle=null);cv.addEventListener('pointercancel',()=>handle=null)})();
+</script></body></html>

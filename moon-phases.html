@@ -220,4 +220,6 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
-</body></html>
+<style>.stage canvas{touch-action:none;cursor:grab}.v13-direct{margin:7px 0;padding:8px 10px;border:2px solid #ffd85a;border-radius:12px;background:#14263a;font-weight:800;font-size:13px}</style><script id="v13-direct-drag">
+(()=>{const tip=document.createElement('div');tip.className='v13-direct';tip.textContent='🌙 軌道上の月をドラッグ：公転位置（月齢）を直接変更し、地球から見た月相と空の位置を同時に観察';cv.closest('.stage').after(tip);let active=false;function move(e){if(!active)return;e.preventDefault();const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*900,y=(e.clientY-r.top)/r.height*590,ang=Math.atan2(255-y,x-285);age=((ang<0?ang+Math.PI*2:ang)/(Math.PI*2))*29.53;draw();tip.textContent=`月齢 ${age.toFixed(1)}日（${name(age)}）→ 照明率 ${$('illumM').textContent}、月の出 ${$('riseM').textContent}`}cv.addEventListener('pointerdown',e=>{active=true;try{cv.setPointerCapture(e.pointerId)}catch(_){}move(e)});cv.addEventListener('pointermove',move);cv.addEventListener('pointerup',()=>active=false);cv.addEventListener('pointercancel',()=>active=false)})();
+</script></body></html>

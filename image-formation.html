@@ -186,4 +186,6 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
-</body></html>
+<style>.stage canvas{touch-action:none;cursor:grab}.v13-direct{margin:7px 0;padding:8px 10px;border:2px solid #ffd85a;border-radius:12px;background:#14263a;font-weight:800;font-size:13px}</style><script id="v13-direct-drag">
+(()=>{const cv=$('mainCv'),tip=document.createElement('div');tip.className='v13-direct';tip.textContent='⬆ 物体の矢印をドラッグ：左右＝物体距離、上下＝物体高さ。光線と実像／虚像を直接変える';cv.closest('.stage').after(tip);let active=false;function move(e){if(!active)return;e.preventDefault();const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*900,y=(e.clientY-r.top)/r.height*520;$('c3').value=clamp(450-x,30,360);$('c4').value=clamp(280-y,20,100);manualUpdates++;drawAll();tip.textContent=`物体距離 ${num('c3').toFixed(0)}、高さ ${num('c4').toFixed(0)} → 像距離 ${compute().metrics[0]}、倍率 ${compute().metrics[1]}`}cv.addEventListener('pointerdown',e=>{active=true;try{cv.setPointerCapture(e.pointerId)}catch(_){}move(e)});cv.addEventListener('pointermove',move);cv.addEventListener('pointerup',()=>active=false);cv.addEventListener('pointercancel',()=>active=false)})();
+</script></body></html>

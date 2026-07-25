@@ -188,4 +188,6 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
-</body></html>
+<style>.stage canvas{touch-action:none;cursor:grab}.v13-direct{margin:7px 0;padding:8px 10px;border:2px solid #ffd85a;border-radius:12px;background:#14263a;font-weight:800;font-size:13px}</style><script id="v13-direct-drag">
+(()=>{const cv=$('mainCv'),tip=document.createElement('div');tip.className='v13-direct';tip.textContent='🔴 z の矢印先をドラッグ：実部・虚部を直接変更（横＝実部、縦＝虚部）';cv.closest('.stage').after(tip);let active=false;function move(e){if(!active)return;e.preventDefault();const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*900,y=(e.clientY-r.top)/r.height*520,set=(id,v)=>{const q=$(id);q.value=clamp(v,+q.min,+q.max)};set('c1',(x-450)/65);set('c2',(260-y)/65);domainReset();manualUpdates++;drawAll();tip.textContent=`z = ${num('c1').toFixed(1)} ${num('c2')>=0?'+':'−'} ${Math.abs(num('c2')).toFixed(1)}i に移動 → 赤い矢印と計器が変化`};cv.addEventListener('pointerdown',e=>{active=true;try{cv.setPointerCapture(e.pointerId)}catch(_){}move(e)});cv.addEventListener('pointermove',move);cv.addEventListener('pointerup',()=>active=false);cv.addEventListener('pointercancel',()=>active=false)})();
+</script></body></html>

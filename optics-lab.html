@@ -187,4 +187,6 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
-</body></html>
+<style>.stage canvas{touch-action:none;cursor:grab}.v13-direct{margin:7px 0;padding:8px 10px;border:2px solid #ffd85a;border-radius:12px;background:#14263a;font-weight:800;font-size:13px}</style><script id="v13-direct-drag">
+(()=>{const tip=document.createElement('div');tip.className='v13-direct';tip.textContent='⬆ 物体／⬜ スクリーンをドラッグ：物体距離またはスクリーン位置を直接変更し、像とぼけを観察';cv.closest('.stage').after(tip);let handle=null;function xOf(e){const r=cv.getBoundingClientRect();return(e.clientX-r.left)/r.width*900}function move(e){if(!handle)return;e.preventDefault();const x=xOf(e);if(handle==='object')$('objectDist').value=Math.max(40,Math.min(300,450-x));else $('screen').value=Math.max(40,Math.min(350,x-450));const q=handle==='object'?$('objectDist'):$('screen');q.dispatchEvent(new Event('input'));tip.textContent=handle==='object'?`物体距離 ${q.value} → 像距離 ${$('imageM').textContent}、倍率 ${$('magM').textContent}`:`スクリーン ${q.value} → ぼけ ${$('blurM').textContent}、判定 ${$('stateM').textContent}`}cv.addEventListener('pointerdown',e=>{const x=xOf(e),p=P();handle=Math.abs(x-(450-p.do))<=Math.abs(x-(450+p.screen))?'object':'screen';try{cv.setPointerCapture(e.pointerId)}catch(_){}move(e)});cv.addEventListener('pointermove',move);cv.addEventListener('pointerup',()=>handle=null);cv.addEventListener('pointercancel',()=>handle=null)})();
+</script></body></html>

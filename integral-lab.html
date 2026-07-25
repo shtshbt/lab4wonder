@@ -178,4 +178,6 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
-</body></html>
+<style>.stage canvas{touch-action:none;cursor:ew-resize}.v13-direct{margin:7px 0;padding:8px 10px;border:2px solid #ffd85a;border-radius:12px;background:#14263a;font-weight:800;font-size:13px}</style><script id="v13-direct-drag">
+(()=>{const cv=$('mainCv'),tip=document.createElement('div');tip.className='v13-direct';tip.textContent='↔ 面積の左端 a／右端 b をドラッグ：色付き短冊の積分区間を直接変更';cv.closest('.stage').after(tip);let handle=null;const px=x=>55+(x+3.2)/7.4*790,toX=x=>-3.2+(x-55)/790*7.4;function loc(e){const r=cv.getBoundingClientRect();return(e.clientX-r.left)/r.width*900}function move(e){if(!handle)return;e.preventDefault();const x=toX(loc(e));if(handle==='a')$('c2').value=clamp(x,-3,Math.min(1,num('c3')-.2));else $('c3').value=clamp(x,Math.max(1,num('c2')+.2),4);manualUpdates++;drawAll();tip.textContent=`区間 [${num('c2').toFixed(1)}, ${num('c3').toFixed(1)}] → 色付き面積と積分値が変化`}cv.addEventListener('pointerdown',e=>{const x=loc(e);handle=Math.abs(x-px(num('c2')))<=Math.abs(x-px(num('c3')))?'a':'b';try{cv.setPointerCapture(e.pointerId)}catch(_){}move(e)});cv.addEventListener('pointermove',move);cv.addEventListener('pointerup',()=>handle=null);cv.addEventListener('pointercancel',()=>handle=null)})();
+</script></body></html>

@@ -47,7 +47,7 @@ window.__testAPI={ready:true,step:n=>stepN(n||1),reset:resetModel,setScenario:i=
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
 const ready=()=>{
  const title=(document.querySelector('h1')?.textContent||document.title||'このアプリ').trim();
- const ref=(document.referrer||'').split('/').pop(); const home=ref==='kids-index.html'?'kids-index.html':'index.html';
+ const ref=(document.referrer||'').split('/').pop(); const LIST_PAGES=['kids-index.html','explore.html']; let savedList=''; try{savedList=localStorage.getItem('lab4wonder_list')||'';}catch(err){} const home=LIST_PAGES.indexOf(ref)>=0?ref:(LIST_PAGES.indexOf(savedList)>=0?savedList:'index.html'); const kidsHome=home==='kids-index.html'; const homeText=kidsHome?'← いちらん':'← 一覧'; const homeLabel=kidsHome?'いちらんに もどる':'一覧へ戻る'; const otherHome=kidsHome?'explore.html':'kids-index.html'; const otherText=kidsHome?'おとな一覧':'こども一覧'; const otherLabel=kidsHome?'大人向け一覧を開く':'子ども向け一覧を開く';
  let first='まず一つだけ条件を変え、画面の変化を観察しよう。';
  const cleanText=(txt)=>String(txt||'').replace(/\s+/g,' ').trim();
  const pickFirst=()=>{
@@ -73,7 +73,7 @@ const ready=()=>{
  };
  first=pickFirst();
  const bar=document.createElement('nav');bar.id='r59-globalbar';bar.setAttribute('aria-label','共通ナビゲーション');
- bar.innerHTML=`<a class="r59-home" href="${home}" aria-label="一覧へ戻る">← 一覧</a><a href="kids-index.html" aria-label="子ども向け一覧を開く">こども一覧</a><span class="r63-package" aria-label="配布パッケージ r70">配布 r70</span><button type="button" id="r66-global-guide" aria-label="任意のミッションを開く">🔎 ミッション</button>`;
+ bar.innerHTML=`<a class="r59-home" href="${home}" aria-label="${homeLabel}">${homeText}</a><a href="${otherHome}" aria-label="${otherLabel}">${otherText}</a><span class="r63-package" aria-label="配布パッケージ r70">配布 r70</span><button type="button" id="r66-global-guide" aria-label="任意のミッションを開く">🔎 ミッション</button>`;
  document.body.insertBefore(bar,document.body.firstChild);
  bar.querySelector('#r66-global-guide').onclick=()=>window.dispatchEvent(new CustomEvent('r66-open-coach'));
  const labelFrom=(el)=>{let x=el.getAttribute('aria-label')||el.title||el.placeholder||'';if(x)return x.trim();const id=el.id;if(id){const lab=document.querySelector(`label[for="${CSS.escape(id)}"]`);if(lab)x=lab.textContent||'';}if(!x){const p=el.closest('label,.control,.row,.field,.setting');if(p)x=(p.querySelector('span,b,strong,label')?.textContent||'').trim();}if(!x&&el.tagName==='BUTTON')x=(el.textContent||'').trim();return x||({range:'値を調整',checkbox:'切り替え',number:'数値入力'}[el.type]||'操作');};
@@ -163,7 +163,7 @@ const starter='# 観察メモ\n\n## 今日わかったこと\n\n- 主図で変�
 const samples=[
   starter,
   '# 実験計画\n\n> 一度に変える条件は一つだけ。\n\n1. 条件Aを記録\n2. 一つだけ変える\n3. 条件Bと比較\n\n結果は **数値** と見た目の両方で説明する。',
-  '# コードメモ\n\n```js\nconst result = observe(change);\n```\n\n詳しくは [MDN](https://developer.mozilla.org/) を参照。'
+  '# コードメモ\n\n```js\nconst result = observe(change);\n```\n\n詳しくは [実験の一覧](explore.html) を参照。'
 ];
 const section=document.createElement('section');section.className='md-native';section.setAttribute('aria-labelledby','md-native-title');
 section.innerHTML='<h2 id="md-native-title">✍️ Markdownを書いて、すぐプレビュー</h2><p class="md-lead">左へ入力すると右が更新されます。HTMLは文字として表示し、実行しません。</p><div class="md-native-grid"><label>Markdownソース<textarea id="md-source" maxlength="6000" spellcheck="true"></textarea></label><label>安全なプレビュー<div id="md-preview" class="md-preview" aria-live="polite"></div></label></div><div class="md-actions"><button id="md-starter" class="primary">スターターへ戻す</button><button id="md-sample">別の見本</button><button id="md-clear">空にする</button></div><div id="md-status" class="md-status"></div>';

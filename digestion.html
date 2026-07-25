@@ -16,7 +16,7 @@ html,body{max-width:100%;overflow-x:hidden}canvas{max-width:100%;height:auto}.r5
 <section class="learn"><div><b>これは何？</b><p>食事の組成、機械的細分化、部位ごとの酵素分解、門脈・リンパへの吸収を一つの流れで追う。</p></div><div><b>どこを見る？</b><p>口から大腸まで進む栄養粒子、分解度、部位別作用、門脈とリンパへの吸収。</p></div><div><b>何を変える？</b><p>炭水化物・たんぱく質・脂質、咀嚼、胃酸、膵酵素、胆汁、通過速度。</p></div><div><b>持ち帰る一文</b><p data-takeaway>消化は食物を単に小さくするだけでなく、基質と部位に合う酵素で吸収可能な単位へ変え、栄養素ごとに異なる経路へ送る。</p></div></section>
 
 <section class="toolbar" data-tour="controls"><button id="playPause" class="primary" aria-label="▶ 再生">▶ 再生</button><button id="stepBtn" aria-label="10分">10分</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="4">×4</option><option value="12">×12</option></select><button id="mealBtn" aria-label="食事を入れる">食事を入れる</button><button id="scenarioBtn" aria-label="別の食事">別の食事</button></section>
-<section class="stage" data-tour="stage"><canvas id="mainCv" width="900" height="590" aria-label="口、胃、小腸、大腸を食物粒子が進み、酵素分解と血液・リンパへの吸収が起こるアニメーション" role="img"></canvas></section>
+<section class="stage" data-tour="stage"><canvas id="mainCv" width="900" height="590" aria-label="食塊が口、食道、胃、小腸、大腸の管腔中心線を進み、小腸から糖とアミノ酸は門脈を通って肝臓へ、脂肪はリンパを通って血流へ移動するアニメーション" role="img"></canvas></section>
 <div class="panel grid2"><section class="card"><h2>食事と消化条件</h2><label class="control">炭水化物 <output id="carbOut"></output><input id="carb" type="range" min="0" max="100" value="55" aria-label="炭水化物"></label><label class="control">たんぱく質 <output id="proteinOut"></output><input id="protein" type="range" min="0" max="100" value="30" aria-label="たんぱく質"></label><label class="control">脂質 <output id="fatOut"></output><input id="fat" type="range" min="0" max="100" value="25" aria-label="脂質"></label><label class="control">よくかむ度 <output id="chewOut"></output><input id="chew" type="range" min="10" max="100" value="70" aria-label="よくかむ度"></label><label class="control">胃酸 <output id="acidOut"></output><input id="acid" type="range" min="0" max="100" value="70" aria-label="胃酸"></label><label class="control">膵酵素 <output id="enzymeOut"></output><input id="enzyme" type="range" min="0" max="100" value="80" aria-label="膵酵素"></label><label class="control">胆汁 <output id="bileOut"></output><input id="bile" type="range" min="0" max="100" value="75" aria-label="胆汁"></label><label class="control">腸の移動速度 <output id="transitOut"></output><input id="transit" type="range" min="20" max="160" value="80" aria-label="腸の移動速度"></label><div class="callout" id="explain" aria-live="polite"></div></section><section class="card" data-tour="metrics"><h2>消化・吸収の計器</h2><div class="metrics"><div class="metric"><b>未分解栄養</b><strong id="undigM"></strong></div><div class="metric"><b>門脈へ吸収</b><strong id="portalM"></strong></div><div class="metric"><b>リンパへ吸収</b><strong id="lymphM"></strong></div><div class="metric"><b>大腸到達</b><strong id="colonM"></strong></div></div><div class="callout" id="stateText"></div></section></div>
 <section class="deep"><h2>部位別の分解・吸収と栄養素別収支</h2><canvas id="graphCv" width="900" height="350" aria-label="胃、小腸、大腸での分解率、糖・アミノ酸・脂質の吸収経路と履歴" role="img"></canvas><p>酵素は部位と基質が合う時に働きます。糖とアミノ酸は主に門脈から肝臓へ、長鎖脂質はキロミクロンとしてリンパへ入るという経路差も示します。</p></section>
 
@@ -27,15 +27,156 @@ html,body{max-width:100%;overflow-x:hidden}canvas{max-width:100%;height:auto}.r5
 <script>
 (()=>{let state=510001;window.r51ScenarioIndex=0;window.r51SeedBase=510001;window.r51SetSeed=v=>{state=(Number(v)>>>0)||1;window.r51Seed=state;return state};window.r51Rand=()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;window.r51Seed=state;return state/4294967296};window.r51Noise=(a,b=0)=>{let x=(Math.imul((Number(a)+1)>>>0,0x45d9f3b)^Math.imul((Number(b)+1)>>>0,0x27d4eb2d)^0x9e3779b9)>>>0;x^=x>>>16;x=Math.imul(x,0x7feb352d)>>>0;x^=x>>>15;return (x>>>0)/4294967296};window.r51SetSeed(window.r51SeedBase)})();
 </script><script>
-const $=id=>document.getElementById(id),cv=$('mainCv'),c=cv.getContext('2d'),gv=$('graphCv'),g=gv.getContext('2d');let t=0,running=false,last=performance.now(),speed=1,particles=[],absorbed={carb:0,protein:0,fatPortal:0,fatLymph:0},colon=0,hist=[];
+const $=id=>document.getElementById(id),cv=$('mainCv'),c=cv.getContext('2d'),gv=$('graphCv'),g=gv.getContext('2d');let t=0,running=false,last=performance.now(),speed=1,particles=[],routes=[],absorbed={carb:0,protein:0,fatPortal:0,fatLymph:0},colon=0,hist=[];
 function par(){return{carb:+$('carb').value,protein:+$('protein').value,fat:+$('fat').value,chew:+$('chew').value/100,acid:+$('acid').value/100,enzyme:+$('enzyme').value/100,bile:+$('bile').value/100,transit:+$('transit').value/100}}
-function reset(){t=0;particles=[];absorbed={carb:0,protein:0,fatPortal:0,fatLymph:0};colon=0;hist=[];running=false;$('playPause').textContent='▶ 再生';draw()}window.resetSimulation=reset;
+function reset(){t=0;particles=[];routes=[];absorbed={carb:0,protein:0,fatPortal:0,fatLymph:0};colon=0;hist=[];running=false;$('playPause').textContent='▶ 再生';draw()}window.resetSimulation=reset;
 function addMeal(){const p=par();[['carb',p.carb,'#ffd45f'],['protein',p.protein,'#f08f8f'],['fat',p.fat,'#b995ff']].forEach(([kind,n,col])=>{for(let i=0;i<Math.ceil(n/4);i++)particles.push({kind,col,p:0,size:8+(1-p.chew)*8,broken:0,absorbed:false,wig:r51Rand()*6.28})})}
-function region(p){if(p<.12)return'mouth';if(p<.34)return'stomach';if(p<.80)return'small';return'colon'}
-function stepCore(dt){const p=par();t+=dt;for(const q of particles){if(q.absorbed)continue;const r=region(q.p);let digest=0;if(r==='mouth'&&q.kind==='carb')digest=.12*p.chew;if(r==='stomach'&&q.kind==='protein')digest=.20*p.acid;if(r==='small'){if(q.kind==='carb')digest=.30*p.enzyme;if(q.kind==='protein')digest=.26*p.enzyme;if(q.kind==='fat')digest=.20*p.enzyme*p.bile}q.broken=Math.min(1,q.broken+dt*digest);const slow=(1-q.broken*.35)*(q.kind==='fat'?1.18:1);q.p+=dt*.018*p.transit/slow;if(r==='small'&&q.broken>.45){const rate=(q.kind==='fat'?p.bile:p.enzyme)*q.broken*.08*dt;if(r51Rand()<1-Math.exp(-rate)){q.absorbed=true;if(q.kind==='fat')absorbed.fatLymph+=1;else absorbed[q.kind]+=1}}if(q.p>=.98&&!q.absorbed){q.absorbed=true;colon+=1}}particles=particles.filter(q=>!q.absorbed);if(!hist.length||t-hist.at(-1).t>.15){const live=particles.filter(q=>!q.absorbed);hist.push({t,undig:live.reduce((s,q)=>s+1-q.broken,0),carb:absorbed.carb,protein:absorbed.protein,fat:absorbed.fatLymph,colon});if(hist.length>280)hist.shift()}}function step(dt){const n=Math.max(1,Math.ceil(Math.abs(dt)/.04)),h=dt/n;for(let i=0;i<n;i++)stepCore(h)}
-function pathPos(p){const pts=[[70,95],[180,105],[270,190],[340,310],[470,220],[570,360],[690,210],[790,350],[835,485]];const u=p*(pts.length-1),i=Math.min(pts.length-2,Math.floor(u)),f=u-i;return{x:pts[i][0]+(pts[i+1][0]-pts[i][0])*f,y:pts[i][1]+(pts[i+1][1]-pts[i][1])*f}}
-function drawOrgans(){c.strokeStyle='#e2c1aa';c.lineWidth=38;c.lineCap='round';c.beginPath();c.moveTo(70,95);c.lineTo(180,105);c.lineTo(270,190);c.stroke();c.fillStyle='#8d4d5e';c.beginPath();c.ellipse(305,245,70,85,.2,0,6.28);c.fill();c.strokeStyle='#d49a72';c.lineWidth=34;c.beginPath();c.moveTo(340,310);c.bezierCurveTo(430,145,520,420,600,240);c.bezierCurveTo(650,160,735,300,790,350);c.stroke();c.strokeStyle='#8e6a48';c.lineWidth=46;c.beginPath();c.moveTo(790,350);c.lineTo(835,485);c.stroke();c.fillStyle='#fff';c.font='bold 13px system-ui';[['口',55,70],['胃',270,245],['小腸',500,150],['大腸',785,520]].forEach(x=>c.fillText(x[0],x[1],x[2]));c.strokeStyle='#6fcfff';c.lineWidth=7;c.beginPath();c.moveTo(430,430);c.lineTo(610,520);c.stroke();c.strokeStyle='#b995ff';c.beginPath();c.moveTo(560,405);c.lineTo(735,505);c.stroke();c.fillStyle='#6fcfff';c.fillText('門脈→肝臓',420,550);c.fillStyle='#b995ff';c.fillText('リンパ',700,535)}
-function draw(){c.clearRect(0,0,900,590);c.fillStyle='#08131f';c.fillRect(0,0,900,590);drawOrgans();particles.forEach(q=>{const z=pathPos(q.p),s=q.size*(1-q.broken*.55);c.fillStyle=q.col;c.globalAlpha=.95;c.beginPath();if(q.kind==='fat')c.arc(z.x+Math.sin(q.wig+t)*5,z.y,s,0,6.28);else c.rect(z.x-s/2,z.y-s/2,s,s);c.fill();if(q.broken>.45){c.strokeStyle='#fff';c.lineWidth=1;c.beginPath();c.arc(z.x,z.y,s+3,0,6.28);c.stroke()}c.globalAlpha=1});const live=particles.filter(q=>!q.absorbed),undig=live.reduce((s,q)=>s+1-q.broken,0),portal=absorbed.carb+absorbed.protein+absorbed.fatPortal,lymph=absorbed.fatLymph;$('undigM').textContent=undig.toFixed(1);$('portalM').textContent=portal.toFixed(0);$('lymphM').textContent=lymph.toFixed(0);$('colonM').textContent=colon.toFixed(0);let msg='粒子の色、細かさ、部位、吸収経路を追おう。';if(par().enzyme<.15)msg='膵酵素不足で小腸での分解が遅れています。';else if(par().bile<.15&&par().fat>30)msg='胆汁不足で脂質の細分化とリンパ吸収が低下しています。';else if(par().transit>1.4)msg='通過が速く、分解・吸収の時間が不足しています。';else if(colon>12)msg='未吸収物が大腸へ多く到達しています。どの基質と酵素条件が合っていないか確認しよう。';$('stateText').textContent=msg;$('explain').textContent='咀嚼は表面積、胃酸は胃のたんぱく質分解、膵酵素は小腸の主要分解、胆汁は脂質処理、移動速度は反応時間を変えます。';drawGraph()}
+function region(p){if(p<.08)return'mouth';if(p<.18)return'esophagus';if(p<.34)return'stomach';if(p<.80)return'small';return'colon'}
+function stepCore(dt){const p=par();t+=dt;for(const q of particles){if(q.absorbed)continue;const r=region(q.p);let digest=0;if(r==='mouth'&&q.kind==='carb')digest=.12*p.chew;if(r==='stomach'&&q.kind==='protein')digest=.20*p.acid;if(r==='small'){if(q.kind==='carb')digest=.30*p.enzyme;if(q.kind==='protein')digest=.26*p.enzyme;if(q.kind==='fat')digest=.20*p.enzyme*p.bile}q.broken=Math.min(1,q.broken+dt*digest);const slow=(1-q.broken*.35)*(q.kind==='fat'?1.18:1);q.p+=dt*.018*p.transit/slow;if(r==='small'&&q.broken>.45){const rate=(q.kind==='fat'?p.bile:p.enzyme)*q.broken*.08*dt;if(r51Rand()<1-Math.exp(-rate)){q.absorbed=true;const start=pathPos(q.p);routes.push({kind:q.kind,p:0,start,phase:r51Rand()*6.28});if(q.kind==='fat')absorbed.fatLymph+=1;else absorbed[q.kind]+=1}}if(q.p>=.98&&!q.absorbed){q.absorbed=true;colon+=1}}particles=particles.filter(q=>!q.absorbed);for(const r of routes)r.p+=dt*.28;routes=routes.filter(r=>r.p<1.15);if(!hist.length||t-hist.at(-1).t>.15){const live=particles.filter(q=>!q.absorbed);hist.push({t,undig:live.reduce((s,q)=>s+1-q.broken,0),carb:absorbed.carb,protein:absorbed.protein,fat:absorbed.fatLymph,colon});if(hist.length>280)hist.shift()}}function step(dt){const n=Math.max(1,Math.ceil(Math.abs(dt)/.04)),h=dt/n;for(let i=0;i<n;i++)stepCore(h)}
+const DIGESTIVE_PATH=[[70,95],[145,98],[215,135],[270,190],[315,215],[335,260],[305,305],[355,325],[405,280],[455,225],[505,280],[555,335],[605,275],[655,220],[705,275],[755,325],[795,350],[825,395],[835,445],[835,500]];
+function pathPos(p){
+  const u=Math.max(0,Math.min(.9999,p))*(DIGESTIVE_PATH.length-1),i=Math.min(DIGESTIVE_PATH.length-2,Math.floor(u)),v=u-i;
+  const p0=DIGESTIVE_PATH[Math.max(0,i-1)],p1=DIGESTIVE_PATH[i],p2=DIGESTIVE_PATH[i+1],p3=DIGESTIVE_PATH[Math.min(DIGESTIVE_PATH.length-1,i+2)];
+  const curve=(a,b,d,e)=>.5*((2*b)+(-a+d)*v+(2*a-5*b+4*d-e)*v*v+(-a+3*b-3*d+e)*v*v*v);
+  return{x:curve(p0[0],p1[0],p2[0],p3[0]),y:curve(p0[1],p1[1],p2[1],p3[1])};
+}
+function strokeDigestiveSegment(from,to,color,width){
+  c.strokeStyle=color;
+  c.lineWidth=width;
+  c.lineCap='round';
+  c.lineJoin='round';
+  c.beginPath();
+  const a=pathPos(from);
+  c.moveTo(a.x,a.y);
+  const steps=Math.max(2,Math.ceil((to-from)*90));
+  for(let i=1;i<=steps;i++){const z=pathPos(from+(to-from)*i/steps);c.lineTo(z.x,z.y)}
+  c.stroke();
+}
+function arrowPath(points,color,label,labelX,labelY){
+  c.strokeStyle=color;
+  c.lineWidth=8;
+  c.lineCap='round';
+  c.lineJoin='round';
+  c.beginPath();
+  c.moveTo(points[0][0],points[0][1]);
+  for(let i=1;i<points.length;i++)c.lineTo(points[i][0],points[i][1]);
+  c.stroke();
+  const end=points.at(-1),prev=points.at(-2),a=Math.atan2(end[1]-prev[1],end[0]-prev[0]);
+  c.fillStyle=color;
+  c.beginPath();
+  c.moveTo(end[0],end[1]);
+  c.lineTo(end[0]-16*Math.cos(a-.5),end[1]-16*Math.sin(a-.5));
+  c.lineTo(end[0]-16*Math.cos(a+.5),end[1]-16*Math.sin(a+.5));
+  c.closePath();
+  c.fill();
+  c.font='bold 13px system-ui';
+  c.fillText(label,labelX,labelY);
+}
+function drawOrgans(){
+  strokeDigestiveSegment(0,.08,'#e2c1aa',42);
+  strokeDigestiveSegment(.08,.18,'#d8b49f',30);
+  strokeDigestiveSegment(.18,.34,'#9a5365',58);
+  strokeDigestiveSegment(.34,.80,'#d49a72',38);
+  strokeDigestiveSegment(.80,1,'#8e6a48',50);
+  strokeDigestiveSegment(0,1,'rgba(55,27,23,.7)',7);
+  c.fillStyle='#fff';
+  c.font='bold 14px system-ui';
+  [['口',45,65],['食道',165,100],['胃',285,245],['小腸',510,190],['大腸',785,525]].forEach(x=>c.fillText(x[0],x[1],x[2]));
+  c.font='11px system-ui';
+  c.fillStyle='#ffdca0';
+  c.fillText('かむ：物理的に小さくする',25,130);
+  c.fillStyle='#f5b6bd';
+  c.fillText('胃酸・酵素：たんぱく質を分解',225,365);
+  c.fillStyle='#f6d1a5';
+  c.fillText('膵酵素・胆汁：吸収できる形へ',450,365);
+  const portal=[[555,335],[540,405],[500,455],[445,495]];
+  const lymph=[[605,300],[660,390],[720,455],[795,490],[855,490]];
+  arrowPath(portal,'#62d7ff','糖・アミノ酸 → 門脈 → 肝臓',330,548);
+  arrowPath(lymph,'#bd91ff','脂肪 → リンパ → 血流',675,548);
+  c.fillStyle='#8d4d35';
+  c.beginPath();
+  c.ellipse(430,495,52,28,-.18,0,Math.PI*2);
+  c.fill();
+  c.fillStyle='#fff';
+  c.font='bold 12px system-ui';
+  c.fillText('肝臓',410,500);
+  c.strokeStyle='#caabff';
+  c.lineWidth=3;
+  for(let i=0;i<5;i++){c.beginPath();c.arc(785+i*15,490,6,0,Math.PI*2);c.stroke()}
+}
+function routePos(r){
+  const portal=[[555,335],[540,405],[500,455],[445,495]],lymph=[[605,300],[660,390],[720,455],[795,490],[855,490]];
+  const points=[r.start,...(r.kind==='fat'?lymph:portal)];
+  const u=Math.min(.9999,r.p)*(points.length-1),i=Math.min(points.length-2,Math.floor(u)),f=u-i;
+  return{x:points[i][0]+(points[i+1][0]-points[i][0])*f,y:points[i][1]+(points[i+1][1]-points[i][1])*f};
+}
+function drawFoodParticle(q,z){
+  const size=q.size*(1-q.broken*.48),x=z.x+Math.sin(q.wig+t)*Math.min(4,size*.3),y=z.y;
+  c.save();
+  c.globalAlpha=.95;
+  c.fillStyle=q.col;
+  c.strokeStyle='#fff';
+  c.lineWidth=1.2;
+  if(q.broken<.42){
+    c.beginPath();
+    if(q.kind==='fat')c.arc(x,y,size,0,Math.PI*2);
+    else if(q.kind==='protein'){c.moveTo(x,y-size);c.lineTo(x+size,y+size);c.lineTo(x-size,y+size);c.closePath()}
+    else c.rect(x-size,y-size,size*2,size*2);
+    c.fill();
+  }else{
+    for(let i=0;i<3;i++){
+      const px=x+(i-1)*size*.75,py=y+(i%2?1:-1)*size*.32,r=Math.max(2.5,size*.38);
+      c.beginPath();
+      if(q.kind==='fat')c.arc(px,py,r,0,Math.PI*2);
+      else if(q.kind==='protein'){c.moveTo(px,py-r);c.lineTo(px+r,py+r);c.lineTo(px-r,py+r);c.closePath()}
+      else c.arc(px,py,r,0,Math.PI*2);
+      c.fill();
+      c.stroke();
+    }
+  }
+  c.restore();
+}
+function stageExplanation(){
+  if(!particles.length)return'口をタップして食事を入れよう。黄いろ=炭水化物、赤い三角=たんぱく質、紫の丸=脂肪。';
+  const mean=particles.reduce((sum,q)=>sum+q.p,0)/particles.length,r=region(mean);
+  if(r==='mouth')return'口：大きな食塊を「かむ」と小粒になります。これは物理的粉砕で、栄養の種類はまだ変わりません。';
+  if(r==='esophagus')return'食道：食塊を胃へ運ぶ管です。ここでは主に移動し、大きな化学分解は示していません。';
+  if(r==='stomach')return'胃：赤い三角のたんぱく質が、胃酸と酵素でより短い断片へ分解されています。';
+  if(r==='small')return'小腸：黄の小粒=糖、赤の小三角=アミノ酸、紫の小粒=脂肪成分。糖・アミノ酸は門脈から肝臓へ、脂肪はリンパから血流へ進みます。';
+  return'大腸：分解・吸収されずに残った物が届き、水分回収を受けます。';
+}
+function draw(){
+  c.clearRect(0,0,900,590);
+  c.fillStyle='#08131f';
+  c.fillRect(0,0,900,590);
+  drawOrgans();
+  particles.forEach(q=>drawFoodParticle(q,pathPos(q.p)));
+  routes.forEach(r=>{
+    const z=routePos(r),color=r.kind==='carb'?'#ffd45f':r.kind==='protein'?'#f08f8f':'#b995ff';
+    c.save();
+    c.fillStyle=color;
+    c.shadowColor=color;
+    c.shadowBlur=10;
+    c.beginPath();
+    if(r.kind==='protein'){c.moveTo(z.x,z.y-6);c.lineTo(z.x+6,z.y+6);c.lineTo(z.x-6,z.y+6);c.closePath()}
+    else c.arc(z.x,z.y,6,0,Math.PI*2);
+    c.fill();
+    c.restore();
+  });
+  const live=particles.filter(q=>!q.absorbed),undig=live.reduce((s,q)=>s+1-q.broken,0),portal=absorbed.carb+absorbed.protein+absorbed.fatPortal,lymph=absorbed.fatLymph;
+  $('undigM').textContent=undig.toFixed(1);
+  $('portalM').textContent=portal.toFixed(0);
+  $('lymphM').textContent=lymph.toFixed(0);
+  $('colonM').textContent=colon.toFixed(0);
+  let msg=stageExplanation();
+  if(par().enzyme<.15)msg+=' 膵酵素が少ないため、小腸での分解が遅れています。';
+  else if(par().bile<.15&&par().fat>30)msg+=' 胆汁が少ないため、脂肪の細分化とリンパ吸収が低下しています。';
+  else if(par().transit>1.4)msg+=' 通過が速く、分解・吸収の時間が不足しています。';
+  else if(colon>12)msg+=' 未吸収物が多く大腸へ届いています。';
+  $('stateText').textContent=msg;
+  $('explain').textContent='図形の変化は、大きな食塊→小さな吸収可能成分への変化を表します。咀嚼は物理的粉砕、胃酸・膵酵素は化学的分解、胆汁は脂肪を細かく分散させます。';
+  drawGraph();
+}
 function drawGraph(){g.clearRect(0,0,900,350);g.fillStyle='#09131f';g.fillRect(0,0,900,350);g.fillStyle='#fff';g.fillText('栄養素別の現在位置と分解度',35,25);const kinds=[['carb','炭水化物','#ffd45f'],['protein','たんぱく質','#f08f8f'],['fat','脂質','#b995ff']];kinds.forEach((k,i)=>{const arr=particles.filter(q=>q.kind===k[0]&&!q.absorbed),dig=arr.length?arr.reduce((s,q)=>s+q.broken,0)/arr.length:1,pos=arr.length?arr.reduce((s,q)=>s+q.p,0)/arr.length:1,y=70+i*70;g.fillStyle='#17283a';g.fillRect(35,y,300,22);g.fillStyle=k[2];g.fillRect(35,y,300*dig,22);g.fillStyle='#fff';g.fillText(`${k[1]} 分解 ${(dig*100).toFixed(0)}%`,35,y-8);g.fillStyle='#17283a';g.fillRect(365,y,180,22);g.fillStyle='#7dd7ff';g.fillRect(365,y,180*pos,22);g.fillStyle='#fff';g.fillText(`通過 ${(pos*100).toFixed(0)}%`,365,y-8)});g.fillStyle='#fff';g.fillText('吸収経路と大腸到達',610,25);[['糖→門脈',absorbed.carb,'#ffd45f'],['アミノ酸→門脈',absorbed.protein,'#f08f8f'],['脂質→リンパ',absorbed.fatLymph,'#b995ff'],['未吸収→大腸',colon,'#8e6a48']].forEach((b,i)=>{const y=65+i*55;g.fillStyle='#17283a';g.fillRect(610,y,230,24);g.fillStyle=b[2];g.fillRect(610,y,Math.min(230,b[1]*7),24);g.fillStyle='#fff';g.fillText(`${b[0]} ${b[1].toFixed(0)}`,610,y-7)});if(hist.length>1){g.fillStyle='#9fcdf5';g.fillText(`経過 ${hist.at(-1).t.toFixed(1)} 相対時間`,610,315)}}
 function bind(id,out,fmt=v=>v){$(id).oninput=e=>{$(out).textContent=fmt(+e.target.value);draw()};$(id).dispatchEvent(new Event('input'))}bind('carb','carbOut',v=>v);bind('protein','proteinOut',v=>v);bind('fat','fatOut',v=>v);bind('chew','chewOut',v=>v+'%');bind('acid','acidOut',v=>v+'%');bind('enzyme','enzymeOut',v=>v+'%');bind('bile','bileOut',v=>v+'%');bind('transit','transitOut',v=>v+'%');$('playPause').onclick=()=>{running=!running;$('playPause').textContent=running?'⏸ 一時停止':'▶ 再生'};$('stepBtn').onclick=()=>{step(1);draw()};$('speedSel').onchange=e=>speed=+e.target.value;$('mealBtn').onclick=()=>{addMeal();draw()};$('scenarioBtn').onclick=()=>{const S=[[70,20,10,85,75,85,75,75],[15,55,55,45,80,35,20,90],[40,35,70,70,65,80,90,45],[80,10,5,20,30,70,70,150],[25,75,20,80,95,15,60,70]][Math.floor(r51Rand()*5)];['carb','protein','fat','chew','acid','enzyme','bile','transit'].forEach((id,i)=>{$(id).value=S[i];$(id).dispatchEvent(new Event('input'))});reset();addMeal()};function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(running)step(dt*speed);draw();requestAnimationFrame(loop)}reset();addMeal();requestAnimationFrame(loop);window.getSnapshot=()=>({炭水化物:$('carbOut').textContent,たんぱく質:$('proteinOut').textContent,脂質:$('fatOut').textContent,咀嚼:$('chewOut').textContent,胃酸:$('acidOut').textContent,膵酵素:$('enzymeOut').textContent,胆汁:$('bileOut').textContent,移動:$('transitOut').textContent,未分解:$('undigM').textContent,門脈:$('portalM').textContent,リンパ:$('lymphM').textContent,大腸:$('colonM').textContent});
 </script><script>

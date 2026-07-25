@@ -206,6 +206,10 @@ show(0);
     for(let i=3;i<rooms.length;i++){const room=rooms[i],parent=i===3?rooms[0]:rooms[i-1];c.beginPath();c.moveTo(parent.x,parent.y);c.lineTo(room.x,room.y);c.stroke()}
     for(let i=3;i<rooms.length;i++){const room=rooms[i];c.fillStyle='#74583e';c.strokeStyle='#ba9468';c.lineWidth=3;c.beginPath();c.ellipse(room.x,room.y,room.r*1.25,room.r*.82,0,0,Math.PI*2);c.fill();c.stroke();c.fillStyle='#fff3d7';c.font='bold 12px system-ui';c.textAlign='center';c.fillText(room.type,room.x,room.y+4)}
     ants.forEach(drawAnt);
+    const roleKey=[['#f6d36a','採餌：餌を運ぶ'],['#ff9b74','掘削：巣を広げる'],['#9ee6b2','育児：幼虫を世話'],['#8fcdf7','換気：空気を送る']];
+    c.fillStyle='rgba(5,14,24,.9)';c.fillRect(18,62,190,116);c.strokeStyle='#45627d';c.lineWidth=1;c.strokeRect(18,62,190,116);
+    c.fillStyle='#fff';c.font='bold 12px system-ui';c.fillText('アリの色＝いまの仕事',30,82);
+    roleKey.forEach(([color,label],i)=>{const y=103+i*21;c.fillStyle=color;c.beginPath();c.arc(34,y-4,5,0,Math.PI*2);c.fill();c.fillStyle='#e9f2fb';c.font='11px system-ui';c.fillText(label,47,y)});
     c.fillStyle='#ffffffdd';c.font='bold 13px system-ui';c.textAlign='left';c.fillText(`挑戦：巣室 ${rooms.length}/7　餌 ${foods.filter(f=>f.n>0).length}か所`,650,30);
     c.restore();
   };

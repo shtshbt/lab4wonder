@@ -61,7 +61,7 @@ footer{margin-top:12px;color:#94a5bb;font-size:12px}
 .analysisWrap canvas{border-radius:14px;background:#0d1622}
 .metricGrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;margin-top:8px}
 .metric{background:#101826;border:1px solid #2b3b51;border-radius:11px;padding:8px;text-align:center}
-.metric b{display:block;color:#9fb4ca;font-size:10px;margin-bottom:3px}
+.metric b{display:block;color:#9fb4ca;font-size:12px;line-height:1.35;margin-bottom:3px}
 .metric span{font:700 14px ui-monospace,SFMono-Regular,Menlo,monospace;color:#ffd85a}
 .abState{margin-top:8px;font-size:12px;color:#b9c8da;line-height:1.65}
 @media(max-width:700px){.metricGrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -775,7 +775,7 @@ document.addEventListener('keydown',e=>{const open=qsa('.sheetBack,.modalBack,di
 if(e.key==='Tab'){const dlg=dialogFor(open);const items=focusables(dlg);if(!items.length){e.preventDefault();dlg.focus();return;}const first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}},true);
 const motionStyle=document.createElement('style');motionStyle.textContent='html.r62-reduced-motion *,html.r62-reduced-motion *::before,html.r62-reduced-motion *::after{animation-duration:0.001ms!important;animation-iteration-count:1!important;transition-duration:0.001ms!important;scroll-behavior:auto!important;}';document.head.appendChild(motionStyle);
 const motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
-const applyMotion=()=>{const reduce=!!motionQuery&&motionQuery.matches;document.documentElement.classList.toggle('r62-reduced-motion',reduce);if(reduce){const playPause=document.querySelector('#playPause');const label=((playPause?.textContent||'')+' '+(playPause?.getAttribute('aria-label')||'')).toLowerCase();if(playPause&&(/一時停止|pause|⏸/.test(label))){try{playPause.click();}catch(_){}}}};
+const applyMotion=()=>{const reduce=!!motionQuery&&motionQuery.matches;document.documentElement.classList.toggle('r62-reduced-motion',reduce);if(reduce){const playPause=document.querySelector('#playPause,#playBtn,#play');const label=((playPause?.textContent||'')+' '+(playPause?.getAttribute('aria-label')||'')).toLowerCase();if(playPause&&(/一時停止|pause|⏸/.test(label))){try{playPause.click();}catch(_){}}}};
 applyMotion();if(motionQuery){if(motionQuery.addEventListener)motionQuery.addEventListener('change',applyMotion);else if(motionQuery.addListener)motionQuery.addListener(applyMotion);}
 qsa('.badge,.tag,.chip,small,span').forEach(el=>{const t=textOf(el);if(/^r\d+$/i.test(t)){el.textContent='内容版 '+t;el.setAttribute('aria-label','内容改訂 '+t);}});
 syncButtonNames();new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1){syncButtonNames(n);if(n.matches?.('.sheetBack,.modalBack,div.back,.guideBack'))syncDialogs(n);qsa('.sheetBack,.modalBack,div.back,.guideBack',n).forEach(syncDialogs);}}))).observe(document.body,{childList:true,subtree:true});

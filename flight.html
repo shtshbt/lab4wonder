@@ -169,4 +169,6 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
-</body></html>
+<style>.v14-direct{margin:7px 0;padding:8px 10px;border:2px solid #ffd85a;border-radius:12px;background:#14263a;font-weight:800;font-size:13px}.stage canvas{touch-action:none;cursor:grab}</style><script id="v14-direct-flight">
+(()=>{const canvas=$('mainCanvas'),status=document.createElement('div');status.className='v14-direct';status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.textContent='✈️ 飛行機をドラッグ：上下で高度・迎角、左右で速度を直接変える';canvas.closest('.stage').after(status);let active=null;function point(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*800,y:(e.clientY-r.top)/r.height*430}}function move(e){if(!active)return;e.preventDefault();const p=point(e),dy=active.p.y-p.y,dx=p.x-active.p.x;s.h=Math.max(0,Math.min(320,355-p.y));s.v=Math.max(8,Math.min(90,s.v+dx*.18));C.aoa.value=Math.max(+C.aoa.min,Math.min(+C.aoa.max,+C.aoa.value+dy*.08));s.vy=dy*.12;active.p=p;drawAll();status.textContent=`高度 ${s.h.toFixed(0)} m、速度 ${s.v.toFixed(1)} m/s、迎角 ${(+C.aoa.value).toFixed(1)}° → 力ベクトルが変化`};canvas.addEventListener('pointerdown',e=>{active={p:point(e)};try{canvas.setPointerCapture(e.pointerId)}catch(_){}move(e)});canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',()=>active=null);canvas.addEventListener('pointercancel',()=>active=null)})();
+</script></body></html>

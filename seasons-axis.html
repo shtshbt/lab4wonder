@@ -204,4 +204,6 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
-</body></html>
+<style>.v14-direct{margin:7px 0;padding:8px 10px;border:2px solid #ffd85a;border-radius:12px;background:#14263a;font-weight:800;font-size:13px}.stage canvas{touch-action:none;cursor:grab}</style><script id="v14-direct-seasons">
+(()=>{const canvas=$('mainCv'),status=document.createElement('div');status.className='v14-direct';status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.textContent='🌍 軌道上をドラッグ：地球を好きな季節へ直接動かす';canvas.closest('.stage').after(status);let active=false;function move(e){if(!active)return;e.preventDefault();const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*900,y=(e.clientY-r.top)/r.height*590,a=Math.atan2((y-260)/170,(x-330)/230);day=((a/(Math.PI*2)*365+80)%365+365)%365;draw();const z=calc();status.textContent=`公転 ${Math.round(day)}日目 → 昼 ${z.dayLen.toFixed(1)}時間、太陽高度 ${z.noonAlt.toFixed(0)}°`};canvas.addEventListener('pointerdown',e=>{active=true;try{canvas.setPointerCapture(e.pointerId)}catch(_){}move(e)});canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',()=>active=false);canvas.addEventListener('pointercancel',()=>active=false)})();
+</script></body></html>

@@ -202,4 +202,6 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
-</body></html>
+<style>.v14-direct{margin:7px 0;padding:8px 10px;border:2px solid #ffd85a;border-radius:12px;background:#14263a;font-weight:800;font-size:13px}.stage canvas{touch-action:none;cursor:grab}</style><script id="v14-direct-newton">
+(()=>{const canvas=$('mainCv'),status=document.createElement('div');status.className='v14-direct';status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.textContent='🛒 台車を左右にドラッグ：位置と初速度を直接与える';canvas.closest('.stage').after(status);let active=null;function point(e){const r=canvas.getBoundingClientRect();return(e.clientX-r.left)/r.width*900}function move(e){if(!active)return;e.preventDefault();const px=point(e),next=Math.max(-19,Math.min(19,(px-450)/20)),q=$('v0');q.value=Math.max(+q.min,Math.min(+q.max,(next-active.x)*60));v=+q.value/12;x=next;active.x=next;draw();status.textContent=`位置 ${x.toFixed(1)}、速度 ${v.toFixed(1)} → 合力による次の変化を計器に表示`};canvas.addEventListener('pointerdown',e=>{running=false;active={x};try{canvas.setPointerCapture(e.pointerId)}catch(_){}move(e)});canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',()=>active=null);canvas.addEventListener('pointercancel',()=>active=null)})();
+</script></body></html>

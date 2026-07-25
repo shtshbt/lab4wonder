@@ -205,4 +205,6 @@ for(const id of (CFG.partitionControls||[])){const x=el(id);if(x)x.addEventListe
 render();
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
-</body></html>
+<style>.v14-direct{margin:7px 0;padding:8px 10px;border:2px solid #ffd85a;border-radius:12px;background:#14263a;font-weight:800;font-size:13px}.stage canvas{touch-action:none;cursor:grab}</style><script id="v14-direct-kite">
+(()=>{const canvas=$('mainCanvas'),status=document.createElement('div');status.className='v14-direct';status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.textContent='🪁 たこをドラッグ：糸の長さとたこの角度を直接変える';canvas.closest('.stage').after(status);let active=false;function move(e){if(!active)return;e.preventDefault();const r=canvas.getBoundingClientRect(),dx=((e.clientX-r.left)/r.width*800-110)/2.2,dy=(380-(e.clientY-r.top)/r.height*430)/1.6;s.theta=Math.max(.12,Math.min(1.45,Math.atan2(dy,dx)));s.r=Math.max(48,Math.min(336,Math.hypot(dx,dy)));s.omega=0;C.lineLen.value=Math.max(+C.lineLen.min,Math.min(+C.lineLen.max,s.r/2.4));drawAll();status.textContent=`糸 ${(+C.lineLen.value).toFixed(0)}、仰角 ${(s.theta*180/Math.PI).toFixed(0)}° → 張力 ${s.tension.toFixed(1)} N`};canvas.addEventListener('pointerdown',e=>{active=true;try{canvas.setPointerCapture(e.pointerId)}catch(_){}move(e)});canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',()=>active=false);canvas.addEventListener('pointercancel',()=>active=false)})();
+</script></body></html>

@@ -202,4 +202,6 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
-</body></html>
+<style>.v14-direct{margin:7px 0;padding:8px 10px;border:2px solid #ffd85a;border-radius:12px;background:#14263a;font-weight:800;font-size:13px}.stage canvas{touch-action:none;cursor:grab}</style><script id="v14-direct-collision">
+(()=>{const canvas=$('mainCv'),status=document.createElement('div');status.className='v14-direct';status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.textContent='🚙 台車A/Bをドラッグ：位置と手を動かした速さをそのまま衝突条件にする';canvas.closest('.stage').after(status);let active=null;function point(e){const r=canvas.getBoundingClientRect();return(e.clientX-r.left)/r.width*900}function move(e){if(!active)return;e.preventDefault();const px=Math.max(65,Math.min(835,point(e))),vel=(px-active.last)*.08,id=active.which===1?'v1':'v2',q=$(id);q.value=Math.max(+q.min,Math.min(+q.max,vel));if(active.which===1){x1=px;u1=+q.value}else{x2=px;u2=+q.value}active.last=px;collided=false;draw();status.textContent=`台車${active.which===1?'A':'B'}：位置 ${px.toFixed(0)}、速度 ${(+q.value).toFixed(1)} → 運動量を再計算`};canvas.addEventListener('pointerdown',e=>{const px=point(e);active={which:Math.abs(px-x1)<=Math.abs(px-x2)?1:2,last:px};running=false;try{canvas.setPointerCapture(e.pointerId)}catch(_){}move(e)});canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',()=>active=null);canvas.addEventListener('pointercancel',()=>active=null)})();
+</script></body></html>

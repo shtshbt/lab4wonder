@@ -171,4 +171,6 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
-</body></html>
+<style>.v14-direct{margin:7px 0;padding:8px 10px;border:2px solid #ffd85a;border-radius:12px;background:#14263a;font-weight:800;font-size:13px}.stage canvas{touch-action:none;cursor:grab}</style><script id="v14-direct-balloon">
+(()=>{const canvas=$('mainCanvas'),status=document.createElement('div');status.className='v14-direct';status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.textContent='🎈 気球を上下にドラッグ：高度を直接変え、膨張と外皮応力を調べる';canvas.closest('.stage').after(status);let active=null;function altitude(e){const r=canvas.getBoundingClientRect(),y=(e.clientY-r.top)/r.height*430;return Math.max(0,Math.min(42000,(380-y)/330*42000))}function move(e){if(!active)return;e.preventDefault();const next=altitude(e);s.v=Math.max(-25,Math.min(25,(next-s.h)/120));s.h=next;s.maxH=Math.max(s.maxH,s.h);drawAll();const q=now();status.textContent=`高度 ${(s.h/1000).toFixed(1)} km → 体積 ${q.V.toFixed(1)} m³、外皮応力 ${q.stress.toFixed(2)}`};canvas.addEventListener('pointerdown',e=>{active={id:e.pointerId};try{canvas.setPointerCapture(e.pointerId)}catch(_){}move(e)});canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',()=>active=null);canvas.addEventListener('pointercancel',()=>active=null)})();
+</script></body></html>

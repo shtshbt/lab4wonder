@@ -210,4 +210,6 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
-</body></html>
+<style>.v14-direct{margin:7px 0;padding:8px 10px;border:2px solid #ffd85a;border-radius:12px;background:#14263a;font-weight:800;font-size:13px}.stage canvas{touch-action:none;cursor:grab}</style><script id="v14-direct-eclipse">
+(()=>{const canvas=$('mainCv'),status=document.createElement('div');status.className='v14-direct';status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.textContent='🌑 月を左右にドラッグ：月の位置と影の重なりを直接変える';canvas.closest('.stage').after(status);let active=false;function move(e){if(!active)return;e.preventDefault();const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*900,y=(e.clientY-r.top)/r.height*590;t=Math.max(-5,Math.min(5,(x-450)/70));const node=$('node');node.value=Math.max(+node.min,Math.min(+node.max,(y-295)/295*180));draw();const z=geom();status.textContent=`月の位置 ${t.toFixed(1)}、軌道のずれ ${(+node.value).toFixed(0)}° → ${z.kind}（影 ${Math.round(z.cover*100)}%）`};canvas.addEventListener('pointerdown',e=>{active=true;try{canvas.setPointerCapture(e.pointerId)}catch(_){}move(e)});canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',()=>active=false);canvas.addEventListener('pointercancel',()=>active=false)})();
+</script></body></html>

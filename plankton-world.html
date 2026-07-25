@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ミクロなプランクトンワールド</title><style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}body{background:#08111c;color:#edf4fb;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;max-width:980px;margin:auto;padding:12px 12px calc(40px + env(safe-area-inset-bottom));touch-action:manipulation}button,input,select,textarea{font:inherit}button,select{min-height:44px;border:1px solid #38506b;border-radius:11px;background:#17283b;color:#eef7ff;padding:8px 11px;font-weight:800}button{cursor:pointer}button.primary{background:#ffd75a;color:#211a00;border-color:#d5ae2f}button.warn{background:#5d2f24;border-color:#a65c45}button:disabled{opacity:.45}.hdr{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}.hdr h1{font-size:21px;line-height:1.45;margin:0}.sub{color:#9eb0c4;font-size:12px;line-height:1.7}.badge{display:inline-block;background:#20354d;color:#c7e6ff;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:800;white-space:nowrap}.learn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 10px}.learn>div{border:1px solid #2b4058;border-radius:14px;background:#101d2b;padding:10px;min-height:92px}.learn b{display:block;color:#ffd75a;font-size:11px;margin-bottom:5px}.learn p{margin:0;color:#dce7f3;font-size:12px;line-height:1.65}.steps{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 10px}.step{background:#17283a;border:1px solid #36506b;border-radius:999px;padding:7px 10px;font-size:11px;color:#deebf8}.step strong{color:#ffd75a}.stage{border:1px solid #30465f;border-radius:17px;background:#0d1825;overflow:hidden;position:relative}.stage canvas{display:block;width:100%;height:auto;touch-action:none}canvas{display:block;width:100%;height:auto;max-width:100%}.stage-label{position:absolute;left:10px;top:10px;background:rgba(7,13,22,.82);border:1px solid #3d5874;border-radius:999px;padding:5px 9px;font-size:11px;pointer-events:none}.toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:10px 0}.toolbar .grow{flex:1}.panel{display:grid;gap:10px}.card{border:1px solid #2c4259;border-radius:14px;background:#101d2b;padding:11px}.card h2,.card h3{margin:0 0 8px;font-size:15px;color:#ffd75a}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 13px}.sl{display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center}.sl span{font-size:12px;line-height:1.55}.sl output{color:#ffd75a;font:12px ui-monospace,SFMono-Regular,Menlo,monospace}.sl input{grid-column:1/-1;width:100%;height:32px}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}.metric{background:#132337;border:1px solid #31506e;border-radius:12px;padding:9px;min-height:72px}.metric .k{font-size:10px;color:#9eb0c4}.metric .v{font:800 17px/1.25 ui-monospace,SFMono-Regular,Menlo,monospace;color:#fff}.metric .u{font-size:10px;color:#b9c8d7}.bar{height:12px;border-radius:999px;background:#263a50;overflow:hidden}.bar>i{display:block;height:100%;width:0;background:#ffd75a;transition:width .2s}.hint{font-size:12px;line-height:1.75;color:#b0c0d1}.callout{background:#162b3f;border:1px solid #3c617f;border-radius:12px;padding:10px;font-size:12px;line-height:1.75}.take{border-left:4px solid #ffd75a;background:#142130;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.75}.legend{display:flex;gap:7px;flex-wrap:wrap;font-size:11px}.legend span{background:#1a2d42;border-radius:999px;padding:5px 8px}.row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.row label{font-size:12px}.quiz-options{display:grid;gap:7px}.quiz-options button{text-align:left;font-weight:700}.quiz-options button.good{outline:2px solid #65d58b}.quiz-options button.bad{outline:2px solid #ff8b7c}.timeline{display:flex;gap:5px;overflow:auto;padding-bottom:3px}.timeline span{min-width:95px;border:1px solid #36516b;border-radius:10px;padding:7px;font-size:10px;color:#aebfd0}.timeline span.on{background:#ffd75a;color:#211a00;border-color:#ffd75a}.flow{display:flex;align-items:center;gap:5px;overflow:auto}.flow .node{min-width:108px;border:1px solid #36516b;border-radius:11px;padding:8px;text-align:center;font-size:11px;background:#14263a}.flow .arrow{color:#ffd75a;font-weight:900}.explore{margin-top:12px;border:1px solid #36516b;border-radius:15px;background:#0f1d2a;padding:12px}.explore h2{font-size:16px;color:#ffd75a;margin:0 0 7px}.snapgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.snap{border:1px solid #31465e;border-radius:11px;background:#111b28;padding:8px;min-height:100px;white-space:pre-wrap;font:11px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace}.notes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.notes textarea{width:100%;min-height:80px;border:1px solid #3a526c;border-radius:10px;background:#0a1622;color:#eef7ff;padding:9px;line-height:1.55}.model{margin-top:10px}.model summary{cursor:pointer;color:#ffd75a;font-weight:800}.model p{font-size:12px;line-height:1.75;color:#b3c3d3}.guideBack{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;display:none;align-items:flex-end;justify-content:center}.guideBack.show{display:flex}.guide{width:min(760px,100%);background:#f8fbff;color:#182231;border-radius:22px 22px 0 0;padding:16px 14px calc(20px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}.guide h2{margin:0 0 8px;font-size:19px}.guide ol{line-height:1.9}.guide ruby{ruby-position:over}.guide button{background:#eef3f8;color:#192536;border-color:#c4ceda}.guide button.primary{background:#ffd75a;color:#211a00}.footer{display:flex;justify-content:space-between;gap:8px;margin-top:14px;font-size:11px;color:#91a5b9}.footer a{color:#cce8ff}ruby{ruby-position:over}rt{font-size:.56em}.pulse{animation:pulse 1.4s ease-in-out infinite}@keyframes pulse{50%{box-shadow:0 0 0 7px rgba(255,215,90,.14)}}@media(max-width:700px){.learn{grid-template-columns:1fr 1fr}.grid2,.grid3,.grid4{grid-template-columns:1fr}.controls{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.snapgrid,.notes{grid-template-columns:1fr}.hdr h1{font-size:19px}}@media(max-width:390px){body{padding-left:8px;padding-right:8px}.learn{grid-template-columns:1fr}.metric .v{font-size:15px}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}body{background:#08111c;color:#edf4fb;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;max-width:980px;margin:auto;padding:12px 12px calc(40px + env(safe-area-inset-bottom));touch-action:manipulation}button,input,select,textarea{font:inherit}button,select{min-height:44px;border:1px solid #38506b;border-radius:11px;background:#17283b;color:#eef7ff;padding:8px 11px;font-weight:800}button{cursor:pointer}button.primary{background:#ffd75a;color:#211a00;border-color:#d5ae2f}button.warn{background:#5d2f24;border-color:#a65c45}button:disabled{opacity:.45}.hdr{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}.hdr h1{font-size:21px;line-height:1.45;margin:0}.sub{color:#9eb0c4;font-size:12px;line-height:1.7}.badge{display:inline-block;background:#20354d;color:#c7e6ff;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:800;white-space:nowrap}.learn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 10px}.learn>div{border:1px solid #2b4058;border-radius:14px;background:#101d2b;padding:10px;min-height:92px}.learn b{display:block;color:#ffd75a;font-size:11px;margin-bottom:5px}.learn p{margin:0;color:#dce7f3;font-size:12px;line-height:1.65}.steps{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 10px}.step{background:#17283a;border:1px solid #36506b;border-radius:999px;padding:7px 10px;font-size:11px;color:#deebf8}.step strong{color:#ffd75a}.stage{border:1px solid #30465f;border-radius:17px;background:#0d1825;overflow:hidden;position:relative}.stage canvas{display:block;width:100%;height:auto;touch-action:none}canvas{display:block;width:100%;height:auto;max-width:100%}.stage-label{position:absolute;left:10px;top:10px;background:rgba(7,13,22,.82);border:1px solid #3d5874;border-radius:999px;padding:5px 9px;font-size:11px;pointer-events:none}.micro-key{display:flex;gap:6px;flex-wrap:wrap;padding:8px 10px;background:#0b1a28;border-top:1px solid #36536c;font-size:11px}.micro-key span{padding:4px 7px;border:1px solid #45637e;border-radius:999px}.pulse-status{min-height:44px;padding:9px 11px;background:#fff1a8;color:#282000;border-top:2px solid #d8b735;font-size:13px;font-weight:850;line-height:1.6}.toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:10px 0}.toolbar .grow{flex:1}.panel{display:grid;gap:10px}.card{border:1px solid #2c4259;border-radius:14px;background:#101d2b;padding:11px}.card h2,.card h3{margin:0 0 8px;font-size:15px;color:#ffd75a}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 13px}.sl{display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center}.sl span{font-size:12px;line-height:1.55}.sl output{color:#ffd75a;font:12px ui-monospace,SFMono-Regular,Menlo,monospace}.sl input{grid-column:1/-1;width:100%;height:32px}.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}.metric{background:#132337;border:1px solid #31506e;border-radius:12px;padding:9px;min-height:72px}.metric .k{font-size:10px;color:#9eb0c4}.metric .v{font:800 17px/1.25 ui-monospace,SFMono-Regular,Menlo,monospace;color:#fff}.metric .u{font-size:10px;color:#b9c8d7}.bar{height:12px;border-radius:999px;background:#263a50;overflow:hidden}.bar>i{display:block;height:100%;width:0;background:#ffd75a;transition:width .2s}.hint{font-size:12px;line-height:1.75;color:#b0c0d1}.callout{background:#162b3f;border:1px solid #3c617f;border-radius:12px;padding:10px;font-size:12px;line-height:1.75}.take{border-left:4px solid #ffd75a;background:#142130;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.75}.legend{display:flex;gap:7px;flex-wrap:wrap;font-size:11px}.legend span{background:#1a2d42;border-radius:999px;padding:5px 8px}.row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.row label{font-size:12px}.quiz-options{display:grid;gap:7px}.quiz-options button{text-align:left;font-weight:700}.quiz-options button.good{outline:2px solid #65d58b}.quiz-options button.bad{outline:2px solid #ff8b7c}.timeline{display:flex;gap:5px;overflow:auto;padding-bottom:3px}.timeline span{min-width:95px;border:1px solid #36516b;border-radius:10px;padding:7px;font-size:10px;color:#aebfd0}.timeline span.on{background:#ffd75a;color:#211a00;border-color:#ffd75a}.flow{display:flex;align-items:center;gap:5px;overflow:auto}.flow .node{min-width:108px;border:1px solid #36516b;border-radius:11px;padding:8px;text-align:center;font-size:11px;background:#14263a}.flow .arrow{color:#ffd75a;font-weight:900}.explore{margin-top:12px;border:1px solid #36516b;border-radius:15px;background:#0f1d2a;padding:12px}.explore h2{font-size:16px;color:#ffd75a;margin:0 0 7px}.snapgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.snap{border:1px solid #31465e;border-radius:11px;background:#111b28;padding:8px;min-height:100px;white-space:pre-wrap;font:11px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace}.notes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.notes textarea{width:100%;min-height:80px;border:1px solid #3a526c;border-radius:10px;background:#0a1622;color:#eef7ff;padding:9px;line-height:1.55}.model{margin-top:10px}.model summary{cursor:pointer;color:#ffd75a;font-weight:800}.model p{font-size:12px;line-height:1.75;color:#b3c3d3}.guideBack{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;display:none;align-items:flex-end;justify-content:center}.guideBack.show{display:flex}.guide{width:min(760px,100%);background:#f8fbff;color:#182231;border-radius:22px 22px 0 0;padding:16px 14px calc(20px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}.guide h2{margin:0 0 8px;font-size:19px}.guide ol{line-height:1.9}.guide ruby{ruby-position:over}.guide button{background:#eef3f8;color:#192536;border-color:#c4ceda}.guide button.primary{background:#ffd75a;color:#211a00}.footer{display:flex;justify-content:space-between;gap:8px;margin-top:14px;font-size:11px;color:#91a5b9}.footer a{color:#cce8ff}ruby{ruby-position:over}rt{font-size:.56em}.pulse{animation:pulse 1.4s ease-in-out infinite}@keyframes pulse{50%{box-shadow:0 0 0 7px rgba(255,215,90,.14)}}@media(max-width:700px){.learn{grid-template-columns:1fr 1fr}.grid2,.grid3,.grid4{grid-template-columns:1fr}.controls{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.snapgrid,.notes{grid-template-columns:1fr}.hdr h1{font-size:19px}}@media(max-width:390px){body{padding-left:8px;padding-right:8px}.learn{grid-template-columns:1fr}.metric .v{font-size:15px}}
 </style><style id="r53-style">
 html,body{max-width:100%;overflow-x:hidden}canvas{max-width:100%;height:auto}.r53-limit,.r53-deep{margin:14px 0;padding:14px;border:1px solid #30465e;border-radius:14px;background:#0b1725}.r53-limit h2,.r53-deep h2{font-size:1rem;margin:0 0 7px}.r53-limit p,.r53-deep p{margin:0}.r53-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:10px 0}.r53-metric{background:#0b1624;border:1px solid #293e57;border-radius:11px;padding:8px;min-width:0}.r53-metric b{display:block;color:#9fcdf5;font-size:10px}.r53-metric strong{display:block;color:#ffdb5b;font:17px/1.35 ui-monospace,monospace;margin-top:3px;overflow-wrap:anywhere}.r53-inline-select{min-height:42px;border:1px solid #38506b;border-radius:10px;background:#0b1624;color:#fff;padding:7px}@media(max-width:390px){.r53-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.toolbar{gap:6px}.toolbar button,.toolbar select,.row button,.row select{font-size:12px;padding:8px 9px}canvas{width:100%!important}}
 </style><style id="r59-common-ui-style">
@@ -23,9 +23,9 @@ body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px
 <div class="steps"><span class="step"><strong>1</strong> 現在の増減を予想</span><span class="step"><strong>2</strong> 再生・早送り</span><span class="step"><strong>3</strong> 栄養塩パルス</span><span class="step"><strong>4</strong> 時間差を説明</span></div>
 <div class="row" style="margin-bottom:10px"><button id="guideBtn" type="button">👆 操作ガイド</button><button id="speakBtn" type="button">🔊 読み上げ</button><span class="badge">★★★ ブルームと遅れを探す</span></div>
 
-<div class="stage"><canvas id="micro" width="960" height="560" aria-label="顕微鏡の視野を泳ぐプランクトン"></canvas><div id="microLabel" class="stage-label">0日目・池の水滴</div></div>
+<div class="stage"><canvas id="micro" width="960" height="560" aria-label="タップした場所へ栄養塩を落とし、植物から動物プランクトンへ伝わる時間差を観察する水滴"></canvas><div id="microLabel" class="stage-label">0日目・池の水滴</div><div class="micro-key"><span>水色粒＝栄養塩</span><span>緑＝植物プランクトン</span><span>桃＝動物プランクトン</span><span>白い輪＝着水・拡散</span></div><div id="pulseStatus" class="pulse-status" role="status" aria-live="polite">👆 水滴をタップして栄養塩を落とそう。植物が先、動物が遅れて集まります。</div></div>
 <div class="toolbar"><button id="play" class="primary pulse" type="button">⏸ 一時停止</button><button id="step" type="button">＋1日</button><select id="speed" aria-label="再生速度"><option value="1">×1</option><option value="5">×5</option><option value="20">×20</option></select><button id="skip60" type="button">⏩ 60日タイムラプス</button><button id="pulseN" type="button">栄養塩を加える</button><button id="newDrop" type="button">新しい水滴</button><button id="reset" type="button">初期化</button></div>
-<div class="metrics"><div class="metric"><div class="k">経過</div><div id="mDay" class="v">0.0</div><div class="u">日</div></div><div class="metric"><div class="k">植物プランクトン</div><div id="mPhy" class="v">80</div><div class="u">相対量</div></div><div class="metric"><div class="k">動物プランクトン</div><div id="mZoo" class="v">24</div><div class="u">相対量</div></div><div class="metric"><div class="k">栄養塩</div><div id="mNut" class="v">70</div><div class="u">相対量</div></div></div>
+<div class="metrics"><div class="metric"><div class="k">経過</div><div id="mDay" class="v">0.0</div><div class="u">日</div></div><div class="metric"><div class="k">植物プランクトン</div><div id="mPhy" class="v">80</div><div class="u">相対量</div></div><div class="metric"><div class="k">動物プランクトン</div><div id="mZoo" class="v">24</div><div class="u">相対量</div></div><div class="metric"><div class="k">栄養塩</div><div id="mNut" class="v">70</div><div class="u">相対量</div></div><div class="metric"><div class="k">酸素の目安</div><div id="mOxy" class="v">—</div><div class="u">%</div></div><div class="metric"><div class="k">透明度の目安</div><div id="mClear" class="v">—</div><div class="u">%</div></div></div>
 <div class="grid2"><div class="card"><h2>水の条件</h2><div class="controls"><label class="sl"><span>環境</span><select id="habitat"><option value="pond">池</option><option value="coast">海岸</option><option value="ocean">外洋</option></select></label><label class="sl"><span>光</span><output id="oLight">75%</output><input id="light" type="range" min="0" max="100" value="75"></label><label class="sl"><span>水温</span><output id="oTemp">20℃</output><input id="temp" type="range" min="2" max="32" value="20"></label><label class="sl"><span>混合・栄養供給</span><output id="oMix">35%</output><input id="mix" type="range" min="0" max="100" value="35"></label><label class="sl"><span>捕食圧</span><output id="oGraze">50%</output><input id="graze" type="range" min="0" max="100" value="50"></label><label class="sl"><span>倍率</span><output id="oZoom">200×</output><input id="zoom" type="range" min="100" max="600" step="50" value="200"></label></div><div id="timeLapse" class="callout" style="margin-top:8px">60日タイムラプスでは、日付が進みながら増減を追えます。</div></div><div class="card"><h2>個体群の時間変化</h2><canvas id="popChart" width="960" height="320" aria-label="植物プランクトン、動物プランクトン、栄養塩の時間変化"></canvas><div class="legend"><span>緑：植物プランクトン</span><span>桃：動物プランクトン</span><span>青：栄養塩</span></div></div></div>
 <div class="flow"><div class="node">光・栄養塩</div><div class="arrow">→</div><div class="node">植物プランクトン増加</div><div class="arrow">→ 遅れて</div><div class="node">動物プランクトン増加</div><div class="arrow">→</div><div class="node">栄養塩の再循環</div></div><div id="explain" class="take">栄養塩の増加後、植物プランクトンが先に増え、動物プランクトンは時間差をもって増えます。</div>
 
@@ -96,6 +96,201 @@ function drawChart(){const W=960,H=320;g.clearRect(0,0,W,H);g.fillStyle='#091722
 function updateMetrics(){mDay.textContent=day.toFixed(1);mPhy.textContent=Math.round(phy);mZoo.textContent=Math.round(zoo);mNut.textContent=Math.round(nut);microLabel.textContent=day.toFixed(1)+'日目・'+habitat.options[habitat.selectedIndex].text+'・'+zoom.value+'×';const bloom=phy>180?'植物プランクトンのブルームが起きています。':'植物プランクトンは通常範囲です。';const lag=zoo>70?'動物プランクトンも遅れて増えています。':'動物プランクトンの応答には時間差があります。';explain.textContent=bloom+' '+lag+' デトリタス '+Math.round(det)+'、累積沈降 '+Math.round(sunk)+'。光・栄養・捕食のどれが支配的か、一つずつ変えて確かめよう。'}
 function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(running){let mul=+speed.value;if(targetDay!==null)mul=30;simStep(dt*.8*mul)}draw();requestAnimationFrame(loop)}
 play.onclick=()=>{running=!running;play.textContent=running?'⏸ 一時停止':'▶ 再生';play.classList.toggle('pulse',!running)};step.onclick=()=>{running=false;play.textContent='▶ 再生';simStep(1);draw()};skip60.onclick=()=>{targetDay=day+60;running=true;play.textContent='⏸ 一時停止';speed.value='20';timeLapse.textContent='60日タイムラプス進行中：'+day.toFixed(1)+' → '+targetDay.toFixed(1)+'日';};pulseN.onclick=()=>{nut=clamp(nut+90,0,220);record();timeLapse.textContent='栄養塩パルスを加えました。植物→動物の順に増えるか見よう。'};newDrop.onclick=()=>{seedParticles();particles.forEach(p=>p.k=Math.random())};reset.onclick=()=>resetSim(true);habitat.onchange=()=>resetSim(true);[['light','oLight','%'],['mix','oMix','%'],['graze','oGraze','%']].forEach(([a,b,u])=>document.getElementById(a).oninput=()=>document.getElementById(b).textContent=document.getElementById(a).value+u);temp.oninput=()=>oTemp.textContent=temp.value+'℃';zoom.oninput=()=>oZoom.textContent=zoom.value+'×';resetSim(true);requestAnimationFrame(loop);
+</script><script id="plankton-nutrient-interaction">
+(()=>{
+const baseDraw=draw;
+const baseSimStep=simStep;
+const baseResetSim=resetSim;
+const drops=[];
+let activePulse=null;
+
+function derivedWater(){
+  const oxygen=clamp(58+phy*.18-zoo*.08-det*.15-Math.max(0,phy-160)*.38,8,100);
+  const clarity=clamp(104-phy*.2-det*.08,6,100);
+  return{oxygen,clarity};
+}
+
+function makeSpecks(){
+  return Array.from({length:32},()=>({
+    angle:rand(0,Math.PI*2),
+    radius:rand(.12,1),
+    sink:rand(.5,1.3),
+    size:rand(2,5)
+  }));
+}
+
+function clampToDrop(x,y){
+  const dx=x-480,dy=y-280;
+  const distance=Math.hypot(dx,dy);
+  if(distance<=245)return{x,y};
+  const scale=245/Math.max(1,distance);
+  return{x:480+dx*scale,y:280+dy*scale};
+}
+
+function addNutrient(x,y){
+  const point=clampToDrop(x,y);
+  const water=derivedWater();
+  nut=clamp(nut+72,0,220);
+  activePulse={
+    x:point.x,y:point.y,startDay:day,
+    startPhy:phy,startZoo:zoo,startOxygen:water.oxygen,startClarity:water.clarity
+  };
+  drops.push({...activePulse,startedAt:performance.now(),specks:makeSpecks()});
+  if(drops.length>3)drops.shift();
+  record();
+  running=true;
+  play.textContent='⏸ 一時停止';
+  play.classList.remove('pulse');
+  pulseStatus.textContent='💧 着水！ 水色の栄養塩が沈みながら広がっています。まず緑の植物プランクトンが反応します。';
+  timeLapse.textContent='栄養投入を追跡中：植物が先、動物が遅れて増える順序を見よう。';
+  draw();
+}
+
+simStep=function(dt){
+  baseSimStep(dt);
+  if(!activePulse)return;
+  const elapsed=day-activePulse.startDay;
+  if(elapsed<2.5||elapsed>16)return;
+  const bloom=Math.max(0,phy-activePulse.startPhy);
+  const delayedGain=Math.min(3.2,.6+bloom*.04);
+  zoo=clamp(zoo+delayedGain*dt,1,260);
+};
+
+function drawCloud(drop,age){
+  const spread=28+Math.min(145,age*25);
+  const cy=drop.y+Math.min(95,age*14);
+  const gradient=c.createRadialGradient(drop.x,cy,5,drop.x,cy,spread);
+  gradient.addColorStop(0,'rgba(89,207,255,.35)');
+  gradient.addColorStop(1,'rgba(89,207,255,0)');
+  c.fillStyle=gradient;
+  c.beginPath();
+  c.arc(drop.x,cy,spread,0,Math.PI*2);
+  c.fill();
+  c.fillStyle='rgba(128,224,255,.86)';
+  for(const speck of drop.specks){
+    const radius=spread*speck.radius;
+    const x=drop.x+Math.cos(speck.angle+age*.12)*radius;
+    const y=cy+Math.sin(speck.angle)*radius*.55+age*speck.sink*3;
+    c.beginPath();
+    c.arc(x,y,speck.size,0,Math.PI*2);
+    c.fill();
+  }
+}
+
+function drawRipple(drop,age){
+  if(age>2.2)return;
+  for(let i=0;i<3;i++){
+    const phase=Math.max(0,age-i*.3);
+    c.strokeStyle=`rgba(238,251,255,${Math.max(0,.85-phase*.38)})`;
+    c.lineWidth=4;
+    c.beginPath();
+    c.ellipse(drop.x,drop.y,18+phase*65,8+phase*24,0,0,Math.PI*2);
+    c.stroke();
+  }
+}
+
+function drawResponseCluster(drop){
+  const elapsed=Math.max(0,day-drop.startDay);
+  const cy=drop.y+Math.min(95,(performance.now()-drop.startedAt)/1000*14);
+  const greenCount=Math.min(34,Math.floor(4+elapsed*5));
+  const pinkCount=Math.min(18,Math.floor(Math.max(0,elapsed-2.5)*3));
+  for(let i=0;i<greenCount;i++){
+    const angle=i*2.4,rad=25+(i%6)*13;
+    c.fillStyle='rgba(81,239,139,.82)';
+    c.beginPath();
+    c.ellipse(drop.x+Math.cos(angle)*rad,cy+Math.sin(angle)*rad*.58,7,4,angle,0,Math.PI*2);
+    c.fill();
+  }
+  for(let i=0;i<pinkCount;i++){
+    const angle=i*2.1+.5,rad=46+(i%5)*16;
+    c.strokeStyle='rgba(255,157,196,.92)';
+    c.lineWidth=3;
+    c.beginPath();
+    c.arc(drop.x+Math.cos(angle)*rad,cy+Math.sin(angle)*rad*.58,7,0,Math.PI*2);
+    c.stroke();
+  }
+}
+
+function drawCauseGuide(){
+  if(!activePulse)return;
+  const elapsed=day-activePulse.startDay;
+  const phase=elapsed<1?0:elapsed<3?1:elapsed<7?2:3;
+  const items=['① 栄養が拡散','② 植物が増える','③ 動物が追う','④ 酸素・透明度が変化'];
+  c.font='800 14px system-ui';
+  items.forEach((text,index)=>{
+    c.fillStyle=index===phase?'#fff0a8':'rgba(7,18,29,.86)';
+    c.fillRect(604,18+index*34,334,27);
+    c.fillStyle=index===phase?'#251d00':'#dcecf8';
+    c.fillText(text,616,37+index*34);
+  });
+}
+
+function drawPulseEffects(){
+  const now=performance.now();
+  c.save();
+  c.beginPath();
+  c.arc(480,280,266,0,Math.PI*2);
+  c.clip();
+  for(const drop of drops){
+    const age=(now-drop.startedAt)/1000;
+    if(age<10)drawCloud(drop,age);
+    drawRipple(drop,age);
+    drawResponseCluster(drop);
+  }
+  c.restore();
+  drawCauseGuide();
+}
+
+function updatePulseReadout(){
+  const water=derivedWater();
+  mOxy.textContent=Math.round(water.oxygen);
+  mClear.textContent=Math.round(water.clarity);
+  if(!activePulse)return;
+  const elapsed=day-activePulse.startDay;
+  if(elapsed<1)return;
+  const phyChange=Math.round(phy-activePulse.startPhy);
+  const zooChange=Math.round(zoo-activePulse.startZoo);
+  if(elapsed<3){
+    pulseStatus.textContent=`🌿 ${elapsed.toFixed(1)}日後：植物プランクトンが集まり始めました（${phyChange>=0?'+':''}${phyChange}）。動物はまだ追いついていません。`;
+  }else if(elapsed<7){
+    pulseStatus.textContent=`🌿→🦠 ${elapsed.toFixed(1)}日後：植物が先に増え、桃色の動物プランクトンが追い始めました（動物 ${zooChange>=0?'+':''}${zooChange}）。`;
+  }else{
+    pulseStatus.textContent=`🔎 ${elapsed.toFixed(1)}日後：動物も追随。酸素 ${Math.round(water.oxygen)}%、透明度 ${Math.round(water.clarity)}%。増えすぎると水は濁ります。`;
+  }
+}
+
+draw=function(){
+  baseDraw();
+  drawPulseEffects();
+  updatePulseReadout();
+};
+
+resetSim=function(loadPreset=true){
+  drops.length=0;
+  activePulse=null;
+  baseResetSim(loadPreset);
+  pulseStatus.textContent='👆 水滴をタップして栄養塩を落とそう。植物が先、動物が遅れて集まります。';
+};
+
+function canvasPoint(event){
+  const rect=micro.getBoundingClientRect();
+  return{
+    x:(event.clientX-rect.left)/rect.width*micro.width,
+    y:(event.clientY-rect.top)/rect.height*micro.height
+  };
+}
+
+micro.addEventListener('pointerdown',event=>{
+  if(event.button!==undefined&&event.button!==0)return;
+  event.preventDefault();
+  try{micro.setPointerCapture(event.pointerId)}catch(_){}
+  const point=canvasPoint(event);
+  addNutrient(point.x,point.y);
+});
+
+pulseN.onclick=()=>addNutrient(480,105);
+updatePulseReadout();
+})();
 </script><script id="r53-contract-layer">
 (()=>{
  const cfg={"base":530808,"main":"micro","second":"popChart","trigger":"newDrop","label":"水域課題","speed":"speed","step":"step","play":"play","resetName":"resetPlanktonR53","limit":"植物・動物プランクトン、栄養塩、デトリタスをまとめた教育模型です。種多様性、乱流、鉛直構造、実海域の赤潮予測には使えません。","scenarios":[{"habitat":"pond","light":75,"temp":20,"mix":35,"graze":50,"zoom":200},{"habitat":"coast","light":85,"temp":18,"mix":75,"graze":40,"zoom":250},{"habitat":"ocean","light":90,"temp":14,"mix":15,"graze":30,"zoom":300},{"habitat":"pond","light":25,"temp":10,"mix":25,"graze":70,"zoom":150},{"habitat":"coast","light":65,"temp":24,"mix":45,"graze":85,"zoom":400}],"tests":[["light",5,95],["mix",0,95],["graze",0,95]],"resetButton":"reset"},q=id=>document.getElementById(id),main=q(cfg.main),second=q(cfg.second);let trigger=q(cfg.trigger),speedSel=q(cfg.speed),stepBtn=q(cfg.step),playBtn=q(cfg.play);

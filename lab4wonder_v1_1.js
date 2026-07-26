@@ -482,6 +482,7 @@
 
     nextButton.addEventListener("click", startEncounter);
     bookButton.addEventListener("click", () => atlasOpen?.click());
+    nextButton.hidden = true;
     target.addEventListener("pointerdown", (event) => event.stopPropagation());
     target.addEventListener("click", (event) => {
       event.preventDefault();
@@ -499,7 +500,26 @@
       }
     });
 
-    window.setTimeout(startEncounter, 650);
+    // Wait for the visitor to start the app. This layer used to spawn its
+    // creature 650ms after load, so something drifted across a cave or a reef
+    // that had not been played yet, which is exactly what the apps themselves
+    // were changed to stop doing.
+    status.textContent = "▶ 再生を押すと、この景色の中に何か現れます。";
+    const play = document.querySelector("#playPause,#playBtn,#play");
+    if (!play) {
+      // Nothing to wait for: this app runs continuously.
+      nextButton.hidden = false;
+      window.setTimeout(startEncounter, 650);
+      return;
+    }
+    const begin = () => {
+      nextButton.hidden = false;
+      startEncounter();
+    };
+    play.addEventListener("click", function once() {
+      play.removeEventListener("click", once);
+      window.setTimeout(begin, 650);
+    });
   }
 
   function watchExplorationAtlas() {

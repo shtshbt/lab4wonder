@@ -207,7 +207,7 @@ const lensInfo = {
   composition:'三分割・対角線・三角形・主役配置を見る。画面がどのように安定または緊張しているかを確かめる。',
   light:'明るい所と暗い所を分けて見る。光の向きと、どこを強調したいかが分かる。',
   color:'暖色と寒色のバランスを見る。空気感や心理的な温度がどう変わるかに注目する。',
-  stroke:'筆の動き、点描、輪郭の強さを見る。形を作っているのが線なのか、色片なのかを区別する。',
+  stroke:'丸いまどの中は実物の拡大。筆の動き、点描、輪郭の強さを見て、形を作っているのが線なのか色の粒なのかを区別する。',
   perspective:'消失点や奥行きの筋道を見る。遠近法が主役の作品か、そうでない作品かも分かる。'
 };
 
@@ -262,7 +262,7 @@ const works = [
     title:'印象・日の出', short:'日の出', artist:'クロード・モネ', year:'1872', style:'印象派',
     summary:'細部よりも光と空気を優先し、近くでは筆触、離れると景色としてまとまる。',
     focus:'朝の光、霞む輪郭、短い筆触、反射。',
-    source:'原作はパブリックドメイン。オフライン版のため軽量な絵画的リメイクで表示。',
+    source:'原作はパブリックドメイン。低容量化したパブリックドメイン実画像を表示。',
     tags:['光','空気感','色のにじみ'],
     swatches:['#95aebb','#ec6b3e','#627892','#d7d7c4'],
     missions:[
@@ -577,25 +577,34 @@ function overlayLight(work){
   }
   ctx.restore();
 }
+const STROKE_VIEWS={
+  athens:{spots:[[.50,.62],[.245,.56]],note:'フレスコ画: なめらかな面と輪郭で形を作る'},
+  matthew:{spots:[[.33,.50],[.62,.22]],note:'油彩: 暗部はなめらかに、光の縁だけ鋭く'},
+  wave:{spots:[[.30,.26],[.55,.66]],note:'木版画: 筆あとではなく、彫った輪郭線と平らな色面'},
+  sunrise:{spots:[[.61,.55],[.44,.72]],note:'短く切れた筆触が、水面のゆらぎと光を作る'},
+  grande:{spots:[[.36,.62],[.12,.35]],note:'小さな色の点の集まり。離れると目の中で混ざる'},
+  starry:{spots:[[.50,.33],[.16,.45]],note:'うねる長い筆触が、空の流れを作る'}
+};
+function drawLoupe(work,nx,ny){
+  const im=realImages[work.id];if(!im)return;
+  const r=Math.max(46,activeImageRect.w*.13),zoomF=2.8;
+  const [cx,cy]=artPoint(nx,ny);
+  const side=(r*2/zoomF)*(im.naturalWidth/activeImageRect.w);
+  const sx=clamp(nx*im.naturalWidth-side/2,0,im.naturalWidth-side);
+  const sy=clamp(ny*im.naturalHeight-side/2,0,im.naturalHeight-side);
+  ctx.save();ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.clip();
+  ctx.drawImage(im,sx,sy,side,side,cx-r,cy-r,r*2,r*2);ctx.restore();
+  ctx.save();ctx.strokeStyle='#ffd85a';ctx.lineWidth=3;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();ctx.restore();
+}
 function overlayStroke(work){
-  withArtClip(()=>{
-    ctx.save();hatchOverlay(Math.max(16,activeImageRect.w/48),'rgba(255,255,255,.16)',-0.4);
-    if(work.id==='grande'){
-      for(let i=0;i<180;i++){const p=artPoint(.04+rnd(i)*.40,.05+rnd(i*3)*.35);dotCircle(p[0],p[1],2.5,['#3b6595','#e0d37f','#5f8d63','#b2525d','#76659b'][i%5],.95);}const lab=artPoint(.04,.04);drawLabel('点の集合で色と形を作る',lab[0],lab[1],'rgba(22,39,61,.92)');
-    }else if(work.id==='sunrise'){
-      for(let i=0;i<30;i++){const p=artPoint(.05+i*.025,.18+(i%4)*.035);brushStroke(p[0],p[1],activeImageRect.w*.045,.05,5,i%2?'#dde4ea':'#6c8799',.9);}const lab=artPoint(.04,.05);drawLabel('短く切れた筆触',lab[0],lab[1],'rgba(22,39,61,.92)');
-    }else if(work.id==='starry'){
-      const c=artPoint(...ART_GUIDES.starry.swirl);for(let i=0;i<22;i++)brushStroke(c[0]+Math.cos(i*.55)*i*4,c[1]+Math.sin(i*.55)*i*3,activeImageRect.w*.075,-.8+i*.08,7,i%2?'#f2ca46':'#5b8cca',.9);const lab=artPoint(.04,.05);drawLabel('空を回り込むうねる筆触',lab[0],lab[1],'rgba(22,39,61,.92)');
-    }else if(work.id==='wave'){
-      for(let i=0;i<20;i++){const p=artPoint(.06+i*.035,.17+(i%3)*.03);brushStroke(p[0],p[1],activeImageRect.w*.055,-.18,5,i%2?'#1b4165':'#f8f4eb',.92);}const lab=artPoint(.04,.05);drawLabel('輪郭線と反復する波形',lab[0],lab[1],'rgba(22,39,61,.92)');
-    }else{const lab=artPoint(.04,.05);drawLabel(work.id==='matthew'?'滑らかな暗部と硬い光の縁':'輪郭と面の塗り分け',lab[0],lab[1],'rgba(22,39,61,.92)');}
-    ctx.restore();
-  });
+  const sv=STROKE_VIEWS[work.id];if(!sv)return;
+  sv.spots.forEach(p=>drawLoupe(work,p[0],p[1]));
+  const lab=artPoint(.04,.05);drawLabel(sv.note+'。丸いまどは実物の拡大',lab[0],lab[1],'rgba(22,39,61,.92)');
 }
 function overlayPerspective(work){
   const g=ART_GUIDES[work.id];ctx.save();ctx.strokeStyle='rgba(113,241,255,.95)';ctx.lineWidth=2;
   if(work.id==='athens'){
-    const v=artPoint(...g.vanish);for(let f=0;f<=1;f+=.08){const p=artPoint(f,1);ctx.beginPath();ctx.moveTo(...p);ctx.lineTo(...v);ctx.stroke();}for(let y=.58;y<=.98;y+=.07){const l=artPoint(.08+(y-.58)*.45,y),r=artPoint(.92-(y-.58)*.45,y);ctx.beginPath();ctx.moveTo(...l);ctx.lineTo(...r);ctx.stroke();}dotCircle(v[0],v[1],7,'#ffd85a');drawLabel('一点透視の中心',v[0]+12,v[1]-10,'rgba(19,47,55,.95)');
+    const v=artPoint(...g.vanish);ctx.save();ctx.globalAlpha=.7;for(let f=0;f<=1.001;f+=.125){const p=artPoint(f,1);ctx.beginPath();ctx.moveTo(...p);ctx.lineTo(...v);ctx.stroke();}ctx.restore();dotCircle(v[0],v[1],7,'#ffd85a');drawLabel('一点透視の中心。奥行きの線がここに集まる',v[0]+12,v[1]-10,'rgba(19,47,55,.95)');
   }else if(work.id==='wave'){
     const pts=g.fuji.map(p=>artPoint(...p));ctx.beginPath();ctx.moveTo(...pts[0]);ctx.lineTo(...pts[1]);ctx.lineTo(...pts[2]);ctx.closePath();ctx.stroke();const lab=artPoint(.47,.04);drawLabel('富士は小さくても輪郭対比で残る',lab[0],lab[1],'rgba(19,47,55,.95)');
   }else if(work.id==='sunrise'){
@@ -603,7 +612,7 @@ function overlayPerspective(work){
   }else if(work.id==='matthew'){
     const a=artPoint(...g.beam[0]),b=artPoint(...g.beam[1]);ctx.beginPath();ctx.moveTo(...a);ctx.lineTo(...b);ctx.stroke();const lab=artPoint(.53,.05);drawLabel('建築空間より光線が奥行きを示す',lab[0],lab[1],'rgba(19,47,55,.95)');
   }else if(work.id==='grande'){
-    const y=artPoint(0,g.horizon)[1];ctx.beginPath();ctx.moveTo(activeImageRect.x,y);ctx.lineTo(activeImageRect.x+activeImageRect.w,y);ctx.stroke();const lab=artPoint(.42,.04);drawLabel('人物の縮尺と重なりで距離を作る',lab[0],lab[1],'rgba(19,47,55,.95)');
+    const near=artBox(.70,.20,.26,.74),far=artBox(.29,.30,.06,.14);ctx.strokeRect(...near);ctx.strokeRect(...far);ctx.save();ctx.setLineDash([7,7]);const a=artPoint(.70,.50),b=artPoint(.35,.40);ctx.beginPath();ctx.moveTo(...a);ctx.lineTo(...b);ctx.stroke();ctx.restore();const lab=artPoint(.28,.04);drawLabel('近くの人は大きく、遠くの人は小さい',lab[0],lab[1],'rgba(19,47,55,.95)');
   }else{
     const lab=artPoint(.39,.04);drawLabel('線遠近より色・重なり・筆触が主役',lab[0],lab[1],'rgba(19,47,55,.95)');
   }ctx.restore();

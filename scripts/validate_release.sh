@@ -34,7 +34,7 @@ for catalog_name in explore.html kids-index.html; do
 done
 
 asset_count=$(rg -l 'lab4wonder_v1_1\.js' "$repo_dir"/*.html | wc -l)
-check_equal "apps using v1.1 behavior" "$asset_count" "180"
+check_equal "apps using v1.1 behavior" "$asset_count" "183"
 
 if rg -q -F '\n<link rel="stylesheet"' "$repo_dir"/*.html; then
   printf 'error: literal backslash-n remains beside a shared asset tag\n' >&2

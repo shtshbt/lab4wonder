@@ -13,8 +13,8 @@
 <header class="hdr"><div><span class="badge">r50・化学・電気・動的探究版</span><h1>電池・化学反応・負荷ラボ</h1><div class="sub">電池内部のイオン移動と外部回路の電子移動をつなぎ、負荷による放電・電圧低下・発熱を追う。</div></div><div class="head-actions"><button id="guideBtn" aria-label="？ ガイド">？ ガイド</button><button id="speakBtn" aria-label="🔊 読む">🔊 読む</button><button id="tourBtn" aria-label="👣 操作">👣 操作</button><button id="resetTop" aria-label="↺ リセット">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>電池内部のイオン移動と外部回路の電子移動をつなぎ、負荷による放電・電圧低下・発熱を追う。</p></div><div><b>どこを見る？</b><p>電極、電解質、イオン、電子、残量ゲージ、端子電圧、温度。</p></div><div><b>何を変える？</b><p>化学系、セル数、負荷抵抗、内部抵抗、周囲温度、容量、充放電。</p></div><div><b>持ち帰る一文</b><p data-takeaway>電池の公称電圧だけでは使用時の性能は決まらず、残量・負荷・内部抵抗・温度が端子電圧と発熱を変える。</p></div></section>
 
-<section class="toolbar" data-tour="controls"><button id="playPause" class="primary" aria-label="▶ 放電">▶ 放電</button><button id="stepBtn" aria-label="1分">1分</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="10">×10</option><option value="60">×60</option></select><button id="chargeBtn" aria-label="充電/放電切替">充電/放電切替</button><button id="faultBtn" aria-label="短絡テスト">短絡テスト</button><button id="scenarioBtn" aria-label="別の電池">別の電池</button></section>
-<section class="stage" data-tour="stage"><canvas id="mainCv" width="900" height="590" aria-label="電池内部を移動するイオンと外部回路を流れる電子、残量と温度" role="img"></canvas></section>
+<section class="toolbar" data-tour="controls"><button id="playPause" class="primary" aria-label="▶ 放電">▶ 放電</button><button id="stepBtn" aria-label="1分">1分</button><select id="speedSel" aria-label="再生速度"><option value="1">×1</option><option value="2" selected>×2</option><option value="4">×4</option><option value="8">×8</option></select><button id="chargeBtn" aria-label="充電/放電切替">充電/放電切替</button><button id="faultBtn" aria-label="短絡テスト">短絡テスト</button><button id="scenarioBtn" aria-label="別の電池">別の電池</button></section>
+<section class="stage" data-tour="stage"><canvas id="mainCv" width="900" height="590" aria-label="電池内部を移動するイオンと外部回路を流れる電子、残量と温度。図の上のスイッチと負荷の道具はタップで直接操作できる" role="img"></canvas></section>
 <div class="panel grid2"><section class="card"><h2>電池条件</h2><label class="control">化学系 <select id="chem" aria-label="化学系"><option value="alkaline">アルカリ一次電池</option><option value="nimh">ニッケル水素</option><option value="liion">リチウムイオン</option></select></label><label class="control">セル数 <output id="cellsOut"></output><input id="cells" type="range" min="1" max="6" value="2" aria-label="セル数"></label><label class="control">負荷抵抗 <output id="loadOut"></output><input id="load" type="range" min="0.5" max="30" value="8" step="0.5" aria-label="負荷抵抗"></label><label class="control">内部抵抗 <output id="intOut"></output><input id="internal" type="range" min="0.05" max="2" value="0.25" step="0.05" aria-label="内部抵抗"></label><label class="control">周囲温度 <output id="ambOut"></output><input id="ambient" type="range" min="-10" max="50" value="22" aria-label="周囲温度"></label><label class="control">容量 <output id="capOut"></output><input id="capacity" type="range" min="500" max="4000" value="2000" step="100" aria-label="容量"></label><div class="callout" id="explain" aria-live="polite"></div></section><section class="card" data-tour="metrics"><h2>常時計器</h2><div class="metrics"><div class="metric"><b>残量</b><strong id="socM"></strong></div><div class="metric"><b>端子電圧</b><strong id="voltM"></strong></div><div class="metric"><b>電流</b><strong id="currM"></strong></div><div class="metric"><b>温度</b><strong id="tempM"></strong></div></div><div class="metrics" style="margin-top:7px"><div class="metric"><b>内部損失</b><strong id="lossM"></strong></div><div class="metric"><b>負荷電力</b><strong id="powerM"></strong></div><div class="metric"><b>反応偏り</b><strong id="polarM"></strong></div><div class="metric"><b>状態</b><strong id="stateM"></strong></div></div><div class="bar" style="margin-top:8px"><i id="socBar"></i></div><div class="callout" id="stateText"></div></section></div>
 <section class="deep"><h2>電圧・電流・残量・温度の履歴</h2><canvas id="graphCv" width="900" height="310" aria-label="電池端子電圧電流残量温度の履歴" role="img"></canvas><p>電池では化学反応が電荷を分離し、外部回路へエネルギーを渡します。内部抵抗があるため、負荷電流が大きいほど端子電圧低下と発熱が増えます。</p></section>
 
@@ -34,38 +34,91 @@
 })();
 </script>
 <script>
-const $=id=>document.getElementById(id),cv=$('mainCv'),c=cv.getContext('2d'),gv=$('graphCv'),g=gv.getContext('2d');let running=false,last=performance.now(),speed=1,time=0,soc=.8,temp=22,charging=false,shorted=false,ions=[],electrons=[],hist=[],polar=0;
+const $=id=>document.getElementById(id),cv=$('mainCv'),c=cv.getContext('2d'),gv=$('graphCv'),g=gv.getContext('2d');let running=false,last=performance.now(),speed=2,time=0,soc=.8,temp=22,charging=false,shorted=false,ions=[],electrons=[],hist=[],polar=0;
 const CHEM={alkaline:{v:1.5,eff:.82,charge:false,col:'#ffd85a'},nimh:{v:1.2,eff:.9,charge:true,col:'#8fe8a4'},liion:{v:3.7,eff:.94,charge:true,col:'#c5a3ff'}};
 function P(){return{chem:$('chem').value,cells:+$('cells').value,load:shorted?.08:+$('load').value,r:+$('internal').value,amb:+$('ambient').value,cap:+$('capacity').value}}
 function calc(){const p=P(),ch=CHEM[p.chem],ocv=ch.v*p.cells*(.78+.22*Math.max(.05,soc))-polar*p.cells*.08,sign=charging?-1:1,I=sign*ocv/Math.max(.08,p.load+p.r*p.cells),term=ocv-I*p.r*p.cells;return{...p,ch,ocv,I,term,loss:I*I*p.r*p.cells,power:Math.max(0,I*term)}}
 function seed(){ions=Array.from({length:50},()=>({x:310+r50Rand()*280,y:150+r50Rand()*250,u:r50Rand()}));electrons=Array.from({length:24},(_,i)=>({u:i/24}))}
 function reset(){const p=P(),ds=window.r50DomainState||{};running=false;time=0;soc=Number.isFinite(+ds.soc)?Math.max(0,Math.min(1,+ds.soc)):.8;temp=p.amb;charging=!!ds.charging&&CHEM[p.chem].charge;shorted=!!ds.shorted;polar=0;hist=[];seed();$('playPause').textContent=charging?'▶ 充電':'▶ 放電';draw()}window.resetSimulation=reset;
-function step(dt){const q=calc();if(charging&&!q.ch.charge){running=false;$('playPause').textContent='▶ 放電';draw();return}time+=dt;const ah=Math.abs(q.I)*dt/60,signed=charging?ah:-ah;soc=Math.max(0,Math.min(1,soc+signed/(q.cap/1000)*q.ch.eff));polar=Math.max(0,Math.min(1,polar+dt*(Math.abs(q.I)*.003-.005)));temp+=(q.amb-temp)*dt*.03+q.loss*dt*.7;for(const a of ions)a.u=(a.u+dt*Math.abs(q.I)*.025*(charging?-1:1)+1)%1;for(const e of electrons)e.u=(e.u+dt*q.I*.04+1)%1;if(temp>75||soc<=.001){running=false;$('playPause').textContent='▶ 放電'}if(!hist.length||time-hist.at(-1).time>.3){hist.push({time,soc:soc*100,V:q.term,I:Math.abs(q.I),T:temp});if(hist.length>300)hist.shift()}}
-function draw(){const q=calc();c.clearRect(0,0,900,590);c.fillStyle='#07111d';c.fillRect(0,0,900,590);c.strokeStyle='#8194aa';c.lineWidth=7;c.strokeRect(280,100,340,360);c.fillStyle='#30465f';c.fillRect(300,120,130,320);c.fillStyle='#4d3455';c.fillRect(470,120,130,320);c.fillStyle='#8fc8e8aa';c.fillRect(430,120,40,320);c.fillStyle='#fff';c.font='bold 15px system-ui';c.fillText('負極',345,145);c.fillText('電解質',420,95);c.fillText('正極',515,145);for(const a of ions){const x=430+40*Math.sin(a.u*Math.PI*2),y=145+a.u*270;c.fillStyle=a.u<.5?'#75c2ff':'#ff9b72';c.beginPath();c.arc(x,y,5,0,Math.PI*2);c.fill()}c.strokeStyle='#ffd85a';c.lineWidth=7;c.beginPath();c.moveTo(350,100);c.lineTo(350,55);c.lineTo(550,55);c.lineTo(550,100);c.stroke();for(const e of electrons){const u=e.u,x=u<.5?350+400*u:550-400*(u-.5),y=55;c.fillStyle='#75c2ff';c.beginPath();c.arc(x,y,4,0,Math.PI*2);c.fill()}c.fillStyle=q.ch.col;c.fillRect(675,120,125,320);c.fillStyle='#0a1421';c.fillRect(690,135,95,290);c.fillStyle=q.ch.col;c.fillRect(690,425-290*soc,95,290*soc);c.fillStyle='#fff';c.font='bold 18px system-ui';c.fillText((soc*100).toFixed(0)+'%',715,455);c.fillStyle='#ff9b72';c.font='bold 16px system-ui';c.fillText(temp.toFixed(0)+'℃',115,160);c.fillStyle='#26384c';c.fillRect(90,180,100,260);c.fillStyle='#ff9b72';c.fillRect(130,420-(temp-q.amb)*3,20,(temp-q.amb)*3);$('socM').textContent=(soc*100).toFixed(1)+'%';$('voltM').textContent=q.term.toFixed(2)+' V';$('currM').textContent=Math.abs(q.I).toFixed(2)+' A';$('tempM').textContent=temp.toFixed(1)+'℃';$('lossM').textContent=q.loss.toFixed(2)+' W';$('powerM').textContent=q.power.toFixed(2)+' W';$('polarM').textContent=(polar*100).toFixed(0)+'%';$('socBar').style.width=(soc*100)+'%';let state=shorted?'短絡':temp>65?'過熱':soc<.08?'残量低下':charging?'充電中':'放電中';if(!q.ch.charge&&charging)state='充電不可';$('stateM').textContent=state;$('stateText').textContent=shorted?'負荷抵抗がほぼゼロで大電流が流れ、内部発熱が急増しています。すぐ短絡を解除しよう。':temp>65?'温度が高い模型範囲です。負荷を軽くするか内部抵抗を下げよう。':!q.ch.charge&&charging?'一次電池はこの模型では充電できません。化学系を充電可能なものへ変えよう。':q.term<q.ocv*.75?'内部抵抗と分極により端子電圧が大きく低下しています。':'電子は外部回路、イオンは電池内部を移動し、同じ反応をつないでいます。';$('explain').textContent='セル数は電圧、容量は持続時間、内部抵抗と負荷は電圧低下・発熱・利用可能電力を変えます。';drawGraph()}
+function step(dt){const q=calc();if(charging&&!q.ch.charge){running=false;$('playPause').textContent='▶ 放電';draw();return}time+=dt;const ah=Math.abs(q.I)*dt/60,signed=charging?ah:-ah;soc=Math.max(0,Math.min(1,soc+signed/(q.cap/1000)*q.ch.eff));polar=Math.max(0,Math.min(1,polar+dt*(Math.abs(q.I)*.003-.005)));temp+=(q.amb-temp)*dt*.03+q.loss*dt*.7;for(const a of ions)a.u=(a.u+dt*Math.abs(q.I)*.12*(charging?-1:1)+1)%1;for(const e of electrons)e.u=(e.u+((dt*q.I*.25)%1)+1)%1;if(temp>75||soc<=.001){running=false;$('playPause').textContent='▶ 放電'}if(!hist.length||time-hist.at(-1).time>.3){hist.push({time,soc:soc*100,V:q.term,I:Math.abs(q.I),T:temp});if(hist.length>300)hist.shift()}}
+function draw(){const q=calc();c.clearRect(0,0,900,590);c.fillStyle='#07111d';c.fillRect(0,0,900,590);c.strokeStyle='#8194aa';c.lineWidth=7;c.strokeRect(280,100,340,360);c.fillStyle='#30465f';c.fillRect(300,120,130,320);c.fillStyle='#4d3455';c.fillRect(470,120,130,320);c.fillStyle='#8fc8e8aa';c.fillRect(430,120,40,320);c.fillStyle='#fff';c.font='bold 15px system-ui';c.fillText('負極',345,145);c.fillText('電解質',420,95);c.fillText('正極',515,145);for(const a of ions){const x=430+40*Math.sin(a.u*Math.PI*2),y=145+a.u*270;c.fillStyle=a.u<.5?'#75c2ff':'#ff9b72';c.beginPath();c.arc(x,y,6,0,Math.PI*2);c.fill()}c.strokeStyle='#ffd85a';c.lineWidth=7;c.beginPath();c.moveTo(350,100);c.lineTo(350,55);c.lineTo(550,55);c.lineTo(550,100);c.stroke();for(const e of electrons){const t=e.u*290;let ex,ey;if(t<45){ex=350;ey=100-t}else if(t<245){ex=350+(t-45);ey=55}else{ex=550;ey=55+(t-245)}c.fillStyle='#75c2ff';c.beginPath();c.arc(ex,ey,5,0,Math.PI*2);c.fill()}c.fillStyle=q.ch.col;c.fillRect(675,120,125,320);c.fillStyle='#0a1421';c.fillRect(690,135,95,290);c.fillStyle=q.ch.col;c.fillRect(690,425-290*soc,95,290*soc);c.fillStyle='#fff';c.font='bold 18px system-ui';c.fillText((soc*100).toFixed(0)+'%',715,455);c.fillStyle='#ff9b72';c.font='bold 16px system-ui';c.fillText(temp.toFixed(0)+'℃',115,160);c.fillStyle='#26384c';c.fillRect(90,180,100,260);c.fillStyle='#ff9b72';c.fillRect(130,420-(temp-q.amb)*3,20,(temp-q.amb)*3);$('socM').textContent=(soc*100).toFixed(1)+'%';$('voltM').textContent=q.term.toFixed(2)+' V';$('currM').textContent=Math.abs(q.I).toFixed(2)+' A';$('tempM').textContent=temp.toFixed(1)+'℃';$('lossM').textContent=q.loss.toFixed(2)+' W';$('powerM').textContent=q.power.toFixed(2)+' W';$('polarM').textContent=(polar*100).toFixed(0)+'%';$('socBar').style.width=(soc*100)+'%';let state=shorted?'短絡':temp>65?'過熱':soc<.08?'残量低下':charging?'充電中':'放電中';if(!q.ch.charge&&charging)state='充電不可';$('stateM').textContent=state;$('stateText').textContent=shorted?'負荷抵抗がほぼゼロで大電流が流れ、内部発熱が急増しています。すぐ短絡を解除しよう。':temp>65?'温度が高い模型範囲です。負荷を軽くするか内部抵抗を下げよう。':!q.ch.charge&&charging?'一次電池はこの模型では充電できません。化学系を充電可能なものへ変えよう。':q.term<q.ocv*.75?'内部抵抗と分極により端子電圧が大きく低下しています。':'電子は外部回路、イオンは電池内部を移動し、同じ反応をつないでいます。';$('explain').textContent='セル数は電圧、容量は持続時間、内部抵抗と負荷は電圧低下・発熱・利用可能電力を変えます。図のスイッチと負荷の道具はタップで直接動かせます。';drawGraph()}
 function drawGraph(){g.setTransform(1,0,0,1,0,0);g.globalAlpha=1;g.setLineDash([]);g.lineWidth=1;g.font='12px system-ui';g.clearRect(0,0,900,310);g.fillStyle='#0a1421';g.fillRect(0,0,900,310);g.strokeStyle='#2c4159';for(let y=45;y<280;y+=55){g.beginPath();g.moveTo(45,y);g.lineTo(875,y);g.stroke()}if(hist.length>2){const t0=hist[0].time,t1=hist.at(-1).time,xx=v=>45+(v-t0)/Math.max(.1,t1-t0)*820;function line(k,min,max,col){g.strokeStyle=col;g.lineWidth=3;g.beginPath();hist.forEach((h,i)=>{const x=xx(h.time),y=260-(h[k]-min)/(max-min)*210;i?g.lineTo(x,y):g.moveTo(x,y)});g.stroke()}line('soc',0,100,'#8fe8a4');line('V',0,25,'#ffd85a');line('I',0,15,'#75c2ff');line('T',-10,90,'#ff8f9f')}g.fillStyle='#8fe8a4';g.fillText('残量',50,22);g.fillStyle='#ffd85a';g.fillText('電圧',105,22);g.fillStyle='#75c2ff';g.fillText('電流',160,22);g.fillStyle='#ff8f9f';g.fillText('温度',215,22)}
 function bind(id,out,fmt){$(id).oninput=e=>{$(out).textContent=fmt(+e.target.value);draw()};$(id).dispatchEvent(new Event('input'))}bind('cells','cellsOut',v=>v+'セル');bind('load','loadOut',v=>v.toFixed(1)+' Ω');bind('internal','intOut',v=>v.toFixed(2)+' Ω/セル');bind('ambient','ambOut',v=>v+'℃');bind('capacity','capOut',v=>v+' mAh');$('chem').onchange=draw;$('playPause').onclick=()=>{running=!running;$('playPause').textContent=running?'⏸ 一時停止':charging?'▶ 充電':'▶ 放電'};$('stepBtn').onclick=()=>{step(1);draw()};$('speedSel').onchange=e=>speed=+e.target.value;$('chargeBtn').onclick=()=>{charging=!charging;shorted=false;$('playPause').textContent=charging?'▶ 充電':'▶ 放電';draw()};$('faultBtn').onclick=()=>{shorted=!shorted;charging=false;draw()};$('scenarioBtn').onclick=()=>{const a=[['alkaline',2,12,.35,20,2000],['nimh',4,5,.2,5,2500],['liion',1,3,.12,35,3000],['liion',3,1,.6,25,1200]][Math.floor(r50Rand()*4)];$('chem').value=a[0];['cells','load','internal','ambient','capacity'].forEach((id,i)=>{$(id).value=a[i+1];$(id).dispatchEvent(new Event('input'))});reset()};function loop(now){const dt=Math.min(.04,(now-last)/1000);last=now;if(running){const q=calc();if(!q.ch.charge&&charging){running=false}else step(dt*speed)}draw();requestAnimationFrame(loop)}reset();requestAnimationFrame(loop);window.getSnapshot=()=>({化学系:$('chem').selectedOptions[0].text,セル:$('cellsOut').textContent,負荷:$('loadOut').textContent,内部抵抗:$('intOut').textContent,容量:$('capOut').textContent,残量:$('socM').textContent,電圧:$('voltM').textContent,電流:$('currM').textContent,温度:$('tempM').textContent,損失:$('lossM').textContent,状態:$('stateM').textContent});
 </script><script id="direct-battery-play">
 (()=>{
-let directResult='黄色い外部回路をタップして放電／電池本体をタップして充電';
+const DEVICES=[{name:'豆電球',ohm:12},{name:'モーター',ohm:4},{name:'ヒーター',ohm:1.5}];
+const START_MSG='上のスイッチをタップすると電気が流れだす';
+let directResult=START_MSG,spotUntil=0,motorAngle=0,lastWall=performance.now();
+function deviceIndex(){const v=+$('load').value;return DEVICES.findIndex(d=>Math.abs(d.ohm-v)<.01)}
+function plate(x,y,w,h){c.fillStyle='rgba(16,30,47,.94)';c.strokeStyle='#4a6584';c.lineWidth=1.5;c.beginPath();c.moveTo(x+9,y);c.arcTo(x+w,y,x+w,y+h,9);c.arcTo(x+w,y+h,x,y+h,9);c.arcTo(x,y+h,x,y,9);c.arcTo(x,y,x+w,y,9);c.closePath();c.fill();c.stroke()}
+function ampNow(){return Math.abs(calc().I).toFixed(2)}
 const baseDraw=draw;
 draw=function(){
-  baseDraw();c.save();c.fillStyle='rgba(7,17,29,.92)';c.fillRect(18,484,760,40);
-  c.fillStyle='#eef5fb';c.font='bold 13px system-ui';c.fillText('水色粒：電子・イオン　黄色線：外部回路　青い帯：電解質　紫／黄／緑：化学系',30,502);
-  c.fillStyle='#ffd85a';c.fillText(directResult,30,520);c.restore();
+  baseDraw();
+  const now=performance.now(),wdt=Math.min(.1,(now-lastWall)/1000);lastWall=now;
+  const q=calc(),on=running,bright=on?Math.min(1,q.power/3):0;
+  if(on)motorAngle+=wdt*speed*(1+Math.abs(q.I)*3);
+  c.save();
+  plate(303,6,120,34);
+  c.fillStyle='#eef5fb';c.font='bold 15px system-ui';c.fillText('スイッチ',313,29);
+  c.fillStyle=on?'#8fe8a4':'#ff9b8f';c.fillText(on?'入':'切',388,29);
+  c.fillStyle='#eef5fb';c.beginPath();c.arc(378,55,5,0,Math.PI*2);c.fill();c.beginPath();c.arc(420,55,5,0,Math.PI*2);c.fill();
+  if(!on){c.fillStyle='#07111d';c.fillRect(380,45,38,20);c.strokeStyle='#c8d4e2';c.lineWidth=5;c.beginPath();c.moveTo(378,55);c.lineTo(416,32);c.stroke();c.fillStyle='#eef5fb';c.beginPath();c.arc(378,55,5,0,Math.PI*2);c.fill()}
+  const di=deviceIndex(),loadV=+$('load').value;
+  plate(450,6,148,34);
+  c.fillStyle='#eef5fb';c.font='bold 15px system-ui';
+  c.fillText((di>=0?`${DEVICES[di].name} ${DEVICES[di].ohm}Ω`:`負荷 ${loadV.toFixed(1)}Ω`)+' ▼',460,29);
+  if(di===0){
+    if(bright>0){c.fillStyle=`rgba(255,216,90,${.32*bright})`;c.beginPath();c.arc(487,52,22+9*bright,0,Math.PI*2);c.fill()}
+    c.fillStyle=`rgba(255,222,120,${.15+.75*bright})`;c.beginPath();c.arc(487,52,15,0,Math.PI*2);c.fill();
+    c.strokeStyle='#e6d38f';c.lineWidth=2;c.beginPath();c.arc(487,52,15,0,Math.PI*2);c.stroke();
+    c.strokeStyle='#8a6b2c';c.beginPath();c.moveTo(480,58);c.lineTo(484,47);c.lineTo(490,58);c.lineTo(494,47);c.stroke();
+  }else if(di===1){
+    c.fillStyle='#22364e';c.beginPath();c.arc(487,52,15,0,Math.PI*2);c.fill();
+    c.strokeStyle='#8fb0cf';c.lineWidth=2;c.stroke();
+    c.strokeStyle='#8fe8a4';c.lineWidth=4;
+    for(let k=0;k<3;k++){const a=motorAngle+k*Math.PI*2/3;c.beginPath();c.moveTo(487,52);c.lineTo(487+11*Math.cos(a),52+11*Math.sin(a));c.stroke()}
+  }else if(di===2){
+    if(bright>0){c.fillStyle=`rgba(255,120,80,${.3*bright})`;c.beginPath();c.arc(487,53,24,0,Math.PI*2);c.fill()}
+    c.strokeStyle=`rgb(255,${Math.round(150-90*bright)},90)`;c.lineWidth=5;c.beginPath();c.moveTo(465,55);for(let k=0;k<5;k++)c.lineTo(469+k*9,k%2?63:43);c.lineTo(509,55);c.stroke();
+  }else{
+    c.fillStyle='#31465f';c.fillRect(465,42,44,22);c.strokeStyle='#9fb4cc';c.lineWidth=2;c.strokeRect(465,42,44,22);
+    c.fillStyle='#dce8f4';c.font='bold 13px system-ui';c.fillText('Ω',481,58);
+  }
+  if(now<spotUntil){
+    c.fillStyle='rgba(143,200,232,.16)';c.fillRect(430,120,40,320);
+    for(const a of ions){const x=430+40*Math.sin(a.u*Math.PI*2),y=145+a.u*270;c.strokeStyle=a.u<.5?'rgba(150,210,255,.95)':'rgba(255,170,130,.95)';c.lineWidth=2.5;c.beginPath();c.arc(x,y,10,0,Math.PI*2);c.stroke()}
+    const dir=charging?-1:1;
+    c.strokeStyle='#d5ecff';c.lineWidth=4;c.beginPath();c.moveTo(450,290-40*dir);c.lineTo(450,290+34*dir);c.stroke();
+    c.fillStyle='#d5ecff';c.beginPath();c.moveTo(450,290+50*dir);c.lineTo(441,290+32*dir);c.lineTo(459,290+32*dir);c.closePath();c.fill();
+  }
+  c.fillStyle='rgba(7,17,29,.92)';c.fillRect(18,478,864,52);
+  c.fillStyle='#eef5fb';c.font='bold 13px system-ui';
+  c.fillText('タップ操作：スイッチ＝入と切　負荷の道具＝とりかえ　電池の中＝イオンに注目',30,497);
+  c.fillStyle='#ffd85a';c.fillText(directResult,30,518);
+  c.restore();
 };
 function point(event){const r=cv.getBoundingClientRect();return{x:(event.clientX-r.left)*900/r.width,y:(event.clientY-r.top)*590/r.height}}
 cv.addEventListener('pointerdown',event=>{
   const p=point(event);
-  if(p.y<125&&p.x>280&&p.x<625){
-    charging=false;shorted=false;step(1);directResult=`結果：放電1段 → 電流 ${Math.abs(calc().I).toFixed(2)} A、残量 ${(soc*100).toFixed(1)}%`;
-  }else if(p.x>275&&p.x<625&&p.y>120&&p.y<465){
-    if(!CHEM[P().chem].charge)directResult='結果：この一次電池は充電できない';
-    else{charging=true;shorted=false;step(1);directResult=`成功：充電1段 → 残量 ${(soc*100).toFixed(1)}%`}
-  }else directResult='黄色い外部回路、または中央の電池本体をタップしよう';
+  if(p.y<132&&p.x>280&&p.x<620){
+    if(p.x<425){
+      $('playPause').click();
+      directResult=running?`スイッチ入 ${charging?'充電中':'放電中'} 電流 ${ampNow()} A`:'スイッチ切 電流が止まった';
+    }else{
+      const d=DEVICES[(deviceIndex()+1)%DEVICES.length];
+      shorted=false;
+      $('load').value=d.ohm;$('load').dispatchEvent(new Event('input',{bubbles:true}));
+      directResult=`負荷を${d.name}にとりかえた ${d.ohm}Ω ${running?'電流':'入れると電流'} ${ampNow()} A`;
+    }
+  }else if(p.x>280&&p.x<620&&p.y>=132&&p.y<465){
+    spotUntil=performance.now()+4000;
+    directResult=running?(charging?'イオン注目 充電中はイオンも電子も逆向きに動く':'イオン注目 プラスのイオンは正極へ、電子は外の回路を回る'):'イオン注目 スイッチを入れると動きだす';
+  }else directResult='上のスイッチか負荷の道具、まん中の電池をタップしてみよう';
   draw();
 });
 const baseReset=window.resetSimulation;
-window.resetSimulation=()=>{directResult='黄色い外部回路をタップして放電／電池本体をタップして充電';return baseReset()};
+window.resetSimulation=()=>{directResult=START_MSG;spotUntil=0;return baseReset()};
 draw();
 })();
 </script><script>
@@ -83,7 +136,7 @@ let zoom=false;q('#zoomToggle').addEventListener('click',()=>{zoom=!zoom;q('#zoo
  const trigger=q(cfg.trigger),startAction=null;
  let tick=0,manualUpdates=0,last=performance.now(),AA=null,BB=null;
  const badge=document.querySelector('.badge');if(badge)badge.textContent=badge.textContent.replace(/^r\d+/,'r50');
- speedSel.innerHTML='<option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option>';speedSel.value='1';speedSel.dispatchEvent(new Event('change',{bubbles:true}));
+ speedSel.innerHTML='<option value="1">×1</option><option value="2" selected>×2</option><option value="4">×4</option><option value="8">×8</option>';speedSel.value='2';speedSel.dispatchEvent(new Event('change',{bubbles:true}));
  const metricHost=document.querySelector('.metrics');
  if(metricHost&&!q('r50TickMetric')){const d=document.createElement('div');d.className='metric';d.innerHTML='<b class="k">更新位相</b><strong class="v" id="r50TickMetric">0.0</strong>';metricHost.appendChild(d)}
  if(metricHost&&!q('r50SigMetric')){const d=document.createElement('div');d.className='metric';d.innerHTML='<b class="k">条件署名</b><strong class="v" id="r50SigMetric">000</strong>';metricHost.appendChild(d)}

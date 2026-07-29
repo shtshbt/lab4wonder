@@ -1062,6 +1062,20 @@
   }
   // --- end furigana -----------------------------------------------
 
+  function installOfflineServiceWorker() {
+    if (!("serviceWorker" in navigator)) return;
+    const local = location.hostname === "localhost" || location.hostname === "127.0.0.1";
+    if (location.protocol !== "https:" && !local) return;
+    const register = () => {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    };
+    if (document.readyState === "complete") {
+      register();
+    } else {
+      window.addEventListener("load", register, { once: true });
+    }
+  }
+
   function init() {
     document.body.classList.add("lw-v1-1");
     scrubVersions();
@@ -1073,6 +1087,7 @@
     watchExplorationAtlas();
     installPlanktonTouch();
     installFurigana();
+    installOfflineServiceWorker();
   }
 
   if (document.readyState === "loading") {

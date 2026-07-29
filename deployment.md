@@ -25,7 +25,18 @@
 - `kids-index.html`: こども向け入口
 - `*.html`: 自己完結型アプリ
 - `art-*.jpg`: 一部アプリの画像素材
+- `sw.js`: オフライン用 service worker（全ページと共有アセットを precache）
+- `manifest.webmanifest` / `icon-*.png` / `apple-touch-icon.png`: PWA 設定とアイコン
 - `R70_RUNTIME_MANIFEST_SHA256.csv`: 配布物の整合性情報
+
+## オフライン対応の仕組み
+
+- 入口 3 ページと `lab4wonder_v1_1.js` が `sw.js` を登録し、初回アクセス時に
+  `PRECACHE_URLS` の全ファイルを端末にキャッシュする。
+- `sw.js` の `__BUILD_ID__` は deploy 時に `pages.yml` が commit id へ置換する。
+  push のたびにキャッシュ名が変わり、次回オンライン時に全ファイルが更新される。
+- アプリ HTML を追加・削除したら `sw.js` の `PRECACHE_URLS` も更新する。
+  漏れは `scripts/validate_release.sh` の precache チェックが検出する。
 
 ## 公開しないもの
 

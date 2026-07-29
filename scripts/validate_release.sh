@@ -36,6 +36,20 @@ done
 asset_count=$(rg -l 'lab4wonder_v1_1\.js' "$repo_dir"/*.html | wc -l)
 check_equal "apps using v1.1 behavior" "$asset_count" "183"
 
+precache_gap_count=0
+while IFS= read -r page_name; do
+  if ! rg -qF "\"$page_name\"" "$repo_dir/sw.js"; then
+    printf 'error: sw.js precache is missing %s\n' "$page_name" >&2
+    precache_gap_count=$((precache_gap_count + 1))
+  fi
+done < <(find "$repo_dir" -maxdepth 1 -type f -name '*.html' -printf '%f\n')
+check_equal "sw.js precache gaps" "$precache_gap_count" "0"
+
+sw_register_count=$(rg -l 'navigator\.serviceWorker\.register' \
+  "$repo_dir/index.html" "$repo_dir/explore.html" "$repo_dir/kids-index.html" \
+  "$repo_dir/lab4wonder_v1_1.js" | wc -l)
+check_equal "offline service worker registrations" "$sw_register_count" "4"
+
 if rg -q -F '\n<link rel="stylesheet"' "$repo_dir"/*.html; then
   printf 'error: literal backslash-n remains beside a shared asset tag\n' >&2
   failures=$((failures + 1))
@@ -88,7 +102,9 @@ else
   printf 'ok: protected app behavior retained with version labels removed\n'
 fi
 
-for required_name in fourier.html fourier_drawing.html pillbug-maze.html lab4wonder_v1_1.css lab4wonder_v1_1.js; do
+for required_name in fourier.html fourier_drawing.html pillbug-maze.html \
+  lab4wonder_v1_1.css lab4wonder_v1_1.js sw.js manifest.webmanifest \
+  icon-192.png icon-512.png apple-touch-icon.png; do
   if [[ ! -s "$repo_dir/$required_name" ]]; then
     printf 'error: required file missing or empty: %s\n' "$required_name" >&2
     failures=$((failures + 1))
@@ -96,6 +112,7 @@ for required_name in fourier.html fourier_drawing.html pillbug-maze.html lab4won
 done
 
 node --check "$repo_dir/lab4wonder_v1_1.js"
+node --check "$repo_dir/sw.js"
 bash -n "$repo_dir/scripts/apply_v1_1_assets.sh"
 bash -n "$repo_dir/scripts/validate_release.sh"
 git -C "$repo_dir" diff --check

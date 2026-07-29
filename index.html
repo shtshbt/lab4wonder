@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0a1724">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <title>Lab4Wonder — おどろきとはっけんの実験室へようこそ</title>
   <script>
     try {
@@ -779,6 +781,28 @@
       } else {
         gate.setAttribute("aria-hidden", "true");
       }
+    })();
+  </script>
+  <script>
+    (function () {
+      if (!("serviceWorker" in navigator)) return;
+      var local = location.hostname === "localhost" || location.hostname === "127.0.0.1";
+      if (location.protocol !== "https:" && !local) return;
+      var register = function () {
+        navigator.serviceWorker.register("./sw.js").catch(function () {});
+        navigator.serviceWorker.ready.then(function () {
+          var note = document.createElement("p");
+          note.id = "offline-ready-note";
+          note.setAttribute("role", "status");
+          note.textContent = "オフラインでも使えます";
+          note.style.cssText = "position:fixed;left:50%;bottom:16px;transform:translateX(-50%);margin:0;padding:6px 16px;border-radius:999px;border:1px solid rgba(128,216,209,0.4);background:rgba(10,23,36,0.92);color:#e8c87a;font-size:13px;z-index:2147483000;transition:opacity 0.8s;pointer-events:none;";
+          document.body.appendChild(note);
+          setTimeout(function () { note.style.opacity = "0"; }, 4500);
+          setTimeout(function () { if (note.parentNode) note.parentNode.removeChild(note); }, 5500);
+        });
+      };
+      if (document.readyState === "complete") { register(); }
+      else { window.addEventListener("load", register, { once: true }); }
     })();
   </script>
 </body>

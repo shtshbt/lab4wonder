@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>気体分子・ピストン・気体法則ラボ</title><style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}body{background:#08101a;color:#edf4fb;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;max-width:980px;margin:auto;padding:12px 12px calc(92px + env(safe-area-inset-bottom));touch-action:manipulation}button,input,select,textarea{font:inherit}button{min-height:42px;border:1px solid #38506b;border-radius:11px;background:#17263a;color:#f3f7fb;padding:8px 11px;font-weight:800}button.primary{background:#ffd85a;color:#241c00;border-color:#d4b53b}button.on{outline:3px solid #ffd85a;outline-offset:1px}button:disabled{opacity:.45}.hdr{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}.hdr h1{font-size:21px;line-height:1.45;margin:0}.sub{color:#9eb0c6;font-size:12px;line-height:1.7;margin-top:4px}.badge{display:inline-block;background:#21344d;color:#b8dcff;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800;margin-bottom:5px}.head-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.head-actions button{font-size:11px;padding:7px 9px}.learn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:0 0 10px}.learn>div{border:1px solid #2a3d55;border-radius:13px;background:#111c2a;padding:9px;min-height:90px}.learn b{display:block;color:#ffd85a;font-size:11px;margin-bottom:4px}.learn p{margin:0;color:#d9e3ef;font-size:12px;line-height:1.65}.toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:0 0 10px;padding:9px;border:1px solid #2b415b;border-radius:13px;background:#101b2a}.toolbar select{min-height:42px;border:1px solid #38506b;border-radius:10px;background:#0b1624;color:#fff;padding:7px}.stage{border:1px solid #2c4058;border-radius:17px;background:#07111d;overflow:hidden;position:relative}.stage canvas,.stage svg{display:block;width:100%;height:auto;touch-action:none}canvas,svg{max-width:100%;height:auto}.panel{display:grid;gap:10px;margin-top:10px}.grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.card{border:1px solid #2a3d55;border-radius:14px;background:#111c2a;padding:11px}.card h2,.card h3{font-size:15px;margin:0 0 8px;color:#ffd85a}.control{display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center;margin:8px 0;font-size:12px}.control output{color:#ffd85a;font:12px ui-monospace,monospace}.control input,.control select{grid-column:1/-1;width:100%}.control select{min-height:40px;background:#0b1624;color:#fff;border:1px solid #38506b;border-radius:9px;padding:7px}.row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.metric{background:#0b1624;border:1px solid #293e57;border-radius:11px;padding:8px;min-width:0}.metric b{display:block;color:#9fcdf5;font-size:12px;line-height:1.35}.metric strong{display:block;color:#ffdb5b;font:17px/1.35 ui-monospace,monospace;margin-top:3px;word-break:break-word}.callout{background:#15283d;border:1px solid #385a79;border-radius:11px;padding:9px;font-size:12px;line-height:1.75}.hint{font-size:12px;line-height:1.75;color:#aab8ca}.legend{display:flex;gap:7px;flex-wrap:wrap;font-size:11px;margin-top:7px}.legend span{background:#1a2b40;border-radius:999px;padding:4px 7px}.deep{margin-top:10px;border:1px solid #35516e;border-radius:14px;background:#101b29;padding:11px}.deep h2{font-size:16px;margin:0 0 6px;color:#ffd85a}.deep p{font-size:12px;line-height:1.7;color:#aebed0}.bar{height:11px;background:#24364b;border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;background:#ffd85a;width:0;transition:width .2s}.mini-table{width:100%;border-collapse:collapse;font-size:11px}.mini-table th,.mini-table td{padding:5px;border-bottom:1px solid #2d4159;text-align:left}.mini-table th{color:#9fcdf5}.ok{color:#89e6a7}.warn{color:#ffbe79}.bad{color:#ff8f8f}.small{font-size:11px;color:#90a2ba;line-height:1.65}ruby{ruby-position:over}rt{font-size:.55em}.hidden{display:none!important}.tourGlow{outline:4px solid #ffdb5b!important;outline-offset:3px!important;position:relative;z-index:20}.sheetBack,.modalBack{position:fixed;inset:0;background:#000c;z-index:70;display:none;padding:18px;overflow:auto}.sheetBack.show,.modalBack.show{display:flex;align-items:flex-end;justify-content:center}.sheet{width:min(780px,100%);max-height:88vh;overflow:auto;background:#0e1a29;border:1px solid #405978;border-radius:18px;padding:14px}.sheet h2{font-size:17px;margin:0}.sheet h3{font-size:14px;color:#ffdb5b;margin:14px 0 6px}.sheet p,.sheet li{font-size:12px;line-height:1.8;color:#d7e2ef}.sheetHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.sheetHead button{font-size:20px;min-width:42px}.tourBox{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:90;background:#0d1927;border:2px solid #ffdb5b;border-radius:14px;padding:10px;display:none}.tourBox.show{display:block}.tourBox .row{justify-content:space-between}.trayOpen{position:fixed;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:55;background:#ffdb5b;color:#211b00}.traySection{border-top:1px solid #2f455f;padding-top:10px;margin-top:10px}.terms{display:flex;gap:6px;flex-wrap:wrap}.term{background:#1b2c42;border-radius:999px;padding:5px 8px;font-size:12px}.snapGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.snap{background:#0a1421;border:1px solid #2d415a;border-radius:10px;padding:8px}.snap pre{white-space:pre-wrap;font:11px/1.55 ui-monospace,monospace;margin:5px 0 0}.noteGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.noteGrid label{font-size:12px}.noteGrid textarea{width:100%;min-height:76px;background:#0a1421;color:#edf4fb;border:1px solid #38506c;border-radius:9px;padding:8px;margin-top:4px}.zoomBody{background:#07101a;border-radius:12px;padding:8px}.zoomBody svg,.zoomBody img{width:100%;height:auto;max-height:72vh;object-fit:contain}.zoomOn{cursor:zoom-in}.pulse{animation:pulse 1s ease-in-out infinite alternate}@keyframes pulse{to{opacity:.35}}@media(max-width:700px){.learn{grid-template-columns:1fr 1fr}.grid2,.grid3{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.hdr{display:block}.head-actions{justify-content:flex-start;margin-top:8px}}@media(max-width:390px){body{padding-left:8px;padding-right:8px}.learn{grid-template-columns:1fr}.hdr h1{font-size:18px}.metrics{grid-template-columns:1fr 1fr}.snapGrid,.noteGrid{grid-template-columns:1fr}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}body{background:#08101a;color:#edf4fb;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;max-width:980px;margin:auto;padding:12px 12px calc(92px + env(safe-area-inset-bottom));touch-action:manipulation}button,input,select,textarea{font:inherit}button{min-height:42px;border:1px solid #38506b;border-radius:11px;background:#17263a;color:#f3f7fb;padding:8px 11px;font-weight:800}button.primary{background:#ffd85a;color:#241c00;border-color:#d4b53b}button.on{outline:3px solid #ffd85a;outline-offset:1px}button:disabled{opacity:.45}.hdr{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}.hdr h1{font-size:21px;line-height:1.45;margin:0}.sub{color:#9eb0c6;font-size:12px;line-height:1.7;margin-top:4px}.badge{display:inline-block;background:#21344d;color:#b8dcff;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800;margin-bottom:5px}.head-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.head-actions button{font-size:11px;padding:7px 9px}.learn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:0 0 10px}.learn>div{border:1px solid #2a3d55;border-radius:13px;background:#111c2a;padding:9px;min-height:90px}.learn b{display:block;color:#ffd85a;font-size:11px;margin-bottom:4px}.learn p{margin:0;color:#d9e3ef;font-size:12px;line-height:1.65}.toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:0 0 10px;padding:9px;border:1px solid #2b415b;border-radius:13px;background:#101b2a}.toolbar select{min-height:42px;border:1px solid #38506b;border-radius:10px;background:#0b1624;color:#fff;padding:7px}.tapbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:0 0 10px;padding:9px;border:1px solid #2b415b;border-radius:13px;background:#101b2a}.tapbar .lbl{font-size:12px;font-weight:800;color:#9fcdf5}.tapbar button{min-height:46px;font-size:14px}.tapbar button.on{background:#ffd85a;color:#241c00;border-color:#d4b53b}.stage{border:1px solid #2c4058;border-radius:17px;background:#07111d;overflow:hidden;position:relative}.stage canvas,.stage svg{display:block;width:100%;height:auto;touch-action:none}canvas,svg{max-width:100%;height:auto}.panel{display:grid;gap:10px;margin-top:10px}.grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.card{border:1px solid #2a3d55;border-radius:14px;background:#111c2a;padding:11px}.card h2,.card h3{font-size:15px;margin:0 0 8px;color:#ffd85a}.control{display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center;margin:8px 0;font-size:12px}.control output{color:#ffd85a;font:12px ui-monospace,monospace}.control input,.control select{grid-column:1/-1;width:100%}.control select{min-height:40px;background:#0b1624;color:#fff;border:1px solid #38506b;border-radius:9px;padding:7px}.row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.metric{background:#0b1624;border:1px solid #293e57;border-radius:11px;padding:8px;min-width:0}.metric b{display:block;color:#9fcdf5;font-size:12px;line-height:1.35}.metric strong{display:block;color:#ffdb5b;font:17px/1.35 ui-monospace,monospace;margin-top:3px;word-break:break-word}.callout{background:#15283d;border:1px solid #385a79;border-radius:11px;padding:9px;font-size:12px;line-height:1.75}.hint{font-size:12px;line-height:1.75;color:#aab8ca}.legend{display:flex;gap:7px;flex-wrap:wrap;font-size:11px;margin-top:7px}.legend span{background:#1a2b40;border-radius:999px;padding:4px 7px}.deep{margin-top:10px;border:1px solid #35516e;border-radius:14px;background:#101b29;padding:11px}.deep h2{font-size:16px;margin:0 0 6px;color:#ffd85a}.deep p{font-size:12px;line-height:1.7;color:#aebed0}.bar{height:11px;background:#24364b;border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;background:#ffd85a;width:0;transition:width .2s}.mini-table{width:100%;border-collapse:collapse;font-size:11px}.mini-table th,.mini-table td{padding:5px;border-bottom:1px solid #2d4159;text-align:left}.mini-table th{color:#9fcdf5}.ok{color:#89e6a7}.warn{color:#ffbe79}.bad{color:#ff8f8f}.small{font-size:11px;color:#90a2ba;line-height:1.65}ruby{ruby-position:over}rt{font-size:.55em}.hidden{display:none!important}.tourGlow{outline:4px solid #ffdb5b!important;outline-offset:3px!important;position:relative;z-index:20}.sheetBack,.modalBack{position:fixed;inset:0;background:#000c;z-index:70;display:none;padding:18px;overflow:auto}.sheetBack.show,.modalBack.show{display:flex;align-items:flex-end;justify-content:center}.sheet{width:min(780px,100%);max-height:88vh;overflow:auto;background:#0e1a29;border:1px solid #405978;border-radius:18px;padding:14px}.sheet h2{font-size:17px;margin:0}.sheet h3{font-size:14px;color:#ffdb5b;margin:14px 0 6px}.sheet p,.sheet li{font-size:12px;line-height:1.8;color:#d7e2ef}.sheetHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.sheetHead button{font-size:20px;min-width:42px}.tourBox{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:90;background:#0d1927;border:2px solid #ffdb5b;border-radius:14px;padding:10px;display:none}.tourBox.show{display:block}.tourBox .row{justify-content:space-between}.trayOpen{position:fixed;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:55;background:#ffdb5b;color:#211b00}.traySection{border-top:1px solid #2f455f;padding-top:10px;margin-top:10px}.terms{display:flex;gap:6px;flex-wrap:wrap}.term{background:#1b2c42;border-radius:999px;padding:5px 8px;font-size:12px}.snapGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.snap{background:#0a1421;border:1px solid #2d415a;border-radius:10px;padding:8px}.snap pre{white-space:pre-wrap;font:11px/1.55 ui-monospace,monospace;margin:5px 0 0}.noteGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.noteGrid label{font-size:12px}.noteGrid textarea{width:100%;min-height:76px;background:#0a1421;color:#edf4fb;border:1px solid #38506c;border-radius:9px;padding:8px;margin-top:4px}.zoomBody{background:#07101a;border-radius:12px;padding:8px}.zoomBody svg,.zoomBody img{width:100%;height:auto;max-height:72vh;object-fit:contain}.zoomOn{cursor:zoom-in}.pulse{animation:pulse 1s ease-in-out infinite alternate}@keyframes pulse{to{opacity:.35}}@media(max-width:700px){.learn{grid-template-columns:1fr 1fr}.grid2,.grid3{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.hdr{display:block}.head-actions{justify-content:flex-start;margin-top:8px}}@media(max-width:390px){body{padding-left:8px;padding-right:8px}.learn{grid-template-columns:1fr}.hdr h1{font-size:18px}.metrics{grid-template-columns:1fr 1fr}.snapGrid,.noteGrid{grid-template-columns:1fr}}
 </style><style id="r59-common-ui-style">
 #r59-globalbar{position:sticky;top:0;z-index:2147483000;display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:-2px -2px 10px;padding:7px 8px;background:rgba(7,14,24,.96);border:1px solid #38506b;border-radius:12px;box-shadow:0 5px 18px rgba(0,0,0,.28);backdrop-filter:blur(8px)}
 #r59-globalbar a,#r59-globalbar button{min-height:38px!important;padding:6px 9px!important;border:1px solid #47617e!important;border-radius:10px!important;background:#16263a!important;color:#f3f8fd!important;font:800 11px/1.25 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif!important;text-decoration:none!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important}
@@ -14,6 +14,7 @@
 <section class="learn"><div><b>これは何？</b><p>分子衝突とピストン運動から、圧力・体積・温度・分子数の関係を複数の拘束条件で比較する。</p></div><div><b>どこを見る？</b><p>分子速度、壁への衝突、ピストン位置、熱流、P–V経路、状態量の履歴。</p></div><div><b>何を変える？</b><p>拘束条件、加熱冷却、外部荷重、分子数、漏れ、壁との熱交換。</p></div><div><b>持ち帰る一文</b><p data-takeaway>気体法則は別々の暗記式ではなく、分子衝突と拘束条件によってP・V・T・nのどれが応答するかを記述する。</p></div></section>
 
 <section class="toolbar" data-tour="controls"><button id="playPause" class="primary" aria-label="▶ 再生">▶ 再生</button><button id="stepBtn" aria-label="0.5秒">0.5秒</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="compressBtn" aria-label="一時的に押す">一時的に押す</button><button id="heatPulseBtn" aria-label="熱パルス">熱パルス</button><button id="scenarioBtn" aria-label="別の実験">別の実験</button></section>
+<section class="tapbar" id="tapTools" role="group" aria-label="タップ操作の道具えらび"><span class="lbl">えらんでタップ：</span><button id="toolPush" class="on" aria-label="👇 押す">👇 押す</button><button id="toolHeat" aria-label="🔥 熱パルス">🔥 熱パルス</button><button id="toolCool" aria-label="❄️ 冷やす">❄️ 冷やす</button><button id="toolAdd" aria-label="🫧 分子を入れる">🫧 分子を入れる</button></section>
 <section class="stage" data-tour="stage"><canvas id="mainCv" width="900" height="590" aria-label="気体分子の衝突、ピストン運動、加熱冷却、漏れ、圧力体積温度変化のアニメーション" role="img"></canvas></section>
 <div class="panel grid2"><section class="card"><h2>実験条件</h2><label class="control">拘束条件 <select id="mode" aria-label="拘束条件"><option value="free">自由ピストン</option><option value="fixedV">定積</option><option value="fixedP">定圧</option><option value="isothermal">等温圧縮</option><option value="adiabatic">断熱圧縮</option></select></label><label class="control">加熱・冷却 <output id="heatOut"></output><input id="heat" type="range" min="-100" max="100" value="15" aria-label="加熱・冷却"></label><label class="control">外部荷重 <output id="loadOut"></output><input id="load" type="range" min="5" max="100" value="35" aria-label="外部荷重"></label><label class="control">分子数 <output id="nOut"></output><input id="amount" type="range" min="15" max="120" value="60" aria-label="分子数"></label><label class="control">漏れ <output id="leakOut"></output><input id="leak" type="range" min="0" max="40" value="0" aria-label="漏れ"></label><label class="control">壁との熱交換 <output id="exchangeOut"></output><input id="exchange" type="range" min="0" max="100" value="45" aria-label="壁との熱交換"></label><div class="callout" id="explain" aria-live="polite"></div></section><section class="card" data-tour="metrics"><h2>状態方程式の計器</h2><div class="metrics"><div class="metric"><b>圧力 P</b><strong id="pM"></strong></div><div class="metric"><b>体積 V</b><strong id="vM"></strong></div><div class="metric"><b>温度 T</b><strong id="tM"></strong></div><div class="metric"><b>PV/nT</b><strong id="invM"></strong></div></div><div class="callout" id="stateText"></div></section></div>
 <section class="deep"><h2>P–V経路と状態履歴</h2><canvas id="graphCv" width="900" height="330" aria-label="圧力体積経路と圧力体積温度の時間履歴" role="img"></canvas><p>分子が壁やピストンへ衝突すると圧力が生じます。熱を加える、荷重を変える、分子を増減する操作が、衝突頻度とピストン位置を通じてP・V・Tを同時に変えます。</p></section>
@@ -34,22 +35,83 @@
 })();
 </script><script id="direct-gas-play">
 addEventListener('DOMContentLoaded',()=>{
-let dragging=false,directResult='銀色のピストンを左右へドラッグして圧縮・膨張';
+let dragging=false,tool='push',directResult='';
+const ripples=[];
+const clampNum=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
+const toolBtns={push:$('toolPush'),heat:$('toolHeat'),cool:$('toolCool'),add:$('toolAdd')};
+const toolHints={
+  push:'👇 押す：部屋の中をタップすると、そこへ向けてピストンがせばまる',
+  heat:'🔥 熱パルス：タップした場所の分子があつくなって速くなる',
+  cool:'❄️ 冷やす：タップした場所の分子がひえてゆっくりになる',
+  add:'🫧 分子を入れる：タップした場所に分子が5個ふえる'
+};
+function setTool(name){tool=name;for(const[k,b]of Object.entries(toolBtns)){if(b)b.classList.toggle('on',k===name)}directResult=toolHints[name];draw()}
+for(const k of Object.keys(toolBtns)){if(toolBtns[k])toolBtns[k].addEventListener('click',()=>setTool(k))}
+function addRipple(x,y,color){ripples.push({x,y,t:performance.now(),color});if(ripples.length>12)ripples.shift()}
 const baseDraw=draw;
 draw=function(){
   baseDraw();
+  const now=performance.now();
   c.save();
-  c.fillStyle='rgba(7,17,29,.92)';c.fillRect(22,490,515,38);
+  for(let i=ripples.length-1;i>=0;i--){
+    const r=ripples[i],age=(now-r.t)/700;
+    if(age>=1){ripples.splice(i,1);continue}
+    c.globalAlpha=(1-age)*.9;c.strokeStyle=r.color;c.lineWidth=4;
+    c.beginPath();c.arc(r.x,r.y,12+age*85,0,Math.PI*2);c.stroke();
+  }
+  c.globalAlpha=1;
+  for(const q of parts){
+    if(q.markT&&now-q.markT<650){
+      c.globalAlpha=1-(now-q.markT)/650;c.strokeStyle=q.markC;c.lineWidth=2.5;
+      c.beginPath();c.arc(q.x,q.y,9,0,Math.PI*2);c.stroke();
+    }
+  }
+  c.globalAlpha=1;
+  c.fillStyle='rgba(7,17,29,.92)';c.fillRect(22,490,738,38);
   c.fillStyle='#ffd85a';c.font='bold 14px system-ui';c.fillText(directResult,34,515);
-  c.fillStyle='#fff';c.fillText('← ピストンをドラッグ →',Math.max(555,piston-80),510);
-  c.fillStyle='#9fcdf5';c.fillText('青〜赤の粒：気体分子　橙の丸：加熱',35,555);
+  c.fillStyle='#9fcdf5';c.font='13px system-ui';c.fillText('青〜赤の粒：気体分子　銀の板：ピストン（ドラッグでも動かせる）',35,555);
   c.restore();
 };
 function point(event){const r=cv.getBoundingClientRect();return{x:(event.clientX-r.left)*900/r.width,y:(event.clientY-r.top)*590/r.height}}
+function insideGas(p){return p.x>=55&&p.x<=piston-12&&p.y>=60&&p.y<=470}
+function applyTool(p){
+  const now=performance.now();
+  if(!running)$('playPause').click();
+  if(tool==='push'){
+    if($('mode').value==='fixedV'){directResult='定積ではピストンは動かない。拘束条件を変えよう';addRipple(p.x,p.y,'#ff8f8f');draw();return}
+    const target=clampNum(Math.max(p.x+45,piston-150),175,735);
+    if(target<piston){piston=target;V=clampNum((piston-80)/690*100,14,96);vp=0;push=2.4}
+    addRipple(piston-6,clampNum(p.y,80,460),'#ffd85a');
+    const newP=parts.length*T/(60*320)*55/Math.max(12,V);
+    directResult=`👇 押した！ 体積 ${V.toFixed(1)} → 圧力 ${newP.toFixed(2)} 相対`;
+  }else if(tool==='heat'){
+    let hit=0;
+    for(const q of parts){const dx=q.x-p.x,dy=q.y-p.y;if(dx*dx+dy*dy<12100){q.vx=q.vx*1.45+(r48Rand()-.5)*30;q.vy=q.vy*1.45+(r48Rand()-.5)*30;q.markT=now;q.markC='#ff8b67';hit++}}
+    T=clampNum(T+18+hit*.9,120,900);heatPulse=Math.max(heatPulse,5);
+    addRipple(p.x,p.y,'#ff8b67');
+    directResult=hit?`🔥 分子${hit}個があつくなった！ 温度 ${T.toFixed(0)} K`:`🔥 へやが少しあたたまった。温度 ${T.toFixed(0)} K`;
+  }else if(tool==='cool'){
+    let hit=0;
+    for(const q of parts){const dx=q.x-p.x,dy=q.y-p.y;if(dx*dx+dy*dy<12100){q.vx*=.6;q.vy*=.6;q.markT=now;q.markC='#7dd7ff';hit++}}
+    T=clampNum(T-18-hit*.9,120,900);
+    addRipple(p.x,p.y,'#7dd7ff');
+    directResult=hit?`❄️ 分子${hit}個がひえた！ 温度 ${T.toFixed(0)} K`:`❄️ へやが少しひえた。温度 ${T.toFixed(0)} K`;
+  }else if(tool==='add'){
+    const room=120-parts.length;
+    if(room<=0){directResult='分子はもうまんたん（最大120個）';addRipple(p.x,p.y,'#ff8f8f');draw();return}
+    const n=Math.min(5,room);
+    for(let i=0;i<n;i++)parts.push({x:clampNum(p.x+(r48Rand()-.5)*36,58,piston-14),y:clampNum(p.y+(r48Rand()-.5)*36,68,452),vx:(r48Rand()-.5)*100,vy:(r48Rand()-.5)*100,markT:now,markC:'#8ce6a1'});
+    $('amount').value=parts.length;$('amount').dispatchEvent(new Event('input'));
+    addRipple(p.x,p.y,'#8ce6a1');
+    directResult=`🫧 分子が${n}個ふえた！ ぜんぶで${parts.length}個`;
+  }
+  draw();
+}
 cv.addEventListener('pointerdown',event=>{
   const p=point(event);
+  if(insideGas(p)){applyTool(p);event.preventDefault();return}
   if(Math.abs(p.x-piston)<75&&p.y>=35&&p.y<=500){
-    if($('mode').value==='fixedV'){directResult='結果：定積条件ではピストンは固定。拘束条件を変えよう';draw();return}
+    if($('mode').value==='fixedV'){directResult='定積条件ではピストンは固定。拘束条件を変えよう';draw();return}
     dragging=true;cv.setPointerCapture?.(event.pointerId);event.preventDefault();
   }
 });
@@ -66,8 +128,8 @@ function finish(){
 }
 cv.addEventListener('pointerup',finish);cv.addEventListener('pointercancel',finish);
 const baseReset=window.resetSimulation;
-window.resetSimulation=()=>{dragging=false;directResult='銀色のピストンを左右へドラッグして圧縮・膨張';return baseReset()};
-draw();
+window.resetSimulation=()=>{dragging=false;ripples.length=0;directResult=toolHints[tool];return baseReset()};
+setTool(tool);
 });
 </script><script>
 const $=id=>document.getElementById(id),cv=$('mainCv'),c=cv.getContext('2d'),gv=$('graphCv'),g=gv.getContext('2d');let running=false,last=performance.now(),speed=1,time=0,T=320,V=55,P=1,piston=430,vp=0,parts=[],hist=[],push=0,heatPulse=0;

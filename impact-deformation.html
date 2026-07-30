@@ -1,24 +1,181 @@
 <!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>落として変形ラボ</title><link rel="stylesheet" href="lab4wonder_v1_1.css"><style>
-:root{color-scheme:dark}*{box-sizing:border-box}body{max-width:930px;margin:auto;padding:12px 12px 100px;background:#081421;color:#edf7ff;font-family:system-ui,"Yu Gothic",sans-serif}.head,.tools,.metrics,.legend{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.head{justify-content:space-between}.head h1{margin:0;font-size:clamp(1.35rem,4vw,2rem)}p{line-height:1.65}.stage{position:relative;border:2px solid #405d76;border-radius:20px;overflow:hidden;background:#d8eef8}.stage canvas{display:block;width:100%;height:auto;touch-action:none}.prompt{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:#091624e8;padding:8px 13px;border-radius:999px;font-weight:900;white-space:nowrap}.tools{margin:10px 0}.tools button,.head button{min-height:46px;border:1px solid #46647e;border-radius:13px;background:#173049;color:#fff;padding:8px 13px;font-weight:900}.tools button.on{background:#ffd75e;color:#271e00}.metrics span,.legend span{padding:8px 10px;background:#11283c;border-radius:12px}.legend{margin:8px 0;font-size:12px}.legend .original{border:2px dashed #9aaab5}.legend .after{border:2px solid #ffd75e}.card{margin-top:10px;padding:12px;border:1px solid #385670;border-radius:15px;background:#102539}.card label{display:grid;grid-template-columns:1fr auto;margin:8px 0}.card input{grid-column:1/-1;width:100%}.samples{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:8px}.samples div{padding:8px;border-radius:10px;background:#0b1d2f;text-align:center}
+:root{color-scheme:dark}*{box-sizing:border-box}body{max-width:930px;margin:auto;padding:12px 12px 100px;background:#081421;color:#edf7ff;font-family:system-ui,"Yu Gothic",sans-serif}.head,.tools,.metrics,.legend{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.head{justify-content:space-between}.head h1{margin:0;font-size:clamp(1.35rem,4vw,2rem)}p{line-height:1.65}.stage{position:relative;border:2px solid #405d76;border-radius:20px;overflow:hidden;background:#d8eef8}.stage canvas{display:block;width:100%;height:auto;touch-action:none}.prompt{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:#091624e8;padding:8px 13px;border-radius:999px;font-weight:900;white-space:nowrap}.tools{margin:10px 0}.tools button,.head button{min-height:46px;border:1px solid #46647e;border-radius:13px;background:#173049;color:#fff;padding:8px 13px;font-weight:900}.tools button.on{background:#ffd75e;color:#271e00;box-shadow:0 0 0 3px #ffd75e55}.metrics span,.legend span{padding:8px 10px;background:#11283c;border-radius:12px}.metrics #phase{flex:1;min-width:230px}.legend{margin:8px 0;font-size:12px}.legend .original{border:2px dashed #9aaab5}.legend .after{border:2px solid #ffd75e}.card{margin-top:10px;padding:12px;border:1px solid #385670;border-radius:15px;background:#102539}.card label{display:grid;grid-template-columns:1fr auto;margin:8px 0}.card input{grid-column:1/-1;min-height:44px;width:100%}.samples{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:8px}.samples div{padding:8px;border-radius:10px;background:#0b1d2f;text-align:center}
 </style></head><body>
 <header class="head"><div><h1>🔨 落として変形ラボ</h1><p>落としたい試験片を画面でタップ。衝突の瞬間は自動でスローになり、元の形（点線）と変形後を重ねて見られる。</p></div><button id="resetBtn">↺ はじめから</button></header>
 <div class="tools"><button data-material="rubber">🟢 ゴム</button><button data-material="clay" class="on">🟠 ねんど</button><button data-material="foam">🟣 スポンジ</button><button id="slowBtn" class="on">🐢 衝突を自動スロー</button></div>
-<div class="legend" aria-label="変形図の凡例"><span>灰色のおもり＝落下物</span><span class="original">点線＝衝突前の形</span><span class="after">色面＝衝突後の形</span></div>
+<div class="legend" aria-label="変形図の凡例"><span>色つきのおもり＝選んだ材料</span><span class="original">点線＝つぶれる前の形</span><span class="after">色面＝今の形</span></div>
 <section class="stage"><canvas id="canvas" width="900" height="570" aria-label="三つの試験片へ物体を落として変形を比較する"></canvas><div class="prompt" id="prompt">👆 左・中央・右の試験片をタップして落下</div></section>
-<div class="metrics"><span>今の速さ <b id="speedM">0 m/s</b></span><span>最大変形 <b id="deformM">0%</b></span><span>残ったへこみ <b id="dentM">0%</b></span><span id="phase">試験片を選ぼう</span></div>
+<div class="metrics"><span>今の速さ <b id="speedM">0 m/s</b></span><span>最大変形 <b id="deformM">0%</b></span><span>残ったへこみ <b id="dentM">0%</b></span><span>衝突エネルギー <b id="energyM">0 J</b></span><span>反発係数 <b id="bounceM">8%</b></span><span id="phase">試験片を選ぼう</span></div>
 <div class="samples"><div>左<br><b id="result0">未実験</b></div><div>中央<br><b id="result1">未実験</b></div><div>右<br><b id="result2">未実験</b></div></div>
 <details class="card"><summary><b>🔬 もっとためす：高さ・重さ・やわらかさ</b></summary><label>落下高さ <output id="heightOut"></output><input id="height" type="range" min="1" max="5" value="3" step=".2"></label><label>おもりの重さ <output id="massOut"></output><input id="mass" type="range" min=".5" max="5" value="2" step=".1"></label><label>試験片のやわらかさ <output id="softOut"></output><input id="soft" type="range" min="10" max="100" value="60"></label><p><b>弾性変形</b>は元へ戻る変形、<b>塑性変形</b>はへこみが残る変形。材料を変えて両者を比べよう。</p></details>
 <script>
-(()=>{'use strict';const cv=document.getElementById('canvas'),c=cv.getContext('2d'),materials={rubber:{name:'ゴム',color:'#57b868',bounce:.78,plastic:.08},clay:{name:'ねんど',color:'#d87b43',bounce:.08,plastic:.82},foam:{name:'スポンジ',color:'#a36fd1',bounce:.28,plastic:.28}};let material='clay',tests=[null,null,null],drop=null,last=0;
+(()=>{
+'use strict';
+const cv=document.getElementById('canvas'),c=cv.getContext('2d');
+const materials={
+rubber:{name:'ゴム',color:'#57b868',bounce:.78,plastic:.08},
+clay:{name:'ねんど',color:'#d87b43',bounce:.08,plastic:.82},
+foam:{name:'スポンジ',color:'#a36fd1',bounce:.28,plastic:.28}
+};
 const height=document.getElementById('height'),mass=document.getElementById('mass'),soft=document.getElementById('soft');
-function updateLabels(){document.getElementById('heightOut').textContent=height.value+' m';document.getElementById('massOut').textContent=mass.value+' kg';document.getElementById('softOut').textContent=soft.value+'%'}
-function reset(){tests=[null,null,null];drop=null;last=0;['result0','result1','result2'].forEach(id=>document.getElementById(id).textContent='未実験');metrics(0,0,0,'試験片を選ぼう');draw()}
-function metrics(v,d,dent,phase){document.getElementById('speedM').textContent=Math.abs(v).toFixed(1)+' m/s';document.getElementById('deformM').textContent=Math.round(d*100)+'%';document.getElementById('dentM').textContent=Math.round(dent*100)+'%';document.getElementById('phase').textContent=phase}
-function begin(slot){if(drop)return;const energy=Number(height.value)*Number(mass.value),mat=materials[material];drop={slot,y:75,v:0,impact:false,t:0,energy,mat,maxD:Math.min(.62,energy*Number(soft.value)/2100),dent:0};document.getElementById('prompt').hidden=true}
-function drawWeight(x,y){c.fillStyle='#425563';c.beginPath();c.roundRect(x-42,y-33,84,66,16);c.fill();c.fillStyle='#e8f4fa';c.font='bold 18px system-ui';c.textAlign='center';c.fillText(mass.value+'kg',x,y+6)}
-function draw(){c.fillStyle='#d8eef8';c.fillRect(0,0,900,570);c.fillStyle='#9ac8df';c.fillRect(0,440,900,130);c.strokeStyle='#6993a7';c.lineWidth=3;c.beginPath();c.moveTo(0,440);c.lineTo(900,440);c.stroke();for(let i=0;i<3;i++){const x=150+i*300,t=tests[i],active=drop&&drop.slot===i,d=active&&drop.impact?drop.maxD*Math.sin(Math.min(1,drop.t*2.4)*Math.PI*.72):t?.dent||0;c.save();c.setLineDash([10,8]);c.strokeStyle='#3b526399';c.lineWidth=3;c.strokeRect(x-90,365,180,75);c.restore();c.fillStyle=t?.color||materials[material].color;c.beginPath();c.roundRect(x-90,365+d*95,180,75-d*80,18);c.fill();c.fillStyle='#243b4b';c.font='bold 18px system-ui';c.textAlign='center';c.fillText(i===0?'試験片 A':i===1?'試験片 B':'試験片 C',x,475);if(!drop&& !t){c.fillStyle='#174c6b';c.font='bold 38px system-ui';c.fillText('↓',x,325)}}
-if(drop){const x=150+drop.slot*300;drawWeight(x,drop.y)}c.textAlign='left'}
-	function step(ts){let dt=Math.min(.035,(ts-last)/1000||.016);last=ts;if(drop){const floor=330;if(!drop.impact){drop.v+=9.8*dt*38;drop.y+=drop.v*dt;if(drop.y>=floor){drop.y=floor;drop.impact=true;drop.t=0;drop.dent=drop.maxD*drop.mat.plastic;metrics(drop.v/38,drop.maxD,drop.dent,'💥 衝突！ 自動スロー中')}}else{const slow=document.getElementById('slowBtn').classList.contains('on')?.22:1;drop.t+=dt*slow;if(drop.t<1.3){const squash=Math.sin(Math.min(1,drop.t*2.4)*Math.PI*.72);drop.y=floor+drop.maxD*38*squash;metrics(drop.v/38,drop.maxD*squash,drop.dent,drop.t<.55?'💥 ひしゃげる':'↟ 戻ろうとする')}else if(drop.mat.bounce>.15&&drop.t<2.2){drop.y=floor-Math.sin((drop.t-1.3)/.9*Math.PI)*drop.mat.bounce*110;metrics(drop.v/38,0,drop.dent,'↟ はね返った')}else{tests[drop.slot]={dent:drop.dent,color:drop.mat.color,name:drop.mat.name,maxD:drop.maxD};const kind=drop.dent/drop.maxD>.5?'塑性変形（へこみが残る）':'弾性変形優位（形が戻る）';document.getElementById('result'+drop.slot).textContent=`${drop.mat.name}：${kind}／最大${Math.round(drop.maxD*100)}%→残り${Math.round(drop.dent*100)}%`;drop=null;metrics(0,0,0,`結果：${kind}。別の試験片と比べよう`)}}draw()}requestAnimationFrame(step)}
-cv.addEventListener('pointerdown',e=>{const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*900;begin(Math.max(0,Math.min(2,Math.floor(x/300))))});document.querySelectorAll('[data-material]').forEach(b=>b.onclick=()=>{material=b.dataset.material;document.querySelectorAll('[data-material]').forEach(x=>x.classList.toggle('on',x===b))});document.getElementById('slowBtn').onclick=e=>e.currentTarget.classList.toggle('on');document.getElementById('resetBtn').onclick=reset;[height,mass,soft].forEach(x=>x.oninput=updateLabels);updateLabels();reset();requestAnimationFrame(step);
+const scale=38,gravity=9.8*scale,floorY=330,substep=1/240;
+let material='clay',tests=[null,null,null],drop=null,last=0,accumulator=0;
+
+function updateLabels(){
+document.getElementById('heightOut').textContent=height.value+' m';
+document.getElementById('massOut').textContent=mass.value+' kg';
+document.getElementById('softOut').textContent=soft.value+'%';
+if(!drop)updateModelReadout(materials[material],Number(height.value)*Number(mass.value));
+}
+
+function updateModelReadout(mat,energy){
+document.getElementById('energyM').textContent=(energy*9.8).toFixed(1)+' J';
+document.getElementById('bounceM').textContent=Math.round(mat.bounce*100)+'%';
+}
+
+function metrics(v,d,dent,phase){
+document.getElementById('speedM').textContent=Math.abs(v).toFixed(1)+' m/s';
+document.getElementById('deformM').textContent=Math.round(d*100)+'%';
+document.getElementById('dentM').textContent=Math.round(dent*100)+'%';
+document.getElementById('phase').textContent=phase;
+}
+
+function reset(){
+tests=[null,null,null];drop=null;last=0;accumulator=0;
+['result0','result1','result2'].forEach(id=>document.getElementById(id).textContent='未実験');
+document.getElementById('prompt').hidden=false;
+metrics(0,0,0,'試験片を選ぼう');
+updateLabels();
+draw();
+}
+
+function begin(slot){
+if(drop)return;
+const energy=Number(height.value)*Number(mass.value),mat=materials[material];
+drop={slot,y:floorY-Number(height.value)*scale,v:0,phase:'fall',contactTime:0,
+energy,mat,maxD:Math.min(.62,energy*Number(soft.value)/2100),dent:0,
+currentD:0,impactD:0,firstImpactSpeed:0,impactSpeed:0,bounces:0,massLabel:mass.value};
+document.getElementById('prompt').hidden=true;
+updateModelReadout(mat,energy);
+metrics(0,0,0,`${mat.name}を落下中`);
+}
+
+function startImpact(speed){
+drop.phase='contact';drop.contactTime=0;drop.impactSpeed=speed;
+if(!drop.firstImpactSpeed){
+drop.firstImpactSpeed=speed;
+drop.impactD=drop.maxD;
+drop.dent=drop.maxD*drop.mat.plastic;
+}else{
+const energyRatio=Math.min(1,(speed/drop.firstImpactSpeed)**2);
+drop.impactD=drop.maxD*energyRatio;
+}
+drop.y=floorY;
+metrics(speed/scale,drop.impactD,drop.dent,'💥 ぶつかってつぶれる');
+}
+
+function finish(){
+const finished=drop;
+tests[finished.slot]={dent:finished.dent,color:finished.mat.color,name:finished.mat.name,
+maxD:finished.maxD,mat:finished.mat,massLabel:finished.massLabel};
+const kind=finished.dent/finished.maxD>.5?'塑性変形でへこみが残る':'弾性変形が多く形が戻る';
+document.getElementById('result'+finished.slot).textContent=
+`${finished.mat.name}：${kind}／最大${Math.round(finished.maxD*100)}%から残り${Math.round(finished.dent*100)}%／反発${Math.round(finished.mat.bounce*100)}%`;
+drop=null;
+metrics(0,finished.maxD,finished.dent,`結果：${kind}。材料や高さを変えて比べよう`);
+}
+
+function integrateFall(dt){
+drop.v+=gravity*dt;
+drop.y+=drop.v*dt;
+if(drop.y>=floorY&&drop.v>0)startImpact(drop.v);
+else metrics(drop.v/scale,0,drop.dent,drop.v<0?`↟ ${drop.bounces}回目のはね返り`:`↡ ${drop.bounces?'もう一度ぶつかる':'落下中'}`);
+}
+
+function integrateContact(dt){
+const slow=document.getElementById('slowBtn').classList.contains('on')?.42:1;
+drop.contactTime+=dt*slow;
+const progress=Math.min(1,drop.contactTime/.36),pulse=Math.sin(Math.PI*progress);
+const base=drop.bounces?drop.dent:drop.dent*progress;
+drop.currentD=base+(drop.impactD-base)*pulse;
+drop.y=floorY+drop.currentD*65;
+const contactV=drop.impactSpeed*(1-2*progress)/scale;
+metrics(contactV,drop.currentD,drop.dent,progress<.52?'💥 つぶれて横に広がる':'↟ 形を戻して押し返す');
+if(progress<1)return;
+drop.currentD=drop.dent;
+const rebound=drop.impactSpeed*drop.mat.bounce;
+const bounceHeight=rebound*rebound/(2*gravity);
+if(bounceHeight<3||drop.bounces>=5){finish();return}
+drop.bounces+=1;drop.phase='fall';drop.v=-rebound;drop.y=floorY;
+metrics(drop.v/scale,drop.dent,drop.dent,`↟ ${drop.bounces}回目のはね返り`);
+}
+
+function integrate(dt){
+if(!drop)return;
+if(drop.phase==='contact')integrateContact(dt);
+else integrateFall(dt);
+}
+
+function drawWeight(x,y,deform,mat,massLabel){
+const squeeze=Math.min(.48,deform*.72),width=84*(1+squeeze*.65),heightNow=66*(1-squeeze);
+c.save();c.translate(x,y+33);
+if(deform>.006){
+c.setLineDash([7,6]);c.strokeStyle='#31485699';c.lineWidth=3;
+c.strokeRect(-42,-66,84,66);c.setLineDash([]);
+}
+c.fillStyle=mat.color;c.beginPath();c.roundRect(-width/2,-heightNow,width,heightNow,16);c.fill();
+c.fillStyle='#243744';c.fillRect(-width*.32,-heightNow,width*.64,12);
+c.fillStyle='#f5fbff';c.font='bold 18px system-ui';c.textAlign='center';
+c.fillText(massLabel+'kg',0,-heightNow*.38);
+c.restore();
+}
+
+function drawSample(x,test,deform){
+c.save();c.setLineDash([10,8]);c.strokeStyle='#3b526399';c.lineWidth=3;
+c.strokeRect(x-90,365,180,75);c.restore();
+const shown=deform||test?.dent||0;
+c.fillStyle=test?.color||materials[material].color;c.beginPath();
+c.roundRect(x-90-shown*20,365+shown*65,180+shown*40,75-shown*58,18);c.fill();
+}
+
+function draw(){
+c.fillStyle='#d8eef8';c.fillRect(0,0,900,570);
+c.fillStyle='#9ac8df';c.fillRect(0,440,900,130);
+c.strokeStyle='#6993a7';c.lineWidth=3;c.beginPath();c.moveTo(0,440);c.lineTo(900,440);c.stroke();
+for(let i=0;i<3;i+=1){
+const x=150+i*300,active=drop&&drop.slot===i;
+drawSample(x,tests[i],active?drop.currentD:0);
+if(tests[i]&&!active)drawWeight(x,floorY+tests[i].dent*65,tests[i].dent,tests[i].mat,tests[i].massLabel);
+c.fillStyle='#243b4b';c.font='bold 18px system-ui';c.textAlign='center';
+c.fillText(`試験片 ${String.fromCharCode(65+i)}`,x,475);
+if(!drop&&!tests[i]){c.fillStyle='#174c6b';c.font='bold 38px system-ui';c.fillText('↓',x,325)}
+}
+if(drop)drawWeight(150+drop.slot*300,drop.y,drop.currentD,drop.mat,drop.massLabel);
+c.textAlign='left';
+cv.dataset.motion=drop?`${drop.phase},${drop.y.toFixed(3)},${drop.currentD.toFixed(4)},${drop.v.toFixed(3)},${drop.bounces}`:'idle';
+}
+
+function frame(ts){
+if(!last)last=ts;
+accumulator+=Math.min(.05,(ts-last)/1000);
+last=ts;
+while(accumulator>=substep){integrate(substep);accumulator-=substep}
+draw();
+requestAnimationFrame(frame);
+}
+
+cv.addEventListener('pointerdown',event=>{
+const r=cv.getBoundingClientRect(),x=(event.clientX-r.left)/r.width*900;
+begin(Math.max(0,Math.min(2,Math.floor(x/300))));
+});
+document.querySelectorAll('[data-material]').forEach(button=>button.addEventListener('pointerdown',()=>{
+material=button.dataset.material;
+document.querySelectorAll('[data-material]').forEach(item=>item.classList.toggle('on',item===button));
+if(!drop)updateModelReadout(materials[material],Number(height.value)*Number(mass.value));
+}));
+document.getElementById('slowBtn').addEventListener('pointerdown',event=>event.currentTarget.classList.toggle('on'));
+document.getElementById('resetBtn').addEventListener('pointerdown',reset);
+[height,mass,soft].forEach(input=>input.addEventListener('input',updateLabels));
+updateLabels();reset();requestAnimationFrame(frame);
 })();
 </script><script src="lab4wonder_v1_1.js" defer></script></body></html>

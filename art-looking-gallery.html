@@ -27,6 +27,9 @@ canvas{display:block;width:100%;height:auto;max-width:100%;border-radius:18px;ba
 .stageWrap{position:relative}
 .stageTools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
 .stageTools .small{font-size:12px;color:#aab8c8}
+.stageTools .loupeBtn{min-height:44px}
+.stageTools .loupeHint{flex-basis:100%;font-size:12px;color:#9db0c9}
+#art{touch-action:none;cursor:crosshair}
 .row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
@@ -104,6 +107,10 @@ footer{margin-top:12px;color:#94a5bb;font-size:12px}
       <button id="nextWork" class="soft" type="button">次の作品 →</button>
       <label class="small">表示倍率 <input id="zoom" type="range" min="1" max="1.8" step="0.05" value="1.0"></label>
       <span id="zoomInfo">100%</span>
+      <button id="loupe2x" class="soft loupeBtn" type="button" aria-label="むしめがねを2ばいにする">🔍 2ばい</button>
+      <button id="loupe4x" class="soft loupeBtn" type="button" aria-label="むしめがねを4ばいにする">🔍 4ばい</button>
+      <button id="loupeOff" class="soft loupeBtn" type="button" aria-label="むしめがねを消す">🔍 むしめがね けす</button>
+      <span class="loupeHint">絵を さわると むしめがねで 大きく 見られるよ。ゆびで うごかせるよ。</span>
     </div>
     <div class="controls" aria-label="時間と比較の操作">
       <button id="playPause" class="primary" type="button">⏸ 一時停止</button>
@@ -578,23 +585,41 @@ function overlayLight(work){
   ctx.restore();
 }
 const STROKE_VIEWS={
-  athens:{spots:[[.50,.62],[.245,.56]],note:'フレスコ画: なめらかな面と輪郭で形を作る'},
-  matthew:{spots:[[.33,.50],[.62,.22]],note:'油彩: 暗部はなめらかに、光の縁だけ鋭く'},
-  wave:{spots:[[.30,.26],[.55,.66]],note:'木版画: 筆あとではなく、彫った輪郭線と平らな色面'},
-  sunrise:{spots:[[.61,.55],[.44,.72]],note:'短く切れた筆触が、水面のゆらぎと光を作る'},
-  grande:{spots:[[.36,.62],[.12,.35]],note:'小さな色の点の集まり。離れると目の中で混ざる'},
-  starry:{spots:[[.50,.33],[.16,.45]],note:'うねる長い筆触が、空の流れを作る'}
+  athens:{spots:[[.50,.62]],note:'フレスコ画: なめらかな面と輪郭で形を作る'},
+  matthew:{spots:[[.33,.50]],note:'油彩: 暗部はなめらかに、光の縁だけ鋭く'},
+  wave:{spots:[[.30,.26]],note:'木版画: 筆あとではなく、彫った輪郭線と平らな色面'},
+  sunrise:{spots:[[.61,.55]],note:'短く切れた筆触が、水面のゆらぎと光を作る'},
+  grande:{spots:[[.36,.62]],note:'小さな色の点の集まり。離れると目の中で混ざる'},
+  starry:{spots:[[.50,.33]],note:'うねる長い筆触が、空の流れを作る'}
 };
-function drawLoupe(work,nx,ny){
+function drawLoupeCircle(work,nx,ny,r,zoomF,ring){
   const im=realImages[work.id];if(!im)return;
-  const r=Math.max(46,activeImageRect.w*.13),zoomF=2.8;
   const [cx,cy]=artPoint(nx,ny);
   const side=(r*2/zoomF)*(im.naturalWidth/activeImageRect.w);
   const sx=clamp(nx*im.naturalWidth-side/2,0,im.naturalWidth-side);
   const sy=clamp(ny*im.naturalHeight-side/2,0,im.naturalHeight-side);
   ctx.save();ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.clip();
   ctx.drawImage(im,sx,sy,side,side,cx-r,cy-r,r*2,r*2);ctx.restore();
-  ctx.save();ctx.strokeStyle='#ffd85a';ctx.lineWidth=3;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();ctx.restore();
+  ctx.save();ctx.strokeStyle=ring;ctx.lineWidth=3;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();ctx.restore();
+}
+function drawLoupe(work,nx,ny){
+  drawLoupeCircle(work,nx,ny,Math.max(46,activeImageRect.w*.13),2.8,'#ffd85a');
+}
+const userLoupe={active:false,nx:.5,ny:.5,mag:2};
+function drawUserLoupe(work){
+  if(!userLoupe.active)return;
+  const im=realImages[work.id];if(!im)return;
+  const r=Math.max(52,activeImageRect.w*.15);
+  const [cx,cy]=artPoint(userLoupe.nx,userLoupe.ny);
+  ctx.save();
+  ctx.strokeStyle='#7cffc4';ctx.lineWidth=6;ctx.lineCap='round';
+  const hx=cx+r*Math.SQRT1_2, hy=cy+r*Math.SQRT1_2;
+  ctx.beginPath();ctx.moveTo(hx,hy);ctx.lineTo(hx+r*.42,hy+r*.42);ctx.stroke();
+  ctx.restore();
+  drawLoupeCircle(work,userLoupe.nx,userLoupe.ny,r,userLoupe.mag,'#7cffc4');
+  const lx=clamp(cx-22,activeImageRect.x+4,activeImageRect.x+activeImageRect.w-64);
+  const ly=cy-r-30<activeImageRect.y+4 ? cy+r+10 : cy-r-30;
+  drawLabel(`${userLoupe.mag}ばい`,lx,ly,'rgba(15,58,44,.92)');
 }
 function overlayStroke(work){
   const sv=STROKE_VIEWS[work.id];if(!sv)return;
@@ -628,6 +653,7 @@ function renderFrame(work,t){
     else if(lens==='perspective') overlayPerspective(work);
     const scanX=(t*2.1)%W;
     ctx.save(); ctx.strokeStyle='rgba(255,216,90,.34)'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(scanX,H-26); ctx.lineTo(scanX,H-6); ctx.stroke(); ctx.restore();
+    drawUserLoupe(work);
   });
 }
 
@@ -702,9 +728,52 @@ lensBox.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=
 playPause.addEventListener('click',()=>{playing=!playing;playPause.textContent=playing?'⏸ 一時停止':'▶ 再生';});
 document.getElementById('stepOnce').addEventListener('click',()=>{playing=false;playPause.textContent='▶ 再生';animationTick+=12*speed;renderFrame(works[current],animationTick);drawAnalysis();});
 document.querySelectorAll('.speed').forEach(btn=>btn.addEventListener('click',()=>{speed=Number(btn.dataset.speed);document.querySelectorAll('.speed').forEach(x=>x.classList.toggle('on',x===btn));}));
-document.getElementById('resetAll').addEventListener('click',()=>{current=0;lens='normal';zoom=1;zoomInput.value='1';zoomInfo.textContent='100%';animationTick=0;missionIndex=0;quizIndex=0;tasteScores={};snapshotA=snapshotB=null;playing=false;playPause.textContent='▶ 再生';lensBox.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.lens==='normal'));updateSidebar();renderQuiz();updateAB();renderFrame(works[current],animationTick);drawAnalysis();});
+document.getElementById('resetAll').addEventListener('click',()=>{current=0;lens='normal';zoom=1;zoomInput.value='1';zoomInfo.textContent='100%';animationTick=0;missionIndex=0;quizIndex=0;tasteScores={};snapshotA=snapshotB=null;playing=false;playPause.textContent='▶ 再生';userLoupe.active=false;loupeDragging=false;updateLoupeButtons();lensBox.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.lens==='normal'));updateSidebar();renderQuiz();updateAB();renderFrame(works[current],animationTick);drawAnalysis();});
 document.getElementById('snapA').addEventListener('click',()=>{snapshotA=snapState();updateAB();drawAnalysis();});
 document.getElementById('snapB').addEventListener('click',()=>{snapshotB=snapState();updateAB();drawAnalysis();});
+
+const loupe2xBtn=document.getElementById('loupe2x');
+const loupe4xBtn=document.getElementById('loupe4x');
+const loupeOffBtn=document.getElementById('loupeOff');
+let loupeDragging=false;
+function updateLoupeButtons(){
+  loupe2xBtn.classList.toggle('on',userLoupe.active&&userLoupe.mag===2);
+  loupe4xBtn.classList.toggle('on',userLoupe.active&&userLoupe.mag===4);
+}
+function setLoupeMag(m){userLoupe.mag=m;userLoupe.active=true;updateLoupeButtons();}
+loupe2xBtn.addEventListener('click',()=>setLoupeMag(2));
+loupe4xBtn.addEventListener('click',()=>setLoupeMag(4));
+loupeOffBtn.addEventListener('click',()=>{userLoupe.active=false;loupeDragging=false;updateLoupeButtons();});
+function loupePointFromEvent(e){
+  const rect=cv.getBoundingClientRect();
+  const sx=(e.clientX-rect.left)*W/rect.width;
+  const sy=(e.clientY-rect.top)*H/rect.height;
+  const wx=(sx-W/2)/zoom+W/2;
+  const wy=(sy-H/2)/zoom+H/2;
+  return {nx:(wx-activeImageRect.x)/activeImageRect.w, ny:(wy-activeImageRect.y)/activeImageRect.h};
+}
+function moveUserLoupe(e){
+  if(!activeImageRect.w||!activeImageRect.h)return;
+  const p=loupePointFromEvent(e);
+  userLoupe.nx=clamp(p.nx,0,1);
+  userLoupe.ny=clamp(p.ny,0,1);
+  userLoupe.active=true;
+  updateLoupeButtons();
+}
+cv.addEventListener('pointerdown',e=>{
+  if(e.pointerType==='mouse'&&e.button!==0)return;
+  loupeDragging=true;
+  try{cv.setPointerCapture(e.pointerId);}catch(_){}
+  moveUserLoupe(e);
+  e.preventDefault();
+});
+cv.addEventListener('pointermove',e=>{if(loupeDragging)moveUserLoupe(e);});
+function endLoupeDrag(e){
+  loupeDragging=false;
+  try{cv.releasePointerCapture(e.pointerId);}catch(_){}
+}
+cv.addEventListener('pointerup',endLoupeDrag);
+cv.addEventListener('pointercancel',endLoupeDrag);
 
 document.addEventListener('keydown',e=>{
   if(e.key==='ArrowRight') setWork(current+1);

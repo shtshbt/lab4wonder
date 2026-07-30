@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><title>年輪・形成層・気候記録ラボ</title><style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}body{background:#08101a;color:#edf4fb;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;max-width:980px;margin:auto;padding:12px 12px calc(92px + env(safe-area-inset-bottom));touch-action:manipulation}button,input,select,textarea{font:inherit}button{min-height:42px;border:1px solid #38506b;border-radius:11px;background:#17263a;color:#f3f7fb;padding:8px 11px;font-weight:800}button.primary{background:#ffd85a;color:#241c00;border-color:#d4b53b}button.on{outline:3px solid #ffd85a;outline-offset:1px}button:disabled{opacity:.45}.hdr{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}.hdr h1{font-size:21px;line-height:1.45;margin:0}.sub{color:#9eb0c6;font-size:12px;line-height:1.7;margin-top:4px}.badge{display:inline-block;background:#21344d;color:#b8dcff;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800;margin-bottom:5px}.head-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.head-actions button{font-size:11px;padding:7px 9px}.learn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:0 0 10px}.learn>div{border:1px solid #2a3d55;border-radius:13px;background:#111c2a;padding:9px;min-height:90px}.learn b{display:block;color:#ffd85a;font-size:11px;margin-bottom:4px}.learn p{margin:0;color:#d9e3ef;font-size:12px;line-height:1.65}.toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:0 0 10px;padding:9px;border:1px solid #2b415b;border-radius:13px;background:#101b2a}.toolbar select{min-height:42px;border:1px solid #38506b;border-radius:10px;background:#0b1624;color:#fff;padding:7px}.stage{border:1px solid #2c4058;border-radius:17px;background:#07111d;overflow:hidden;position:relative}.stage canvas,.stage svg{display:block;width:100%;height:auto;touch-action:none}canvas,svg{max-width:100%;height:auto}.panel{display:grid;gap:10px;margin-top:10px}.grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.card{border:1px solid #2a3d55;border-radius:14px;background:#111c2a;padding:11px}.card h2,.card h3{font-size:15px;margin:0 0 8px;color:#ffd85a}.control{display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center;margin:8px 0;font-size:12px}.control output{color:#ffd85a;font:12px ui-monospace,monospace}.control input,.control select{grid-column:1/-1;width:100%}.control select{min-height:40px;background:#0b1624;color:#fff;border:1px solid #38506b;border-radius:9px;padding:7px}.row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.metric{background:#0b1624;border:1px solid #293e57;border-radius:11px;padding:8px;min-width:0}.metric b{display:block;color:#9fcdf5;font-size:12px;line-height:1.35}.metric strong{display:block;color:#ffdb5b;font:17px/1.35 ui-monospace,monospace;margin-top:3px;word-break:break-word}.callout{background:#15283d;border:1px solid #385a79;border-radius:11px;padding:9px;font-size:12px;line-height:1.75}.hint{font-size:12px;line-height:1.75;color:#aab8ca}.legend{display:flex;gap:7px;flex-wrap:wrap;font-size:11px;margin-top:7px}.legend span{background:#1a2b40;border-radius:999px;padding:4px 7px}.deep{margin-top:10px;border:1px solid #35516e;border-radius:14px;background:#101b29;padding:11px}.deep h2{font-size:16px;margin:0 0 6px;color:#ffd85a}.deep p{font-size:12px;line-height:1.7;color:#aebed0}.bar{height:11px;background:#24364b;border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;background:#ffd85a;width:0;transition:width .2s}.mini-table{width:100%;border-collapse:collapse;font-size:11px}.mini-table th,.mini-table td{padding:5px;border-bottom:1px solid #2d4159;text-align:left}.mini-table th{color:#9fcdf5}.ok{color:#89e6a7}.warn{color:#ffbe79}.bad{color:#ff8f8f}.small{font-size:11px;color:#90a2ba;line-height:1.65}ruby{ruby-position:over}rt{font-size:.55em}.hidden{display:none!important}.tourGlow{outline:4px solid #ffdb5b!important;outline-offset:3px!important;position:relative;z-index:20}.sheetBack,.modalBack{position:fixed;inset:0;background:#000c;z-index:70;display:none;padding:18px;overflow:auto}.sheetBack.show,.modalBack.show{display:flex;align-items:flex-end;justify-content:center}.sheet{width:min(780px,100%);max-height:88vh;overflow:auto;background:#0e1a29;border:1px solid #405978;border-radius:18px;padding:14px}.sheet h2{font-size:17px;margin:0}.sheet h3{font-size:14px;color:#ffdb5b;margin:14px 0 6px}.sheet p,.sheet li{font-size:12px;line-height:1.8;color:#d7e2ef}.sheetHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.sheetHead button{font-size:20px;min-width:42px}.tourBox{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:90;background:#0d1927;border:2px solid #ffdb5b;border-radius:14px;padding:10px;display:none}.tourBox.show{display:block}.tourBox .row{justify-content:space-between}.trayOpen{position:fixed;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:55;background:#ffdb5b;color:#211b00}.traySection{border-top:1px solid #2f455f;padding-top:10px;margin-top:10px}.terms{display:flex;gap:6px;flex-wrap:wrap}.term{background:#1b2c42;border-radius:999px;padding:5px 8px;font-size:12px}.snapGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.snap{background:#0a1421;border:1px solid #2d415a;border-radius:10px;padding:8px}.snap pre{white-space:pre-wrap;font:11px/1.55 ui-monospace,monospace;margin:5px 0 0}.noteGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.noteGrid label{font-size:12px}.noteGrid textarea{width:100%;min-height:76px;background:#0a1421;color:#edf4fb;border:1px solid #38506c;border-radius:9px;padding:8px;margin-top:4px}.zoomBody{background:#07101a;border-radius:12px;padding:8px}.zoomBody svg,.zoomBody img{width:100%;height:auto;max-height:72vh;object-fit:contain}.zoomOn{cursor:zoom-in}.pulse{animation:pulse 1s ease-in-out infinite alternate}@keyframes pulse{to{opacity:.35}}@media(max-width:700px){.learn{grid-template-columns:1fr 1fr}.grid2,.grid3{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.hdr{display:block}.head-actions{justify-content:flex-start;margin-top:8px}}@media(max-width:390px){body{padding-left:8px;padding-right:8px}.learn{grid-template-columns:1fr}.hdr h1{font-size:18px}.metrics{grid-template-columns:1fr 1fr}.snapGrid,.noteGrid{grid-template-columns:1fr}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}body{background:#08101a;color:#edf4fb;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;max-width:980px;margin:auto;padding:12px 12px calc(92px + env(safe-area-inset-bottom));touch-action:manipulation}button,input,select,textarea{font:inherit}button{min-height:42px;border:1px solid #38506b;border-radius:11px;background:#17263a;color:#f3f7fb;padding:8px 11px;font-weight:800}button.primary{background:#ffd85a;color:#241c00;border-color:#d4b53b}button.on{outline:3px solid #ffd85a;outline-offset:1px}button:disabled{opacity:.45}.hdr{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}.hdr h1{font-size:21px;line-height:1.45;margin:0}.sub{color:#9eb0c6;font-size:12px;line-height:1.7;margin-top:4px}.badge{display:inline-block;background:#21344d;color:#b8dcff;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800;margin-bottom:5px}.head-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.head-actions button{font-size:11px;padding:7px 9px}.learn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:0 0 10px}.learn>div{border:1px solid #2a3d55;border-radius:13px;background:#111c2a;padding:9px;min-height:90px}.learn b{display:block;color:#ffd85a;font-size:11px;margin-bottom:4px}.learn p{margin:0;color:#d9e3ef;font-size:12px;line-height:1.65}.toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:0 0 10px;padding:9px;border:1px solid #2b415b;border-radius:13px;background:#101b2a}.toolbar select{min-height:42px;border:1px solid #38506b;border-radius:10px;background:#0b1624;color:#fff;padding:7px}.tapbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:0 0 8px;padding:9px;border:1px solid #2b415b;border-radius:13px;background:#101b2a}.tapbar .lbl{font-size:12px;font-weight:800;color:#9fcdf5}.tapbar button{min-height:46px;min-width:44px;font-size:14px}.tapbar button.on{background:#ffd85a;color:#241c00;border-color:#d4b53b}.tapmsg{margin:0 0 10px}.lw-direct-tools{display:none!important}.stage{border:1px solid #2c4058;border-radius:17px;background:#07111d;overflow:hidden;position:relative}.stage canvas,.stage svg{display:block;width:100%;height:auto;touch-action:none}canvas,svg{max-width:100%;height:auto}.panel{display:grid;gap:10px;margin-top:10px}.grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.card{border:1px solid #2a3d55;border-radius:14px;background:#111c2a;padding:11px}.card h2,.card h3{font-size:15px;margin:0 0 8px;color:#ffd85a}.control{display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center;margin:8px 0;font-size:12px}.control output{color:#ffd85a;font:12px ui-monospace,monospace}.control input,.control select{grid-column:1/-1;width:100%}.control select{min-height:40px;background:#0b1624;color:#fff;border:1px solid #38506b;border-radius:9px;padding:7px}.row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.metric{background:#0b1624;border:1px solid #293e57;border-radius:11px;padding:8px;min-width:0}.metric b{display:block;color:#9fcdf5;font-size:12px;line-height:1.35}.metric strong{display:block;color:#ffdb5b;font:17px/1.35 ui-monospace,monospace;margin-top:3px;word-break:break-word}.callout{background:#15283d;border:1px solid #385a79;border-radius:11px;padding:9px;font-size:12px;line-height:1.75}.hint{font-size:12px;line-height:1.75;color:#aab8ca}.legend{display:flex;gap:7px;flex-wrap:wrap;font-size:11px;margin-top:7px}.legend span{background:#1a2b40;border-radius:999px;padding:4px 7px}.deep{margin-top:10px;border:1px solid #35516e;border-radius:14px;background:#101b29;padding:11px}.deep h2{font-size:16px;margin:0 0 6px;color:#ffd85a}.deep p{font-size:12px;line-height:1.7;color:#aebed0}.bar{height:11px;background:#24364b;border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;background:#ffd85a;width:0;transition:width .2s}.mini-table{width:100%;border-collapse:collapse;font-size:11px}.mini-table th,.mini-table td{padding:5px;border-bottom:1px solid #2d4159;text-align:left}.mini-table th{color:#9fcdf5}.ok{color:#89e6a7}.warn{color:#ffbe79}.bad{color:#ff8f8f}.small{font-size:11px;color:#90a2ba;line-height:1.65}ruby{ruby-position:over}rt{font-size:.55em}.hidden{display:none!important}.tourGlow{outline:4px solid #ffdb5b!important;outline-offset:3px!important;position:relative;z-index:20}.sheetBack,.modalBack{position:fixed;inset:0;background:#000c;z-index:70;display:none;padding:18px;overflow:auto}.sheetBack.show,.modalBack.show{display:flex;align-items:flex-end;justify-content:center}.sheet{width:min(780px,100%);max-height:88vh;overflow:auto;background:#0e1a29;border:1px solid #405978;border-radius:18px;padding:14px}.sheet h2{font-size:17px;margin:0}.sheet h3{font-size:14px;color:#ffdb5b;margin:14px 0 6px}.sheet p,.sheet li{font-size:12px;line-height:1.8;color:#d7e2ef}.sheetHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.sheetHead button{font-size:20px;min-width:42px}.tourBox{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:90;background:#0d1927;border:2px solid #ffdb5b;border-radius:14px;padding:10px;display:none}.tourBox.show{display:block}.tourBox .row{justify-content:space-between}.trayOpen{position:fixed;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:55;background:#ffdb5b;color:#211b00}.traySection{border-top:1px solid #2f455f;padding-top:10px;margin-top:10px}.terms{display:flex;gap:6px;flex-wrap:wrap}.term{background:#1b2c42;border-radius:999px;padding:5px 8px;font-size:12px}.snapGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.snap{background:#0a1421;border:1px solid #2d415a;border-radius:10px;padding:8px}.snap pre{white-space:pre-wrap;font:11px/1.55 ui-monospace,monospace;margin:5px 0 0}.noteGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.noteGrid label{font-size:12px}.noteGrid textarea{width:100%;min-height:76px;background:#0a1421;color:#edf4fb;border:1px solid #38506c;border-radius:9px;padding:8px;margin-top:4px}.zoomBody{background:#07101a;border-radius:12px;padding:8px}.zoomBody svg,.zoomBody img{width:100%;height:auto;max-height:72vh;object-fit:contain}.zoomOn{cursor:zoom-in}.pulse{animation:pulse 1s ease-in-out infinite alternate}@keyframes pulse{to{opacity:.35}}@media(max-width:700px){.learn{grid-template-columns:1fr 1fr}.grid2,.grid3{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.hdr{display:block}.head-actions{justify-content:flex-start;margin-top:8px}}@media(max-width:390px){body{padding-left:8px;padding-right:8px}.learn{grid-template-columns:1fr}.hdr h1{font-size:18px}.metrics{grid-template-columns:1fr 1fr}.snapGrid,.noteGrid{grid-template-columns:1fr}}
 </style><style id="r59-common-ui-style">
 #r59-globalbar{position:sticky;top:0;z-index:2147483000;display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:-2px -2px 10px;padding:7px 8px;background:rgba(7,14,24,.96);border:1px solid #38506b;border-radius:12px;box-shadow:0 5px 18px rgba(0,0,0,.28);backdrop-filter:blur(8px)}
 #r59-globalbar a,#r59-globalbar button{min-height:38px!important;padding:6px 9px!important;border:1px solid #47617e!important;border-radius:10px!important;background:#16263a!important;color:#f3f8fd!important;font:800 11px/1.25 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif!important;text-decoration:none!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important}
@@ -17,11 +17,13 @@ input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
 </style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
-</head><body data-first="同じ条件で干ばつ年を一度だけ入れ、細い年輪が系列のどこへ残るか確認しよう。">
+</head><body data-first="えらんでタップ：かんそうの年をえらび、みきの輪をタップして、その年の輪と記録グラフがどう変わるか見よう。">
 <header class="hdr"><div><span class="badge">r32・植物・古環境・動的探究版</span><h1>年輪・形成層・気候記録ラボ</h1><div class="sub">形成層が季節ごとに早材と晩材を作り、干ばつ・火災・霜などの履歴が年輪系列へ残る。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetTop">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>形成層が季節ごとに早材と晩材を作り、干ばつ・火災・霜などの履歴が年輪系列へ残る。</p></div><div><b>どこを見る？</b><p>幹断面の新しい層、季節ごとの細胞密度、年輪幅の年次系列。</p></div><div><b>何を変える？</b><p>春雨、夏の暑さ、養分、樹冠、年変動、干ばつ・火災イベント。</p></div><div><b>持ち帰る一文</b><p data-takeaway="">年輪は単なる年齢の目盛りではなく、その年の季節条件を圧縮して残す生物学的記録である。</p></div></section>
 <section class="toolbar" data-tour="controls"><button class="primary" id="playPause">▶ 再生</button><button id="stepBtn">1か月</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option selected="" value="1">×1</option><option value="4">×4</option><option value="12">×12</option></select><button id="droughtBtn">干ばつ年</button><button id="fireBtn">火災傷</button><button id="scenarioBtn">別の気候</button></section>
-<section class="stage" data-tour="stage"><canvas aria-label="形成層が季節ごとに早材と晩材を作り、年輪に干ばつや火災の記録が残るアニメーション" height="590" id="mainCv" width="900"></canvas></section>
+<section class="tapbar" id="tapTools" role="group" aria-label="タップ操作の道具えらび"><span class="lbl">えらんでタップ：</span><button id="toolDry" class="on" aria-label="かんそうの年をえらぶ">☀️ かんそうの年</button><button id="toolWet" aria-label="めぐみの雨の年をえらぶ">💧 めぐみの<ruby>雨<rt>あめ</rt></ruby></button><button id="toolFire" aria-label="火事をえらぶ">🔥 <ruby>火事<rt>かじ</rt></ruby></button><button id="toolBug" aria-label="虫の害をえらぶ">🐛 <ruby>虫<rt>むし</rt></ruby>の<ruby>害<rt>がい</rt></ruby></button></section>
+<div class="callout tapmsg" id="tapMsg" aria-live="polite">☀️ かんそうの年を えらんだよ。木のみきか、下の年表を タップしてね。</div>
+<section class="stage" data-tour="stage"><canvas aria-label="形成層が季節ごとに早材と晩材を作り、年輪に干ばつや火災の記録が残るアニメーション" height="756" id="mainCv" width="900"></canvas></section>
 <div class="panel grid2"><section class="card"><h2>成長条件</h2><label class="control">春の雨 <output id="rainOut"></output><input id="rain" max="100" min="0" type="range" value="70"/></label><label class="control">夏の暑さ <output id="heatOut"></output><input id="heat" max="100" min="0" type="range" value="55"/></label><label class="control">養分 <output id="nutOut"></output><input id="nut" max="100" min="10" type="range" value="65"/></label><label class="control">樹冠の大きさ <output id="crownOut"></output><input id="crown" max="100" min="20" type="range" value="75"/></label><label class="control">年ごとの変動 <output id="varOut"></output><input id="vari" max="100" min="0" type="range" value="35"/></label><div class="callout" id="explain"></div></section><section class="card" data-tour="metrics"><h2>年輪計器</h2><div class="metrics"><div class="metric"><b>樹齢</b><strong id="ageM"></strong></div><div class="metric"><b>今季成長</b><strong id="growM"></strong></div><div class="metric"><b>平均年輪幅</b><strong id="meanM"></strong></div><div class="metric"><b>異常年</b><strong id="eventM"></strong></div></div><div class="callout" id="stateText"></div></section></div>
 <section class="deep"><h2>年輪幅・気候・クロスデーティング</h2><canvas aria-label="年輪幅の年次系列と別個体のずれを合わせるクロスデーティング表示" height="340" id="graphCv" width="900"></canvas><p>年輪幅は年齢だけでなく、その年の季節条件を記録します。同じ地域の木は共通する気候パターンを持つため、系列をずらして年代を合わせられます。</p></section>
 <div class="sheetBack" id="guideBack"><section class="sheet" role="dialog" aria-modal="true"><div class="sheetHead"><h2>年輪・形成層・気候記録ラボ の学び方</h2><button id="guideClose" aria-label="閉じる">×</button></div><h3>最初の予想</h3><p>同じ条件で干ばつ年を一度だけ入れ、細い年輪が系列のどこへ残るか確認しよう。別の気候で共通パターンが照合できるか比べる。</p><h3>★★★ 探究</h3><p>同じ条件で干ばつ年を一度だけ入れ、細い年輪が系列のどこへ残るか確認しよう。別の気候で共通パターンが照合できるか比べる。</p><h3>模型で省いているもの</h3><p>実際の年輪は樹種、年齢、斜面、競争、病害、剪定、CO₂などにも影響されます。年代推定には多数標本と校正が必要です。</p></section></div>
@@ -104,67 +106,295 @@ let zoom=false;q('#zoomToggle').addEventListener('click',()=>{zoom=!zoom;q('#zoo
 (()=>{
  const canvas=document.getElementById('mainCv');
  if(!canvas)return;
+ // Cross-section geometry. The wood disc is redrawn at a fit-to-view scale so
+ // thin model rings stay visible and tappable, while the widths themselves
+ // remain exactly what the growth model produced.
+ const CX=650,CY=310,PITH=20,MAX_WOOD=150,PANEL_X=402,PANEL_Y=114;
+ const BAND_Y=592,BAND_END=756,MSG_Y=616,CELL_Y=626,CELL_H=108,CELL_W=119,CELL_GAP=5,CELL_X=16;
+ const SLOTS=7,YEAR_SLOTS=SLOTS-1;
+ const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
  const tools=[
-  {id:'rain',label:'春の雨',icon:'💧',color:'#62c8ff',width:5.4},
-  {id:'sun',label:'夏の暑さ',icon:'☀',color:'#ffcf58',width:2.4},
-  {id:'drought',label:'干ばつ',icon:'ひび',color:'#d99b62',width:.65},
-  {id:'scar',label:'幹の傷',icon:'傷',color:'#ff786b',width:2.8}
+  {id:'dry',btn:'toolDry',icon:'☀️',name:'かんそうの年',tag:'かんそう',color:'#ffcf58',factor:.45,result:'輪が ほそくなったよ'},
+  {id:'wet',btn:'toolWet',icon:'💧',name:'めぐみの雨の年',tag:'めぐみの雨',color:'#62c8ff',factor:1.6,result:'輪が ふとくなったよ'},
+  {id:'fire',btn:'toolFire',icon:'🔥',name:'火事',tag:'火事',color:'#ff8358',factor:.72,result:'くろい きずが のこったよ'},
+  {id:'bug',btn:'toolBug',icon:'🐛',name:'虫の害',tag:'虫の害',color:'#9be08a',factor:.55,result:'はっぱを 食べられて 成長が おちたよ'}
  ];
- let selected='rain',placed=0,pointerDown=false,lastPlace=0;
- const baseDraw=draw;
- function finishYear(tool,x,y){
-  const p=par(),variation=.84+((x+y)%43)/100;
-  const width=Math.max(.42,tool.width*(.45+.55*p.nut)*(.5+.5*p.crown)*variation);
-  rings.push({w:width,drought:tool.id==='drought',fire:tool.id==='scar',direct:tool.id});
-  if(tool.id==='scar')scarYear=rings.length-1;
-  if(rings.length>45)rings.shift();
-  month=rings.length*12;current=0;drought=false;fire=false;placed++;
-  baseDraw();drawDirectLayer();
- }
- function roundRect(ctx,x,y,w,h,r){
-  ctx.beginPath();ctx.roundRect(x,y,w,h,r);
- }
- function drawDirectLayer(){
-  c.save();
-  c.fillStyle='rgba(4,12,20,.92)';c.fillRect(18,440,864,62);
-  c.font='bold 15px system-ui';c.textAlign='center';c.textBaseline='middle';
-  tools.forEach((tool,i)=>{
-   const x=27+i*150,w=138,on=tool.id===selected;
-   roundRect(c,x,450,w,40,12);c.fillStyle=on?tool.color:'#172b3d';c.fill();
-   c.strokeStyle=on?'#fff':'#45627d';c.lineWidth=on?3:1;c.stroke();
-   c.fillStyle=on?'#101820':'#eef6fc';c.fillText(`${tool.icon} ${tool.label}`,x+w/2,470);
+ const toolById=Object.fromEntries(tools.map(t=>[t.id,t]));
+ const msgBox=document.getElementById('tapMsg');
+ let tool=tools[0],ripples=[],flash=null,message='',scale=9,tested=new Set();
+ const calmMotion=()=>document.documentElement.classList.contains('r62-reduced-motion');
+ function tell(text,icon){message=text;if(msgBox)msgBox.textContent=`${icon||tool.icon} ${text}`}
+ function selectTool(id,announce){
+  tool=toolById[id]||tools[0];
+  tools.forEach(item=>{
+   const btn=document.getElementById(item.btn);
+   if(!btn)return;
+   btn.classList.toggle('on',item.id===tool.id);
+   btn.setAttribute('aria-pressed',item.id===tool.id?'true':'false');
   });
-  c.textAlign='left';c.fillStyle='#d9e8f2';c.font='bold 13px system-ui';
-  c.fillText('① 選ぶ　② 幹をタップして1年を刻む',640,459);
-  c.fillStyle=placed>=4?'#82e7a3':'#ffd85a';
-  c.fillText(placed>=4?'★ 達成：4つの年輪を比べられた！':`目標：ちがう年輪を4つ作る（${placed}/4）`,640,481);
-  c.strokeStyle='#ffffffaa';c.lineWidth=2;c.beginPath();c.arc(650,310,Math.min(238,34+rings.reduce((sum,ring)=>sum+ring.w*2.7,0)),0,Math.PI*2);c.stroke();
+  if(announce!==false)tell(`${tool.name}を えらんだよ。木のみきか、下の年表を タップしてね。`);
+  draw();
+ }
+ tools.forEach(item=>{
+  const btn=document.getElementById(item.btn);
+  if(btn)btn.addEventListener('click',()=>selectTool(item.id));
+ });
+ // One year of growth under the current sliders, integrating the same seasonal
+ // weighting that step() uses month by month.
+ function modelYearWidth(yearIndex){
+  const p=par(),annual=Math.max(0,.65+.7*(noise(yearIndex)-.5)*p.vari);
+  return .36*annual*p.rain*p.nut*p.crown*(5.2+1.85*(1-.45*p.heat));
+ }
+ function widthSum(){let sum=Math.max(0,current);for(const ring of rings)sum+=ring.w;return sum}
+ // Few thin years are magnified so each ring stays visible; once the series is
+ // long the disc stops at MAX_WOOD and the years share the space instead.
+ function fitScale(){return clamp((MAX_WOOD-PITH)/Math.max(.6,widthSum()),2.7,56)}
+ function ringRadii(){const list=[];let r=PITH;for(const ring of rings){r+=ring.w*scale;list.push(r)}return list}
+ function woodEdge(){const list=ringRadii();return list.length?list[list.length-1]:PITH}
+ function ringIndexAt(radius){
+  if(!rings.length)return -1;
+  if(radius<=PITH)return 0;
+  let r=PITH;
+  for(let i=0;i<rings.length;i++){r+=rings[i].w*scale;if(radius<=r+1)return i}
+  return -1;
+ }
+ function markYear(index,item){
+  const ring=rings[index];
+  if(!ring)return;
+  if(ring.base==null)ring.base=ring.w;
+  const undo=ring.event===item.id;
+  ring.event=undo?null:item.id;
+  ring.w=clamp(ring.base*(undo?1:item.factor),.14,14);
+  ring.drought=ring.event==='dry';
+  ring.fire=ring.event==='fire';
+  if(ring.fire)scarYear=index;else if(scarYear===index)scarYear=-1;
+  if(!undo)tested.add(item.id);
+  flash={index,at:performance.now(),color:undo?'#9fcdf5':item.color};
+  if(undo)tell(`${index+1}年目を ふつうの年に もどしたよ（はば ${ring.w.toFixed(2)}）`,'↺');
+  else tell(`この年は ${item.tag}。${item.result}（${index+1}年目・はば ${ring.w.toFixed(2)}）`,item.icon);
+ }
+ function addYear(item){
+  const base=clamp(modelYearWidth(rings.length),.14,9);
+  rings.push({w:clamp(base*item.factor,.14,14),base,event:item.id,drought:item.id==='dry',fire:item.id==='fire'});
+  if(item.id==='fire')scarYear=rings.length-1;
+  if(rings.length>45){rings.shift();scarYear=Math.max(-1,scarYear-1)}
+  month=rings.length*12;current=0;drought=false;fire=false;
+  tested.add(item.id);
+  flash={index:rings.length-1,at:performance.now(),color:item.color};
+  tell(`${rings.length}年目が そだったよ。天気は ${item.tag}。${item.result}（はば ${rings[rings.length-1].w.toFixed(2)}）`,item.icon);
+ }
+ function ripple(x,y,color){
+  ripples.push({x,y,at:performance.now(),color});
+  if(ripples.length>10)ripples.shift();
+ }
+ function boxPath(x,y,w,h,r){
+  c.beginPath();
+  if(c.roundRect)c.roundRect(x,y,w,h,r);else c.rect(x,y,w,h);
+ }
+ function drawTrunk(){
+  const target=fitScale(),calm=calmMotion(),now=performance.now();
+  scale=calm?target:scale+(target-scale)*.14;
+  const radii=ringRadii(),edge=radii.length?radii[radii.length-1]:PITH,grown=Math.max(0,current)*scale;
+  c.save();
+  c.beginPath();c.rect(PANEL_X,PANEL_Y,898-PANEL_X,BAND_Y-PANEL_Y-2);c.clip();
+  c.fillStyle='#0b1722';c.fillRect(PANEL_X,PANEL_Y,898-PANEL_X,BAND_Y-PANEL_Y);
+  for(let i=rings.length-1;i>=0;i--){
+   const ring=rings[i];
+   c.beginPath();c.arc(CX,CY,radii[i],0,Math.PI*2);
+   c.fillStyle=i%2?'#c79b62':'#dfb979';c.fill();
+   c.strokeStyle=ring.drought?'#6f4b2c':'#76502d';c.lineWidth=ring.drought?3:1;c.stroke();
+  }
+  c.fillStyle='#ead19a';c.beginPath();c.arc(CX,CY,PITH,0,Math.PI*2);c.fill();
+  rings.forEach((ring,i)=>{
+   const band=Math.max(2.6,ring.w*scale),mid=radii[i]-band*.5,mark=clamp(band*.6,3,13);
+   if(ring.event==='dry'){c.strokeStyle='#c8892f';c.lineWidth=mark;c.beginPath();c.arc(CX,CY,mid,3.88,4.32);c.stroke()}
+   if(ring.event==='wet'){c.strokeStyle='#72bde8';c.lineWidth=mark;c.beginPath();c.arc(CX,CY,mid,.72,1.18);c.stroke()}
+   if(ring.event==='bug'){c.fillStyle='#7ec978';for(let k=0;k<5;k++){const a=2.16+k*.17;c.beginPath();c.arc(CX+Math.cos(a)*mid,CY+Math.sin(a)*mid,clamp(band*.28,2,4.5),0,Math.PI*2);c.fill()}}
+   if(ring.fire){
+    c.strokeStyle='#1c1c1c';c.lineWidth=clamp(band*1.1,6,16);c.beginPath();c.arc(CX,CY,mid,-.52,.16);c.stroke();
+    c.strokeStyle='#ff8358';c.lineWidth=2;c.beginPath();c.arc(CX,CY,mid,-.52,.16);c.stroke();
+   }
+  });
+  if(grown>0){
+   c.strokeStyle=month%12<6?'#f0d292':'#70431f';c.lineWidth=Math.max(2,grown);
+   c.beginPath();c.arc(CX,CY,edge+grown*.5,0,Math.PI*2);c.stroke();
+  }
+  c.strokeStyle='#9fdc8a';c.lineWidth=8;c.beginPath();c.arc(CX,CY,edge+grown+5,0,Math.PI*2);c.stroke();
+  const hintR=Math.min(MAX_WOOD+16,edge+grown+20);
+  c.setLineDash([9,9]);c.lineDashOffset=calm?0:-(now/45)%18;
+  c.strokeStyle='#ffd85a';c.lineWidth=3;c.globalAlpha=.85;
+  c.beginPath();c.arc(CX,CY,hintR,0,Math.PI*2);c.stroke();
+  c.setLineDash([]);c.globalAlpha=1;
+  c.textAlign='left';c.fillStyle='#9fcdf5';c.font='bold 15px system-ui';
+  c.fillText('みきの きりくち（うえから 見た かたち）',PANEL_X+12,PANEL_Y+20);
+  if(flash&&rings[flash.index]&&now-flash.at<1500){
+   // Bracket the changed year with thin arcs so the ring itself stays readable.
+   const ring=rings[flash.index],outer=radii[flash.index],inner=outer-ring.w*scale,age=(now-flash.at)/1500;
+   c.globalAlpha=calm?.9:.4+.5*Math.abs(Math.cos(age*9));
+   c.strokeStyle=flash.color;c.lineWidth=3.5;
+   c.beginPath();c.arc(CX,CY,outer,0,Math.PI*2);c.stroke();
+   if(inner>PITH+2){c.beginPath();c.arc(CX,CY,inner,0,Math.PI*2);c.stroke()}
+   c.globalAlpha=1;
+   c.fillStyle=flash.color;c.font='bold 17px system-ui';c.textAlign='right';
+   c.fillText(`いま ${flash.index+1}年目`,886,PANEL_Y+20);
+  }
+  c.textAlign='left';c.fillStyle='#d9e8f2';c.font='bold 15px system-ui';
+  c.fillText('みきの 輪を タップ：その年の 天気を かえる',PANEL_X+12,548);
+  c.fillStyle='#ffd85a';
+  c.fillText('まわりの あきちを タップ：あたらしい年が そだつ',PANEL_X+12,572);
   c.restore();
  }
- draw=function(){baseDraw();drawDirectLayer()};
+ function drawBand(){
+  const now=performance.now(),calm=calmMotion();
+  const maxW=Math.max(.6,...rings.map(ring=>ring.w)),start=Math.max(0,rings.length-YEAR_SLOTS);
+  c.save();
+  c.fillStyle='#0a1522';c.fillRect(0,BAND_Y,900,BAND_END-BAND_Y);
+  c.fillStyle='#22364d';c.fillRect(0,BAND_Y,900,2);
+  c.textAlign='left';c.font='bold 18px system-ui';c.fillStyle='#ffd85a';
+  c.fillText(message,18,MSG_Y);
+  for(let slot=0;slot<SLOTS;slot++){
+   const x=CELL_X+slot*(CELL_W+CELL_GAP);
+   if(slot===SLOTS-1){
+    boxPath(x,CELL_Y,CELL_W,CELL_H,13);c.fillStyle='#16283c';c.fill();
+    c.setLineDash([8,7]);c.lineDashOffset=calm?0:-(now/60)%15;
+    c.strokeStyle='#ffd85a';c.lineWidth=3;c.stroke();c.setLineDash([]);
+    c.textAlign='center';c.fillStyle='#ffd85a';c.font='bold 26px system-ui';
+    c.fillText('＋',x+CELL_W/2,CELL_Y+42);
+    c.font='bold 15px system-ui';c.fillText('あたらしい年',x+CELL_W/2,CELL_Y+70);
+    c.fillStyle=tool.color;c.fillText(tool.tag,x+CELL_W/2,CELL_Y+94);
+    continue;
+   }
+   const index=start+slot,ring=rings[index],picked=flash&&flash.index===index&&now-flash.at<1500;
+   boxPath(x,CELL_Y,CELL_W,CELL_H,13);
+   c.fillStyle=ring?'#101f2f':'#0c1725';c.fill();
+   if(!ring){
+    c.setLineDash([6,6]);c.strokeStyle='#2a3d55';c.lineWidth=1;c.stroke();c.setLineDash([]);
+    c.textAlign='center';c.fillStyle='#5a7391';c.font='bold 15px system-ui';
+    c.fillText('まだ ない年',x+CELL_W/2,CELL_Y+60);
+    continue;
+   }
+   const item=ring.event?toolById[ring.event]:null;
+   c.strokeStyle=picked?'#ffd85a':item?item.color:'#33506d';
+   c.lineWidth=picked?3:1.5;c.stroke();
+   c.textAlign='center';c.fillStyle='#e8f2f7';c.font='bold 17px system-ui';
+   c.fillText(`${index+1}年目`,x+CELL_W/2,CELL_Y+24);
+   const bx=x+14,bw=CELL_W-28;
+   c.fillStyle='#24364b';c.fillRect(bx,CELL_Y+32,bw,14);
+   c.fillStyle=item?item.color:'#d7ac6d';
+   c.fillRect(bx,CELL_Y+32,Math.max(4,bw*clamp(ring.w/maxW,0,1)),14);
+   c.fillStyle='#9fcdf5';c.font='14px ui-monospace,monospace';
+   c.fillText(`はば ${ring.w.toFixed(2)}`,x+CELL_W/2,CELL_Y+66);
+   c.fillStyle=item?item.color:'#89e6a7';c.font='bold 15px system-ui';
+   c.fillText(item?item.tag:'ふつうの年',x+CELL_W/2,CELL_Y+92);
+  }
+  c.textAlign='left';c.font='bold 14px system-ui';
+  c.fillStyle=tested.size>=4?'#82e7a3':'#9fcdf5';
+  c.fillText(tested.size>=4?'★ 4しゅるいの できごとを ぜんぶ ためせたよ':`ためした できごと ${tested.size}/4`,18,BAND_END-6);
+  if(start>0){
+   c.textAlign='right';c.fillStyle='#9fcdf5';
+   c.fillText(`年表は さいきんの${YEAR_SLOTS}年（ふるい年は みきの輪をタップ）`,882,BAND_END-6);
+  }
+  c.restore();
+ }
+ function drawRipples(){
+  const now=performance.now();
+  c.save();
+  for(let i=ripples.length-1;i>=0;i--){
+   const item=ripples[i],age=(now-item.at)/650;
+   if(age>=1){ripples.splice(i,1);continue}
+   c.globalAlpha=(1-age)*.9;c.strokeStyle=item.color;c.lineWidth=4;
+   c.beginPath();c.arc(item.x,item.y,10+age*70,0,Math.PI*2);c.stroke();
+  }
+  c.restore();
+ }
+ function syncMetrics(){
+  const box=document.getElementById('eventM');
+  if(box)box.textContent=rings.filter(ring=>ring.event||ring.drought||ring.fire).length+'年';
+ }
+ function markGraph(){
+  if(!rings.length)return;
+  const count=rings.length,mx=Math.max(1,...rings.map(ring=>ring.w)),bw=Math.max(3,480/count);
+  g.save();
+  rings.forEach((ring,i)=>{
+   if(!ring.event)return;
+   const item=toolById[ring.event],x=40+i*(520/count),h=ring.w/mx*150;
+   if(ring.event==='wet'||ring.event==='bug'){g.fillStyle=item.color;g.fillRect(x,190-h,bw,h)}
+   g.fillStyle=item.color;g.fillRect(x,192,bw,6);
+  });
+  g.textAlign='left';g.font='bold 14px system-ui';g.fillStyle='#9fcdf5';
+  g.fillText('タップで つけた できごと',36,228);
+  let lx=36;
+  tools.forEach(item=>{
+   g.fillStyle=item.color;g.fillRect(lx,238,14,14);
+   g.fillStyle='#d9e8f2';g.fillText(item.tag,lx+19,250);
+   lx+=19+g.measureText(item.tag).width+16;
+  });
+  g.fillStyle='#9fcdf5';g.font='14px system-ui';
+  g.fillText('ほそい年・ふとい年の ならびが その土地の 気候の記録になる',36,276);
+  g.restore();
+ }
+ const baseDraw=draw,baseGraph=drawGraph;
+ draw=function(){baseDraw();drawTrunk();drawBand();drawRipples();syncMetrics()};
+ drawGraph=function(){baseGraph();markGraph()};
  function point(event){
   const rect=canvas.getBoundingClientRect();
   return{x:(event.clientX-rect.left)*canvas.width/rect.width,y:(event.clientY-rect.top)*canvas.height/rect.height};
  }
- function interact(event){
-  const p=point(event);
-  if(p.y>=438){
-   const index=Math.floor((p.x-27)/150);
-   if(index>=0&&index<tools.length){selected=tools[index].id;draw()}
-   return;
+ function cellAt(p){
+  if(p.y<CELL_Y||p.y>CELL_Y+CELL_H)return -1;
+  for(let slot=0;slot<SLOTS;slot++){
+   const x=CELL_X+slot*(CELL_W+CELL_GAP);
+   if(p.x>=x&&p.x<=x+CELL_W)return slot;
   }
-  if(p.x<405||p.x>890||p.y<105||p.y>495)return;
-  const now=performance.now();if(now-lastPlace<180)return;lastPlace=now;
-  finishYear(tools.find(tool=>tool.id===selected),p.x,p.y);
+  return -1;
  }
- canvas.addEventListener('pointerdown',event=>{event.stopImmediatePropagation();pointerDown=true;try{canvas.setPointerCapture?.(event.pointerId)}catch(_){/* synthetic pointer */}interact(event)});
- canvas.addEventListener('pointermove',event=>{if(pointerDown&&event.buttons)interact(event)});
- canvas.addEventListener('pointerup',()=>{pointerDown=false});
- canvas.addEventListener('pointercancel',()=>{pointerDown=false});
+ let lastTap=0;
+ function interact(event){
+  if(canvas.classList.contains('zoomOn'))return;
+  const now=performance.now();
+  if(now-lastTap<140)return;
+  lastTap=now;
+  const p=point(event);
+  if(p.y>=BAND_Y){
+   const slot=cellAt(p);
+   if(slot<0)return;
+   const cx=CELL_X+slot*(CELL_W+CELL_GAP)+CELL_W/2,cy=CELL_Y+CELL_H/2;
+   if(slot===SLOTS-1){ripple(cx,cy,tool.color);addYear(tool);draw();return}
+   const index=Math.max(0,rings.length-YEAR_SLOTS)+slot;
+   if(index>=rings.length){
+    ripple(cx,cy,'#ff8f8f');
+    tell('その年は まだ ないよ。右はしの ＋あたらしい年 を タップしてね。','👆');
+    draw();return;
+   }
+   ripple(cx,cy,tool.color);markYear(index,tool);draw();return;
+  }
+  if(p.x<PANEL_X||p.y<PANEL_Y){
+   tell('右の まるい きりくちか、下の年表を タップしてね。','👆');
+   draw();return;
+  }
+  const radius=Math.hypot(p.x-CX,p.y-CY),edge=woodEdge()+Math.max(0,current)*scale;
+  if(rings.length&&radius<=edge+6){
+   const index=ringIndexAt(radius);
+   if(index>=0){ripple(p.x,p.y,tool.color);markYear(index,tool);draw();return}
+  }
+  ripple(p.x,p.y,tool.color);addYear(tool);draw();
+ }
+ canvas.addEventListener('pointerdown',event=>{
+  event.preventDefault();event.stopImmediatePropagation();
+  try{canvas.setPointerCapture?.(event.pointerId)}catch(_){/* synthetic pointer */}
+  interact(event);
+ });
  const baseReset=window.resetSimulation;
- window.resetSimulation=()=>{placed=0;selected='rain';const result=baseReset?.();draw();return result};
+ window.resetSimulation=()=>{
+  ripples=[];flash=null;tested=new Set();scale=9;
+  const result=baseReset?.();
+  selectTool(tool.id,false);
+  tell(`${tool.name}を えらんだよ。木のみきか、下の年表を タップしてね。`);
+  draw();
+  return result;
+ };
  window.addEventListener('load',()=>document.querySelectorAll('.lw-direct-tools').forEach(node=>node.remove()));
- draw();
+ selectTool(tool.id);
 })();
 </script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;

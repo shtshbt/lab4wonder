@@ -39,7 +39,10 @@ function blocked(x,y){return blocks.some(b=>Math.hypot(x-b.x,y-b.y)<b.r)}
 function fieldAt(x,y){let v=0;for(const f of foods)v+=f.n*1800/(80+Math.hypot(x-f.x,y-f.y)**2);v+=trail[idx(x/6,y/6)]*.9;return v}
 function step(dt){const p=par(),decay=Math.pow(.985+.014*p.trail,dt*12);for(let i=0;i<trail.length;i++)trail[i]*=decay;for(const a of agents){const d=18+45*p.sense,da=.55;let vals=[-da,0,da].map(q=>fieldAt(a.x+Math.cos(a.a+q)*d,a.y+Math.sin(a.a+q)*d)+(r46rand()-.5)*p.branch*.5);let k=vals.indexOf(Math.max(...vals));a.a+=(-da+k*da)*(.35+.6*p.sense)+(r46rand()-.5)*p.branch*.45;let nx=a.x+Math.cos(a.a)*(18+36*p.move)*dt,ny=a.y+Math.sin(a.a)*(18+36*p.move)*dt;if(nx<14||nx>886||ny<72||ny>574||blocked(nx,ny)){a.a+=Math.PI*(.65+r46rand()*.7);nx=a.x;ny=a.y}else{a.x=nx;a.y=ny}trail[idx(a.x/6,a.y/6)]+=1.4;let hit=-1;foods.forEach((f,i)=>{if(Math.hypot(a.x-f.x,a.y-f.y)<28){hit=i;f.n=Math.min(1.4,f.n+dt*.01)}});if(hit>=0){a.hit=hit;for(let s=0;s<8;s++){const q=.5-s/16;trail[idx((a.x*q+450*(1-q))/6,(a.y*q+295*(1-q))/6)]+=2.2}}if(r46rand()<dt*.025*p.branch&&agents.length<260)agents.push({x:a.x,y:a.y,a:a.a+(r46rand()-.5)*1.6,hit:-1})}if(p.prune>0){const cut=.05*p.prune*dt;for(let i=0;i<trail.length;i++)if(trail[i]<.8+2*p.prune)trail[i]=Math.max(0,trail[i]-cut)}t+=dt;const st=stats();if(!hist.length||t-hist.at(-1).t>.35){hist.push({t,...st});if(hist.length>280)hist.shift()}}
 function stats(){let conn=0;for(const f of foods){let local=0;for(let y=Math.max(0,(f.y/6-6)|0);y<Math.min(th,(f.y/6+6)|0);y++)for(let x=Math.max(0,(f.x/6-6)|0);x<Math.min(tw,(f.x/6+6)|0);x++)local+=trail[idx(x,y)];if(local>42)conn++}let cells=0,sum=0,strong=0;for(const v of trail){if(v>.25){cells++;sum+=v}if(v>3)strong++}const length=cells*6,ideal=foods.reduce((s,f)=>s+Math.hypot(f.x-450,f.y-295),0),eff=conn?Math.min(1,ideal/Math.max(ideal,length*.55)):0,redund=Math.max(0,strong/(Math.max(1,conn)*65));return{conn,length,eff,redund,explore:agents.length}}
-function draw(){const p=par(),st=stats();c.clearRect(0,0,900,590);c.fillStyle='#06121a';c.fillRect(0,0,900,590);for(let y=0;y<th;y+=2)for(let x=0;x<tw;x+=2){const v=trail[idx(x,y)];if(v>.15){c.fillStyle=`rgba(236,211,84,${Math.min(.58,v/12)})`;c.fillRect(x*6,y*6,12,12)}}for(const b of blocks){c.fillStyle='#31404c';c.beginPath();c.arc(b.x,b.y,b.r,0,6.28);c.fill();c.strokeStyle='#75879a';c.stroke()}for(const f of foods){c.fillStyle='#74e1a8';c.beginPath();c.arc(f.x,f.y,25,0,6.28);c.fill();c.fillStyle='#143424';c.font='bold 12px system-ui';c.fillText('餌',f.x-8,f.y+4)}c.fillStyle='#f6e77b';for(let i=0;i<agents.length;i+=2){const a=agents[i];c.beginPath();c.arc(a.x,a.y,2.1,0,6.28);c.fill()}c.fillStyle='#fff';c.font='bold 16px system-ui';c.fillText('探索して餌を結ぶ粘菌ネットワーク',24,30);c.font='12px system-ui';c.fillStyle='#cfe9ff';c.fillText('明るい管ほど多くの個体が通り、輸送路として強化される',24,51);$('connectM').textContent=st.conn+'/'+foods.length;$('lengthM').textContent=Math.round(st.length)+' px';$('effM').textContent=(st.eff*100).toFixed(0)+'%';$('redundM').textContent=st.redund.toFixed(1);let msg=st.conn===foods.length&&st.eff>.65?'全ての餌が比較的短い管で接続されています。':st.conn===foods.length?'全て接続しましたが、探索枝が多く総管長が長いです。':p.prune>.8?'刈り込みが強く、まだ見つけていない餌への探索路も消えています。':'探索枝が広がっています。どの枝が太く残るか見よう。';$('stateText').textContent=msg;$('explain').textContent='感知距離は勾配の読み取り、枝分かれは探索範囲、残りやすさは経路記憶、刈り込みは不要な管の削減、速度は探索の速さを変えます。';drawGraph()}
+// Dark rims first, bright cores second, so crowded bodies never rub each other out.
+function drawAgents(){const rim=3.6,core=2.1;c.fillStyle='#08141f';c.beginPath();for(const a of agents){c.moveTo(a.x+rim,a.y);c.arc(a.x,a.y,rim,0,6.28)}c.fill();c.fillStyle='#fffbe8';c.beginPath();for(const a of agents){c.moveTo(a.x+core,a.y);c.arc(a.x,a.y,core,0,6.28)}c.fill()}
+// The trail map stays a muted warm wash so the bright slime bodies keep their own channel.
+function draw(){const p=par(),st=stats();c.clearRect(0,0,900,590);c.fillStyle='#06121a';c.fillRect(0,0,900,590);for(let y=0;y<th;y+=2)for(let x=0;x<tw;x+=2){const v=trail[idx(x,y)];if(v>.15){c.fillStyle=`rgba(196,134,70,${Math.min(.34,.045+v/22)})`;c.fillRect(x*6,y*6,12,12)}}for(const b of blocks){c.fillStyle='#31404c';c.beginPath();c.arc(b.x,b.y,b.r,0,6.28);c.fill();c.strokeStyle='#75879a';c.stroke()}for(const f of foods){c.fillStyle='#74e1a8';c.beginPath();c.arc(f.x,f.y,25,0,6.28);c.fill();c.fillStyle='#143424';c.font='bold 12px system-ui';c.fillText('餌',f.x-8,f.y+4)}drawAgents();c.fillStyle='#fff';c.font='bold 16px system-ui';c.fillText('探索して餌を結ぶ粘菌ネットワーク',24,30);c.font='12px system-ui';c.fillStyle='#cfe9ff';c.fillText('明るい点＝粘菌の本体、うすい茶色の線＝通った道（濃いほど強い輸送路）',24,51);$('connectM').textContent=st.conn+'/'+foods.length;$('lengthM').textContent=Math.round(st.length)+' px';$('effM').textContent=(st.eff*100).toFixed(0)+'%';$('redundM').textContent=st.redund.toFixed(1);let msg=st.conn===foods.length&&st.eff>.65?'全ての餌が比較的短い管で接続されています。':st.conn===foods.length?'全て接続しましたが、探索枝が多く総管長が長いです。':p.prune>.8?'刈り込みが強く、まだ見つけていない餌への探索路も消えています。':'探索枝が広がっています。どの枝が太く残るか見よう。';$('stateText').textContent=msg;$('explain').textContent='感知距離は勾配の読み取り、枝分かれは探索範囲、残りやすさは経路記憶、刈り込みは不要な管の削減、速度は探索の速さを変えます。';drawGraph()}
 function drawGraph(){g.clearRect(0,0,900,330);g.fillStyle='#09131f';g.fillRect(0,0,900,330);if(hist.length>1){const t0=hist[0].t,t1=hist.at(-1).t,xx=v=>45+(v-t0)/Math.max(.1,t1-t0)*810;function line(get,max,col){g.strokeStyle=col;g.lineWidth=3;g.beginPath();hist.forEach((h,i)=>{const x=xx(h.t),y=280-get(h)/max*220;i?g.lineTo(x,y):g.moveTo(x,y)});g.stroke()}line(h=>h.conn,foods.length,'#7fd5ff');line(h=>h.eff,1,'#77e69f');line(h=>Math.min(1,h.length/8000),1,'#ffe36a')}g.fillStyle='#7fd5ff';g.fillText('接続率',45,24);g.fillStyle='#77e69f';g.fillText('輸送効率',110,24);g.fillStyle='#ffe36a';g.fillText('管長（相対）',205,24)}
 function bind(id,out,fmt=v=>v){$(id).oninput=e=>{$(out).textContent=fmt(+e.target.value);draw()};$(id).dispatchEvent(new Event('input'))}bind('sense','senseOut',v=>v+'%');bind('branch','branchOut',v=>v+'%');bind('trail','trailOut',v=>v+'%');bind('prune','pruneOut',v=>v+'%');bind('move','moveOut',v=>v+'%');$('playPause').onclick=()=>{running=!running;$('playPause').textContent=running?'⏸ 一時停止':'▶ 再生'};$('stepBtn').onclick=()=>{step(1);draw()};$('speedSel').onchange=e=>speed=+e.target.value;$('foodBtn').onclick=()=>foods.push({x:70+r46rand()*760,y:95+r46rand()*440,n:1});$('blockBtn').onclick=()=>blocks.push({x:180+r46rand()*540,y:130+r46rand()*350,r:28+r46rand()*40});$('scenarioBtn').onclick=()=>{r46Scenario++;r46ResetSeed();reset();foods=[];const n=4+Math.floor(r46rand()*4);for(let i=0;i<n;i++)foods.push({x:80+r46rand()*740,y:100+r46rand()*430,n:1});if(r46rand()<.6)blocks.push({x:450,y:295,r:45+r46rand()*45});draw()};function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(running)step(dt*speed);draw();requestAnimationFrame(loop)}reset();requestAnimationFrame(loop);window.getSnapshot=()=>({感知:$('senseOut').textContent,枝分かれ:$('branchOut').textContent,記憶:$('trailOut').textContent,刈り込み:$('pruneOut').textContent,速度:$('moveOut').textContent,接続:$('connectM').textContent,管長:$('lengthM').textContent,効率:$('effM').textContent,冗長:$('redundM').textContent});
 </script><script>
@@ -215,7 +218,7 @@ show(0);
   style.textContent='.bio-tools{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}.bio-tools button{flex:1 1 130px}.bio-tools button.on{background:#f6e77b;color:#211b00}.bio-template{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 10px;align-items:center;margin:8px 0;padding:9px 11px;border:1px solid #557391;border-radius:12px;background:#0d1b2b;font-size:12px}.bio-template select{min-height:42px;border:1px solid #557391;border-radius:10px;background:#071523;color:#fff;padding:7px}.bio-template small{grid-column:1/-1;color:#bcd0e5;line-height:1.6}.bio-mission{padding:9px 11px;border:1px solid #f6e77b88;border-radius:12px;background:#142237;font-size:12px;line-height:1.65}.bio-key{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}.bio-key span{padding:3px 7px;border-radius:999px;background:#091522}@media(max-width:440px){.bio-template{grid-template-columns:1fr}.bio-template small{grid-column:auto}}';
   document.head.append(style);
   const panel=document.createElement('div');
-  panel.innerHTML='<label class="bio-template"><b>🗺️ 背景テンプレート</b><select id="slimeTemplate" aria-label="粘菌実験の背景テンプレート"><option value="free">自由な実験場</option><option value="tokyo">東京の駅と交通網</option><option value="river">川と橋のある町</option></select><small id="templateHint" aria-live="polite">自由に餌と障害物を置く実験場。背景は粘菌の動きに影響しません。</small></label><div class="bio-tools" role="toolbar" aria-label="粘菌の配置道具"><button data-tool="food" class="on">🍚 餌を置く</button><button data-tool="block">🪨 障害物を置く</button><button data-tool="erase">🧽 近くを消す</button></div><div class="bio-mission"><b>最短ネットワーク挑戦：</b>餌と岩を好きな場所へ置こう。粘菌は枝を伸ばし、岩を回り、餌へ到着した枝を太くして、使わない枝を細くする。配置を変えて全部の餌を短く結べるかな？<div class="bio-key"><span>黄い太い管＝粘菌が作る道</span><span>水色の細線＝人が作った道・鉄道（比較用）</span><span>緑＝餌／地図では主要地点</span><span>灰＝通れない岩</span></div></div>';
+  panel.innerHTML='<label class="bio-template"><b>🗺️ 背景テンプレート</b><select id="slimeTemplate" aria-label="粘菌実験の背景テンプレート"><option value="free">自由な実験場</option><option value="tokyo">東京の駅と交通網</option><option value="river">川と橋のある町</option></select><small id="templateHint" aria-live="polite">自由に餌と障害物を置く実験場。背景は粘菌の動きに影響しません。</small></label><div class="bio-tools" role="toolbar" aria-label="粘菌の配置道具"><button data-tool="food" class="on">🍚 餌を置く</button><button data-tool="block">🪨 障害物を置く</button><button data-tool="erase">🧽 近くを消す</button></div><div class="bio-mission"><b>最短ネットワーク挑戦：</b>餌と岩を好きな場所へ置こう。粘菌は枝を伸ばし、岩を回り、餌へ到着した枝を太くして、使わない枝を細くする。配置を変えて全部の餌を短く結べるかな？<div class="bio-key"><span>あかるい点＝ねんきん（うごく本体）</span><span>うすい茶色の線＝とおった みち</span><span>水色の細線＝人が作った道・鉄道（比較用）</span><span>緑＝餌／地図では主要地点</span><span>灰＝通れない岩</span></div></div>';
   canvas.closest('.stage').insertAdjacentElement('afterend',panel);
   let tool='food';
   const foodButton=document.getElementById('foodBtn');
@@ -243,7 +246,7 @@ show(0);
         ['東京',540,275],['千葉',760,270]
       ],
       links:[[0,1],[1,3],[2,3],[2,7],[3,4],[3,8],[4,5],[5,6],[7,8],[8,9]],
-      hint:'緑の餌は主要駅、水色の線は人が作った鉄道・幹線の模式図。黄色い粘菌の網が、どの駅をどう結び直すか比べよう。'
+      hint:'緑の餌は主要駅、水色の線は人が作った鉄道・幹線の模式図。粘菌の網（明るい点と茶色の道）が、どの駅をどう結び直すか比べよう。'
     },
     river:{
       foods:[
@@ -251,7 +254,7 @@ show(0);
         ['市場',215,420],['病院',535,420],['南の町',760,455]
       ],
       links:[[0,1],[1,2],[0,3],[1,4],[2,5],[3,4],[4,5]],
-      hint:'緑の餌は町の主要地点、水色の線は道路、青い帯は川、白い短線は橋。背景は比較用で、置いた灰色の障害物だけが粘菌を止めます。'
+      hint:'緑の餌は町の主要地点、水色の線は道路、青い帯は川、うす水色の短線は橋。背景は比較用で、置いた灰色の障害物だけが粘菌を止めます。'
     }
   };
 
@@ -309,7 +312,7 @@ show(0);
     c.moveTo(470,70);
     c.bezierCurveTo(350,190,575,335,425,575);
     c.stroke();
-    c.strokeStyle='rgba(234,245,255,.82)';
+    c.strokeStyle='rgba(176,224,255,.85)';
     c.lineWidth=9;
     for(const [x,y,angle] of [[409,206,-.65],[502,367,-.62]]){
       c.translate(x,y);
@@ -324,7 +327,7 @@ show(0);
     c.fillStyle='#bfeaff';
     c.font='800 14px system-ui';
     c.fillText('川（背景）',470,130);
-    c.fillStyle='#ffffff';
+    c.fillStyle='#bfe6ff';
     c.fillText('橋',372,180);
     c.fillText('橋',520,350);
     c.restore();
@@ -373,9 +376,12 @@ show(0);
   draw=function(){
     baseDraw();const st=stats(),progress=Math.min(1,t/18);c.save();c.lineCap='round';
     drawTemplateOverlay();
-    c.strokeStyle=`rgba(255,236,102,${.22+.62*progress})`;c.shadowColor='#f6df55';c.shadowBlur=10;c.lineWidth=4+8*progress;
-    foods.forEach(route);c.shadowBlur=0;
-    c.fillStyle='#f8dc67';c.beginPath();c.arc(450,295,23+Math.sin(t*2)*2,0,Math.PI*2);c.fill();c.fillStyle='#4b3900';c.font='bold 11px system-ui';c.textAlign='center';c.fillText('粘菌',450,299);
+    // The backbone tubes stay a faded map layer under the bright slime bodies.
+    c.strokeStyle=`rgba(206,142,74,${.2+.28*progress})`;c.shadowBlur=0;c.lineWidth=2.5+4*progress;
+    foods.forEach(route);
+    drawAgents();
+    c.font='bold 12px system-ui';c.fillStyle='#143424';for(const f of foods)c.fillText('餌',f.x-8,f.y+4);
+    c.fillStyle='#fff6d2';c.beginPath();c.arc(450,295,23+Math.sin(t*2)*2,0,Math.PI*2);c.fill();c.lineWidth=2.5;c.strokeStyle='#0a1724';c.stroke();c.fillStyle='#3b2c00';c.font='bold 11px system-ui';c.textAlign='center';c.fillText('粘菌',450,299);
     c.textAlign='left';c.fillStyle='#fff';c.font='bold 13px system-ui';c.fillText(`挑戦：餌 ${st.conn}/${foods.length} 接続　効率 ${Math.round(st.eff*100)}%`,650,30);
     if(st.conn===foods.length)c.fillStyle='#8df0ac',c.fillText('★ 全部つながった！',650,51);
     c.restore();

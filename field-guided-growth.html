@@ -20,13 +20,13 @@ a[href="index.html"],a[href="kids-index.html"]{display:inline-flex;align-items:c
 <section class="learn"><div><b>これは何？</b><p>局所的な物質源から濃度勾配ができ、細胞がしきい値を読んで異なる領域へ分化する。</p><p class="v11-bridge">やさしく いうと：色は からだの 中の <ruby>合図<rt>あいず</rt></ruby>の こさ。あかいほど こく、あおいほど うすいよ。きめた こさ（<ruby>しきい値<rt>しきいち</rt></ruby>）より こい ところが「ここから 育つ」に なって、その さかいめが 白い せんで 見えるよ。</p></div><div><b>どこを見る？</b><p>濃度場の広がり、色分けされた領域、傷害後の回復、断面プロファイル。</p></div><div><b>何を変える？</b><p>源、拡散、分解、しきい値、成長フィードバック、追加源・傷害。</p></div><div><b>持ち帰る一文</b><p data-takeaway>複雑な組織境界は、各細胞が全体図を知ることなく、局所濃度としきい値を読むことで生じうる。</p></div></section>
 
 <section class="toolbar" data-tour="controls"><button id="playPause" class="primary">▶ 再生</button><button id="stepBtn">1段階</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1">×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="woundBtn">一部を傷つける</button><button id="sourceBtn">異所性の源</button><button id="scenarioBtn">別の胚</button></section>
-<section class="v11-preset" aria-label="生きもののかたちの例をえらぶ"><b>🧬 生きものの かたちで ためす</b><div class="v11-presetRow"><button type="button" data-preset="segments">🪰 むしの たまご</button><button type="button" data-preset="tip">🌱 くきの さきっぽ</button><button type="button" data-preset="spot">🐆 どうぶつの ぶち</button><button type="button" data-preset="heal">🩹 きずが なおる</button></div><p id="presetNote" class="small" aria-live="polite">ボタンを おすと つまみの ばしょが 変わるだけ。しくみは どれも おなじだよ。</p></section>
+<section class="v11-preset" aria-label="生きもののかたちの例をえらぶ"><b>🧬 生きものの かたちで ためす</b><div class="v11-presetRow"><button type="button" data-preset="segments">🪰 むしの たまご</button><button type="button" data-preset="tip">🌱 くきの さきっぽ</button><button type="button" data-preset="eyespot">🦋 チョウの はねの もん</button><button type="button" data-preset="heal">🩹 きずが なおる</button></div><p id="presetNote" class="small" aria-live="polite">ボタンを おすと つまみの ばしょが 変わるだけ。しくみは どれも おなじだよ。</p></section>
 <section class="stage" data-tour="stage"><canvas id="mainCv" width="900" height="590" aria-label="形態形成因子が拡散し、しきい値に応じて細胞領域が決まり、組織が成長するアニメーション"></canvas></section>
 <div id="liveStory" class="v11-live" role="status" aria-live="polite">🔎 まだ あいずが ひろがっていないよ。▶ さいせい か 1段階 を おしてみよう。</div>
 <div class="panel grid2"><section class="card"><h2>場と成長の条件</h2><label class="control">源の強さ <output id="sourceOut"></output><input id="source" type="range" min="10" max="100" value="75"></label><label class="control">拡散 <output id="diffOut"></output><input id="diff" type="range" min="5" max="100" value="55"></label><label class="control">分解 <output id="decayOut"></output><input id="decay" type="range" min="0" max="100" value="35"></label><label class="control">しきい値間隔 <output id="thOut"></output><input id="threshold" type="range" min="15" max="85" value="50"></label><label class="control">成長フィードバック <output id="feedOut"></output><input id="feedback" type="range" min="0" max="100" value="45"></label><div class="callout" id="explain"></div></section><section class="card" data-tour="metrics"><h2>パターン計器</h2><div class="metrics"><div class="metric"><b>高濃度領域</b><strong id="highM"></strong></div><div class="metric"><b>中濃度領域</b><strong id="midM"></strong></div><div class="metric"><b>低濃度領域</b><strong id="lowM"></strong></div><div class="metric"><b>さかいめの ばしょ</b><strong id="shiftM"></strong></div></div><div class="callout" id="stateText"></div></section></div>
 <section class="deep"><h2>濃度断面・領域境界・回復</h2><canvas id="graphCv" width="900" height="330" aria-label="形態形成因子の濃度断面としきい値、領域境界の履歴"></canvas><p>細胞は「目的の形」を直接知るのではなく、局所濃度としきい値を読み、増殖・移動・分化を変えます。組織の成長は場そのものも引き伸ばします。</p></section>
 
-<div id="guideBack" class="sheetBack"><section class="sheet" role="dialog" aria-modal="true"><div class="sheetHead"><h2>形態形成因子・しきい値・成長場ラボ の学び方</h2><button id="guideClose" aria-label="閉じる">×</button></div><h3>これは 何の 話？</h3><p>色は からだの 中の 合図（あいず）の こさです。合図は もとから にじむように 広がり、こわれながら うすく なります。きめた こさ（しきい値）より こい ところが「ここから 育つ」に なり、その さかいめが 白い せんに なります。</p><p>「生きものの かたちで ためす」の ボタンは、この つまみの ばしょを かえるだけで、むしの たまごの からだわけ・くきの さきっぽ・どうぶつの ぶち・きずの 回復に あたる ばあいを 見せます。しくみは どれも おなじ 一つの 場です。</p><h3>最初の予想</h3><p>拡散だけを高くして領域境界がどこまで遠ざかるか比較しよう。次に傷害後の回復速度をフィードバック条件で比べる。</p><h3>★★★ 探究</h3><p>拡散だけを高くして領域境界がどこまで遠ざかるか比較しよう。次に傷害後の回復速度をフィードバック条件で比べる。</p><h3>模型で省いているもの</h3><p>実際の発生では複数因子、受容体、遺伝子ネットワーク、力学、細胞移動が相互作用します。単一因子の教育模型です。</p></section></div>
+<div id="guideBack" class="sheetBack"><section class="sheet" role="dialog" aria-modal="true"><div class="sheetHead"><h2>形態形成因子・しきい値・成長場ラボ の学び方</h2><button id="guideClose" aria-label="閉じる">×</button></div><h3>これは 何の 話？</h3><p>色は からだの 中の 合図（あいず）の こさです。合図は もとから にじむように 広がり、こわれながら うすく なります。きめた こさ（しきい値）より こい ところが「ここから 育つ」に なり、その さかいめが 白い せんに なります。</p><p>「生きものの かたちで ためす」の ボタンは、この つまみの ばしょを かえるだけで、むしの たまごの からだわけ・くきの さきっぽ・チョウの はねの もん・きずの 回復に あたる ばあいを 見せます。しくみは どれも おなじ 一つの 場です。</p><h3>最初の予想</h3><p>拡散だけを高くして領域境界がどこまで遠ざかるか比較しよう。次に傷害後の回復速度をフィードバック条件で比べる。</p><h3>★★★ 探究</h3><p>拡散だけを高くして領域境界がどこまで遠ざかるか比較しよう。次に傷害後の回復速度をフィードバック条件で比べる。</p><h3>模型で省いているもの</h3><p>実際の発生では複数因子、受容体、遺伝子ネットワーク、力学、細胞移動が相互作用します。単一因子の教育模型です。</p></section></div>
 <div id="tourBox" class="tourBox"><div id="tourText" class="hint"></div><div class="row"><button id="tourPrev">←</button><span id="tourCount" class="small"></span><button id="tourNext" class="primary">次へ →</button><button id="tourStop">終わる</button></div></div>
 <button id="trayOpen" class="trayOpen">🔬 探究トレイ</button><div id="trayBack" class="sheetBack"><section class="sheet" role="dialog" aria-modal="true"><div class="sheetHead"><h2>形態形成因子・しきい値・成長場ラボ を条件比較する</h2><button id="trayClose" aria-label="閉じる">×</button></div><p class="hint">保存はしません。条件Aと条件Bを記録し、なるべく一つだけ変えた比較を作ります。</p><div class="traySection"><h3>ことば</h3><div class="terms"><span class="term"><ruby>形態形成因子<rt>けいたいけいせいいんし</rt></ruby></span><span class="term"><ruby>濃度勾配<rt>のうどこうばい</rt></ruby></span><span class="term"><ruby>しきい値<rt>しきいち</rt></ruby></span><span class="term"><ruby>分化<rt>ぶんか</rt></ruby></span><span class="term"><ruby>回復<rt>かいふく</rt></ruby></span></div></div><div class="traySection"><h3>★★★ 探究</h3><div class="callout">拡散だけを高くして領域境界がどこまで遠ざかるか比較しよう。次に傷害後の回復速度をフィードバック条件で比べる。</div></div><div class="traySection"><h3>条件A / 条件B</h3><div class="row"><button id="recA" class="primary">条件Aを記録</button><button id="recB">条件Bを記録</button><button id="clearAB">消す</button></div><div class="snapGrid"><div class="snap"><b>条件A</b><pre id="snapA">まだ記録していません。</pre></div><div class="snap"><b>条件B</b><pre id="snapB">まだ記録していません。</pre></div></div><div id="diffAB" class="callout">Aを記録し、一つだけ条件を変えてBを記録しよう。</div></div><div class="traySection"><h3>予想と観察</h3><div class="noteGrid"><label>先に予想<textarea placeholder="何を変えると、どこがどう変わる？"></textarea></label><label>見つけたこと<textarea placeholder="予想と同じ点、違った点は？"></textarea></label></div></div><div class="traySection"><button id="zoomToggle">🔍 図をタップして拡大</button></div></section></div>
 <div id="zoomBack" class="modalBack"><section class="sheet" role="dialog" aria-modal="true"><div class="sheetHead"><h2>図の拡大</h2><button id="zoomClose" aria-label="閉じる">×</button></div><div id="zoomBody" class="zoomBody"></div></section></div>
@@ -203,11 +203,11 @@ const reduceMotion=()=>!!(window.matchMedia&&matchMedia('(prefers-reduced-motion
    Each one was checked against the field the model actually produces. */
 const PRESETS={
  segments:{source:90,diff:100,decay:5,threshold:25,feedback:40,warm:600,
-  note:'🪰 むしの たまご：まえの ほうから 出た あいずが、あたま・むね・おなかの ばしょを きめるよ。あかい おび、きいろい おび、あおい ところの 3つが 見える？'},
- tip:{source:100,diff:12,decay:85,threshold:20,feedback:20,warm:400,
-  note:'🌱 くきの さきっぽ：あいずが すぐ こわれるので、もとの すぐ ちかくだけ こいよ。そだつ ばしょが とても せまくて、さきっぽだけ のびる かたち。'},
- spot:{source:70,diff:60,decay:30,threshold:25,feedback:40,warm:400,extra:{x:55,y:22},
-  note:'🐆 どうぶつの ぶち：まん中に もう ひとつ あいずの もとが できたよ。そこだけ まるく こく なって、ぶちの もように なるね。'},
+  note:'🪰 むしの たまご：まえの はしから 出た あいずが、まえから の きょりで あたま・むね・おなかの ばしょを きめるよ。あかい ところ、きいろい ところ、あおい ところの 3つが 見える？'},
+ tip:{source:100,diff:30,decay:40,threshold:20,feedback:20,warm:400,
+  note:'🌱 くきの さきっぽ：あいずが すぐ こわれるので、もとの ちかくだけ こいよ。「ここから 育つ」に なる ところが せまい おびに なって、さきっぽだけ のびる かたち。'},
+ eyespot:{source:70,diff:60,decay:30,threshold:25,feedback:40,warm:400,extra:{x:55,y:22},
+  note:'🦋 チョウの はねの もん：はねの まん中に あいずの もとが 1つ できたよ。そこから 外へ うすく なるので、まん中が あかい わ、そのまわりが きいろい わ、外は あおい。まるい わが かさなった もんに なるね。'},
  heal:{source:90,diff:90,decay:10,threshold:25,feedback:40,warm:500,speed:'4',wound:{x:14,y:23,r:3.5},
   note:'🩹 きずが なおる：きずの ところは あいずが きえるよ。まわりから しみこんで、白い さかいめが もどるか 見てね。'}
 };
@@ -234,9 +234,13 @@ function outlineZones(){
  ctx.setLineDash([]);
  ctx.font='12px system-ui';ctx.fillStyle='#ffffff';
  ctx.fillText('白い せん＝しきい値の さかいめ（ここから 育つ）',300,50);
- ctx.fillStyle='rgba(6,14,24,.84)';ctx.fillRect(6,TOP+3,196,20);
+ /* Keep the caption clear of the source strip it points at (x<3 cells). */
+ const capY=TOP+FH-62;
+ ctx.fillStyle='rgba(6,14,24,.84)';ctx.fillRect(3*sx+8,capY,190,20);
+ ctx.strokeStyle='#ffe08a';ctx.lineWidth=2;
+ ctx.beginPath();ctx.moveTo(3*sx+6,capY+10);ctx.lineTo(3*sx-1,capY+10);ctx.stroke();
  ctx.font='bold 12px system-ui';ctx.fillStyle='#ffe08a';
- ctx.fillText('⬅ ここが あいずの もと',12,TOP+18);
+ ctx.fillText('⬅ ここが あいずの もと',3*sx+12,capY+15);
  ctx.restore();
 }
 /* Mark where the profile crosses each threshold, linking height to position. */
@@ -246,13 +250,15 @@ function markCrossings(){
  gctx.save();
  for(const [T,col] of [[p.th+.2,'#f56478'],[p.th-.18,'#ffd45f']]){
   if(T<=0)continue;
-  let cx=-1;
-  for(let x=2;x<W;x++){if(a[mid+x-1]>=T&&a[mid+x]<T){cx=x;break}}
-  if(cx<0)continue;
-  gctx.strokeStyle=col;gctx.lineWidth=2;gctx.setLineDash([3,4]);
-  gctx.beginPath();gctx.moveTo(px(cx),py(T));gctx.lineTo(px(cx),270);gctx.stroke();
-  gctx.setLineDash([]);gctx.beginPath();gctx.arc(px(cx),py(T),5,0,6.28);
-  gctx.fillStyle=col;gctx.fill();gctx.strokeStyle='#ffffff';gctx.lineWidth=1.5;gctx.stroke();
+  /* Every downhill crossing is a zone edge, so a second source gets its own marker. */
+  const cuts=[];
+  for(let x=2;x<W&&cuts.length<3;x++){if(a[mid+x-1]>=T&&a[mid+x]<T)cuts.push(x)}
+  for(const cx of cuts){
+   gctx.strokeStyle=col;gctx.lineWidth=2;gctx.setLineDash([3,4]);
+   gctx.beginPath();gctx.moveTo(px(cx),py(T));gctx.lineTo(px(cx),270);gctx.stroke();
+   gctx.setLineDash([]);gctx.beginPath();gctx.arc(px(cx),py(T),5,0,6.28);
+   gctx.fillStyle=col;gctx.fill();gctx.strokeStyle='#ffffff';gctx.lineWidth=1.5;gctx.stroke();
+  }
  }
  gctx.fillStyle='#cfe9ff';gctx.font='12px system-ui';
  gctx.fillText('たての てんせん＝さかいめの ばしょ',560,24);
@@ -309,6 +315,9 @@ window.draw=function(){
 };
 function applyPreset(key,button){
  const pre=PRESETS[key];if(!pre)return;
+ /* Name the choice before the warm-up loop so the caption always matches the button. */
+ if(note)note.textContent=pre.note;
+ if(row)row.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===button));
  ['source','diff','decay','threshold','feedback'].forEach(id=>{
   const input=el(id);if(!input)return;
   input.value=String(pre[id]);input.dispatchEvent(new Event('input'));
@@ -320,8 +329,6 @@ function applyPreset(key,button){
  for(let i=0;i<pre.warm;i++)step(1);
  if(pre.wound)wound={x:pre.wound.x,y:pre.wound.y,r:pre.wound.r};
  draw();
- if(note)note.textContent=pre.note;
- if(row)row.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===button));
  tell(performance.now(),boundaryCell());
  if(play&&!reduceMotion()&&!/一時停止|停止/.test(play.textContent||''))play.click();
 }

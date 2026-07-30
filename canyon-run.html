@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>峡谷オプティックフロー・制動ラボ</title><style>*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}body{max-width:980px;margin:auto;background:#09111d;color:#eef5fb;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;padding:12px 12px calc(84px + env(safe-area-inset-bottom));touch-action:manipulation}button,input,select{font:inherit}button,select{min-height:42px;border:1px solid #38516d;border-radius:11px;background:#15253a;color:#f4f8fc;padding:8px 10px;font-weight:800}button.primary{background:#ffd85a;color:#201900;border-color:#dab52f}button.on{outline:2px solid #ffd85a;background:#213752}.hdr{display:flex;justify-content:space-between;gap:9px;align-items:flex-start}.hdr h1{font-size:20px;line-height:1.45;margin:0}.badge{display:inline-block;background:#203047;color:#bfe1ff;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:900}.sub{font-size:12px;line-height:1.65;color:#a9b8ca;margin-top:4px}.headActions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.headActions button{min-height:36px;font-size:11px;padding:6px 8px}.learn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:10px 0}.learn>div{border:1px solid #2c415a;border-radius:13px;background:#101d2d;padding:9px;min-height:88px}.learn b{display:block;color:#ffd85a;font-size:11px;margin-bottom:4px}.learn p{font-size:12px;line-height:1.6;margin:0;color:#dce6f0}.first{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}.first span{font-size:11px;background:#16263a;border:1px solid #344d69;border-radius:999px;padding:6px 9px}.first strong{color:#ffd85a}.stage{border:1px solid #2d435d;border-radius:16px;background:#0e1a28;overflow:hidden}.stage canvas{display:block;width:100%;height:auto;aspect-ratio:800/430}.toolbar{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;margin:9px 0}.toolbar button,.toolbar select{width:100%;font-size:12px;padding:7px 5px}.metrics{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;margin:9px 0}.metric{border:1px solid #2f4660;border-radius:11px;background:#101c2a;padding:8px;min-width:0}.metric b{display:block;color:#9dcdf5;font-size:12px;line-height:1.35}.metric strong{display:block;color:#ffd85a;font:15px/1.35 ui-monospace,SFMono-Regular,monospace;overflow:hidden;text-overflow:ellipsis}.layout{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{border:1px solid #2b4159;border-radius:14px;background:#101d2d;padding:11px}.card h2{font-size:14px;margin:0 0 8px;color:#bfe1ff}.control{display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center;margin:7px 0}.control span{font-size:12px}.control output{font:12px ui-monospace,monospace;color:#ffd85a}.control input[type=range]{grid-column:1/-1;width:100%;height:28px}.control select{grid-column:1/-1;width:100%}.checks{display:flex;gap:7px;flex-wrap:wrap}.checks label{font-size:12px;border:1px solid #38516d;border-radius:9px;padding:7px;background:#132338}.chart{margin-top:10px}.chart canvas{display:block;width:100%;height:auto;aspect-ratio:800/240}.callout{font-size:12px;line-height:1.7;border:1px solid #3b5876;border-radius:11px;background:#14263a;padding:9px}.warn{border-color:#99544c;background:#3a211f;color:#ffd1c9}.ok{border-color:#39734c;background:#173225;color:#bdebc7}.take{margin-top:10px;border-left:4px solid #ffd85a;background:#142338;border-radius:10px;padding:9px 11px;font-size:13px;line-height:1.7}.ab{display:grid;grid-template-columns:1fr 1fr;gap:8px}.snap{border:1px solid #304760;border-radius:10px;background:#0a1522;padding:8px;min-height:82px;white-space:pre-wrap;font:11px/1.55 ui-monospace,monospace}.row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.small{font-size:11px;line-height:1.65;color:#9fb0c3}details{margin-top:10px;border:1px solid #2e445d;border-radius:12px;background:#101d2d;padding:9px}summary{font-size:12px;font-weight:850;color:#bfe1ff}details p,details li{font-size:12px;line-height:1.75;color:#cfdbe7}.modalBack{position:fixed;inset:0;background:#000b;z-index:80;display:none;padding:18px;overflow:auto}.modalBack.show{display:flex;align-items:flex-end;justify-content:center}.modal{width:min(720px,100%);max-height:88vh;overflow:auto;background:#0d1a29;border:1px solid #42607e;border-radius:18px;padding:14px}.modal h2{font-size:17px;margin:0}.modal h3{font-size:14px;color:#ffd85a;margin:13px 0 5px}.modal p,.modal li{font-size:12px;line-height:1.8}.modalHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.modalHead button{min-width:42px;font-size:20px}.footer{font-size:11px;color:#93a5ba;margin-top:14px;display:flex;justify-content:space-between;gap:8px}.footer a{color:#bfe1ff}ruby{ruby-position:over}rt{font-size:.55em}@media(max-width:720px){.learn{grid-template-columns:1fr 1fr}.layout{grid-template-columns:1fr}.toolbar{grid-template-columns:repeat(3,1fr)}.metrics{grid-template-columns:repeat(3,1fr)}}@media(max-width:360px){body{padding-left:8px;padding-right:8px}.hdr{display:block}.headActions{justify-content:flex-start;margin-top:7px}.learn{gap:5px}.learn>div{padding:7px}.toolbar{gap:5px}.toolbar button,.toolbar select{font-size:11px}.metrics{gap:5px}.metric{padding:6px}.metric strong{font-size:13px}}</style><style id="r59-common-ui-style">
+<title>峡谷オプティックフロー・制動ラボ</title><style>*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}body{max-width:980px;margin:auto;background:#09111d;color:#eef5fb;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;padding:12px 12px calc(84px + env(safe-area-inset-bottom));touch-action:manipulation}button,input,select{font:inherit}button,select{min-height:42px;border:1px solid #38516d;border-radius:11px;background:#15253a;color:#f4f8fc;padding:8px 10px;font-weight:800}button.primary{background:#ffd85a;color:#201900;border-color:#dab52f}button.on{outline:2px solid #ffd85a;background:#213752}.hdr{display:flex;justify-content:space-between;gap:9px;align-items:flex-start}.hdr h1{font-size:20px;line-height:1.45;margin:0}.badge{display:inline-block;background:#203047;color:#bfe1ff;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:900}.sub{font-size:12px;line-height:1.65;color:#a9b8ca;margin-top:4px}.headActions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.headActions button{min-height:36px;font-size:11px;padding:6px 8px}.learn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:10px 0}.learn>div{border:1px solid #2c415a;border-radius:13px;background:#101d2d;padding:9px;min-height:88px}.learn b{display:block;color:#ffd85a;font-size:11px;margin-bottom:4px}.learn p{font-size:12px;line-height:1.6;margin:0;color:#dce6f0}.first{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}.first span{font-size:11px;background:#16263a;border:1px solid #344d69;border-radius:999px;padding:6px 9px}.first strong{color:#ffd85a}.stage{border:1px solid #2d435d;border-radius:16px;background:#0e1a28;overflow:hidden}.stage canvas{display:block;width:100%;height:auto;aspect-ratio:800/430}.toolbar{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;margin:9px 0}.toolbar button,.toolbar select{width:100%;font-size:12px;padding:7px 5px}.metrics{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;margin:9px 0}.metric{border:1px solid #2f4660;border-radius:11px;background:#101c2a;padding:8px;min-width:0}.metric b{display:block;color:#9dcdf5;font-size:12px;line-height:1.35}.metric strong{display:block;color:#ffd85a;font:15px/1.35 ui-monospace,SFMono-Regular,monospace;overflow:hidden;text-overflow:ellipsis}.layout{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{border:1px solid #2b4159;border-radius:14px;background:#101d2d;padding:11px}.card h2{font-size:14px;margin:0 0 8px;color:#bfe1ff}.control{display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center;margin:7px 0}.control span{font-size:12px}.control output{font:12px ui-monospace,monospace;color:#ffd85a}.control input[type=range]{grid-column:1/-1;width:100%;height:28px}.control select{grid-column:1/-1;width:100%}.checks{display:flex;gap:7px;flex-wrap:wrap}.checks label{font-size:12px;border:1px solid #38516d;border-radius:9px;padding:7px;background:#132338}.chart{margin-top:10px}.chart canvas{display:block;width:100%;height:auto;aspect-ratio:800/240}.callout{font-size:12px;line-height:1.7;border:1px solid #3b5876;border-radius:11px;background:#14263a;padding:9px}.warn{border-color:#99544c;background:#3a211f;color:#ffd1c9}.ok{border-color:#39734c;background:#173225;color:#bdebc7}.take{margin-top:10px;border-left:4px solid #ffd85a;background:#142338;border-radius:10px;padding:9px 11px;font-size:13px;line-height:1.7}.ab{display:grid;grid-template-columns:1fr 1fr;gap:8px}.snap{border:1px solid #304760;border-radius:10px;background:#0a1522;padding:8px;min-height:82px;white-space:pre-wrap;font:11px/1.55 ui-monospace,monospace}.row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.small{font-size:11px;line-height:1.65;color:#9fb0c3}details{margin-top:10px;border:1px solid #2e445d;border-radius:12px;background:#101d2d;padding:9px}summary{font-size:12px;font-weight:850;color:#bfe1ff}details p,details li{font-size:12px;line-height:1.75;color:#cfdbe7}.modalBack{position:fixed;inset:0;background:#000b;z-index:80;display:none;padding:18px;overflow:auto}.modalBack.show{display:flex;align-items:flex-end;justify-content:center}.modal{width:min(720px,100%);max-height:88vh;overflow:auto;background:#0d1a29;border:1px solid #42607e;border-radius:18px;padding:14px}.modal h2{font-size:17px;margin:0}.modal h3{font-size:14px;color:#ffd85a;margin:13px 0 5px}.modal p,.modal li{font-size:12px;line-height:1.8}.modalHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.modalHead button{min-width:42px;font-size:20px}.footer{font-size:11px;color:#93a5ba;margin-top:14px;display:flex;justify-content:space-between;gap:8px}.footer a{color:#bfe1ff}ruby{ruby-position:over}rt{font-size:.55em}.stage canvas{touch-action:none;cursor:pointer}.brakeRow{display:flex;gap:9px;margin:9px 0;align-items:stretch}#brakeHold{flex:1.1;min-height:64px;font-size:19px;font-weight:900;letter-spacing:.02em;border-radius:16px;border:2px solid #e2604e;background:linear-gradient(180deg,#c44030,#8e2418);color:#fff;touch-action:none;-webkit-user-select:none;user-select:none;cursor:pointer}#brakeHold.held{background:linear-gradient(180deg,#ff7a60,#c0392b);outline:3px solid #ffd85a;transform:translateY(2px)}.brakeHint{flex:1;font-size:12px;line-height:1.65;color:#a9b8ca;align-self:center}@media(max-width:720px){.learn{grid-template-columns:1fr 1fr}.layout{grid-template-columns:1fr}.toolbar{grid-template-columns:repeat(3,1fr)}.metrics{grid-template-columns:repeat(3,1fr)}.brakeRow{flex-direction:column}.brakeHint{text-align:center}}@media(max-width:360px){body{padding-left:8px;padding-right:8px}.hdr{display:block}.headActions{justify-content:flex-start;margin-top:7px}.learn{gap:5px}.learn>div{padding:7px}.toolbar{gap:5px}.toolbar button,.toolbar select{font-size:11px}.metrics{gap:5px}.metric{padding:6px}.metric strong{font-size:13px}}</style><style id="r59-common-ui-style">
 #r59-globalbar{position:sticky;top:0;z-index:2147483000;display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:-2px -2px 10px;padding:7px 8px;background:rgba(7,14,24,.96);border:1px solid #38506b;border-radius:12px;box-shadow:0 5px 18px rgba(0,0,0,.28);backdrop-filter:blur(8px)}
 #r59-globalbar a,#r59-globalbar button{min-height:38px!important;padding:6px 9px!important;border:1px solid #47617e!important;border-radius:10px!important;background:#16263a!important;color:#f3f8fd!important;font:800 11px/1.25 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif!important;text-decoration:none!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important}
 #r59-globalbar .r59-home{background:#ffd85a!important;color:#241c00!important;border-color:#d8b63b!important}
@@ -16,22 +16,23 @@ a[href="index.html"],a[href="kids-index.html"]{display:inline-flex;align-items:c
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
 </style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
 </head><body data-first="視界を下げるとブレーキ開始と停止余裕がどう変わるか予想しよう。">
-<header class="hdr"><div><span class="badge">r39・動的探究版</span><h1><ruby>峡谷<rt>きょうこく</rt></ruby>オプティックフロー・制動ラボ</h1><div class="sub">見かけの流れ、速度、視野、視界、反応遅れ、制動距離、曲率、衝突余裕を結ぶ。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
-<section class="learn"><div><b>これは何？</b><p>移動中の視覚情報と停止可能性を比較する概念模型。</p></div><div><b>どこを見る？</b><p>速度、オプティックフロー、停止距離、障害距離、横余裕、衝突状態。</p></div><div><b>何を変える？</b><p>加速、制動、視野、視界、反応遅れ、峡谷曲率。</p></div><div><b>持ち帰る一文</b><p>速く見えることと安全に止まれることは別で、反応遅れと制動性能を含める必要がある。</p></div></section>
-<div class="first" id="firstSteps"><span><strong>1 予想</strong> 視界を悪くするとブレーキ開始と停止余裕はどう変わるか</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
-<section class="stage"><canvas id="mainCanvas" width="800" height="430" aria-label="峡谷内のオプティックフローと障害物"></canvas></section>
+<header class="hdr"><div><span class="badge">r39・動的探究版</span><h1><ruby>峡谷<rt>きょうこく</rt></ruby>オプティックフロー・制動ラボ</h1><div class="sub">峡谷を一人称で走り、けしきの流れで速さを感じて、とまれ線の手前ぴったりで止まる。速く見えるほど、止まるには長い距離がいる。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
+<section class="learn"><div><b>これは何？</b><p>峡谷を走って、赤白のとまれ線ぴったりに止まるゲーム型の実験。けしきの流れがスピードのてがかり。</p></div><div><b>どこを見る？</b><p>岩や地面が流れてくる速さ、速度計、停止距離、とまれ線までの距離。</p></div><div><b>何を変える？</b><p>加速、制動、視野、視界、反応遅れ、曲率。赤いボタンか画面の長おしで自分でもブレーキできる。</p></div><div><b>持ち帰る一文</b><p>速く見えることと安全に止まれることは別で、反応遅れと制動距離のぶんだけ手前からブレーキがいる。</p></div></section>
+<div class="first" id="firstSteps"><span><strong>1 予想</strong> 視界を悪くするとブレーキ開始と停止余裕はどう変わるか</span><span><strong>2 再生</strong> ▶で走り出し、ブレーキ長おしで線の手前に止まる</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
+<section class="stage"><canvas id="mainCanvas" width="800" height="430" aria-label="一人称視点の峡谷。けしきが流れ、前方にとまれ線がある"></canvas></section>
+<div class="brakeRow"><button id="brakeHold" aria-label="ブレーキ。押している間だけ効く">🛑 ブレーキ（おしている あいだ きく）</button><div class="brakeHint">▶ 再生で走り出す。赤いボタンか画面の長おしでブレーキ。とまれ線の手前ぴったりで止まれたら ★</div></div>
 <div class="toolbar"><button id="playBtn" class="primary">▶ 再生</button><button id="stepBtn">⏭ 一段</button><select id="speedSel" aria-label="速度"><option value="0.5">0.5倍</option><option value="1" selected>1倍</option><option value="2">2倍</option><option value="4">4倍</option></select><select id="scenarioSel" aria-label="シナリオ"><option value="0">明るい直線</option><option value="1">狭い曲線</option><option value="2">広視野低速</option><option value="3">霧の急曲線</option></select><button id="randomBtn">🎲 課題</button><button id="sameSeedBtn">同じ初期へ</button></div>
-<section class="metrics"><div class="metric"><b>速度</b><strong id="m0">—</strong></div><div class="metric"><b>流れ強度</b><strong id="m1">—</strong></div><div class="metric"><b>停止距離</b><strong id="m2">—</strong></div><div class="metric"><b>障害距離</b><strong id="m3">—</strong></div><div class="metric"><b>最小余裕</b><strong id="m4">—</strong></div><div class="metric"><b>状態</b><strong id="m5">—</strong></div></section>
+<section class="metrics"><div class="metric"><b>速度</b><strong id="m0">—</strong></div><div class="metric"><b>ながれの強さ</b><strong id="m1">—</strong></div><div class="metric"><b>停止距離</b><strong id="m2">—</strong></div><div class="metric"><b>とまれ線まで</b><strong id="m3">—</strong></div><div class="metric"><b>最小余裕</b><strong id="m4">—</strong></div><div class="metric"><b>状態</b><strong id="m5">—</strong></div></section>
 <div class="layout"><section class="card"><h2>因果操作</h2><label class="control"><span>加速設定</span><output id="throttleOut"></output><input id="throttle" type="range" min="0" max="100" value="55" step="1"></label><label class="control"><span>制動性能</span><output id="brakeOut"></output><input id="brake" type="range" min="0" max="100" value="65" step="1"></label><label class="control"><span>視野幅</span><output id="fovOut"></output><input id="fov" type="range" min="20" max="100" value="70" step="1"></label><label class="control"><span>視界</span><output id="visibilityOut"></output><input id="visibility" type="range" min="10" max="100" value="85" step="1"></label><label class="control"><span>反応遅れ</span><output id="reactionOut"></output><input id="reaction" type="range" min="0" max="100" value="30" step="1"></label><label class="control"><span>曲率</span><output id="curveOut"></output><input id="curve" type="range" min="0" max="100" value="35" step="1"></label></section><section class="card"><h2>状態の説明</h2><div id="explain" class="callout"></div><h2 style="margin-top:10px">A/B比較</h2><div class="row"><button id="saveA" class="primary">条件Aを記録</button><button id="saveB">条件Bを記録</button><button id="clearAB">消去</button></div><div class="ab"><div><div class="small">条件A</div><div id="snapA" class="snap">未記録</div></div><div><div class="small">条件B</div><div id="snapB" class="snap">未記録</div></div></div><div id="diff" class="callout" style="margin-top:8px">同じ初期条件でAを走らせ、戻して一つだけ操作を変え、Bを記録する。</div></section></div>
 <section class="card chart"><h2>同期する第二ビュー</h2><canvas id="chartCanvas" width="800" height="240" aria-label="速度、停止距離、安全余裕の履歴"></canvas><div id="chartNote" class="small"></div></section>
-<section class="take"><b>今日の要点：</b> 視覚流、反応時間、制動距離、横方向の余裕を同じ画面で分離して読む。</section>
+<section class="take"><b>今日の要点：</b> けしきの流れで速さを感じる。でも止まるには、反応の遅れと制動距離のぶんだけ手前からブレーキがいる。</section>
 <details><summary>模型の適用範囲と現実との違い</summary><p>ゲーム的な二次元模型。実車・自転車・走行訓練、道路設計、医学的視機能評価には使えない。</p></details>
 <div class="footer"><a href="index.html">← 一覧へ戻る</a><span>完全オフライン・保存なし・r39</span></div>
-<div id="guideBack" class="modalBack"><section class="modal" role="dialog" aria-modal="true"><div class="modalHead"><h2>峡谷オプティックフロー・制動ラボ</h2><button id="guideClose" aria-label="閉じる">×</button></div><h3>最初の操作</h3><ol><li>シナリオを選び、結果を予想する。</li><li>一段送りで一回の更新を観察する。</li><li>同じ初期条件へ戻り、一つの操作だけを変えてA/B比較する。</li></ol><h3>★ 実験</h3><p>明るい直線を30段進めAを記録し、同じ初期へ戻って視界だけを下げ、停止距離と余裕を比較する。</p><h3>失敗から直す</h3><p>赤い説明が出たら、原因変数と改善候補を確認し、一つだけ変えて再試行する。</p><h3>模型の限界</h3><p>ゲーム的な二次元模型。実車・自転車・走行訓練、道路設計、医学的視機能評価には使えない。</p></section></div>
+<div id="guideBack" class="modalBack"><section class="modal" role="dialog" aria-modal="true"><div class="modalHead"><h2>峡谷オプティックフロー・制動ラボ</h2><button id="guideClose" aria-label="閉じる">×</button></div><h3>最初の操作</h3><ol><li>▶ 再生で走り出し、けしきが流れる速さを見る。</li><li>赤いブレーキボタン（または画面）を長おしして、とまれ線の手前ぴったりで止まる。</li><li>同じ初期条件へ戻り、一つの操作だけを変えてA/B比較する。</li></ol><h3>★ 実験</h3><p>明るい直線でぴったり止まってAを記録し、同じ初期へ戻って視界だけを下げ、ブレーキ開始の遅れと止まれたかどうかを比較する。</p><h3>失敗から直す</h3><p>赤い説明が出たら、原因変数と改善候補を確認し、一つだけ変えて再試行する。</p><h3>模型の限界</h3><p>ゲーム的な二次元模型。実車・自転車・走行訓練、道路設計、医学的視機能評価には使えない。</p></section></div>
 <script>'use strict';
 const $=id=>document.getElementById(id),clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),fmt=(x,d=1)=>Number.isFinite(x)?Number(x).toFixed(d):'—';
 function mulberry32(a){return function(){let t=a+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
-let baseSeed=390303,rng=mulberry32(baseSeed),playing=false,lastTime=0,acc=0,speed=1,snapA=null,snapB=null;
+let baseSeed=390303,rng=mulberry32(baseSeed),playing=false,lastTime=0,speed=1,snapA=null,snapB=null,manualBrake=false,flowPhase=0,uiAcc=0,lastStarT=0;
 const main=$('mainCanvas'),ctx=main.getContext('2d'),chart=$('chartCanvas'),cctx=chart.getContext('2d');
 function clearCanvas(g,w,h,color='#0d1927'){g.clearRect(0,0,w,h);g.fillStyle=color;g.fillRect(0,0,w,h)}
 function line(g,pts,color='#fff',width=2){if(pts.length<2)return;g.beginPath();g.strokeStyle=color;g.lineWidth=width;pts.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.stroke()}
@@ -39,11 +40,207 @@ function controlValues(){const out={};document.querySelectorAll('.control input,
 function controlText(){return Object.entries(controlValues()).map(([k,v])=>k+'='+v).join(', ')}
 
 const C={throttle:$('throttle'),brake:$('brake'),fov:$('fov'),visibility:$('visibility'),reaction:$('reaction'),curve:$('curve')};let s={},scenarioApplied=-1;
-function resetSim(seed){rng=mulberry32(seed);const q=$('scenarioSel').selectedIndex;if(q!==scenarioApplied){const a=[[55,65,70,85,30,35],[80,40,45,45,60,75],[45,85,90,95,20,55],[70,55,60,25,75,85]][q];[C.throttle.value,C.brake.value,C.fov.value,C.visibility.value,C.reaction.value,C.curve.value]=a.map(String);scenarioApplied=q}s={t:0,pos:0,speed:12,offset:0,steer:0,hazard:260,collision:false,minMargin:80,hist:[]};drawAll()}
-function advance(){const throttle=Number(C.throttle.value)/100,brake=Number(C.brake.value)/100,vis=Number(C.visibility.value)/100,reaction=.15+Number(C.reaction.value)/100*1.2,curve=Number(C.curve.value)/100,desired=10+throttle*30;const seen=s.hazard-s.pos<80+vis*240;const stopping=s.speed*reaction+s.speed*s.speed/(8+brake*24);const braking=seen&&stopping>s.hazard-s.pos-8;const acc=braking?-(2+brake*7):(desired-s.speed)*.08;s.speed=clamp(s.speed+acc*.18,0,45);s.pos+=s.speed*.5;const road=Math.sin(s.pos*.018)*curve*55;const cue=Number(C.fov.value)/100*vis;s.steer+=(road-s.offset)*(.006+.03*cue);s.steer*=.75;s.offset+=s.steer;const wall=85-curve*25-Math.abs(s.offset-road);const obstacle=s.hazard-s.pos;s.minMargin=Math.min(s.minMargin,wall,obstacle);if(wall<0||obstacle<0&&Math.abs(s.offset-road)<18)s.collision=true;if(s.pos>s.hazard+50)s.hazard+=220+rng()*180;s.t++;s.hist.push({t:s.t,v:s.speed,stop:stopping,margin:Math.max(-20,Math.min(wall,obstacle)),flow:s.speed/(1+Math.max(10,obstacle))*100});if(s.hist.length>140)s.hist.shift()}
-function drawMain(){clearCanvas(ctx,800,430,'#1b1714');const vis=Number(C.visibility.value)/100,fade=ctx.createLinearGradient(0,0,0,430);fade.addColorStop(0,`rgba(170,140,100,${.25+.5*vis})`);fade.addColorStop(1,'#261711');ctx.fillStyle=fade;ctx.fillRect(0,0,800,430);const fov=.45+Number(C.fov.value)/100*.8,curve=Number(C.curve.value)/100;ctx.fillStyle='#503424';ctx.beginPath();ctx.moveTo(0,430);ctx.lineTo(400-120*fov,90);ctx.lineTo(400+120*fov,90);ctx.lineTo(800,430);ctx.closePath();ctx.fill();ctx.fillStyle='#30343a';ctx.beginPath();ctx.moveTo(130,430);ctx.lineTo(400-70*fov,90);ctx.lineTo(400+70*fov,90);ctx.lineTo(670,430);ctx.closePath();ctx.fill();for(let i=1;i<11;i++){const z=(i/11+s.pos*.01)%1,y=95+z*z*335,w=10+z*100;ctx.strokeStyle=`rgba(255,255,255,${vis*(1-z)*.7})`;ctx.beginPath();ctx.moveTo(400-w,y);ctx.lineTo(400+w,y);ctx.stroke()}const bend=Math.sin(s.pos*.018)*curve*85;ctx.fillStyle=s.collision?'#ef796e':'#ffd85a';ctx.fillRect(370+bend+s.offset*.45,350,60,28);const dist=s.hazard-s.pos;if(dist<300){const scale=clamp(1-dist/330,0,1);ctx.fillStyle='#ef796e';ctx.fillRect(390+(Math.sin(s.hazard*.018)*curve*85),130+scale*190,20+scale*35,20+scale*35)}ctx.fillStyle=`rgba(210,190,150,${1-vis})`;ctx.fillRect(0,0,800,430);ctx.fillStyle='#fff';ctx.font='bold 14px sans-serif';ctx.fillText(`速度 ${fmt(s.speed,1)}　障害まで ${fmt(Math.max(0,dist),0)}`,560,26)}
-function drawChart(){clearCanvas(cctx,800,240,'#151a21');const H=s.hist;if(!H.length)return;const x=i=>35+i/Math.max(1,H.length-1)*740;line(cctx,H.map((d,i)=>[x(i),205-clamp(d.v/45,0,1)*165]),'#ffd85a',2);line(cctx,H.map((d,i)=>[x(i),205-clamp(d.stop/180,0,1)*165]),'#6eb7f1',2);line(cctx,H.map((d,i)=>[x(i),205-clamp((d.margin+20)/120,0,1)*165]),'#7ed79a',2);cctx.fillStyle='#fff';cctx.font='12px sans-serif';cctx.fillText('速度',38,20);cctx.fillText('停止距離',90,20);cctx.fillText('余裕',165,20)}
-function drawAll(){drawMain();drawChart();const reaction=.15+Number(C.reaction.value)/100*1.2,brake=Number(C.brake.value)/100,stop=s.speed*reaction+s.speed*s.speed/(8+brake*24),dist=Math.max(0,s.hazard-s.pos),flow=s.speed/(dist+20)*100*(Number(C.visibility.value)/100);[fmt(s.speed,1),fmt(flow,1),fmt(stop,0)+'m',fmt(dist,0)+'m',fmt(s.minMargin,0)+'m',s.collision?'衝突':'走行中'].forEach((v,i)=>$('m'+i).textContent=v);let msg='近い物体ほど像の動きが速くなる。速度知覚だけでなく、反応遅れと制動距離を別に計算する。',cls='callout ok';if(s.collision){msg='衝突状態。速度を下げ、視界・視野・制動を改善し、曲率に対する横余裕を確保する。';cls='callout warn'}else if(stop>dist){msg='停止距離が障害までの距離を超えている。減速を早めるか制動性能を上げる。';cls='callout warn'}$('explain').className=cls;$('explain').textContent=msg;$('chartNote').textContent='主図はオプティックフローと峡谷走行、第二ビューは速度、停止距離、最小余裕。'}
+const FONT='-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif';
+const FOG=[213,202,183],SAND_A=[199,158,105],SAND_B=[186,146,95],WALL_L=[122,74,46],WALL_R=[158,102,60],ROCK_C=[94,63,40],BUSH_C=[96,108,66];
+const mixc=(a,b,t)=>'rgb('+Math.round(a[0]+(b[0]-a[0])*t)+','+Math.round(a[1]+(b[1]-a[1])*t)+','+Math.round(a[2]+(b[2]-a[2])*t)+')';
+const hash01=n=>{let x=Math.imul(n^0x9e3779b9,0x85ebca6b);x^=x>>>13;x=Math.imul(x,0xc2b2ae35);x^=x>>>16;return(x>>>0)/4294967296};
+function rr(g,x,y,w,h,r){const q=Math.min(r,w/2,h/2);g.beginPath();g.moveTo(x+q,y);g.arcTo(x+w,y,x+w,y+h,q);g.arcTo(x+w,y+h,x,y+h,q);g.arcTo(x,y+h,x,y,q);g.arcTo(x,y,x+w,y,q);g.closePath()}
+function starPath(g,x,y,r,rot){g.beginPath();for(let i=0;i<10;i++){const a=rot+i*Math.PI/5,rad=i%2?r*.45:r,px=x+Math.cos(a)*rad,py=y+Math.sin(a)*rad;if(i)g.lineTo(px,py);else g.moveTo(px,py)}g.closePath()}
+function chipDraw(g,cx,cy,text,bg,fg,size,align){size=size||14;g.font='bold '+size+'px '+FONT;const w=g.measureText(text).width+22,hh=size+14,x0=align==='left'?cx:cx-w/2;rr(g,x0,cy-hh/2,w,hh,hh/2);g.fillStyle=bg;g.fill();g.fillStyle=fg;g.textAlign=align==='left'?'left':'center';g.textBaseline='middle';g.fillText(text,align==='left'?x0+11:cx,cy+1);g.textAlign='left';g.textBaseline='alphabetic'}
+function setManual(on){manualBrake=on;const b=$('brakeHold');if(b)b.classList.toggle('held',on)}
+function banner2(t,sub,color){s.banner={t:t,sub:sub,color:color};s.bannerT=2.2}
+function spawnStars(){s.stars=[];for(let i=0;i<14;i++)s.stars.push({ang:i/14*Math.PI*2,sp:70+(i*37)%60,r:8,size:5+(i%3)*3,rot:i});lastStarT=0}
+function stopEvent(d){let ttl,sub,col;
+if(d<=16){s.nPerfect++;ttl='ぴったり ストップ！';sub='とまれ線まで あと '+fmt(d,0)+' m。すごい！';col='#2e9e5b';spawnStars();s.advHold=true;s.holdT=1.8;s.pendingEv='good';s.lastEv='good';s.statusShort='ぴったり'}
+else if(d<=45){s.nGood++;ttl='とまれた！';sub='線まで あと '+fmt(d,0)+' m。もっと近くで止まれるかな';col='#3c8fd0';s.advHold=true;s.holdT=1.5;s.pendingEv='good';s.lastEv='good';s.statusShort='停止'}
+else{ttl='ちょっと早すぎ';sub='線はまだ '+fmt(d,0)+' m さき。また走るよ';col='#c9a13b';s.advHold=false;s.holdT=1.1;s.lastEv='early';s.statusShort='早すぎ'}
+banner2(ttl,sub,col)}
+function overEvent(v){s.nOver++;s.pendingEv='over';s.lastEv='over';s.statusShort='いきすぎ';s.flash=1;s.flashC='239,90,70';s.shake=v>8?1:.5;banner2('いきすぎ！','見えてから止まるまでには、きょりがいるんだ','#c8503c')}
+function hitEvent(road){s.nHit++;s.collision=true;s.pendingEv='over';s.lastEv='hit';s.statusShort='ぶつかった';s.flash=1;s.flashC='239,90,70';s.shake=1;s.speed*=.55;s.offset=road+(s.offset-road)*.3;s.steer=0;s.hitCd=8;banner2('がけにこすった！','スピードをおさえて、まん中を走ろう','#c8503c')}
+function resetSim(seed){rng=mulberry32(seed);const q=$('scenarioSel').selectedIndex;if(q!==scenarioApplied){const a=[[55,65,70,85,30,35],[80,40,45,45,60,75],[45,85,90,95,20,55],[70,55,60,25,75,85]][q];[C.throttle.value,C.brake.value,C.fov.value,C.visibility.value,C.reaction.value,C.curve.value]=a.map(String);scenarioApplied=q;document.querySelectorAll('.control input').forEach(el=>{const out=$(el.id+'Out');if(out)out.textContent=formatControl(el)})}
+s={t:0,tAcc:0,pos:0,speed:12,offset:0,steer:0,hazard:260,prevDist:260,collision:false,minMargin:80,hist:[],braking:false,seen:false,stopped:false,trigPrev:false,reactT:0,alert:false,pitch:0,banner:null,bannerT:0,flash:0,flashC:'239,90,70',shake:0,holdT:0,advHold:false,hitCd:0,stars:[],pendingEv:null,lastEv:null,statusShort:'',nPerfect:0,nGood:0,nOver:0,nHit:0};
+setManual(false);drawAll()}
+function advance(f){if(!Number.isFinite(f))f=1;
+const throttle=Number(C.throttle.value)/100,brake=Number(C.brake.value)/100,vis=Number(C.visibility.value)/100,reaction=.15+Number(C.reaction.value)/100*1.2,curve=Number(C.curve.value)/100,desired=10+throttle*30;
+const dist0=s.hazard-s.pos,sight=80+vis*240;
+const seen=dist0<sight;
+const stopping=s.speed*reaction+s.speed*s.speed/(8+brake*24);
+const trigger=seen&&stopping>dist0-8;
+if(trigger){if(!s.trigPrev)s.reactT=reaction;else s.reactT=Math.max(0,s.reactT-f)}else s.reactT=0;
+s.trigPrev=trigger;
+const braking=manualBrake||trigger&&s.reactT===0;
+s.alert=trigger&&s.reactT>0&&!manualBrake;
+const acc=braking?-(20+brake*70):(desired-s.speed)*.08;
+const prevV=s.speed;
+s.speed=clamp(s.speed+acc*.18*f,0,45);
+if(braking&&s.speed>0&&s.speed<.9&&dist0<70)s.speed=0;
+s.pos+=s.speed*.5*f;
+const road=Math.sin(s.pos*.018)*curve*55;const cue=Number(C.fov.value)/100*vis;
+s.steer+=(road-s.offset)*(.006+.03*cue)*f;s.steer*=Math.pow(.75,f);s.offset+=s.steer*f;
+const wall=85-curve*25-Math.abs(s.offset-road);
+const obstacle=s.hazard-s.pos;
+s.minMargin=Math.min(s.minMargin,wall,obstacle);
+s.braking=braking;s.seen=seen;
+if(s.speed>.5)s.stopped=false;
+if(!s.stopped&&s.speed===0&&prevV>.02&&obstacle>0){s.stopped=true;stopEvent(obstacle)}
+s.hitCd=Math.max(0,s.hitCd-f);
+if(wall<0&&s.hitCd===0)hitEvent(road);
+if(s.prevDist>0&&obstacle<=0)overEvent(prevV);
+if(s.pos>s.hazard+50)s.hazard+=220+rng()*180;
+s.prevDist=s.hazard-s.pos;
+s.tAcc+=f;while(s.tAcc>=1){s.tAcc--;s.t++;s.hist.push({t:s.t,v:s.speed,stop:stopping,margin:Math.max(-20,Math.min(wall,obstacle)),flow:s.speed/(1+Math.max(10,obstacle))*100,ev:s.pendingEv});s.pendingEv=null;if(s.hist.length>140)s.hist.shift()}}
+function drawMain(tms){const W=800,H=430;
+const vis=Number(C.visibility.value)/100,curve=Number(C.curve.value)/100,fovv=Number(C.fov.value),brakeP=Number(C.brake.value)/100,reaction=.15+Number(C.reaction.value)/100*1.2;
+const sight=80+vis*240,zNear=4,zMax=Math.min(430,Math.max(150,sight*1.5));
+const f=330-fovv*1.5,KX=.12,camH=5;
+const reduced=document.documentElement.classList.contains('r62-reduced-motion');
+const braking=s.braking||manualBrake;
+s.pitch+=(((braking&&s.speed>.4)?7:0)-s.pitch)*.12;
+const y0=148+s.pitch;
+const roadAt=z=>Math.sin(z*.018)*curve*55;
+const Wu=85-curve*25;
+const proj=(wz,lat,hgt)=>{const z=Math.max(2.6,wz-s.pos),sc=f/z;return{x:400+(lat-s.offset)*sc*KX,y:y0+(camH-hgt)*sc,sc:sc,z:z}};
+const fogOf=z=>clamp((z-sight*.45)/(sight*.7),0,1);
+const d=s.hazard-s.pos;
+function wallQuad(x1,a,x2,b,base,fz,si){
+ctx.fillStyle=mixc(si%2?base:[base[0]+12,base[1]+9,base[2]+6],FOG,fz);
+ctx.beginPath();ctx.moveTo(x1,a.gy);ctx.lineTo(x2,b.gy);ctx.lineTo(x2,b.top);ctx.lineTo(x1,a.top);ctx.closePath();ctx.fill();
+const bands=[[.14,.09],[.4,.12],[.68,.08]];
+for(let bi=0;bi<3;bi++){const fr=bands[bi][0],th=bands[bi][1],k=(si+bi)%3,shade=k===0?18:k===1?-16:6;
+ctx.fillStyle=mixc([base[0]+shade,base[1]+shade*.7,base[2]+shade*.5],FOG,fz);
+const y1a=a.gy+(a.top-a.gy)*fr,y1b=a.gy+(a.top-a.gy)*(fr+th),y2a=b.gy+(b.top-b.gy)*fr,y2b=b.gy+(b.top-b.gy)*(fr+th);
+ctx.beginPath();ctx.moveTo(x1,y1a);ctx.lineTo(x2,y2a);ctx.lineTo(x2,y2b);ctx.lineTo(x1,y1b);ctx.closePath();ctx.fill()}
+ctx.strokeStyle='rgba(30,15,5,'+.28*(1-fz)+')';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x1,a.gy);ctx.lineTo(x1,a.top);ctx.stroke();
+ctx.strokeStyle='rgba(255,235,205,'+.3*(1-fz)+')';ctx.beginPath();ctx.moveTo(x1,a.top);ctx.lineTo(x2,b.top);ctx.stroke()}
+function drawRocks(nearPass){const jMin=Math.floor((s.pos+zNear)/6),jMax=Math.floor((s.pos+zMax)/6);
+for(let j=jMax;j>=jMin;j--){const wz=j*6+hash01(j)*4,z=wz-s.pos;if(z<zNear||z>zMax)continue;
+const isNear=z<d-1;if(nearPass!==isNear)continue;
+const fz=fogOf(z);if(fz>=.96)continue;
+const u=hash01(j*3+1)*1.84-.92,ty=hash01(j*5+2),size=1.6+hash01(j*7+3)*5;
+const lat=roadAt(wz)+u*Wu*.9,p=proj(wz,lat,0),px=Math.max(.8,size*p.sc*KX);
+if(s.speed>.6){const p2=proj(wz+.8+s.speed*.16,lat,0);ctx.strokeStyle='rgba(70,44,26,'+(1-fz)*clamp(s.speed/40,.1,.5)+')';ctx.lineWidth=Math.max(1,px*.45);ctx.beginPath();ctx.moveTo(p2.x,p2.y);ctx.lineTo(p.x,p.y);ctx.stroke()}
+if(ty<.62){ctx.fillStyle=mixc(ROCK_C,FOG,fz);ctx.beginPath();ctx.ellipse(p.x,p.y-px*.35,px,px*.62,0,0,7);ctx.fill();ctx.fillStyle='rgba(255,225,190,'+.32*(1-fz)+')';ctx.beginPath();ctx.ellipse(p.x-px*.2,p.y-px*.62,px*.5,px*.28,0,0,7);ctx.fill()}
+else{ctx.fillStyle=mixc(BUSH_C,FOG,fz);for(let q=0;q<3;q++){ctx.beginPath();ctx.ellipse(p.x+(q-1)*px*.55,p.y-px*.3-(q%2)*px*.25,px*.5,px*.42,0,0,7);ctx.fill()}}}}
+ctx.clearRect(0,0,W,H);
+ctx.save();
+if(s.shake>0&&!reduced)ctx.translate((Math.random()-.5)*s.shake*12,(Math.random()-.5)*s.shake*9);
+const sk=ctx.createLinearGradient(0,0,0,y0+4);sk.addColorStop(0,mixc([110,155,205],FOG,(1-vis)*.7));sk.addColorStop(1,mixc([236,209,160],FOG,(1-vis)*.55));ctx.fillStyle=sk;ctx.fillRect(0,-20,W,y0+24);
+ctx.fillStyle='rgba(255,244,214,'+(0.16*vis+0.06)+')';ctx.beginPath();ctx.arc(628,54,44,0,7);ctx.fill();
+ctx.fillStyle='rgba(255,244,214,'+(0.55+0.35*vis)+')';ctx.beginPath();ctx.arc(628,54,22,0,7);ctx.fill();
+ctx.fillStyle='#472c1b';ctx.fillRect(0,y0,W,H-y0);
+ctx.fillStyle='rgba('+FOG.join(',')+',.9)';ctx.fillRect(0,y0-3,W,16);
+const segLen=15,firstIdx=Math.floor((s.pos+zNear)/segLen),B=[];
+for(let k=0;;k++){const wz=(firstIdx+k)*segLen,z=wz-s.pos;const zc=Math.max(zNear,z),sc=f/zc;B.push({wi:firstIdx+k,z:zc,sc:sc,gy:y0+camH*sc,cx:400+(roadAt(wz)-s.offset)*sc*KX,hw:Wu*sc*KX,top:Math.max(-80,y0+(camH-42)*sc)});if(z>zMax&&B.length>1)break;if(B.length>40)break}
+const z0=2.7,sc0=f/z0,wz0=s.pos+z0;
+B.unshift({wi:firstIdx,z:z0,sc:sc0,gy:y0+camH*sc0,cx:400+(roadAt(wz0)-s.offset)*sc0*KX,hw:Wu*sc0*KX,top:-80});
+for(let i=B.length-1;i>0;i--){const a=B[i-1],b=B[i],fz=fogOf(b.z),si=b.wi;
+ctx.fillStyle=mixc(si%2?SAND_A:SAND_B,FOG,fz);
+ctx.beginPath();ctx.moveTo(a.cx-a.hw,a.gy);ctx.lineTo(a.cx+a.hw,a.gy);ctx.lineTo(b.cx+b.hw,b.gy);ctx.lineTo(b.cx-b.hw,b.gy);ctx.closePath();ctx.fill();
+wallQuad(a.cx-a.hw,a,b.cx-b.hw,b,WALL_L,fz,si);
+wallQuad(a.cx+a.hw,a,b.cx+b.hw,b,WALL_R,fz,si+1)}
+for(let wz=Math.ceil((s.pos+zNear)/20)*20;wz-s.pos<Math.min(zMax,sight);wz+=20){const z=wz-s.pos,fz=fogOf(z),p=proj(wz,roadAt(wz),0),hw=Wu*p.sc*KX*.96;
+ctx.strokeStyle='rgba(255,255,255,'+.26*(1-fz)+')';ctx.lineWidth=Math.max(1,p.sc*.28);ctx.beginPath();ctx.moveTo(p.x-hw,p.y);ctx.lineTo(p.x+hw,p.y);ctx.stroke()}
+drawRocks(false);
+if(d>-6&&d<zMax+6){const Lc=roadAt(s.hazard),fzL=fogOf(Math.max(zNear,d));
+if(d>zNear+.5&&fzL<.92){const nearWz=s.pos+Math.max(zNear,d-16),cN=roadAt(nearWz);
+const pNL=proj(nearWz,cN-Wu*.96,0),pNR=proj(nearWz,cN+Wu*.96,0),pFL=proj(s.hazard,Lc-Wu*.96,0),pFR=proj(s.hazard,Lc+Wu*.96,0);
+const pulse=(!reduced&&d<80&&s.speed>.5)?Math.sin(tms/180)*.05+.05:0;
+ctx.fillStyle='rgba(120,220,140,'+(.18+pulse)*(1-fzL)+')';
+ctx.beginPath();ctx.moveTo(pNL.x,pNL.y);ctx.lineTo(pNR.x,pNR.y);ctx.lineTo(pFR.x,pFR.y);ctx.lineTo(pFL.x,pFL.y);ctx.closePath();ctx.fill();
+ctx.setLineDash([8,8]);ctx.strokeStyle='rgba(235,255,240,'+.5*(1-fzL)+')';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(pNL.x,pNL.y);ctx.lineTo(pNR.x,pNR.y);ctx.stroke();ctx.setLineDash([]);
+if(d<100&&d>12){const pM=proj(s.hazard-7,roadAt(s.hazard-7),0);ctx.fillStyle='rgba(16,74,32,'+.9*(1-fzL)+')';ctx.font='bold '+clamp(pM.sc*1.5,10,16)+'px '+FONT;ctx.textAlign='center';ctx.fillText('ぴったりゾーン',pM.x,pM.y-4);ctx.textAlign='left'}}
+if(d+3.5>zNear+.5){const zn2=Math.max(zNear,d);
+for(let c2=0;c2<10;c2++){const u1=-.95+.19*c2,u2=u1+.19;
+const a1=proj(s.pos+zn2,Lc+u1*Wu,0),a2=proj(s.pos+zn2,Lc+u2*Wu,0),b1=proj(s.hazard+3.5,Lc+u1*Wu,0),b2=proj(s.hazard+3.5,Lc+u2*Wu,0);
+ctx.fillStyle=c2%2?mixc([245,240,230],FOG,fzL):mixc([225,73,58],FOG,fzL);
+ctx.beginPath();ctx.moveTo(a1.x,a1.y);ctx.lineTo(a2.x,a2.y);ctx.lineTo(b2.x,b2.y);ctx.lineTo(b1.x,b1.y);ctx.closePath();ctx.fill()}}
+if(d>zNear-1&&fzL<.95){[-1,1].forEach(sd=>{const lat=Lc+sd*Wu*.98,pB=proj(s.hazard,lat,0),pT=proj(s.hazard,lat,11);
+ctx.strokeStyle=mixc([215,70,50],FOG,fzL);ctx.lineWidth=Math.max(2,pB.sc*.45);ctx.beginPath();ctx.moveTo(pB.x,pB.y);ctx.lineTo(pT.x,pT.y);ctx.stroke();
+ctx.fillStyle=mixc([255,215,80],FOG,fzL);ctx.beginPath();ctx.moveTo(pT.x,pT.y);ctx.lineTo(pT.x-sd*pB.sc*2.2,pT.y+pB.sc*.8);ctx.lineTo(pT.x,pT.y+pB.sc*1.6);ctx.closePath();ctx.fill()});
+if(d>6){const pS=proj(s.hazard,Lc,8.6),sw=clamp(pS.sc*8.5,26,230),sh=sw*.36;
+ctx.globalAlpha=1-fzL;rr(ctx,pS.x-sw/2,pS.y-sh/2,sw,sh,sh*.3);ctx.fillStyle='#d8402e';ctx.fill();ctx.lineWidth=Math.max(1.5,sw*.02);ctx.strokeStyle='#fff';ctx.stroke();
+if(sw>34){ctx.fillStyle='#fff';ctx.font='900 '+Math.max(11,sh*.52)+'px '+FONT;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('とまれ',pS.x,pS.y+1);ctx.textAlign='left';ctx.textBaseline='alphabetic'}
+ctx.globalAlpha=1}}}
+drawRocks(true);
+ctx.fillStyle='rgba('+FOG.join(',')+','+(1-vis)*.3+')';ctx.fillRect(0,0,W,H);
+ctx.restore();
+if(s.speed>19&&!reduced){const al=clamp((s.speed-19)/26,0,.55);ctx.strokeStyle='rgba(255,255,255,'+al+')';ctx.lineWidth=2;
+for(let i=0;i<8;i++){const ang=i/8*Math.PI*2+.4;if(Math.abs(Math.sin(ang))<.28)continue;const r1=170+(tms*.45+i*67)%80,r2=r1+26+s.speed*1.1;
+ctx.beginPath();ctx.moveTo(400+Math.cos(ang)*r1,y0+Math.sin(ang)*r1*.72);ctx.lineTo(400+Math.cos(ang)*r2,y0+Math.sin(ang)*r2*.72);ctx.stroke()}}
+const stopNeed=s.speed*reaction+s.speed*s.speed/(8+brakeP*24);
+let chipT,chipBg='#ffd85a',chipFg='#231a00';
+if(d<0){chipT='とまれ線をこえた！';chipBg='#d0392b';chipFg='#fff'}
+else if(d>sight){chipT='とまれ線はきりのむこう…まだ見えない';chipBg='rgba(96,102,112,.9)';chipFg='#f2f5f9'}
+else if(stopNeed>d&&s.speed>1){chipT='あぶない！いまのスピードでは止まれない';chipBg='#d0392b';chipFg='#fff'}
+else chipT='とまれ線まで あと '+fmt(Math.max(0,d),0)+' m';
+chipDraw(ctx,400,24,chipT,chipBg,chipFg,15);
+chipDraw(ctx,10,H-98,'★ぴったり '+s.nPerfect+'　○とまれた '+s.nGood+'　×しっぱい '+(s.nOver+s.nHit),'rgba(9,16,26,.75)','#eef5fb',12,'left');
+rr(ctx,8,H-82,784,74,14);ctx.fillStyle='rgba(13,20,30,.92)';ctx.fill();ctx.strokeStyle='#3a516e';ctx.lineWidth=1.5;ctx.stroke();
+const gx=64,gy2=H-38,gr=27,va=clamp(s.speed/45,0,1),a0=Math.PI*.75;
+ctx.lineWidth=7;ctx.strokeStyle='#26364c';ctx.beginPath();ctx.arc(gx,gy2,gr,a0,a0+Math.PI*1.5);ctx.stroke();
+ctx.strokeStyle=s.speed>32?'#ef796e':s.speed>18?'#ffd85a':'#7ed79a';ctx.beginPath();ctx.arc(gx,gy2,gr,a0,a0+Math.PI*1.5*va);ctx.stroke();
+const na=a0+Math.PI*1.5*va;ctx.strokeStyle='#fff';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(gx,gy2);ctx.lineTo(gx+Math.cos(na)*(gr-7),gy2+Math.sin(na)*(gr-7));ctx.stroke();
+ctx.fillStyle='#9dcdf5';ctx.font='bold 11px '+FONT;ctx.fillText('はやさ',98,H-58);
+ctx.fillStyle='#ffd85a';ctx.font='900 22px '+FONT;ctx.fillText(fmt(s.speed,0),98,H-36);
+const flowV=s.speed/(Math.max(0,d)+20)*100*vis;
+ctx.fillStyle='#9dcdf5';ctx.font='bold 11px '+FONT;ctx.fillText('けしきの ながれ',170,H-58);
+rr(ctx,170,H-52,240,18,7);ctx.fillStyle='#0b131e';ctx.fill();
+ctx.save();rr(ctx,170,H-52,240,18,7);ctx.clip();
+const off=flowPhase%28;ctx.fillStyle='rgba(255,216,90,.8)';
+for(let x2=142+off;x2<410;x2+=28){ctx.beginPath();ctx.moveTo(x2,H-52);ctx.lineTo(x2+12,H-52);ctx.lineTo(x2+20,H-34);ctx.lineTo(x2+8,H-34);ctx.closePath();ctx.fill()}
+ctx.restore();
+rr(ctx,170,H-52,240,18,7);ctx.strokeStyle='#2c3c52';ctx.lineWidth=1.5;ctx.stroke();
+ctx.fillStyle='#ffd85a';ctx.font='900 14px '+FONT;ctx.fillText(fmt(flowV,1),418,H-38);
+ctx.fillStyle='#8fa3bb';ctx.font='bold 10px '+FONT;ctx.fillText('はやい・ちかい ほど ながれは強い',170,H-18);
+const lampOn=braking&&(s.speed>0||manualBrake);
+if(lampOn){ctx.save();ctx.shadowColor='#ff5a45';ctx.shadowBlur=16;rr(ctx,470,H-64,150,36,10);ctx.fillStyle='#d0392b';ctx.fill();ctx.restore();ctx.fillStyle='#fff';ctx.font='900 17px '+FONT;ctx.textAlign='center';ctx.fillText('ブレーキ！',545,H-40);ctx.textAlign='left'}
+else if(s.alert&&playing){rr(ctx,470,H-64,150,36,10);ctx.fillStyle='#c9a13b';ctx.fill();ctx.fillStyle='#241c00';ctx.font='900 16px '+FONT;ctx.textAlign='center';ctx.fillText('きづいた…！',545,H-40);ctx.textAlign='left'}
+else{rr(ctx,470,H-64,150,36,10);ctx.fillStyle='#182234';ctx.fill();ctx.strokeStyle='#33465e';ctx.lineWidth=1.5;ctx.stroke();ctx.fillStyle='#68809c';ctx.font='900 16px '+FONT;ctx.textAlign='center';ctx.fillText('ブレーキ',545,H-40);ctx.textAlign='left'}
+ctx.fillStyle='#8fa3bb';ctx.font='bold 10px '+FONT;ctx.textAlign='center';
+ctx.fillText(manualBrake?'きみがブレーキ中':lampOn?'じどうでブレーキ中':s.alert&&playing?'はんのうの おくれ中':'赤ボタンか がめん長おし',545,H-18);
+ctx.fillStyle='#eef5fb';ctx.font='900 16px '+FONT;
+ctx.fillText(s.holdT>0?'とまった！':s.speed===0&&playing?'ていし中':lampOn?'げんそく中':playing?'そうこう中':'まってるよ',706,H-42);
+ctx.fillStyle='#8fa3bb';ctx.font='bold 10px '+FONT;ctx.fillText('線の手前でとまろう',706,H-20);ctx.textAlign='left';
+if(!playing&&s.t<.5&&s.bannerT<=0){rr(ctx,150,110,500,104,18);ctx.fillStyle='rgba(9,16,26,.88)';ctx.fill();ctx.strokeStyle='#ffd85a';ctx.lineWidth=2;ctx.stroke();
+ctx.textAlign='center';ctx.fillStyle='#ffd85a';ctx.font='900 24px '+FONT;ctx.fillText('▶ さいせい で スタート！',400,148);
+ctx.fillStyle='#dce6f0';ctx.font='bold 14px '+FONT;ctx.fillText('けしきの ながれで スピードをかんじて',400,176);ctx.fillText('とまれ線の手前ぴったりで 止まろう',400,196);ctx.textAlign='left'}
+else if(!playing&&s.t>=.5&&s.holdT<=0&&s.bannerT<=0)chipDraw(ctx,400,60,'いちじていし中','rgba(96,102,112,.9)','#fff',13);
+if(s.stars.length){const dtF=lastStarT?Math.min(.05,(tms-lastStarT)/1000):.016;lastStarT=tms;
+s.stars=s.stars.filter(p=>{p.r+=p.sp*dtF;p.rot+=dtF*3;return p.r<175});
+s.stars.forEach(p=>{ctx.fillStyle='rgba(255,216,90,'+(1-p.r/175)+')';starPath(ctx,400+Math.cos(p.ang)*p.r,168+Math.sin(p.ang)*p.r*.7,p.size,p.rot);ctx.fill()})}
+if(s.bannerT>0&&s.banner){const k=Math.min(1,(2.2-s.bannerT)*5+.15);ctx.save();ctx.translate(400,168);ctx.scale(k,k);
+rr(ctx,-260,-46,520,92,20);ctx.fillStyle=s.banner.color;ctx.globalAlpha=.95;ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.stroke();
+ctx.fillStyle='#fff';ctx.textAlign='center';ctx.font='900 28px '+FONT;ctx.fillText(s.banner.t,0,-6);ctx.font='bold 14px '+FONT;ctx.fillText(s.banner.sub,0,24);ctx.textAlign='left';ctx.restore()}
+if(s.flash>0){ctx.fillStyle='rgba('+s.flashC+','+s.flash*.32+')';ctx.fillRect(0,0,W,H)}}
+function drawChart(){clearCanvas(cctx,800,240,'#101826');
+cctx.strokeStyle='#20304a';cctx.lineWidth=1;
+for(let i=0;i<=4;i++){const y=205-i*41.25;cctx.beginPath();cctx.moveTo(35,y);cctx.lineTo(775,y);cctx.stroke()}
+const H2=s.hist;
+if(H2.length>1){const x=i=>35+i/Math.max(1,H2.length-1)*740;
+H2.forEach((dd,i)=>{if(dd.ev){cctx.strokeStyle=dd.ev==='good'?'rgba(126,215,154,.5)':'rgba(239,121,110,.55)';cctx.lineWidth=2;cctx.beginPath();cctx.moveTo(x(i),40);cctx.lineTo(x(i),205);cctx.stroke()}});
+line(cctx,H2.map((dd,i)=>[x(i),205-clamp(dd.v/45,0,1)*165]),'#ffd85a',2.5);
+line(cctx,H2.map((dd,i)=>[x(i),205-clamp(dd.stop/180,0,1)*165]),'#6eb7f1',2);
+line(cctx,H2.map((dd,i)=>[x(i),205-clamp((dd.margin+20)/120,0,1)*165]),'#7ed79a',2)}
+const leg=[['#ffd85a','はやさ'],['#6eb7f1','止まるのにいるきょり'],['#7ed79a','よゆう']];let lx=38;cctx.font='bold 12px '+FONT;
+leg.forEach(pair=>{cctx.fillStyle=pair[0];cctx.beginPath();cctx.arc(lx+5,16,5,0,7);cctx.fill();cctx.fillStyle='#dce6f0';cctx.fillText(pair[1],lx+14,20);lx+=14+cctx.measureText(pair[1]).width+18});
+cctx.fillStyle='#8fa3bb';cctx.font='bold 11px '+FONT;cctx.fillText('たての線 緑=とまれた／赤=いきすぎ・衝突',420,225);cctx.fillText('→ じかん',720,20)}
+function updateTexts(){const reaction=.15+Number(C.reaction.value)/100*1.2,brake=Number(C.brake.value)/100,vis=Number(C.visibility.value)/100,stop=s.speed*reaction+s.speed*s.speed/(8+brake*24),dist=Math.max(0,s.hazard-s.pos),flow=s.speed/(dist+20)*100*vis;
+let state;
+if(s.bannerT>0&&s.statusShort)state=s.statusShort;
+else if(!playing)state='たいき中';
+else if(s.speed===0)state='ていし';
+else if(s.braking||manualBrake)state='ブレーキ中';
+else state='そうこう中';
+[fmt(s.speed,1),fmt(flow,1),fmt(stop,0)+'m',fmt(dist,0)+'m',fmt(s.minMargin,0)+'m',state].forEach((v,i)=>$('m'+i).textContent=v);
+let msg='スピードが速いほど、ちかくのけしきはビュッと速くながれる。ながれの速さでスピードをかんじよう。',cls='callout ok';
+if(s.lastEv==='hit'&&s.bannerT>0){msg='がけにこすった。曲がり道では、よこのよゆうも見ておこう。';cls='callout warn'}
+else if(s.lastEv==='over'&&s.bannerT>0){msg='いきすぎた。見えてから止まるまでに、はんのうのおくれとブレーキのきょりがいる。もっと早めにブレーキ！';cls='callout warn'}
+else if(stop>dist&&dist>0&&s.speed>1){msg='このままだと止まるのに約 '+fmt(stop,0)+' m いる。線までは '+fmt(dist,0)+' m。早めのブレーキか、スピードダウン！';cls='callout warn'}
+else if(s.braking||manualBrake){msg='ブレーキ中。けしきのながれが、だんだんゆっくりになるのがわかるかな。'}
+else if(s.lastEv==='good'&&s.bannerT>0){msg='うまく止まれた！同じ初期条件でもう一回ためして、A/Bでくらべてみよう。'}
+$('explain').className=cls;$('explain').textContent=msg;
+$('chartNote').textContent='下のグラフはじかんのながれ。黄=はやさ、青=止まるのにいるきょり、緑=よゆう。'}
+function drawAll(){drawChart();updateTexts()}
 function formatControl(el){return el.value+'%'}function onControlChange(id){drawAll()}
 function makeSnapshot(){const reaction=.15+Number(C.reaction.value)/100*1.2,brake=Number(C.brake.value)/100,stop=s.speed*reaction+s.speed*s.speed/(8+brake*24);return{t:s.t,v:s.speed,pos:s.pos,stop,margin:s.minMargin,collision:s.collision,controls:controlText()}}
 function snapshotText(a){return`時刻 ${a.t}\n速度 ${fmt(a.v,1)}\n進行 ${fmt(a.pos,0)} m\n停止距離 ${fmt(a.stop,0)} m\n最小余裕 ${fmt(a.margin,0)} m\n${a.collision?'衝突':'走行中'}`}
@@ -56,7 +253,26 @@ document.querySelectorAll('.control input,.control select,.checks input').forEac
 $('saveA').onclick=()=>{snapA=makeSnapshot();$('snapA').textContent=snapshotText(snapA);updateDiff()};$('saveB').onclick=()=>{snapB=makeSnapshot();$('snapB').textContent=snapshotText(snapB);updateDiff()};$('clearAB').onclick=()=>{snapA=snapB=null;$('snapA').textContent=$('snapB').textContent='未記録';$('diff').textContent='同じ初期条件でAを走らせ、戻して一つだけ操作を変え、Bを記録する。'};
 function updateDiff(){if(snapA&&snapB)$('diff').textContent=compareSnapshots(snapA,snapB)}
 function setupModal(){const back=$('guideBack');$('guideBtn').onclick=$('tourBtn').onclick=()=>back.classList.add('show');$('guideClose').onclick=()=>back.classList.remove('show');back.onclick=e=>{if(e.target===back)back.classList.remove('show')};$('speakBtn').onclick=()=>{if(!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(document.querySelector('h1').textContent+'。'+document.querySelector('.take').textContent);u.lang='ja-JP';u.rate=.92;speechSynthesis.speak(u)}}setupModal();
-function frame(t){if(!lastTime)lastTime=t;const dt=Math.min(100,t-lastTime);lastTime=t;if(playing){acc+=dt*speed;let guard=0;while(acc>=500&&guard++<20){advance();acc-=500}drawAll()}requestAnimationFrame(frame)}requestAnimationFrame(frame);
+(function(){const b=$('brakeHold');if(!b)return;
+const hold=e=>{e.preventDefault();if(b.setPointerCapture&&e.pointerId!=null){try{b.setPointerCapture(e.pointerId)}catch(err){}}setManual(true)};
+const release=()=>setManual(false);
+b.addEventListener('pointerdown',hold);b.addEventListener('pointerup',release);b.addEventListener('pointercancel',release);
+b.addEventListener('keydown',e=>{if(e.code==='Space'||e.code==='Enter'){e.preventDefault();setManual(true)}});
+b.addEventListener('keyup',e=>{if(e.code==='Space'||e.code==='Enter'){e.preventDefault();setManual(false)}});
+main.addEventListener('pointerdown',e=>{e.preventDefault();if(main.setPointerCapture&&e.pointerId!=null){try{main.setPointerCapture(e.pointerId)}catch(err){}}setManual(true)});
+main.addEventListener('pointerup',release);main.addEventListener('pointercancel',release);
+window.addEventListener('keydown',e=>{if(e.code!=='Space'||e.repeat)return;const t=document.activeElement,tag=t&&t.tagName||'';if(/INPUT|SELECT|TEXTAREA|BUTTON/.test(tag))return;e.preventDefault();setManual(true)});
+window.addEventListener('keyup',e=>{if(e.code!=='Space')return;const t=document.activeElement;if(t===b)return;setManual(false)});
+window.addEventListener('blur',release)})();
+function frame(t){if(!lastTime)lastTime=t;const dt=Math.min(100,t-lastTime);lastTime=t;const dts=dt/1000;
+if(s.holdT>0){s.holdT=Math.max(0,s.holdT-dts);if(s.holdT===0&&s.advHold){s.advHold=false;s.hazard+=220+rng()*180;s.prevDist=s.hazard-s.pos}}
+else if(playing){let fstep=Math.min(3,dt*speed/500);const n=Math.max(1,Math.ceil(fstep/.25)),sub=fstep/n;
+for(let i=0;i<n;i++){advance(sub);if(s.holdT>0)break}
+const dNow=Math.max(0,s.hazard-s.pos);flowPhase+=(s.speed/(dNow+20)*100*(Number(C.visibility.value)/100)*2.2+s.speed*.35)*dts}
+s.bannerT=Math.max(0,s.bannerT-dts);s.flash=Math.max(0,s.flash-dts*1.5);s.shake=Math.max(0,s.shake-dts*1.8);
+drawMain(t);
+uiAcc+=dt;if(uiAcc>150){uiAcc=0;drawChart();updateTexts()}
+requestAnimationFrame(frame)}requestAnimationFrame(frame);
 </script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
 const ready=()=>{

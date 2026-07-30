@@ -1,5 +1,19 @@
 <!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>原子・同位体・イオン・発光ラボ</title><style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}body{background:#08101a;color:#edf4fb;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;max-width:980px;margin:auto;padding:12px 12px calc(92px + env(safe-area-inset-bottom));touch-action:manipulation}button,input,select,textarea{font:inherit}button{min-height:42px;border:1px solid #38506b;border-radius:11px;background:#17263a;color:#f3f7fb;padding:8px 11px;font-weight:800}button.primary{background:#ffd85a;color:#241c00;border-color:#d4b53b}button.on{outline:3px solid #ffd85a;outline-offset:1px}button:disabled{opacity:.45}.hdr{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}.hdr h1{font-size:21px;line-height:1.45;margin:0}.sub{color:#9eb0c6;font-size:12px;line-height:1.7;margin-top:4px}.badge{display:inline-block;background:#21344d;color:#b8dcff;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800;margin-bottom:5px}.head-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.head-actions button{font-size:11px;padding:7px 9px}.learn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:0 0 10px}.learn>div{border:1px solid #2a3d55;border-radius:13px;background:#111c2a;padding:9px;min-height:90px}.learn b{display:block;color:#ffd85a;font-size:11px;margin-bottom:4px}.learn p{margin:0;color:#d9e3ef;font-size:12px;line-height:1.65}.toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:0 0 10px;padding:9px;border:1px solid #2b415b;border-radius:13px;background:#101b2a}.toolbar select{min-height:42px;border:1px solid #38506b;border-radius:10px;background:#0b1624;color:#fff;padding:7px}.stage{border:1px solid #2c4058;border-radius:17px;background:#07111d;overflow:hidden;position:relative}.stage canvas,.stage svg{display:block;width:100%;height:auto;touch-action:none}canvas,svg{max-width:100%;height:auto}.panel{display:grid;gap:10px;margin-top:10px}.grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.card{border:1px solid #2a3d55;border-radius:14px;background:#111c2a;padding:11px}.card h2,.card h3{font-size:15px;margin:0 0 8px;color:#ffd85a}.control{display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center;margin:8px 0;font-size:12px}.control output{color:#ffd85a;font:12px ui-monospace,monospace}.control input,.control select{grid-column:1/-1;width:100%}.control select{min-height:40px;background:#0b1624;color:#fff;border:1px solid #38506b;border-radius:9px;padding:7px}.row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.metric{background:#0b1624;border:1px solid #293e57;border-radius:11px;padding:8px;min-width:0}.metric b{display:block;color:#9fcdf5;font-size:12px;line-height:1.35}.metric strong{display:block;color:#ffdb5b;font:17px/1.35 ui-monospace,monospace;margin-top:3px;word-break:break-word}.callout{background:#15283d;border:1px solid #385a79;border-radius:11px;padding:9px;font-size:12px;line-height:1.75}.hint{font-size:12px;line-height:1.75;color:#aab8ca}.legend{display:flex;gap:7px;flex-wrap:wrap;font-size:11px;margin-top:7px}.legend span{background:#1a2b40;border-radius:999px;padding:4px 7px}.deep{margin-top:10px;border:1px solid #35516e;border-radius:14px;background:#101b29;padding:11px}.deep h2{font-size:16px;margin:0 0 6px;color:#ffd85a}.deep p{font-size:12px;line-height:1.7;color:#aebed0}.bar{height:11px;background:#24364b;border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;background:#ffd85a;width:0;transition:width .2s}.mini-table{width:100%;border-collapse:collapse;font-size:11px}.mini-table th,.mini-table td{padding:5px;border-bottom:1px solid #2d4159;text-align:left}.mini-table th{color:#9fcdf5}.ok{color:#89e6a7}.warn{color:#ffbe79}.bad{color:#ff8f8f}.small{font-size:11px;color:#90a2ba;line-height:1.65}ruby{ruby-position:over}rt{font-size:.55em}.hidden{display:none!important}.tourGlow{outline:4px solid #ffdb5b!important;outline-offset:3px!important;position:relative;z-index:20}.sheetBack,.modalBack{position:fixed;inset:0;background:#000c;z-index:70;display:none;padding:18px;overflow:auto}.sheetBack.show,.modalBack.show{display:flex;align-items:flex-end;justify-content:center}.sheet{width:min(780px,100%);max-height:88vh;overflow:auto;background:#0e1a29;border:1px solid #405978;border-radius:18px;padding:14px}.sheet h2{font-size:17px;margin:0}.sheet h3{font-size:14px;color:#ffdb5b;margin:14px 0 6px}.sheet p,.sheet li{font-size:12px;line-height:1.8;color:#d7e2ef}.sheetHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.sheetHead button{font-size:20px;min-width:42px}.tourBox{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:90;background:#0d1927;border:2px solid #ffdb5b;border-radius:14px;padding:10px;display:none}.tourBox.show{display:block}.tourBox .row{justify-content:space-between}.trayOpen{position:fixed;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:55;background:#ffdb5b;color:#211b00}.traySection{border-top:1px solid #2f455f;padding-top:10px;margin-top:10px}.terms{display:flex;gap:6px;flex-wrap:wrap}.term{background:#1b2c42;border-radius:999px;padding:5px 8px;font-size:12px}.snapGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.snap{background:#0a1421;border:1px solid #2d415a;border-radius:10px;padding:8px}.snap pre{white-space:pre-wrap;font:11px/1.55 ui-monospace,monospace;margin:5px 0 0}.noteGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.noteGrid label{font-size:12px}.noteGrid textarea{width:100%;min-height:76px;background:#0a1421;color:#edf4fb;border:1px solid #38506c;border-radius:9px;padding:8px;margin-top:4px}.zoomBody{background:#07101a;border-radius:12px;padding:8px}.zoomBody svg,.zoomBody img{width:100%;height:auto;max-height:72vh;object-fit:contain}.zoomOn{cursor:zoom-in}.pulse{animation:pulse 1s ease-in-out infinite alternate}@keyframes pulse{to{opacity:.35}}@media(max-width:700px){.learn{grid-template-columns:1fr 1fr}.grid2,.grid3{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.hdr{display:block}.head-actions{justify-content:flex-start;margin-top:8px}}@media(max-width:390px){body{padding-left:8px;padding-right:8px}.learn{grid-template-columns:1fr}.hdr h1{font-size:18px}.metrics{grid-template-columns:1fr 1fr}.snapGrid,.noteGrid{grid-template-columns:1fr}}
+.eventLine{display:flex;gap:9px;align-items:flex-start;margin-top:10px;padding:10px 12px;border:2px solid #ffd85a;border-radius:13px;background:#131f30;font-size:14px;line-height:1.6;font-weight:800}
+.eventLine .evIcon{font-size:18px;line-height:1.4}
+.eventLine.flash{animation:evFlash .9s ease-out}
+@keyframes evFlash{0%{background:#41371b}100%{background:#131f30}}
+.countBoard{display:grid;gap:5px;margin-top:8px;padding:9px 11px;border:1px solid #2a3d55;border-radius:13px;background:#111c2a;font-size:12px}
+.cbRow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:4px 7px;border-radius:9px}
+.cbRow b{color:#ffdb5b;font:800 15px/1.3 ui-monospace,monospace}
+.cbArrow{color:#7f93ab;font-weight:800}
+.cbNote{color:#9eb0c6;font-size:11px;margin-left:auto}
+.cbRow.bump{animation:cbBump .8s ease-out}
+@keyframes cbBump{0%{background:#2e4a2a}100%{background:transparent}}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+.dot.dp{background:#ef6d75}.dot.dn{background:#77a9d8}.dot.de{background:#7ed9ff}.dot.dy{background:#ffd45f}.dot.dr{background:#ff8a72}.dot.db{background:#6bbcff}
+@media(max-width:700px){.cbNote{margin-left:0;flex-basis:100%}}
 </style><style id="r59-common-ui-style">
 #r59-globalbar{position:sticky;top:0;z-index:2147483000;display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:-2px -2px 10px;padding:7px 8px;background:rgba(7,14,24,.96);border:1px solid #38506b;border-radius:12px;box-shadow:0 5px 18px rgba(0,0,0,.28);backdrop-filter:blur(8px)}
 #r59-globalbar a,#r59-globalbar button{min-height:38px!important;padding:6px 9px!important;border:1px solid #47617e!important;border-radius:10px!important;background:#16263a!important;color:#f3f8fd!important;font:800 11px/1.25 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif!important;text-decoration:none!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important}
@@ -15,8 +29,14 @@
 
 <section class="toolbar" data-tour="controls"><button id="playPause" class="primary" aria-label="▶ 再生">▶ 再生</button><button id="stepBtn" aria-label="0.2秒">0.2秒</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="exciteBtn" aria-label="光子を吸収">光子を吸収</button><button id="ionizeBtn" aria-label="電子を1個外す">電子を1個外す</button><button id="missionBtn" aria-label="元素ミッション">元素ミッション</button></section>
 <section class="stage" data-tour="stage"><canvas id="mainCv" width="900" height="590" aria-label="原子核、電子殻、電子の励起、光子放出、イオン化のアニメーション" role="img"></canvas></section>
+<div id="eventLine" class="eventLine" role="status" aria-live="polite"><span class="evIcon" id="eventIcon">💡</span><span id="eventMsg">スライダーやボタンをさわると、いま何がおきたかを ここでお知らせするよ。</span></div>
+<section id="countBoard" class="countBoard" aria-label="粒子の数からわかる原子の状態">
+<div class="cbRow" id="cbRowElem"><span><span class="dot dp"></span>陽子 <b id="cbP">8</b></span><span class="cbArrow">→</span><span>元素: <b id="cbElem">酸素 O</b></span><span class="cbNote">陽子の数が元素の名前を決める</span></div>
+<div class="cbRow" id="cbRowMass"><span><span class="dot dp"></span>陽子 <b id="cbP2">8</b> ＋ <span class="dot dn"></span>中性子 <b id="cbN">8</b></span><span class="cbArrow">→</span><span>質量数: <b id="cbMass">16</b></span><span class="cbNote">中性子がちがう仲間は同位体</span></div>
+<div class="cbRow" id="cbRowCharge"><span><span class="dot dp"></span>陽子 <b id="cbP3">8</b> − <span class="dot de"></span>電子 <b id="cbE">8</b></span><span class="cbArrow">→</span><span>電荷: <b id="cbCharge">0 (中性)</b></span><span class="cbNote">電子がちがうとイオンになる</span></div>
+</section>
 <div class="panel grid2"><section class="card"><h2>原子を組み立てる</h2><label class="control">陽子 <output id="pOut"></output><input id="protons" type="range" min="1" max="18" value="8" aria-label="陽子"></label><label class="control">中性子 <output id="nOut"></output><input id="neutrons" type="range" min="0" max="22" value="8" aria-label="中性子"></label><label class="control">電子 <output id="eOut"></output><input id="electrons" type="range" min="0" max="20" value="8" aria-label="電子"></label><label class="control">入射エネルギー <output id="energyOut"></output><input id="energy" type="range" min="1" max="100" value="45" aria-label="入射エネルギー"></label><label class="control">電場の強さ <output id="fieldOut"></output><input id="field" type="range" min="0" max="100" value="0" aria-label="電場の強さ"></label><div class="callout" id="mission"></div></section><section class="card" data-tour="metrics"><h2>原子の計器</h2><div class="metrics"><div class="metric"><b>元素</b><strong id="elementM"></strong></div><div class="metric"><b>同位体</b><strong id="isotopeM"></strong></div><div class="metric"><b>電荷</b><strong id="chargeM"></strong></div><div class="metric"><b>価電子</b><strong id="valenceM"></strong></div></div><div class="callout" id="stateText"></div></section></div>
-<section class="deep"><h2>電子のエネルギー段階と発光</h2><canvas id="graphCv" width="900" height="330" aria-label="電子殻のエネルギー段階、吸収、放出光子、発光スペクトル履歴" role="img"></canvas><p>電子は小さな惑星のように決まった軌道を回るわけではありません。主図は殻とエネルギー段階を理解するための模式模型で、実際の電子は確率分布として記述されます。</p></section>
+<section class="deep"><h2>電子のエネルギー段階と発光</h2><canvas id="graphCv" width="900" height="330" aria-label="電子殻のエネルギー段階、吸収、放出光子、発光スペクトル履歴" role="img"></canvas><div class="legend"><span><span class="dot dy"></span>黄色の電子は励起中(エネルギーをためこんだ状態)</span><span><span class="dot dr"></span>殻3→殻2 に落ちると赤い光(波長はおよそ620nm)</span><span><span class="dot db"></span>殻2→殻1 に落ちると青い光(波長はおよそ470nm)</span><span>大きく落ちるほど波長の短い光が出る</span></div><p>電子は小さな惑星のように決まった軌道を回るわけではありません。主図は殻とエネルギー段階を理解するための模式模型で、実際の電子は確率分布として記述されます。</p></section>
 
 <div id="guideBack" class="sheetBack"><section class="sheet" role="dialog" aria-modal="true"><div class="sheetHead"><h2>原子・同位体・イオン・発光ラボ の学び方</h2><button id="guideClose" aria-label="閉じる">×</button></div><h3>最初の予想</h3><p>陽子数を固定して中性子だけを変え、元素名と質量数のどちらが変わるか説明しよう。次に電子を増減し、電荷収支を確かめよう。</p><h3>★★★ 探究</h3><p>陽子数を固定して中性子だけを変え、元素名と質量数のどちらが変わるか説明しよう。次に電子を増減し、電荷収支を確かめよう。</p><h3>模型で省いているもの</h3><p>電子殻は教育用の模式表現で、実際の軌道関数、量子数、スピン、核力、正確な同位体安定性を省略しています。</p></section></div>
 <div id="tourBox" class="tourBox"><div id="tourText" class="hint"></div><div class="row"><button id="tourPrev" aria-label="←">←</button><span id="tourCount" class="small"></span><button id="tourNext" class="primary" aria-label="次へ →">次へ →</button><button id="tourStop" aria-label="終わる">終わる</button></div></div>
@@ -33,18 +53,155 @@
  window.r48SetSeed(window.r48SeedBase);
 })();
 </script><script>
-const $=id=>document.getElementById(id),cv=$('mainCv'),c=cv.getContext('2d'),gv=$('graphCv'),g=gv.getContext('2d');const names=['','水素','ヘリウム','リチウム','ベリリウム','ホウ素','炭素','窒素','酸素','フッ素','ネオン','ナトリウム','マグネシウム','アルミニウム','ケイ素','リン','硫黄','塩素','アルゴン'],sym=['','H','He','Li','Be','B','C','N','O','F','Ne','Na','Mg','Al','Si','P','S','Cl','Ar'];let t=0,running=false,last=performance.now(),speed=1,elect=[],photons=[],lines=[],mission='';
+const $=id=>document.getElementById(id),cv=$('mainCv'),c=cv.getContext('2d'),gv=$('graphCv'),g=gv.getContext('2d');const names=['','水素','ヘリウム','リチウム','ベリリウム','ホウ素','炭素','窒素','酸素','フッ素','ネオン','ナトリウム','マグネシウム','アルミニウム','ケイ素','リン','硫黄','塩素','アルゴン'],sym=['','H','He','Li','Be','B','C','N','O','F','Ne','Na','Mg','Al','Si','P','S','Cl','Ar'];let t=0,running=false,last=performance.now(),speed=1,elect=[],photons=[],lines=[],effects=[],mission='';
+const CX=450,CY=290;
 function par(){return{p:+$('protons').value,n:+$('neutrons').value,e:+$('electrons').value,en:+$('energy').value,f:+$('field').value/100}}
 function shellFor(i){return i<2?1:i<10?2:3}
-function rebuild(){elect=[];for(let i=0;i<par().e;i++)elect.push({shell:shellFor(i),angle:i*2.399,exc:0,phase:r48Rand()*6.28});draw()}
-function reset(){r48SetSeed(480211+(window.r48ScenarioIndex||0)*7919);t=0;photons=[];lines=[];rebuild();running=false;$('playPause').textContent='▶ 再生';draw()}window.resetSimulation=reset;
+function ePos(e){const p=par(),s=typeof e.s==='number'?e.s:e.shell;return{x:CX+Math.cos(e.angle)*80*s+p.f*35,y:CY+Math.sin(e.angle)*62*s}}
+function announce(msg,icon,color){const line=$('eventLine');if(!line)return;$('eventMsg').textContent=msg;$('eventIcon').textContent=icon||'💡';line.style.borderColor=color||'#ffd85a';line.classList.remove('flash');void line.offsetWidth;line.classList.add('flash')}
+window.announce=announce;
+function fxRing(x,y,col,r1){effects.push({kind:'ring',x,y,col,r1:r1||46,age:0,life:.6})}
+function fxFly(x,y,tx,ty,col,size){effects.push({kind:'fly',x,y,tx,ty,col,size:size||8,age:0,life:.55})}
+function fxText(x,y,txt,col){effects.push({kind:'text',x,y,txt,col,age:0,life:1.1})}
+function fxDelay(sec,fn){effects.push({kind:'delay',age:0,life:sec,fn})}
+function chargePhrase(p){const ch=p.p-p.e;return ch===0?'電荷は0で中性':ch>0?`電荷は +${ch} のプラスイオン`:`電荷は ${ch} のマイナスイオン`}
+function colName(wl){return wl>560?'赤い':wl>430?'青い':'紫の'}
+function rebuild(){const want=par().e;
+ while(elect.length>want){const e=elect.pop(),pos=ePos(e);fxFly(pos.x,pos.y,CX+Math.cos(e.angle)*430,CY+Math.sin(e.angle)*320,'#7ed9ff');fxRing(pos.x,pos.y,'#7ed9ff',40)}
+ while(elect.length<want){const i=elect.length;elect.push({shell:shellFor(i),s:4.8,angle:i*2.399,exc:0,pend:0,phase:r48Rand()*6.28})}
+ for(const [i,e] of elect.entries()){if(!e.exc&&!e.pend)e.shell=shellFor(i);e.shell=Math.min(3,Math.max(1,e.shell))}
+ draw()}
+function reset(){r48SetSeed(480211+(window.r48ScenarioIndex||0)*7919);t=0;photons=[];lines=[];effects=[];elect=[];rebuild();running=false;$('playPause').textContent='▶ 再生';draw()}window.resetSimulation=reset;
 function stableText(p,n){if(p===1)return n<=1?'よく見られる':'非常に中性子が多い模式条件';if(p===2)return n===1||n===2?'安定同位体の範囲':'不安定になりやすい';const ratio=n/p;return ratio>.82&&ratio<1.35?'安定域に近い模式判定':'中性子/陽子比が安定域から遠い'}
-function excite(){const p=par(),cands=elect.filter(e=>e.shell<3&&e.exc===0);if(!cands.length)return;const e=cands[Math.floor(r48Rand()*cands.length)],need=e.shell===1?55:28;if(p.en>=need){e.exc=1;e.shell++;photons.push({x:30,y:120+r48Rand()*330,vx:160,vy:0,col:'#ffd45f',life:1,absorb:true})}else{photons.push({x:30,y:120+r48Rand()*330,vx:180,vy:0,col:'#8aa0b6',life:1,absorb:false})}}
-function ionize(){const p=par();if(p.e>0&&p.en>65){$('electrons').value=p.e-1;$('electrons').dispatchEvent(new Event('input'));photons.push({x:450,y:290,vx:180,vy:-100,col:'#ff8e8e',life:1})}}
-function step(dt){const p=par();t+=dt;for(const [i,e] of elect.entries()){e.angle+=dt*(1.9/e.shell)*(1+(i%3)*.08);e.phase+=dt*3;if(e.exc&&r48Rand()<dt*.55){const old=e.shell;e.shell=Math.max(shellFor(i),e.shell-1);e.exc=0;const wl=old===3?620:old===2?470:390;lines.push({t,wl});photons.push({x:450,y:290,vx:130*Math.cos(e.angle),vy:130*Math.sin(e.angle),col:wl>560?'#ff8a72':wl>430?'#6bbcff':'#ad7cff',life:1})}}for(const q of photons){q.x+=q.vx*dt;q.y+=q.vy*dt;q.life-=dt*.35}photons=photons.filter(q=>q.life>0&&q.x>-30&&q.x<940&&q.y>-30&&q.y<620);if(r48Rand()<dt*.22*p.en/100)excite();if(lines.length>120)lines.shift()}
-function draw(){const p=par();c.clearRect(0,0,900,590);c.fillStyle='#07111d';c.fillRect(0,0,900,590);const cx=450,cy=290;for(let s=1;s<=3;s++){c.strokeStyle='#2f5878';c.lineWidth=2;c.setLineDash([7,8]);c.beginPath();c.ellipse(cx,cy,80*s,62*s,0,0,Math.PI*2);c.stroke()}c.setLineDash([]);const jitter=(Math.abs(p.n-p.p)*.8+1);for(let i=0;i<p.p+p.n;i++){const a=i*2.4+t*.15,r=8+Math.sqrt(i)*7;c.fillStyle=i<p.p?'#ef6d75':'#77a9d8';c.beginPath();c.arc(cx+Math.cos(a)*r+(r48Noise(i,Math.floor(t*20))-.5)*jitter,cy+Math.sin(a)*r+(r48Noise(i+97,Math.floor(t*20))-.5)*jitter,9,0,Math.PI*2);c.fill()}for(const e of elect){const r=80*e.shell,x=cx+Math.cos(e.angle)*r+p.f*35,y=cy+Math.sin(e.angle)*r;c.fillStyle=e.exc?'#ffd45f':'#7ed9ff';c.beginPath();c.arc(x,y,7,0,Math.PI*2);c.fill();c.strokeStyle='#bdefff';c.lineWidth=1;c.beginPath();c.arc(x,y,12+3*Math.sin(e.phase),0,Math.PI*2);c.stroke()}for(const q of photons){c.strokeStyle=q.col;c.lineWidth=4;c.beginPath();for(let k=0;k<28;k++){const x=q.x-k*5,y=q.y+Math.sin(k*.8+t*8)*5;k?c.lineTo(x,y):c.moveTo(x,y)}c.stroke()}c.fillStyle='#fff';c.font='bold 19px system-ui';c.fillText(`${names[p.p]||'未登録元素'} ${sym[p.p]||'?'}　陽子 ${p.p}・中性子 ${p.n}・電子 ${p.e}`,30,38);c.fillStyle='#9fcdf5';c.font='13px system-ui';c.fillText('青：電子　赤：陽子　水色：中性子　波：光子',30,565);const charge=p.p-p.e,val=p.e<=2?p.e:Math.min(8,(p.e-2)%8||8);$('elementM').textContent=names[p.p]||'Z='+p.p;$('isotopeM').textContent=(p.p+p.n)+(sym[p.p]||'');$('chargeM').textContent=charge===0?'中性':(charge>0?`+${charge}`:`${charge}`);$('valenceM').textContent=val;$('stateText').textContent=p.e>2+8+8?'この殻模型の収容範囲を超えています。電子数を18以下へ戻そう。':Math.abs(charge)>3?'大きな電荷を持つ模式イオンです。電子を陽子数へ近づけると中性になります。':stableText(p.p,p.n)+'。励起した電子が低い段階へ戻ると光子を放出します。';$('mission').textContent=mission||'元素ミッションで、指定された元素・同位体・イオンを作ろう。';drawGraph()}
-function drawGraph(){g.clearRect(0,0,900,330);g.fillStyle='#09131f';g.fillRect(0,0,900,330);const ys=[260,185,105];for(let i=0;i<3;i++){g.strokeStyle='#4b6985';g.lineWidth=2;g.beginPath();g.moveTo(60,ys[i]);g.lineTo(420,ys[i]);g.stroke();g.fillStyle='#9fcdf5';g.fillText(`殻 ${i+1}`,65,ys[i]-8)}for(const e of elect){const x=100+(elect.indexOf(e)%12)*25,y=ys[e.shell-1];g.fillStyle=e.exc?'#ffd45f':'#7ed9ff';g.beginPath();g.arc(x,y,5,0,Math.PI*2);g.fill()}g.fillStyle='#fff';g.fillText('最近の発光スペクトル',520,28);for(const [i,L] of lines.slice(-32).entries()){const x=520+(L.wl-350)/350*330,col=L.wl>560?'#ff8a72':L.wl>430?'#6bbcff':'#ad7cff';g.strokeStyle=col;g.globalAlpha=.3+.7*(i/32);g.beginPath();g.moveTo(x,60);g.lineTo(x,280);g.stroke()}g.globalAlpha=1;g.fillStyle='#9fcdf5';g.fillText('短波長',510,305);g.fillText('長波長',810,305)}
-function bind(id,out,fmt=v=>v){$(id).oninput=e=>{$(out).textContent=fmt(+e.target.value);if(['protons','neutrons','electrons'].includes(id))rebuild();draw()};$(id).dispatchEvent(new Event('input'))}bind('protons','pOut',v=>v);bind('neutrons','nOut',v=>v);bind('electrons','eOut',v=>v);bind('energy','energyOut',v=>v+'相対');bind('field','fieldOut',v=>v+'%');$('playPause').onclick=()=>{running=!running;$('playPause').textContent=running?'⏸ 一時停止':'▶ 再生'};$('stepBtn').onclick=()=>{step(.2);draw()};$('speedSel').onchange=e=>speed=+e.target.value;$('exciteBtn').onclick=()=>{excite();draw()};$('ionizeBtn').onclick=()=>{ionize();draw()};$('missionBtn').onclick=()=>{const M=[[1,0,1,'水素1の中性原子'],[2,2,2,'ヘリウム4の中性原子'],[6,6,6,'炭素12の中性原子'],[8,8,10,'酸化物イオン O²⁻'],[11,12,10,'ナトリウムイオン Na⁺'],[17,18,18,'塩化物イオン Cl⁻'],[8,10,8,'酸素18の中性原子']][Math.floor(r48Rand()*7)];mission=`作ってみよう：${M[3]}`;['protons','neutrons','electrons'].forEach((id,i)=>{$(id).value=Math.max(0,M[i]+(r48Rand()<.5?1:-1));$(id).dispatchEvent(new Event('input'))});draw()};function loop(now){const dt=Math.min(.04,(now-last)/1000);last=now;if(running)step(dt*speed);draw();requestAnimationFrame(loop)}reset();requestAnimationFrame(loop);window.getSnapshot=()=>({陽子:$('pOut').textContent,中性子:$('nOut').textContent,電子:$('eOut').textContent,元素:$('elementM').textContent,同位体:$('isotopeM').textContent,電荷:$('chargeM').textContent,価電子:$('valenceM').textContent,入射:$('energyOut').textContent});
+function excite(manual=true){
+ const p=par(),cands=elect.filter(e=>e.shell<3&&!e.exc&&!e.pend);
+ if(!cands.length){if(manual)announce('いま励起できる電子がないよ。電子をふやすか、光るのを待とう','🤔','#8aa0b6');return 'none'}
+ const e=cands[Math.floor(r48Rand()*cands.length)],need=e.shell===1?55:28,pos=ePos(e);
+ if(p.en>=need){
+  const T=.45;
+  photons.push({x:-30,y:pos.y,vx:(pos.x+30)/T,vy:0,col:'#ffd45f',life:1,decay:1/T});
+  e.pend=1;
+  fxDelay(T,()=>{if(!elect.includes(e))return;e.pend=0;e.exc=1;e.shell=Math.min(3,e.shell+1);const q=ePos(e);fxRing(q.x,q.y,'#ffd45f',52);fxText(q.x-30,q.y-18,'吸収!','#ffd45f')});
+  announce('電子が光子をパクッと吸収! 1つ外側の殻へジャンプ','⚡','#ffd45f');
+  return 'jump'}
+ photons.push({x:-30,y:pos.y,vx:520,vy:0,col:'#8aa0b6',life:1});
+ if(manual)announce(`エネルギー${p.en}では足りず、光子は素通り。入射エネルギーを上げよう`,'💨','#8aa0b6');
+ return 'pass'}
+function ionize(){
+ const p=par();
+ if(p.e<=0){announce('外せる電子がもうないよ。電子スライダーでふやしてみよう','🤔','#8aa0b6');return false}
+ if(p.en<=65){announce(`電子を外すには入射エネルギーを66以上にしよう(いまは${p.en})`,'🔋','#ffbe79');return false}
+ $('electrons').value=p.e-1;$('electrons').dispatchEvent(new Event('input'));
+ announce(`電子が1個はじき飛ばされた! ${chargePhrase(par())}になった`,'💥','#ff8e8e');
+ return true}
+function step(dt){const p=par();t+=dt;
+ for(const [i,e] of elect.entries()){
+  e.angle+=dt*(1.9/e.shell)*(1+(i%3)*.08);e.phase+=dt*3;
+  if(e.exc&&r48Rand()<dt*.55){
+   const old=e.shell,pos=ePos(e);
+   e.shell=Math.max(shellFor(i),e.shell-1);e.exc=0;
+   const wl=old===3?620:old===2?470:390,col=wl>560?'#ff8a72':wl>430?'#6bbcff':'#ad7cff';
+   lines.push({t,wl});
+   const dx=pos.x-CX,dy=pos.y-CY,L=Math.hypot(dx,dy)||1;
+   photons.push({x:pos.x,y:pos.y,vx:dx/L*240,vy:dy/L*240,col,life:1});
+   fxRing(pos.x,pos.y,col,56);
+   announce(`電子が殻${old}から殻${e.shell}へストン! ${colName(wl)}光が飛び出した`,'✨',col)}}
+ if(r48Rand()<dt*.22*p.en/100)excite(false);
+ if(lines.length>120)lines.shift()}
+function animate(dt){
+ for(const e of elect){if(typeof e.s!=='number')e.s=e.shell;e.s+=(e.shell-e.s)*Math.min(1,dt*5);if(Math.abs(e.shell-e.s)<.01)e.s=e.shell}
+ for(const q of photons){q.x+=q.vx*dt;q.y+=q.vy*dt;q.life-=dt*(q.decay||.35)}
+ photons=photons.filter(q=>q.life>0&&q.x>-40&&q.x<940&&q.y>-30&&q.y<620);
+ for(const f of effects){f.age+=dt;if(f.kind==='delay'&&!f.done&&f.age>=f.life){f.done=1;f.fn()}}
+ effects=effects.filter(f=>f.age<f.life)}
+function draw(){const p=par();c.clearRect(0,0,900,590);c.fillStyle='#07111d';c.fillRect(0,0,900,590);
+ const cx=CX,cy=CY,wt=performance.now()/1000*8;
+ for(let s=1;s<=3;s++){c.strokeStyle='#2f5878';c.lineWidth=2;c.setLineDash([7,8]);c.beginPath();c.ellipse(cx,cy,80*s,62*s,0,0,Math.PI*2);c.stroke()}
+ c.setLineDash([]);
+ c.fillStyle='#6f8db0';c.font='11px system-ui';
+ for(let s=1;s<=3;s++)c.fillText('殻'+s,cx-11,cy-62*s-7);
+ const jitter=(Math.abs(p.n-p.p)*.8+1);
+ for(let i=0;i<p.p+p.n;i++){const a=i*2.4+t*.15,r=8+Math.sqrt(i)*7;c.fillStyle=i<p.p?'#ef6d75':'#77a9d8';c.beginPath();c.arc(cx+Math.cos(a)*r+(r48Noise(i,Math.floor(t*20))-.5)*jitter,cy+Math.sin(a)*r+(r48Noise(i+97,Math.floor(t*20))-.5)*jitter,9,0,Math.PI*2);c.fill()}
+ for(const e of elect){const q=ePos(e);
+  if(e.exc){c.fillStyle='rgba(255,212,95,.22)';c.beginPath();c.arc(q.x,q.y,16,0,Math.PI*2);c.fill()}
+  c.fillStyle=e.exc?'#ffd45f':'#7ed9ff';c.beginPath();c.arc(q.x,q.y,7,0,Math.PI*2);c.fill();
+  c.strokeStyle=e.exc?'#ffe9a8':'#bdefff';c.lineWidth=1;c.beginPath();c.arc(q.x,q.y,12+3*Math.sin(e.phase),0,Math.PI*2);c.stroke()}
+ for(const q of photons){const L=Math.hypot(q.vx,q.vy)||1,ux=q.vx/L,uy=q.vy/L,px=-uy,py=ux;
+  c.globalAlpha=Math.max(.05,Math.min(1,q.life*2.2));c.strokeStyle=q.col;c.lineWidth=4;c.beginPath();
+  for(let k=0;k<26;k++){const w=Math.sin(k*.8+wt+q.x*.02)*5,x=q.x-ux*k*5+px*w,y=q.y-uy*k*5+py*w;if(k)c.lineTo(x,y);else c.moveTo(x,y)}
+  c.stroke();c.globalAlpha=1}
+ for(const f of effects){const k=Math.min(1,f.age/f.life);
+  if(f.kind==='ring'){c.globalAlpha=1-k;c.strokeStyle=f.col;c.lineWidth=3;c.beginPath();c.arc(f.x,f.y,10+(f.r1-10)*k,0,Math.PI*2);c.stroke();c.globalAlpha=1}
+  else if(f.kind==='fly'){const ez=1-Math.pow(1-k,3),x=f.x+(f.tx-f.x)*ez,y=f.y+(f.ty-f.y)*ez;c.globalAlpha=1-k*.55;c.fillStyle=f.col;c.beginPath();c.arc(x,y,f.size,0,Math.PI*2);c.fill();c.globalAlpha=1}
+  else if(f.kind==='text'){c.globalAlpha=1-k;c.fillStyle=f.col;c.font='bold 22px system-ui';c.fillText(f.txt,f.x,f.y-34*k);c.globalAlpha=1}}
+ const charge=p.p-p.e,val=p.e<=2?p.e:Math.min(8,(p.e-2)%8||8);
+ const pillTxt=charge===0?'電荷 0 中性':`電荷 ${charge>0?'+':''}${charge} イオン`;
+ c.font='bold 15px system-ui';
+ const tw=c.measureText(pillTxt).width,bw=tw+26,bx=880-bw,by=18;
+ c.beginPath();if(c.roundRect)c.roundRect(bx,by,bw,32,16);else c.rect(bx,by,bw,32);
+ c.fillStyle=charge>0?'#4a1a22':charge<0?'#13304a':'#152436';c.fill();
+ c.strokeStyle=charge>0?'#ff8e8e':charge<0?'#7ed9ff':'#3f5776';c.lineWidth=2;c.stroke();
+ c.fillStyle=charge>0?'#ffb3b3':charge<0?'#aee4ff':'#9fb4cc';c.fillText(pillTxt,bx+13,by+22);
+ c.fillStyle='#fff';c.font='bold 19px system-ui';c.fillText(`${names[p.p]||'未登録元素'} ${sym[p.p]||'?'}　陽子 ${p.p}・中性子 ${p.n}・電子 ${p.e}`,30,38);
+ c.fillStyle='#9fcdf5';c.font='13px system-ui';c.fillText('赤:陽子　うすい青:中性子　水色:電子　黄色:励起した電子　波線:光子',30,565);
+ $('elementM').textContent=names[p.p]||'Z='+p.p;
+ $('isotopeM').textContent=(names[p.p]||'Z'+p.p+'元素')+(p.p+p.n);
+ $('chargeM').textContent=charge===0?'中性':(charge>0?`+${charge}`:`${charge}`);
+ $('valenceM').textContent=val;
+ $('stateText').textContent=p.e>2+8+8?'この殻模型の収容範囲を超えています。電子数を18以下へ戻そう。':Math.abs(charge)>3?'大きな電荷を持つ模式イオンです。電子を陽子数へ近づけると中性になります。':stableText(p.p,p.n)+'。励起した電子が低い段階へ戻ると光子を放出します。';
+ $('mission').textContent=mission||'元素ミッションで、指定された元素・同位体・イオンを作ろう。';
+ updateBoard(p,charge);
+ drawGraph()}
+function drawGraph(){g.clearRect(0,0,900,330);g.fillStyle='#09131f';g.fillRect(0,0,900,330);
+ const ys=[260,185,105];
+ for(let i=0;i<3;i++){g.strokeStyle='#4b6985';g.lineWidth=2;g.beginPath();g.moveTo(60,ys[i]);g.lineTo(420,ys[i]);g.stroke();g.fillStyle='#9fcdf5';g.fillText(`殻 ${i+1}`,65,ys[i]-8)}
+ for(const [i,e] of elect.entries()){const s=Math.min(3,Math.max(1,typeof e.s==='number'?e.s:e.shell)),fl=Math.floor(s),y=fl>=3?ys[2]:ys[fl-1]+(ys[fl]-ys[fl-1])*(s-fl),x=100+(i%12)*25;g.fillStyle=e.exc?'#ffd45f':'#7ed9ff';g.beginPath();g.arc(x,y,5,0,Math.PI*2);g.fill()}
+ g.fillStyle='#fff';g.fillText('最近の発光スペクトル',520,28);
+ const refs=[[470,'#6bbcff','青 殻2→1'],[620,'#ff8a72','赤 殻3→2']];
+ for(const [wl,col,label] of refs){const x=520+(wl-350)/350*330;g.strokeStyle=col;g.globalAlpha=.3;g.setLineDash([3,6]);g.beginPath();g.moveTo(x,48);g.lineTo(x,285);g.stroke();g.setLineDash([]);g.globalAlpha=1;g.fillStyle=col;g.fillText(label,x-26,44)}
+ for(const [i,L] of lines.slice(-32).entries()){const x=520+(L.wl-350)/350*330,col=L.wl>560?'#ff8a72':L.wl>430?'#6bbcff':'#ad7cff';g.strokeStyle=col;g.globalAlpha=.3+.7*(i/32);g.beginPath();g.moveTo(x,60);g.lineTo(x,280);g.stroke()}
+ g.globalAlpha=1;g.fillStyle='#9fcdf5';g.fillText('短波長',510,305);g.fillText('長波長',810,305)}
+function bump(el){if(!el)return;el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump')}
+let boardReady=false;
+function updateBoard(p,charge){
+ const vals={cbP:p.p,cbP2:p.p,cbP3:p.p,cbN:p.n,cbE:p.e,cbElem:names[p.p]?`${names[p.p]} ${sym[p.p]}`:`Z=${p.p}`,cbMass:p.p+p.n,cbCharge:charge===0?'0 (中性)':`${charge>0?'+':''}${charge} (イオン)`};
+ const rows=new Set();
+ for(const id in vals){const node=$(id);if(!node)continue;const sv=String(vals[id]);if(node.textContent!==sv){node.textContent=sv;if(boardReady)rows.add(node.closest('.cbRow'))}}
+ boardReady=true;
+ rows.forEach(bump)}
+const prevVals={protons:8,neutrons:8,electrons:8,energy:45,field:0};
+function nucleonFx(kind,d){
+ const col=kind==='protons'?'#ef6d75':'#77a9d8',n=Math.min(Math.abs(d),3);
+ for(let i=0;i<n;i++){const ang=r48Rand()*6.28,sx=CX+Math.cos(ang)*440,sy=CY+Math.sin(ang)*310;
+  if(d>0)fxFly(sx,sy,CX+(r48Rand()-.5)*26,CY+(r48Rand()-.5)*22,col,9);
+  else fxFly(CX+(r48Rand()-.5)*26,CY+(r48Rand()-.5)*22,sx,sy,col,9)}
+ fxRing(CX,CY,col,64)}
+function announceCount(id,d){
+ const p=par(),n1=Math.abs(d)===1?'1つ':Math.abs(d)+'つ',dir=d>0?'とびこんだ':'とび出した';
+ if(id==='protons')announce(`陽子が${n1}${dir}! 元素が ${names[p.p]||'名前のない元素'} に変わった`,d>0?'➕':'➖','#ef6d75');
+ else if(id==='neutrons')announce(`中性子が${n1}${dir}。質量数${p.p+p.n}の同位体になった(元素はそのまま)`,d>0?'➕':'➖','#77a9d8');
+ else{const ch=p.p-p.e;fxText(CX+110,CY-140,ch===0?'0':(ch>0?`+${ch}`:`${ch}`),ch>0?'#ff8e8e':ch<0?'#7ed9ff':'#9fb4cc');announce(`電子が${n1}${dir}! ${chargePhrase(p)}`,d>0?'➕':'➖','#7ed9ff')}}
+function bind(id,out,fmt=v=>v){$(id).oninput=e=>{
+ const v=+e.target.value,old=prevVals[id];prevVals[id]=v;$(out).textContent=fmt(v);
+ if(id==='protons'||id==='neutrons'||id==='electrons'){
+  if(v!==old){if(id!=='electrons')nucleonFx(id,v-old);announceCount(id,v-old)}
+  rebuild()}
+ else if(id==='energy'&&v!==old){const m=v>65?'電子をはじき出せる強さ!':v>=55?'内側の殻の電子も励起できる強さ':v>=28?'外側の殻の電子を励起できる強さ':'弱めなので光子は素通りしやすい';announce(`入射エネルギー ${v}。${m}`,'🔆','#ffd45f')}
+ else if(id==='field'&&v!==old)announce(v?`電場 ${v}%。マイナスの電子が引っぱられて軌道が横へずれる`:'電場をオフにした','🧲','#9fcdf5');
+ draw()};$(id).dispatchEvent(new Event('input'))}
+bind('protons','pOut',v=>v);bind('neutrons','nOut',v=>v);bind('electrons','eOut',v=>v);bind('energy','energyOut',v=>v+'相対');bind('field','fieldOut',v=>v+'%');
+$('playPause').onclick=()=>{running=!running;$('playPause').textContent=running?'⏸ 一時停止':'▶ 再生';announce(running?'再生スタート! 黄色の励起電子は、少したつと内側へ落ちて光を出すよ':'一時停止。ボタンやスライダーはこのまま使えるよ',running?'▶':'⏸','#ffd85a')};
+$('stepBtn').onclick=()=>{step(.2);draw()};
+$('speedSel').onchange=e=>speed=+e.target.value;
+$('exciteBtn').onclick=()=>{excite();draw()};
+$('ionizeBtn').onclick=()=>{ionize();draw()};
+$('missionBtn').onclick=()=>{const M=[[1,0,1,'水素1の中性原子'],[2,2,2,'ヘリウム4の中性原子'],[6,6,6,'炭素12の中性原子'],[8,8,10,'酸化物イオン O²⁻'],[11,12,10,'ナトリウムイオン Na⁺'],[17,18,18,'塩化物イオン Cl⁻'],[8,10,8,'酸素18の中性原子']][Math.floor(r48Rand()*7)];mission=`作ってみよう：${M[3]}`;['protons','neutrons','electrons'].forEach((id,i)=>{$(id).value=Math.max(0,M[i]+(r48Rand()<.5?1:-1));$(id).dispatchEvent(new Event('input'))});draw()};
+$('missionBtn').addEventListener('click',()=>announce('ミッション! スライダーを動かして、めあての原子を作ってみよう','🎯','#ffd85a'));
+$('resetTop').addEventListener('click',()=>announce('はじめの状態にもどしたよ','↺','#9fcdf5'));
+function loop(now){const dt=Math.min(.04,(now-last)/1000);last=now;animate(dt*(running?speed:1));if(running)step(dt*speed);draw();requestAnimationFrame(loop)}
+reset();requestAnimationFrame(loop);
+window.getSnapshot=()=>({陽子:$('pOut').textContent,中性子:$('nOut').textContent,電子:$('eOut').textContent,元素:$('elementM').textContent,同位体:$('isotopeM').textContent,電荷:$('chargeM').textContent,価電子:$('valenceM').textContent,入射:$('energyOut').textContent});
+window.getFxState=()=>({effects:effects.length,photons:photons.length,electrons:elect.length,excited:elect.filter(e=>e.exc).length,pending:elect.filter(e=>e.pend).length,lines:lines.length});
 </script><script id="direct-atom-play">
 (()=>{
 let directResult='主図をタップ：原子核で中性子を追加／電子殻で光子を吸収';
@@ -68,12 +225,12 @@ cv.addEventListener('pointerdown',event=>{
     directResult=`結果：中性子を追加 → 同位体 ${$('isotopeM').textContent}`;
     tapMarks.at(-1).color='#77d8ff';
   }else if(distance<270){
-    const before=elect.filter(e=>e.exc).length;excite();const after=elect.filter(e=>e.exc).length;
-    directResult=after>before?'成功：光子を吸収し、電子が黄色い高い殻へ励起':'結果：エネルギー不足。入射エネルギーを上げよう';
-    tapMarks.at(-1).color=after>before?'#ffd45f':'#8aa0b6';
+    const res=excite();
+    directResult=res==='jump'?'成功：光子を吸収し、電子が黄色い高い殻へ励起':res==='none'?'結果：いま励起できる電子がないよ':'結果：エネルギー不足。入射エネルギーを上げよう';
+    tapMarks.at(-1).color=res==='jump'?'#ffd45f':'#8aa0b6';
   }else{
     const before=+$('electrons').value;ionize();
-    directResult=+$('electrons').value<before?'成功：電子が外れ、正のイオンになった':'結果：電子を外すには入射エネルギー65以上が必要';
+    directResult=+$('electrons').value<before?'成功：電子が外れ、正のイオンになった':'結果：電子を外すには入射エネルギーを66以上にしよう';
     tapMarks.at(-1).color=+$('electrons').value<before?'#ff8e8e':'#8aa0b6';
   }
   draw();

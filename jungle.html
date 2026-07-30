@@ -73,8 +73,9 @@ function controlText(){return Object.entries(controlValues()).map(([k,v])=>k+'='
 const C={rain:$('rain'),cut:$('cut'),nutrient:$('nutrient'),decomp:$('decomp'),diversity:$('diversity'),disturb:$('disturb')};let s={},scenarioApplied=-1;
 /* Height band of each 図鑑 の森林階層 on the main scene. A card can only be shown by
    an individual standing in its own layer, so the whole catalogue is reachable by
-   looking through every layer. Layers are matched by keyword to keep labels free. */
-const LAYER_BAND=[['超高木層',60,104],['林冠',114,168],['樹冠下',182,258],['林床',306,340],['水辺',348,378],['土壌',386,416]];
+   looking through every layer. Layers are matched by keyword to keep labels free,
+   and the fourth entry is the name the scene shows children. */
+const LAYER_BAND=[['超高木層',60,104,'森の上'],['林冠',114,168,'林冠'],['樹冠下',182,258,'樹冠下'],['林床',306,340,'林床'],['水辺',348,378,'水辺'],['土壌',386,416,'土の中']];
 /* These do not walk away: plants, fungi, microbes and whole cycle cards stay put. */
 const ROOTED_GROUPS=new Set(['植物','菌類','微生物','共生','生態系','線形動物']);
 const PER_LAYER=3,ROTATE_EVERY=1.6;
@@ -88,7 +89,9 @@ function layerBand(zone){const text=String(zone||'');for(const b of LAYER_BAND)i
 function jungleReady(){if(jungleCards)return true;const pool=window.lwAtlasCardPool?.();if(!pool)return false;const list=pool.cards.filter(card=>layerBand(card.zone));if(!list.length)return false;junglePool=pool;jungleCards=list;return true}
 function layerCards(band){return jungleCards.filter(card=>layerBand(card.zone)===band)}
 function jungleTaken(){const taken=new Map();for(const a of s.animals||[])if(a.card)taken.set(a.card,(taken.get(a.card)||0)+1);return taken}
-function rollJungleCard(a,taken){if(!jungleReady())return false;const list=layerCards(a.band);if(!list.length)return false;const card=junglePool.pick(list,taken||jungleTaken(),cardRand);if(!card)return false;a.card=card.name;a.icon=card.icon||'？';a.group=card.group||'';a.zone=card.zone||'';a.rooted=ROOTED_GROUPS.has(a.group);a.y=a.band[1]+a.slot*(a.band[2]-a.band[1]);a.age=-.2;a.leaving=0;return true}
+/* The tally is kept up to date while a whole hand is dealt, otherwise two
+   individuals in one pass can be given the same card. */
+function rollJungleCard(a,taken){if(!jungleReady())return false;const list=layerCards(a.band);if(!list.length)return false;const seen=taken||jungleTaken();const card=junglePool.pick(list,seen,cardRand);if(!card)return false;if(a.card)seen.set(a.card,Math.max(0,(seen.get(a.card)||0)-1));seen.set(card.name,(seen.get(card.name)||0)+1);a.card=card.name;a.icon=card.icon||'？';a.group=card.group||'';a.zone=card.zone||'';a.rooted=ROOTED_GROUPS.has(a.group);a.y=a.band[1]+a.slot*(a.band[2]-a.band[1]);a.age=-.2;a.leaving=0;return true}
 /* Give a card to individuals that do not have one yet. Runs every frame because the
    catalogue and the shared behaviour script both load after this script. */
 function fillJungleCards(){if(!jungleReady()||!s.animals)return;let taken=null;for(const a of s.animals){if(a.card)continue;if(!taken)taken=jungleTaken();rollJungleCard(a,taken)}}
@@ -128,7 +131,7 @@ function fadeAnimalFlash(dt){if(!s.animals)return;for(const a of s.animals)a.fla
 // Leaves only: a very small crown offset. The trunk never moves.
 function crownSway(tr){return Math.sin(windPhase*.9+tr.phase)*1.1}
 /* The six layers of the atlas are marked on the scene itself: a wet band for the
-   waterside and a darker band for the soil, with a small name on the left edge. */
+   waterside and a darker band for the soil. */
 function drawLayerBands(){
   ctx.fillStyle='#2c2015';
   ctx.fillRect(0,382,800,48);
@@ -139,9 +142,18 @@ function drawLayerBands(){
   ctx.lineTo(800,382);
   ctx.closePath();
   ctx.fill();
+}
+/* Each layer is named on the left edge, drawn after the trees so a crown never
+   hides which layer the visitor is looking at. */
+function drawLayerNames(){
   ctx.font='10px sans-serif';
-  ctx.fillStyle='rgba(228,247,224,.55)';
-  [['森の上',72],['林冠',126],['樹冠下',196],['林床',316],['水辺',368],['土の中',404]].forEach(([label,y])=>ctx.fillText(label,5,y));
+  LAYER_BAND.forEach(band=>{
+    const y=band[1]+12,width=ctx.measureText(band[3]).width+8;
+    ctx.fillStyle='rgba(8,20,12,.6)';
+    ctx.fillRect(2,y-10,width,13);
+    ctx.fillStyle='rgba(228,247,224,.8)';
+    ctx.fillText(band[3],5,y);
+  });
 }
 /* A ✓ shows the card is already in the 図鑑, a ? shows it is still new. */
 function drawAnimalMark(a,x,y){
@@ -181,7 +193,7 @@ function drawRainAnimal(a){
   ctx.globalAlpha=1;
 }
 function drawTree(x,base,h,crown,alpha=1,sway=0){ctx.globalAlpha=alpha;ctx.fillStyle='#6c432b';ctx.fillRect(x-3,base-h,6,h);ctx.fillStyle=crown;ctx.beginPath();ctx.arc(x+sway,base-h,12+h*.08,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1}
-function drawMain(){clearCanvas(ctx,800,430,'#0b271d');const sky=ctx.createLinearGradient(0,0,0,250);sky.addColorStop(0,'#79b8d4');sky.addColorStop(1,'#173a2d');ctx.fillStyle=sky;ctx.fillRect(0,0,800,300);ctx.fillStyle='#3d2e21';ctx.fillRect(0,300,800,130);drawLayerBands();const forest=s.forest||{canopy:[],under:[]};const n=clamp(Math.floor(s.canopy/6),3,CANOPY_SLOTS);for(const tr of forest.canopy){if(tr.rank>=n)continue;drawTree(tr.x,310,90+s.canopy*.8+tr.bump*12,'#2f8a4b',1,crownSway(tr))}const m=clamp(Math.round(s.under/100*UNDER_SLOTS),2,UNDER_SLOTS);for(const tr of forest.under){if(tr.rank>=m)continue;drawTree(tr.x,340,35+s.under*.25,'#65ad55',.9,crownSway(tr))}for(const a of s.animals)drawRainAnimal(a);ctx.fillStyle=`rgba(79,157,224,${Number(C.rain.value)/180})`;for(let i=0;i<35;i++){const x=(i*67+s.t*13)%800,y=(i*31+s.t*18)%290;ctx.fillRect(x,y,2,10)}ctx.fillStyle='#d9b95f';for(let i=0;i<Math.floor(s.litter/7);i++){ctx.fillRect(30+i*45,365+(i%3)*7,22,4)}ctx.fillStyle='#fff';ctx.font='bold 14px sans-serif';ctx.fillText(`図鑑 ${atlasCount()}　多様性 ${fmt(s.div,0)}`,550,26)}
+function drawMain(){clearCanvas(ctx,800,430,'#0b271d');const sky=ctx.createLinearGradient(0,0,0,250);sky.addColorStop(0,'#79b8d4');sky.addColorStop(1,'#173a2d');ctx.fillStyle=sky;ctx.fillRect(0,0,800,300);ctx.fillStyle='#3d2e21';ctx.fillRect(0,300,800,130);drawLayerBands();const forest=s.forest||{canopy:[],under:[]};const n=clamp(Math.floor(s.canopy/6),3,CANOPY_SLOTS);for(const tr of forest.canopy){if(tr.rank>=n)continue;drawTree(tr.x,310,90+s.canopy*.8+tr.bump*12,'#2f8a4b',1,crownSway(tr))}const m=clamp(Math.round(s.under/100*UNDER_SLOTS),2,UNDER_SLOTS);for(const tr of forest.under){if(tr.rank>=m)continue;drawTree(tr.x,340,35+s.under*.25,'#65ad55',.9,crownSway(tr))}for(const a of s.animals)drawRainAnimal(a);drawLayerNames();ctx.fillStyle=`rgba(79,157,224,${Number(C.rain.value)/180})`;for(let i=0;i<35;i++){const x=(i*67+s.t*13)%800,y=(i*31+s.t*18)%290;ctx.fillRect(x,y,2,10)}ctx.fillStyle='#d9b95f';for(let i=0;i<Math.floor(s.litter/7);i++){ctx.fillRect(30+i*45,365+(i%3)*7,22,4)}ctx.fillStyle='#fff';ctx.font='bold 14px sans-serif';ctx.fillText(`図鑑 ${atlasCount()}　多様性 ${fmt(s.div,0)}`,550,26)}
 function atlasCount(){const p=junglePool?junglePool.progress():null;return p?`${p.found}/${p.total}`:`${s.found.size}/72`}
 function drawChart(){clearCanvas(cctx,800,240,'#0b1c18');const H=s.hist;if(!H.length)return;const x=i=>35+i/Math.max(1,H.length-1)*740,y=v=>205-clamp(v/100,0,1)*165;line(cctx,H.map((d,i)=>[x(i),y(d.c)]),'#5fd17a',2);line(cctx,H.map((d,i)=>[x(i),y(d.w)]),'#6eb7f1',2);line(cctx,H.map((d,i)=>[x(i),y(d.n)]),'#ffd85a',2);line(cctx,H.map((d,i)=>[x(i),y(d.d)]),'#d889ed',2);cctx.fillStyle='#fff';cctx.font='12px sans-serif';cctx.fillText('林冠',38,20);cctx.fillText('水',82,20);cctx.fillText('養分',115,20);cctx.fillText('多様性',165,20)}
 function drawAll(){drawMain();drawChart();const light=100-s.canopy*.75,runoff=clamp(Number(C.rain.value)-s.water*.5,0,100);[fmt(s.canopy,0),fmt(light,0)+'%',fmt(s.water,0),fmt(s.nutr,0),fmt(s.div,0),fmt(s.carbon,0)].forEach((v,i)=>$('m'+i).textContent=v);let msg='雨、水、養分、分解、光、競争がつながり、林冠と林床は異なる時間尺度で変化する。',cls='callout ok';if(s.water<15||s.nutr<12){msg='資源不足で成長が止まりやすい。降雨・養分・分解を一つずつ変えて原因を分ける。';cls='callout warn'}else if(s.div<20){msg='多様性が低下。攪乱と伐採を下げ、種供給と分解循環を上げて比較する。';cls='callout warn'}$('explain').className=cls;$('explain').textContent=msg;$('chartNote').textContent='主図は林冠、林床、雨、落葉を示す。第二ビューは林冠、水、養分、多様性の時間履歴。'}

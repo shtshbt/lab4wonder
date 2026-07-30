@@ -47,7 +47,7 @@ const C={ballast:$('ballast'),thrust:$('thrust'),lights:$('lights'),sonar:$('son
 const ZONE_DEPTH=[['薄明帯',200,1000],['漸深海帯',1000,4000],['深海平原',4000,5500],['超深海帯',5500,6000],['熱水噴出孔',2200,3200],['冷湧水',900,2100]];
 /* Fish that fish with their own light get the lure body plan. */
 const LURE_FISH=new Set(['チョウチンアンコウ','ホウライエソ','ホテイエソ','ワニトカゲギス','ヒカリキンメダイ','ヨコエソ','ムネエソ','ボウエンギョ']);
-const DEEP_PER_ZONE=4,ROTATE_EVERY=1.1,TAP_LIT=.3,DIM_LIT=.05;
+const DEEP_PER_ZONE=4,ROTATE_EVERY=1.1,TAP_LIT=.3;
 const INTRO_TEXT='▶ 再生を押すと、生き物がゆっくり動き出します。画面をなぞって探査灯を向け、明かりに浮かんだ生き物をタップして図鑑に記録しよう。深く潜ると出会う生き物が変わります。';
 let cardRng=mulberry32(390101),deepPool=null,deepCards=null;
 /* Card draws run on their own generator so saved progress never shifts the model. */
@@ -61,7 +61,9 @@ function deepReady(){if(deepCards)return true;const pool=window.lwAtlasCardPool?
 function deepCandidates(depth){let best=Infinity,out=[];for(const card of deepCards){const w=zoneWindow(card.zone),gap=depth<w[1]?w[1]-depth:depth>w[2]?depth-w[2]:0;if(gap<best-1){best=gap;out=[card]}else if(gap<best+1)out.push(card)}return out}
 function deepForm(card){if(card.name==='ダイオウイカ')return'giant';if(LURE_FISH.has(card.name))return'angler';if(card.group==='頭足類')return'soft';if(card.group==='刺胞動物'||card.group==='有櫛動物')return'glow';return'plain'}
 function deepTaken(){const taken=new Map();for(const a of s.creatures||[])if(a.card)taken.set(a.card,(taken.get(a.card)||0)+1);return taken}
-function rollDeepCard(a,taken){if(!deepReady())return false;const list=deepCandidates(a.depth);if(!list.length)return false;const card=deepPool.pick(list,taken||deepTaken(),cardRand);if(!card)return false;a.card=card.name;a.icon=card.icon||'？';a.group=card.group||'';a.zone=card.zone||'';a.form=deepForm(card);a.hitRadius=a.form==='giant'?64:a.form==='glow'||a.form==='angler'?42:34;a.age=-.15;a.leaving=0;return true}
+/* The tally is kept up to date while a whole hand is dealt, otherwise two
+   individuals in one pass can be given the same card. */
+function rollDeepCard(a,taken){if(!deepReady())return false;const list=deepCandidates(a.depth);if(!list.length)return false;const seen=taken||deepTaken();const card=deepPool.pick(list,seen,cardRand);if(!card)return false;if(a.card)seen.set(a.card,Math.max(0,(seen.get(a.card)||0)-1));seen.set(card.name,(seen.get(card.name)||0)+1);a.card=card.name;a.icon=card.icon||'？';a.group=card.group||'';a.zone=card.zone||'';a.form=deepForm(card);a.hitRadius=a.form==='giant'?64:a.form==='glow'||a.form==='angler'?42:34;a.age=-.15;a.leaving=0;return true}
 /* Give a card to individuals that do not have one yet. Runs every frame because the
    catalogue and the shared behaviour script both load after this script. */
 function fillDeepCards(){if(!deepReady()||!s.creatures)return;let taken=null;for(const a of s.creatures){if(a.card)continue;if(!taken)taken=deepTaken();rollDeepCard(a,taken)}}
@@ -70,7 +72,7 @@ function fillDeepCards(){if(!deepReady()||!s.creatures)return;let taken=null;for
    so the ✓ marks and the weighting match what the visitor already has. */
 function claimDeepCards(){if(!deepReady()||!s.creatures)return;const taken=deepTaken();for(const a of s.creatures){if(a.leaving>0)continue;const age=a.age;if(rollDeepCard(a,taken))a.age=age}}
 function makeDeepCreatures(){const out=[];for(const z of ZONE_DEPTH)for(let i=0;i<DEEP_PER_ZONE;i++){const t=(i+.2+rng()*.6)/DEEP_PER_ZONE;out.push({depth:z[1]+t*(z[2]-z[1]),x:20+rng()*760,vx:(rng()<.5?-1:1)*(7+rng()*11),bob:rng()*6.28,age:-(rng()*1.4),flash:0,card:'',icon:'？',group:'',zone:'',form:'plain',renderX:0,renderY:0,hitRadius:34,leaving:0,lit:0})}return out}
-function resetSim(seed){rng=mulberry32(seed);const q=$('scenarioSel').selectedIndex;if(q!==scenarioApplied){const a=[[55,45,35,30,20,80],[75,55,70,65,45,75],[35,65,20,15,10,95],[80,35,60,80,70,65]][q];[C.ballast.value,C.thrust.value,C.lights.value,C.sonar.value,C.sampling.value,C.hull.value]=a.map(String);scenarioApplied=q}cardRng=mulberry32((seed^0x5f3a)>>>0);s={t:0,depth:120,v:0,battery:100,oxygen:100,temp:13,samples:0,stress:0,hist:[],path:[],creatures:makeDeepCreatures(),found:new Set(),beamAngle:0,rotate:0,rotateAt:0};claimDeepCards();$('creatureStatus').textContent=INTRO_TEXT;drawAll()}
+function resetSim(seed){rng=mulberry32(seed);const q=$('scenarioSel').selectedIndex;if(q!==scenarioApplied){const a=[[55,45,35,30,20,80],[75,55,70,65,45,75],[35,65,20,15,10,95],[80,35,60,80,70,65]][q];[C.ballast.value,C.thrust.value,C.lights.value,C.sonar.value,C.sampling.value,C.hull.value]=a.map(String);scenarioApplied=q}cardRng=mulberry32((seed^0x5f3a)>>>0);s={t:0,depth:120,v:0,battery:100,oxygen:100,temp:13,samples:0,stress:0,hist:[],path:[],creatures:makeDeepCreatures(),found:new Set(),beamAngle:0,rotate:0};claimDeepCards();$('creatureStatus').textContent=INTRO_TEXT;drawAll()}
 function calc(){const depth=s.depth,pressure=1+depth/10,ball=(Number(C.ballast.value)-50)/50,thrust=(Number(C.thrust.value)-50)/50,power=1.3+Number(C.lights.value)*.035+Number(C.sonar.value)*.028+Number(C.sampling.value)*.02+Math.abs(thrust)*2.1,stress=pressure/(60+Number(C.hull.value)*5.4),comm=depth/750+.25;return{pressure,ball,thrust,power,stress,comm}}
 /* A step moves the boat far enough that one dive can visit every depth layer, and
    hull margin now runs out near the depth its rating allows instead of at 160 m. */
@@ -92,14 +94,18 @@ function advanceCreatures(dt,active){
   s.rotate+=dt;
   if(s.rotate>=ROTATE_EVERY){s.rotate=0;rotateDarkCreature();syncDeepCreatures()}
 }
-/* Only creatures outside the lamp are swapped for another card: what the beam
-   already shows stays where it is, and the dark keeps offering something new. */
-function rotateDarkCreature(){const list=s.creatures;if(!list||!list.length)return;const taken=deepTaken();for(let i=0;i<list.length;i++){const a=list[(s.rotateAt+i)%list.length];if(a.leaving>0||a.lit>DIM_LIT)continue;s.rotateAt=(s.rotateAt+i+1)%list.length;rollDeepCard(a,taken);return}s.rotateAt=(s.rotateAt+1)%list.length}
+/* Only creatures outside the lamp are swapped for another card, and every one of
+   them is, because nothing outside the light is drawn. What the beam already shows
+   stays exactly where it is, so the dark water keeps offering something new to
+   whoever moves the light, and every card of every layer comes round quickly. */
+function rotateDarkCreature(){const list=s.creatures;if(!list||!list.length)return;const taken=deepTaken();for(const a of list){if(a.leaving>0||a.lit>0)continue;rollDeepCard(a,taken)}}
 function creatureY(depth){return 45+clamp(depth/6000,0,1)*330}
 function subY(){return creatureY(s.depth)}
 /* The lamp reaches further and spreads wider as 照明出力 rises, and it is aimed by
-   dragging across the main scene. */
-function beamState(){const power=Number(C.lights.value)/100;return{x:414,y:subY(),angle:s.beamAngle||0,half:.18+.2*power,len:70+150*power,power}}
+   dragging across the main scene. At full output it carries most of the way across
+   the scene, so turning the lamp up is worth doing, while the direction it points
+   still decides what can be seen. */
+function beamState(){const power=Number(C.lights.value)/100;return{x:414,y:subY(),angle:s.beamAngle||0,half:.18+.2*power,len:90+330*power,power}}
 /* Light is the only way to see anything down here. Brightness falls off along the
    beam and towards its edge, and outside the cone nothing shows at all. */
 function litLevel(a){const b=beamState(),dx=a.renderX-b.x,dy=a.renderY-b.y,d=Math.hypot(dx,dy);if(d>b.len)return 0;let da=Math.abs(Math.atan2(dy,dx)-b.angle);if(da>Math.PI)da=Math.PI*2-da;const half=d<26?Math.PI:b.half;if(da>half)return 0;const edge=1-clamp(da/half,0,1),reach=1-clamp(d/b.len,0,1);return clamp((.25+.75*edge)*reach*(.5+.5*b.power),0,1)}

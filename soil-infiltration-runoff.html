@@ -12,11 +12,18 @@ input[type="range"]{min-height:32px;margin:2px 0;cursor:pointer}
 input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
-</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
+</style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><style id="soil-tapbar-style">
+.tapbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:10px 0;padding:9px;border:1px solid var(--line);border-radius:13px;background:#101b2a}
+.tapbar .lbl{font-size:12px;font-weight:800;color:#9fcdf5}
+.tapbar button{min-height:46px;font-size:14px}
+.tapbar button.on{background:var(--accent);color:#241c00;border-color:#d4b53b}
+.stage canvas{touch-action:none;cursor:pointer}
+</style><link rel="stylesheet" href="lab4wonder_v1_1.css">
 </head><body data-first="降雨強度だけを透水能力より高くし、表面貯留から流出へ移る時点を探そう。">
 <header class="hdr"><div><span class="badge">r58・地学・水循環</span><h1 id="title"><ruby>土壌浸透<rt>どじょうしんとう</rt></ruby>・<ruby>表面流出<rt>ひょうめんりゅうしゅつ</rt></ruby>ラボ</h1><div class="sub">降雨強度、透水係数、初期含水率、斜面、植生から、浸透・貯留・流出の水収支を見る。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>浸透能力</b><p>乾いた土ほど初期吸引が強いが、湿るにつれて飽和透水係数へ近づく。</p></div><div><b>表面流出</b><p>降雨が浸透能力と表面貯留を超えると斜面を流れる。</p></div><div><b>植生</b><p>植生は粗度・空隙・根系を通じて流出を遅らせ浸透を助ける。</p></div><div><b>水収支</b><p>降雨量は浸透、表面貯留、流出の合計として追跡する。</p></div></section><div class="steps"><span class="step"><strong>1 予想</strong> 変える量と結果を予想</span><span class="step"><strong>2 操作</strong> 一つだけ変える</span><span class="step"><strong>3 比較</strong> 条件A/Bを記録</span></div>
 <section class="toolbar"><button id="playPause" class="primary">▶ 再生</button><button id="stepBtn">一段進める</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="scenarioBtn">課題 S1</button></section>
+<section class="tapbar" id="tapTools" role="group" aria-label="タップ操作の道具えらび"><span class="lbl">えらんでタップ：</span><button id="toolRain" class="on" aria-label="🌧️ 雨をふらす">🌧️ 雨をふらす</button><button id="toolPack" aria-label="🧱 じめんをかためる">🧱 かためる</button><button id="toolDig" aria-label="🕳️ 土をほぐす">🕳️ ほぐす</button></section>
 <section class="stage"><canvas id="mainCv" width="900" height="520" aria-label="土壌浸透・表面流出ラボの中心模型"></canvas></section><div class="panel"><section class="card"><h2>操作条件</h2><label class="control">降雨強度<output id="c1Out"></output><input data-control id="c1" type="range" min="0" max="120" step="5" value="55" data-unit="mm/h"></label><label class="control">飽和透水係数<output id="c2Out"></output><input data-control id="c2" type="range" min="3" max="80" step="1" value="25" data-unit="mm/h"></label><label class="control">初期含水率<output id="c3Out"></output><input data-control id="c3" type="range" min="0.08" max="0.45" step="0.01" value="0.22" data-unit=""></label><label class="control">斜面角<output id="c4Out"></output><input data-control id="c4" type="range" min="0" max="35" step="1" value="8" data-unit="°"></label><label class="control">植生被覆<output id="c5Out"></output><input data-control id="c5" type="range" min="0" max="1" step="0.05" value="0.4" data-unit=""></label></section><section class="card"><h2>計器</h2><div class="metrics"><div class="metric"><b>現在浸透能</b><strong id="m1">—</strong></div><div class="metric"><b>累積降雨</b><strong id="m2">—</strong></div><div class="metric"><b>累積浸透</b><strong id="m3">—</strong></div><div class="metric"><b>累積流出</b><strong id="m4">—</strong></div><div class="metric"><b>表面貯留</b><strong id="m5">—</strong></div><div class="metric"><b>水収支誤差</b><strong id="m6">—</strong></div><div class="metric"><b>模型進行</b><strong id="progress">0 u</strong></div></div><div class="callout" id="explain"></div></section></div>
 <section class="deep"><h2>同期する第二Canvas</h2><canvas id="graphCv" width="900" height="280" aria-label="土壌浸透・表面流出ラボの定量グラフ"></canvas><p>第二Canvasは主画面と異なる問いに答える定量表示です。</p></section><section class="take"><strong>最初の操作：</strong>降雨強度だけを透水能力より高くし、表面貯留から流出へ移る時点を探そう。</section><section class="deep"><h2>★ 実験</h2><p>同じ豪雨で植生0と1を比較し、流出開始時間と累積浸透量を説明する。</p></section><section class="deep"><h2>模型の限界・非用途</h2><p>均一土層の概念模型です。洪水予測、造成、農地管理、災害安全判断には使えません。</p></section>
 <button id="trayOpen" class="trayOpen">🔬 探究トレイ</button><div id="guideBack" class="back"><section class="sheet" role="dialog" aria-modal="true"><div class="sheetHead"><h2>使い方</h2><button id="guideClose" aria-label="閉じる">×</button></div><p>降雨強度だけを透水能力より高くし、表面貯留から流出へ移る時点を探そう。</p><p>再生・一段送り・速度変更を使い、条件を一つだけ変えて因果方向を確かめます。音声が使えなくても全情報は画面にあります。</p></section></div><div id="trayBack" class="back"><section class="sheet" role="dialog" aria-modal="true"><div class="sheetHead"><h2>同一初期条件A/B</h2><button id="trayClose" aria-label="閉じる">×</button></div><p>一つの条件だけを変え、同じ更新回数で結果を比較します。</p><div class="row"><button id="recA">条件Aを記録</button><button id="recB">条件Bを記録</button><button id="clearAB">消す</button></div><div class="snapGrid"><div class="snap"><b>A</b><pre id="snapA"></pre></div><div class="snap"><b>B</b><pre id="snapB"></pre></div></div><p id="diffAB"></p></section></div>
@@ -41,7 +48,7 @@ function compute(){const t=APP.type;let d={};
  state.d=d;return d}
 function domainStep(dt){state.t+=dt;state.phase+=dt;const t=APP.type;
  if(t==='slit'){let d=compute();for(let k=0;k<Math.max(1,Math.round(5*dt));k++){let x=0,tries=0;do{x=(rnd()-.5)*.08;tries++}while(rnd()>d.intensity(x)&&tries<50);state.photons.push({x,age:0});if(state.photons.length>180)state.photons.shift()}state.photons.forEach(p=>p.age+=dt)}
- if(t==='soil'){let d=compute(),hrs=dt/6,inc=d.rain*hrs,capacity=d.cap*hrs,inf=Math.min(inc+state.storage,capacity),left=inc+state.storage-inf,storeCap=4*(1+.8*d.veg)*(1-.5*Math.sin(d.slope*Math.PI/180));let newStore=Math.min(storeCap,left),run=Math.max(0,left-newStore)*(1+.5*Math.sin(d.slope*Math.PI/180));state.rain+=inc;state.infil+=inf;state.runoff+=run;state.storage=newStore}
+ if(t==='soil'){let d=compute(),hrs=dt/6,inc=d.rain*hrs,capacity=d.cap*hrs,inf=Math.min(inc+state.storage,capacity),left=inc+state.storage-inf,storeCap=4*(1+.8*d.veg)*(1-.5*Math.sin(d.slope*Math.PI/180));let newStore=Math.min(storeCap,left),run=Math.max(0,left-newStore);state.rain+=inc;state.infil+=inf;state.runoff+=run;state.storage=newStore}
  if(t==='vortex'){let d=compute(),period=1/Math.max(.1,d.f);if(state.t-(state.lastV||-99)>period/2){state.lastV=state.t;let side=(state.vortices.length%2?1:-1);state.vortices.push({x:330,y:260+side*55,s:side,age:0});if(state.vortices.length>28)state.vortices.shift()}state.vortices.forEach(v=>{v.x+=d.U*45*dt;v.age+=dt})}
  if(t==='enzyme'){let d=compute();state.product+=d.rate*dt*.15}
  if(t==='genetics'){state.genAcc=(state.genAcc||0)+dt*1.5;while(state.genAcc>=1){state.genAcc-=1;let N=Math.round(num('c1')),s=num('c2'),mig=num('c3'),mut=num('c4');state.reps=state.reps.map(p=>{let sel=clamp(p+s*p*(1-p),0,1),pm=sel*(1-mig)+.5*mig,pu=pm*(1-mut)+(1-pm)*mut,alleles=2*N,count=0;for(let i=0;i<alleles;i++)if(rnd()<pu)count++;return count/alleles});state.generation++}state.histReps.push(state.reps.slice());if(state.histReps.length>180)state.histReps.shift()}
@@ -86,30 +93,142 @@ $('speakBtn').onclick=()=>{if('speechSynthesis'in window){speechSynthesis.cancel
 function frame(now){let dt=Math.min(.05,(now-last)/1000);last=now;if(running){domainStep(dt*speed());drawAll()}requestAnimationFrame(frame)}requestAnimationFrame(frame);
 window.r58TestResetCurrent=()=>resetState();window.r58TestAdvance=(n=1)=>{for(let i=0;i<n;i++){domainStep(APP.step*speed())}drawAll();return snapshot()};window.r58TestSnapshot=snapshot;window.r58TestSetScenario=setScenario;window.r58App=APP;
 updateOutputs();resetState();
-</script><script id="direct-rain-play">
+</script><script id="direct-soil-play">
 (()=>{
-const canvas=$('mainCv');let raining=false,lastDrop=0,directResult='空をタップ／なぞって、強い雨を追加';
-const baseDrawAll=drawAll;
-drawAll=function(){
-  baseDrawAll();const m=canvas.getContext('2d');m.save();
-  m.fillStyle='rgba(8,21,34,.9)';m.fillRect(18,34,680,42);
-  m.fillStyle='#eef5fb';m.font='bold 13px system-ui';m.fillText('水色の線：雨粒　青い土：浸透水　青い地表線：流出　緑：植生',30,53);
-  m.fillStyle='#ffd85a';m.fillText(directResult,30,71);m.restore();
+const canvas=$('mainCv');
+const NSEG=30,SEGW=900/NSEG,W=900,H=520;
+let ground=[],clouds=[],drops=[],soaks=[],flows=[],splashes=[],ripples=[];
+let tool='rain',dragging=false,lastApply=0,lastAnim=performance.now(),spawnAcc=0,cloudAcc=0;
+let rates={inf:0,run:0},gauge={inf:0,run:0,store:0},directResult='';
+const toolBtns={rain:$('toolRain'),pack:$('toolPack'),dig:$('toolDig')};
+const toolHints={
+ rain:'🌧️ 雨をふらす：すきな場所をタップすると、雨ぐもが出て つよい雨がふる',
+ pack:'🧱 かためる：じめんをタップすると土がかたくなり、水がしみこみにくくなる',
+ dig:'🕳️ ほぐす：じめんをタップすると土がほぐれて、水がしみこみやすくなる'};
+function initGround(){ground=Array.from({length:NSEG},()=>({mod:1,flash:0}))}
+initGround();
+function groundAvg(){return ground.reduce((a,s)=>a+s.mod,0)/NSEG}
+function slopeK(){return Math.tan(num('c4')*Math.PI/180)*220/W}
+function surfY(px){return 320+slopeK()*px}
+function addRipple(px,py,color){ripples.push({x:px,y:py,t:performance.now(),color});if(ripples.length>12)ripples.shift()}
+function setTool(name){tool=name;for(const[k,b]of Object.entries(toolBtns))if(b)b.classList.toggle('on',k===name);directResult=toolHints[name];drawAll()}
+for(const k of Object.keys(toolBtns))if(toolBtns[k])toolBtns[k].addEventListener('click',()=>setTool(k));
+const baseCompute=compute;
+compute=function(){const d=baseCompute();if(d&&d.cap!==undefined){d.mod=groundAvg();d.cap=clamp(d.cap*d.mod,1,240);d.rain+=Math.min(120,clouds.length*55);if(Math.abs(d.balance)<1e-9)d.balance=0}return d};
+const baseStep=domainStep;
+domainStep=function(dt){const i0=state.infil,r0=state.runoff;baseStep(dt);if(dt>0){const k=clamp(dt*2.5,0,1);rates.inf=lerp(rates.inf,(state.infil-i0)/dt,k);rates.run=lerp(rates.run,(state.runoff-r0)/dt,k)}clouds=clouds.filter(c=>c.until>state.t)};
+function puff(x,cx,cy,r,col){x.fillStyle=col;x.beginPath();x.arc(cx,cy,r,0,7);x.arc(cx+r*1.1,cy+3,r*.8,0,7);x.arc(cx-r*1.1,cy+4,r*.75,0,7);x.fill()}
+drawMain=function(){
+ const x=clear('mainCv'),d=state.d||compute(),now=performance.now();
+ const adt=Math.min(.06,(now-lastAnim)/1000);lastAnim=now;
+ const simDt=running?adt*speed():0;
+ const gw=500-clamp(state.infil/130,0,1)*120,wetBase=clamp(state.infil/70,0,1);
+ if(simDt>0){
+  spawnAcc+=d.rain*1.5*simDt;let g=0;
+  while(spawnAcc>=1&&g++<40){spawnAcc-=1;if(drops.length<240)drops.push({x:Math.random()*(W+60)-30,y:92+Math.random()*22,vx:-30,vy:300+Math.random()*140})}
+  if(clouds.length){cloudAcc+=95*clouds.length*simDt;g=0;
+   while(cloudAcc>=1&&g++<30){cloudAcc-=1;const c=clouds[(Math.random()*clouds.length)|0];if(drops.length<320)drops.push({x:c.x+(Math.random()-.5)*110,y:124,vx:-24,vy:380+Math.random()*160})}}
+  for(let i=drops.length-1;i>=0;i--){const p=drops[i];p.x+=p.vx*simDt;p.y+=p.vy*simDt;const sy=surfY(p.x);
+   if(p.y>=sy){drops.splice(i,1);if(p.x<0||p.x>W)continue;
+    splashes.push({x:p.x,y:sy,t:now});if(splashes.length>50)splashes.shift();
+    const tot=rates.inf+rates.run,pRun=tot>1e-9?rates.run/tot:0;
+    if(Math.random()<pRun){if(flows.length<130)flows.push({x:p.x,sp:60+slopeK()*1300+Math.random()*40})}
+    else if(soaks.length<170){const iSeg=clamp(Math.floor(p.x/SEGW),0,NSEG-1);const dep=clamp(wetBase*(24+70*clamp(ground[iSeg].mod,.2,2.2)),8,Math.max(10,gw-sy-8));soaks.push({x:p.x,y:sy+2,vy:16+Math.random()*22,end:Math.min(gw-4,sy+dep+14)})}}}
+  for(let i=flows.length-1;i>=0;i--){const p=flows[i];p.x+=p.sp*simDt;if(p.x>W)flows.splice(i,1)}
+  for(let i=soaks.length-1;i>=0;i--){const p=soaks[i];p.y+=p.vy*simDt;if(p.y>=p.end)soaks.splice(i,1)}
+ }
+ const sg=x.createLinearGradient(0,0,0,320);sg.addColorStop(0,'#0a1c30');sg.addColorStop(1,'#143049');x.fillStyle=sg;x.fillRect(0,0,W,H);
+ const nc=Math.min(6,2+Math.round(d.rain/35));
+ for(let i=0;i<nc;i++)puff(x,(i*167+70)%860,104+(i%3)*10,15,`rgba(108,128,152,${.45+Math.min(.4,d.rain/300)})`);
+ for(const c of clouds){x.fillStyle='rgba(130,190,250,.08)';x.fillRect(c.x-55,124,110,Math.max(0,surfY(c.x)-124));puff(x,c.x,108,22,'#46586e');puff(x,c.x+26,116,15,'#3c4d61')}
+ const gg=x.createLinearGradient(0,300,0,H);gg.addColorStop(0,'#6a4b2f');gg.addColorStop(1,'#39281a');
+ x.fillStyle=gg;x.beginPath();x.moveTo(0,320);x.lineTo(W,surfY(W));x.lineTo(W,H);x.lineTo(0,H);x.closePath();x.fill();
+ x.fillStyle='rgba(0,0,0,.16)';
+ for(let i=0;i<60;i++){const px=(i*151)%W,py=336+(i*83)%168;if(py>surfY(px)+8&&py<H-6){x.beginPath();x.arc(px,py,1.6+(i%3),0,7);x.fill()}}
+ for(let i=0;i<NSEG;i++){const x0=i*SEGW,x1=x0+SEGW,s0=surfY(x0),s1=surfY(x1);
+  const dep=clamp(wetBase*(24+70*clamp(ground[i].mod,.2,2.2)),0,Math.max(0,gw-Math.max(s0,s1)-6));
+  if(dep>1){x.fillStyle='rgba(62,132,198,.32)';x.beginPath();x.moveTo(x0,s0);x.lineTo(x1,s1);x.lineTo(x1,s1+dep);x.lineTo(x0,s0+dep);x.closePath();x.fill()}
+  if(ground[i].mod<.85){x.fillStyle='rgba(32,20,11,.7)';x.beginPath();x.moveTo(x0,s0);x.lineTo(x1,s1);x.lineTo(x1,s1+9);x.lineTo(x0,s0+9);x.closePath();x.fill();
+   x.strokeStyle='rgba(15,9,5,.6)';x.lineWidth=1;x.beginPath();x.moveTo(x0+3,s0+13);x.lineTo(x1-3,s1+13);x.stroke()}
+  if(ground[i].mod>1.2){x.fillStyle='rgba(18,10,5,.85)';for(let k2=0;k2<4;k2++){const px=x0+5+((k2*9+i*7)%(SEGW-8)),py=surfY(px)+6+(k2*8)%22;x.beginPath();x.arc(px,py,1.7,0,7);x.fill()}}}
+ const gpts=[];for(let px=0;px<=W;px+=30)gpts.push([px,Math.max(gw+Math.sin(px*.03+state.phase*1.6)*3,surfY(px)+16)]);
+ x.fillStyle='rgba(58,138,212,.42)';x.beginPath();gpts.forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));x.lineTo(W,H);x.lineTo(0,H);x.closePath();x.fill();
+ line(x,gpts,'rgba(140,200,255,.7)',2);
+ txt(x,11,'ちかすい（しみこんだ水のたまり）',24,Math.min(gw+16,486),'#a5d3ff');
+ const vegN=Math.floor(num('c5')*20);
+ for(let i=0;i<vegN;i++){const px=22+i*44,sy=surfY(px);
+  x.strokeStyle='rgba(105,224,176,.4)';x.lineWidth=1;x.beginPath();x.moveTo(px,sy);x.lineTo(px-3,sy+13);x.moveTo(px,sy);x.lineTo(px+4,sy+11);x.stroke();
+  x.strokeStyle='#69e0b0';x.lineWidth=2;x.beginPath();x.moveTo(px,sy);x.lineTo(px-5,sy-15);x.moveTo(px,sy);x.lineTo(px+2,sy-19);x.moveTo(px,sy);x.lineTo(px+7,sy-12);x.stroke()}
+ if(state.storage>.15){x.fillStyle='rgba(120,190,245,.5)';const rot=Math.atan(slopeK());
+  for(let i=0;i<6;i++){const px=95+i*140;x.beginPath();x.ellipse(px,surfY(px)+1,14+state.storage*9,2.5+state.storage*.7,rot,0,7);x.fill()}}
+ const filmTh=clamp(state.storage*1.4,0,8)+clamp(rates.run*.12,0,6);
+ if(filmTh>.5){x.fillStyle='rgba(95,190,255,.45)';x.beginPath();x.moveTo(0,320-filmTh);x.lineTo(W,surfY(W)-filmTh);x.lineTo(W,surfY(W)+1.5);x.lineTo(0,321.5);x.closePath();x.fill()}
+ if(rates.run>.2){x.strokeStyle='rgba(225,245,255,.85)';x.lineWidth=2;x.beginPath();
+  for(let i=0;i<9;i++){const px=((state.phase*140)+i*110)%(W+20)-10;x.moveTo(px,surfY(px)-filmTh*.5);x.lineTo(px+10,surfY(px+10)-filmTh*.5)}x.stroke();
+  x.strokeStyle='rgba(140,205,255,.8)';x.beginPath();for(let i=0;i<3;i++){x.moveTo(W-4-i*4,surfY(W)-filmTh);x.lineTo(W-2-i*4,surfY(W)+16+Math.min(26,rates.run*2))}x.stroke()}
+ x.fillStyle='rgba(125,205,255,.85)';for(const p of flows){x.beginPath();x.ellipse(p.x,surfY(p.x)-2-filmTh*.4,5,2.4,Math.atan(slopeK()),0,7);x.fill()}
+ x.fillStyle='rgba(120,200,255,.8)';for(const p of soaks){x.beginPath();x.arc(p.x,p.y,2,0,7);x.fill()}
+ x.strokeStyle='rgba(140,215,255,.9)';x.lineWidth=2;x.beginPath();for(const p of drops){x.moveTo(p.x,p.y);x.lineTo(p.x-p.vx*.035,p.y-p.vy*.035)}x.stroke();
+ for(let i=splashes.length-1;i>=0;i--){const s=splashes[i],age=(now-s.t)/380;if(age>=1){splashes.splice(i,1);continue}
+  x.globalAlpha=1-age;x.strokeStyle='#bfe6ff';x.lineWidth=1.5;x.beginPath();x.arc(s.x,s.y,3+age*9,Math.PI,Math.PI*2);x.stroke()}
+ x.globalAlpha=1;
+ const tot=Math.max(1e-6,state.rain),ease=Math.min(1,adt*4);
+ gauge.inf=lerp(gauge.inf,state.infil/tot,ease);gauge.run=lerp(gauge.run,state.runoff/tot,ease);gauge.store=lerp(gauge.store,state.storage/tot,ease);
+ if(state.rain>.5){
+  if(gauge.inf>.03){const ax=150,ay=surfY(150)+6;arrow(x,ax,ay,ax,ay+16+gauge.inf*85,'#69e0b0');txt(x,11,'しみこみ',ax+12,ay+26,'#8af0c4')}
+  if(gauge.run>.03){const ax=560,len=26+gauge.run*150,ex=ax+len;arrow(x,ax,surfY(ax)-16,ex,surfY(ex)-16,'#ff8d8d');txt(x,11,'ながれ',ax+len*.4,surfY(ax+len*.4)-26,'#ffb0b0')}}
+ for(let i=0;i<NSEG;i++){const f=now-ground[i].flash;if(ground[i].flash&&f<450){const x0=i*SEGW,s0=surfY(x0),s1=surfY(x0+SEGW);
+  x.globalAlpha=(1-f/450)*.4;x.fillStyle='#ffd85a';x.beginPath();x.moveTo(x0,s0-3);x.lineTo(x0+SEGW,s1-3);x.lineTo(x0+SEGW,s1+42);x.lineTo(x0,s0+42);x.closePath();x.fill()}}
+ x.globalAlpha=1;
+ txt(x,14,APP.title,24,26,'#ffd85a');
+ txt(x,11,`t=${fmt(state.t,2)} u / 更新 ${manualUpdates}`,286,26,'#9fb8cc');
+ x.fillStyle='rgba(8,21,34,.86)';x.fillRect(14,40,632,46);
+ x.fillStyle='#ffd85a';x.font='bold 13px -apple-system,sans-serif';x.textAlign='left';x.fillText(directResult||toolHints[tool],24,58);
+ txt(x,11,`いまの雨 ${fmt(d.rain,0)} mm/h ／ しみこむ力 ${fmt(d.cap,1)} mm/h ／ 土のしみこみやすさ ${fmt((d.mod??1)*100,0)}%`,24,77,'#9fcdf5');
+ x.fillStyle='rgba(8,21,34,.86)';x.fillRect(656,40,230,96);x.strokeStyle='#2d4864';x.strokeRect(656,40,230,96);
+ txt(x,12,'ふった雨のゆくえ',668,56,'#dceafa');
+ [['しみこんだ',gauge.inf,'#69e0b0'],['ながれた',gauge.run,'#ff8d8d'],['たまってる',gauge.store,'#5fd3ff']].forEach((row,i)=>{
+  const ry=66+i*22;txt(x,10,row[0],668,ry+9,'#b9d0e4');
+  x.fillStyle='#16263a';x.fillRect(734,ry,104,11);x.fillStyle=row[2];x.fillRect(734,ry,104*clamp(row[1],0,1),11);
+  txt(x,10,fmt(row[1]*100,0)+'%',872,ry+9,row[2],'right')});
+ x.fillStyle='rgba(8,21,34,.72)';x.fillRect(14,492,520,22);
+ txt(x,11,'みどりの矢じるし：しみこみ　あかい矢じるし：ながれ　みずいろ：雨と水',22,507,'#cfe3f5');
+ for(let i=ripples.length-1;i>=0;i--){const r=ripples[i],age=(now-r.t)/700;if(age>=1){ripples.splice(i,1);continue}
+  x.globalAlpha=(1-age)*.9;x.strokeStyle=r.color;x.lineWidth=4;x.beginPath();x.arc(r.x,r.y,12+age*85,0,Math.PI*2);x.stroke()}
+ x.globalAlpha=1;
 };
-function point(event){const r=canvas.getBoundingClientRect();return{x:(event.clientX-r.left)*900/r.width,y:(event.clientY-r.top)*520/r.height}}
-function rainPulse(event){
-  const p=point(event);if(p.y>200)return;
-  const now=performance.now();if(now-lastDrop<90)return;lastDrop=now;
-  const input=$('c1'),old=input.value;input.value='120';domainStep(.3);input.value=old;compute();
-  directResult=state.runoff>0?`結果：豪雨追加 → 流出 ${state.runoff.toFixed(1)} mm`:`結果：豪雨追加 → まず浸透・貯留（浸透 ${state.infil.toFixed(1)} mm）`;
-  drawAll();
+function pt(ev){const r=canvas.getBoundingClientRect();return{x:(ev.clientX-r.left)*W/r.width,y:(ev.clientY-r.top)*H/r.height}}
+function applyTool(p,first){
+ const now=performance.now();
+ if(!first&&now-lastApply<150)return;lastApply=now;
+ if(tool==='rain'){
+  const cx=clamp(p.x,50,850);
+  const near=clouds.find(c=>Math.abs(c.x-cx)<70);
+  if(near)near.until=state.t+2.2;else{clouds.push({x:cx,until:state.t+2.2});if(clouds.length>3)clouds.shift()}
+  if(!running)$('playPause').click();
+  domainStep(.12);
+  addRipple(cx,Math.min(p.y,surfY(cx)-30),'#5fd3ff');
+  directResult=`🌧️ 雨ぐもが きた！ いまの雨 ${fmt(state.d.rain,0)} mm/h`;
+ }else{
+  if(p.y<surfY(p.x)-12){directResult='この道具は、じめん（ちゃいろの場所）をタップしてね';addRipple(p.x,p.y,'#ff8d8d');drawAll();return}
+  for(let i=0;i<NSEG;i++){const mid=i*SEGW+SEGW/2;if(Math.abs(mid-p.x)<=45){ground[i].mod=tool==='pack'?Math.max(.15,ground[i].mod*.55):Math.min(3,ground[i].mod*1.6);ground[i].flash=now}}
+  const d=compute();
+  addRipple(p.x,Math.max(p.y,surfY(p.x)),tool==='pack'?'#e0a878':'#8ce6a1');
+  directResult=tool==='pack'?`🧱 じめんを かためた！ しみこむ力が ${fmt(d.cap,1)} mm/h に へった`:`🕳️ 土を ほぐした！ しみこむ力が ${fmt(d.cap,1)} mm/h に ふえた`;
+ }
+ drawAll();
 }
-canvas.addEventListener('pointerdown',event=>{if(point(event).y>200)return;raining=true;canvas.setPointerCapture?.(event.pointerId);event.preventDefault();rainPulse(event)});
-canvas.addEventListener('pointermove',event=>{if(raining)rainPulse(event)});
-canvas.addEventListener('pointerup',()=>{raining=false});canvas.addEventListener('pointercancel',()=>{raining=false});
+canvas.addEventListener('pointerdown',ev=>{ev.preventDefault();dragging=true;canvas.setPointerCapture?.(ev.pointerId);applyTool(pt(ev),true)});
+canvas.addEventListener('pointermove',ev=>{if(dragging)applyTool(pt(ev),false)});
+const endDrag=()=>{dragging=false};
+canvas.addEventListener('pointerup',endDrag);canvas.addEventListener('pointercancel',endDrag);
+function cleanup(){dragging=false;clouds=[];drops=[];soaks=[];flows=[];splashes=[];ripples=[];spawnAcc=0;cloudAcc=0;rates={inf:0,run:0};gauge={inf:0,run:0,store:0};initGround();directResult=toolHints[tool]}
 const baseResetState=resetState;
-resetState=function(){raining=false;directResult='空をタップ／なぞって、強い雨を追加';return baseResetState()};
-drawAll();
+resetState=function(){cleanup();return baseResetState()};
+$('resetBtn').addEventListener('click',()=>{cleanup();drawAll()});
+(function fx(){if(!running&&(ripples.length||splashes.length||ground.some(s=>s.flash&&performance.now()-s.flash<460)))drawAll();requestAnimationFrame(fx)})();
+window.soilPlayDebug=()=>({tool,drops:drops.length,flows:flows.length,soaks:soaks.length,clouds:clouds.length,groundMod:+groundAvg().toFixed(3),cap:+(state.d?.cap??0).toFixed(2),rain:+(state.d?.rain??0).toFixed(1),infRate:+rates.inf.toFixed(3),runRate:+rates.run.toFixed(3)});
+setTool(tool);
 })();
 </script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;

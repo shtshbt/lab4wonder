@@ -1,7 +1,19 @@
 <!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>店の流れと在庫管理ラボ</title><style>
 :root{color-scheme:dark;--bg:#07111c;--panel:#101f2f;--panel2:#14283b;--line:#33506c;--text:#edf6ff;--muted:#a9bdd0;--accent:#ffd65c;--cyan:#66d9ef;--good:#75e6a6;--warn:#ffb55d;--bad:#ff7d7d}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;max-width:100%;overflow-x:hidden}body{background:radial-gradient(circle at 50% -10%,#17344e 0,#07111c 48%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;max-width:980px;margin:auto;padding:10px 10px calc(94px + env(safe-area-inset-bottom));touch-action:manipulation}button,input,select{font:inherit}button,select{min-height:42px;border:1px solid var(--line);border-radius:11px;background:#152a3e;color:var(--text);padding:8px 11px;font-weight:800}button{cursor:pointer}button.primary{background:var(--accent);color:#251d00;border-color:#d8ad2f}button.on{outline:3px solid var(--accent);outline-offset:1px}button:active{transform:translateY(1px)}header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}h1{font-size:20px;line-height:1.4;margin:0}.subtitle{font-size:12px;line-height:1.65;color:var(--muted);margin-top:3px}.badge{display:inline-block;background:#19324a;color:#bde4ff;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:900;margin-bottom:3px}.headBtns{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.headBtns button{font-size:11px;min-height:36px;padding:6px 8px}.learn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:8px 0}.learn article{border:1px solid #29435c;background:#0d1b29;border-radius:13px;padding:8px;min-height:88px}.learn b{display:block;font-size:11px;color:var(--accent);margin-bottom:3px}.learn p{font-size:11px;line-height:1.6;margin:0;color:#dce9f5}.steps{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}.steps span{font-size:11px;background:#13263a;border:1px solid #2f4b67;border-radius:999px;padding:5px 8px}.steps strong{color:var(--accent)}.toolbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;border:1px solid #2d4963;background:#0d1c2a;border-radius:14px;padding:8px;margin-bottom:8px}.toolbar label{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px}.toolbar select{min-height:38px;font-size:12px;max-width:170px}.stage{border:1px solid #31506e;background:#08131f;border-radius:16px;overflow:hidden;position:relative}.stage canvas{display:block;width:100%;height:auto;touch-action:none}.metricGrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin:8px 0}.metric{border:1px solid #2b4862;background:#0e1e2d;border-radius:11px;padding:7px;min-width:0}.metric b{display:block;color:#9fc9e8;font-size:12px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.metric strong{display:block;color:var(--accent);font:700 15px/1.35 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}.card{border:1px solid #29465f;background:#0d1c2a;border-radius:14px;padding:9px;min-width:0}.card h2{font-size:13px;margin:0 0 6px;color:#d9ecff}.controls{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px}.ctrl{display:grid;grid-template-columns:1fr auto;gap:2px 7px;align-items:center;font-size:11px;min-width:0}.ctrl output{color:var(--accent);font:11px ui-monospace,monospace}.ctrl input[type=range]{grid-column:1/-1;width:100%;height:26px}.ctrl select{grid-column:1/-1;width:100%;font-size:11px;min-height:38px}.ctrl.check{display:flex;justify-content:space-between;grid-template-columns:none}.ctrl input[type=checkbox]{width:22px;height:22px}.buttonRow{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}.buttonRow button{font-size:11px;min-height:39px}.status{font-size:12px;line-height:1.7;border-left:4px solid var(--cyan);background:#10253a;border-radius:9px;padding:8px 10px;min-height:62px}.status.warn{border-left-color:var(--warn)}.status.bad{border-left-color:var(--bad)}.status.good{border-left-color:var(--good)}.second{margin-top:8px}.second canvas{display:block;width:100%;height:auto;background:#08131f;border:1px solid #2c4863;border-radius:12px}.legend{display:flex;gap:6px;flex-wrap:wrap;font-size:11px;color:#bdd0e2;margin-top:5px}.legend span{padding:3px 6px;background:#142a3f;border-radius:999px}.experiment{margin-top:8px;border:1px solid #655631;background:#29240f;border-radius:13px;padding:9px;font-size:11px;line-height:1.7}.experiment b{color:var(--accent)}.ab{margin-top:8px}.snapGrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px}.snap{background:#071522;border:1px solid #27425b;border-radius:10px;padding:7px;min-height:72px}.snap b{font-size:11px;color:#a9d6f4}.snap pre{font:10px/1.5 ui-monospace,monospace;white-space:pre-wrap;word-break:break-word;margin:4px 0 0}.diff{font-size:11px;line-height:1.65;margin-top:7px;padding:7px;background:#11253a;border-radius:9px}.modalBack{position:fixed;inset:0;background:#000b;z-index:100;display:none;padding:12px;overflow:auto}.modalBack.show{display:flex;align-items:flex-end;justify-content:center}.modal{width:min(760px,100%);max-height:90vh;overflow:auto;background:#0c1a28;border:1px solid #41627f;border-radius:18px;padding:13px}.modalHead{display:flex;justify-content:space-between;gap:8px;align-items:center}.modal h2{font-size:16px;margin:0}.modal h3{font-size:13px;color:var(--accent);margin:13px 0 5px}.modal p,.modal li{font-size:12px;line-height:1.75;color:#d8e6f3}.tourBox{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:120;background:#0b1a29;border:2px solid var(--accent);border-radius:14px;padding:10px;display:none;box-shadow:0 8px 30px #000a}.tourBox.show{display:block}.tourBox p{font-size:12px;line-height:1.65;margin:0 0 7px}.tourBox .buttonRow{justify-content:space-between}.tourGlow{outline:4px solid var(--accent)!important;outline-offset:2px!important;position:relative;z-index:30}ruby{ruby-position:over}rt{font-size:.55em}.small{font-size:10px;color:var(--muted);line-height:1.55}.nowrap{white-space:nowrap}@media(max-width:720px){.learn{grid-template-columns:1fr 1fr}.metricGrid{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}.controls{grid-template-columns:1fr 1fr}}@media(max-width:390px){body{padding-left:7px;padding-right:7px}h1{font-size:17px}.headBtns button{font-size:10px;padding:5px 6px}.learn{grid-template-columns:1fr 1fr}.learn article{min-height:0;padding:7px}.learn p{font-size:12px}.toolbar{gap:5px}.toolbar button{font-size:10px;padding:6px 7px}.toolbar label{width:100%;justify-content:space-between}.toolbar select{flex:1;max-width:none}.metricGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.metric strong{font-size:13px}.controls{grid-template-columns:1fr}.stage canvas{min-height:235px;object-fit:contain}.second canvas{min-height:150px;object-fit:contain}.snapGrid{grid-template-columns:1fr}.subtitle{font-size:11px}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;max-width:100%;overflow-x:hidden}body{background:radial-gradient(circle at 50% -10%,#17344e 0,#07111c 48%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;max-width:980px;margin:auto;padding:10px 10px calc(94px + env(safe-area-inset-bottom));touch-action:manipulation}button,input,select{font:inherit}button,select{min-height:42px;border:1px solid var(--line);border-radius:11px;background:#152a3e;color:var(--text);padding:8px 11px;font-weight:800}button{cursor:pointer}button.primary{background:var(--accent);color:#251d00;border-color:#d8ad2f}button.on{outline:3px solid var(--accent);outline-offset:1px}button:active{transform:translateY(1px)}header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}h1{font-size:20px;line-height:1.4;margin:0}.subtitle{font-size:12px;line-height:1.65;color:var(--muted);margin-top:3px}.badge{display:inline-block;background:#19324a;color:#bde4ff;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:900;margin-bottom:3px}.headBtns{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.headBtns button{font-size:11px;min-height:36px;padding:6px 8px}.learn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:8px 0}.learn article{border:1px solid #29435c;background:#0d1b29;border-radius:13px;padding:8px;min-height:88px}.learn b{display:block;font-size:11px;color:var(--accent);margin-bottom:3px}.learn p{font-size:11px;line-height:1.6;margin:0;color:#dce9f5}.steps{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}.steps span{font-size:11px;background:#13263a;border:1px solid #2f4b67;border-radius:999px;padding:5px 8px}.steps strong{color:var(--accent)}.toolbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;border:1px solid #2d4963;background:#0d1c2a;border-radius:14px;padding:8px;margin-bottom:8px}.toolbar label{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px}.toolbar select{min-height:38px;font-size:12px;max-width:170px}.stage{border:1px solid #31506e;background:#08131f;border-radius:16px;overflow:hidden;position:relative}.stage canvas{display:block;width:100%;height:auto;touch-action:none}.metricGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:8px 0}.metric{border:1px solid #2b4862;background:#0e1e2d;border-radius:11px;padding:7px;min-width:0}.metric b{display:block;color:#9fc9e8;font-size:12px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.metric strong{display:block;color:var(--accent);font:700 15px/1.35 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}.card{border:1px solid #29465f;background:#0d1c2a;border-radius:14px;padding:9px;min-width:0}.card h2{font-size:13px;margin:0 0 6px;color:#d9ecff}.controls{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px}.ctrl{display:grid;grid-template-columns:1fr auto;gap:2px 7px;align-items:center;font-size:11px;min-width:0}.ctrl output{color:var(--accent);font:11px ui-monospace,monospace}.ctrl input[type=range]{grid-column:1/-1;width:100%;height:26px}.ctrl select{grid-column:1/-1;width:100%;font-size:11px;min-height:38px}.ctrl.check{display:flex;justify-content:space-between;grid-template-columns:none}.ctrl input[type=checkbox]{width:22px;height:22px}.buttonRow{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}.buttonRow button{font-size:11px;min-height:39px}.status{font-size:12px;line-height:1.7;border-left:4px solid var(--cyan);background:#10253a;border-radius:9px;padding:8px 10px;min-height:62px}.status.warn{border-left-color:var(--warn)}.status.bad{border-left-color:var(--bad)}.status.good{border-left-color:var(--good)}.second{margin-top:8px}.second canvas{display:block;width:100%;height:auto;background:#08131f;border:1px solid #2c4863;border-radius:12px}.legend{display:flex;gap:6px;flex-wrap:wrap;font-size:11px;color:#bdd0e2;margin-top:5px}.legend span{padding:3px 6px;background:#142a3f;border-radius:999px}.experiment{margin-top:8px;border:1px solid #655631;background:#29240f;border-radius:13px;padding:9px;font-size:11px;line-height:1.7}.experiment b{color:var(--accent)}.ab{margin-top:8px}.snapGrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px}.snap{background:#071522;border:1px solid #27425b;border-radius:10px;padding:7px;min-height:72px}.snap b{font-size:11px;color:#a9d6f4}.snap pre{font:10px/1.5 ui-monospace,monospace;white-space:pre-wrap;word-break:break-word;margin:4px 0 0}.diff{font-size:11px;line-height:1.65;margin-top:7px;padding:7px;background:#11253a;border-radius:9px}.modalBack{position:fixed;inset:0;background:#000b;z-index:100;display:none;padding:12px;overflow:auto}.modalBack.show{display:flex;align-items:flex-end;justify-content:center}.modal{width:min(760px,100%);max-height:90vh;overflow:auto;background:#0c1a28;border:1px solid #41627f;border-radius:18px;padding:13px}.modalHead{display:flex;justify-content:space-between;gap:8px;align-items:center}.modal h2{font-size:16px;margin:0}.modal h3{font-size:13px;color:var(--accent);margin:13px 0 5px}.modal p,.modal li{font-size:12px;line-height:1.75;color:#d8e6f3}.tourBox{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:120;background:#0b1a29;border:2px solid var(--accent);border-radius:14px;padding:10px;display:none;box-shadow:0 8px 30px #000a}.tourBox.show{display:block}.tourBox p{font-size:12px;line-height:1.65;margin:0 0 7px}.tourBox .buttonRow{justify-content:space-between}.tourGlow{outline:4px solid var(--accent)!important;outline-offset:2px!important;position:relative;z-index:30}ruby{ruby-position:over}rt{font-size:.55em}.small{font-size:10px;color:var(--muted);line-height:1.55}.nowrap{white-space:nowrap}@media(max-width:720px){.learn{grid-template-columns:1fr 1fr}.metricGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:1fr}.controls{grid-template-columns:1fr 1fr}}@media(max-width:390px){body{padding-left:7px;padding-right:7px}h1{font-size:17px}.headBtns button{font-size:10px;padding:5px 6px}.learn{grid-template-columns:1fr 1fr}.learn article{min-height:0;padding:7px}.learn p{font-size:12px}.toolbar{gap:5px}.toolbar button{font-size:10px;padding:6px 7px}.toolbar label{width:100%;justify-content:space-between}.toolbar select{flex:1;max-width:none}.metricGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.metric strong{font-size:13px}.controls{grid-template-columns:1fr}.stage canvas{min-height:235px;object-fit:contain}.second canvas{min-height:150px;object-fit:contain}.snapGrid{grid-template-columns:1fr}.subtitle{font-size:11px}}
 @media(prefers-reduced-motion:reduce){button:active{transform:none}}
+.tapbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;border:1px solid #2d4963;background:#0d1c2a;border-radius:14px;padding:8px;margin-bottom:8px}
+.tapbar .lbl{font-size:12px;font-weight:900;color:#9fcdf5}
+.tapbar button{min-height:46px;font-size:13px;border-radius:999px;flex:1 1 auto}
+.tapbar button.on{background:var(--accent);color:#241c00;border-color:#d8ad2f}
+.tapHint{font-size:12px;font-weight:850;line-height:1.6;margin:7px 0 8px;padding:8px 10px;border:1px solid rgba(255,214,92,.5);border-radius:11px;background:rgba(255,214,92,.12)}
+.feed{margin:8px 0;border:1px solid #2d4963;background:#0d1c2a;border-radius:14px;padding:8px}
+.feed b{display:block;font-size:12px;color:#9fcdf5;margin-bottom:5px}
+.feed ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.feed li{font-size:12px;line-height:1.6;padding:5px 8px;border-radius:9px;background:#12253a;border-left:4px solid var(--cyan)}
+.feed li.good{border-left-color:var(--good)}.feed li.warn{border-left-color:var(--warn)}.feed li.bad{border-left-color:var(--bad)}
+.feed li i{font-style:normal;color:var(--muted);margin-right:6px}
+@media(max-width:390px){.tapbar button{font-size:12px;padding:7px 8px}}
 </style><style id="r59-common-ui-style">
 #r59-globalbar{position:sticky;top:0;z-index:2147483000;display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:-2px -2px 10px;padding:7px 8px;background:rgba(7,14,24,.96);border:1px solid #38506b;border-radius:12px;box-shadow:0 5px 18px rgba(0,0,0,.28);backdrop-filter:blur(8px)}
 #r59-globalbar a,#r59-globalbar button{min-height:38px!important;padding:6px 9px!important;border:1px solid #47617e!important;border-radius:10px!important;background:#16263a!important;color:#f3f8fd!important;font:800 11px/1.25 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif!important;text-decoration:none!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important}
@@ -19,11 +31,14 @@ body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px
 </style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
 </head><body data-first="価格を標準のまま一段送りし、在庫・レジ列・利益を見よう。次にスタッフだけを増やそう。">
 <header><div><span class="badge">r34・経営・待ち行列・在庫</span><h1>店の流れと<ruby>在庫管理<rt>ざいこかんり</rt></ruby>ラボ</h1><div class="subtitle">来客、需要、在庫、補充遅延、価格、スタッフ、廃棄、機会損失を一日の流れで見る。</div></div><div class="headBtns"><button id="guideBtn">？ガイド</button><button id="speakBtn">🔊読む</button><button id="tourBtn">👣操作</button></div></header>
-<section class="learn"><article><b>これは何？</b><p>商品と客とお金の流れを同時に追う小売店の模型。</p></article><article><b>どこを見る？</b><p>客の動線、棚在庫、レジ列、入荷待ち、売上、利益、廃棄。</p></article><article><b>何を変える？</b><p>価格、スタッフ、発注点、発注量、補充遅延、値引き。</p></article><article><b>持ち帰る一文</b><p>在庫を増やすと欠品は減るが、資金拘束と廃棄が増えうる。</p></article></section>
+<section class="learn"><article><b>これは何？</b><p>商品と客とお金の流れを同時に追う小売店の模型。</p></article><article><b>どこを見る？</b><p>お客さんの顔と行列の長さ、棚のすきま、店員の汗、入荷トラック。</p></article><article><b>何を変える？</b><p>価格、スタッフ、発注点、発注量、補充遅延、値引き。</p></article><article><b>持ち帰る一文</b><p>在庫を増やすと欠品は減るが、資金拘束と廃棄が増えうる。</p></article></section>
 <div class="steps"><span><strong>1 予想</strong> 何が変わるか決める</span><span><strong>2 操作</strong> 一つだけ条件を変える</span><span><strong>3 観察</strong> 主図と計器を同期して見る</span><span><strong>4 比較</strong> A/Bで原因を切り分ける</span></div>
 <nav class="toolbar"><button id="playBtn" class="primary">▶ 再生</button><button id="stepBtn">⏭ 一段</button><label>速度<select id="speedSel" aria-label="再生速度"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></label><label>シナリオ<select id="scenarioSel" aria-label="シナリオを選ぶ"><option value="normal">平日</option><option value="weekend">週末</option><option value="storm">嵐の前</option><option value="fresh">生鮮品中心</option></select></label><button id="randomBtn">🎲 新しい課題</button><button id="resetBtn">↺ リセット</button></nav>
+<section class="tapbar" id="tapTools" role="group" aria-label="タップ操作の道具えらび"><span class="lbl">えらんでタップ：</span><button id="toolStaff" class="on" aria-label="👋 店員をよぶ">👋 店員をよぶ</button><button id="toolRestock" aria-label="📦 きゅうびん">📦 きゅうびん</button><button id="toolPromo" aria-label="📣 せんでん">📣 せんでん</button><button id="toolGift" aria-label="🎁 おまけ">🎁 おまけ</button></section>
 <section class="stage"><canvas id="mainCanvas" width="900" height="520" aria-label="主シミュレーション"></canvas></section>
-<section class="metricGrid"><div class="metric"><b>棚在庫</b><strong id="m0">—</strong></div><div class="metric"><b>レジ列</b><strong id="m1">—</strong></div><div class="metric"><b>売上</b><strong id="m2">—</strong></div><div class="metric"><b>利益</b><strong id="m3">—</strong></div><div class="metric"><b>機会損失</b><strong id="m4">—</strong></div><div class="metric"><b>廃棄</b><strong id="m5">—</strong></div></section>
+<div id="tapHint" class="tapHint">👆 道具をえらんで、店の絵をタップしよう。</div>
+<section class="feed" aria-label="店でおきたこと"><b>できごと</b><ul id="eventFeed" aria-live="polite"></ul></section>
+<section class="metricGrid"><div class="metric"><b>棚在庫</b><strong id="m0">—</strong></div><div class="metric"><b>レジ列</b><strong id="m1">—</strong></div><div class="metric"><b>売上</b><strong id="m2">—</strong></div><div class="metric"><b>利益</b><strong id="m3">—</strong></div><div class="metric"><b>機会損失</b><strong id="m4">—</strong></div><div class="metric"><b>廃棄</b><strong id="m5">—</strong></div><div class="metric"><b>帰った人</b><strong id="m6">—</strong></div><div class="metric"><b>まち時間</b><strong id="m7">—</strong></div></section>
 <div class="grid2"><section class="card" id="controlPanel"><h2>因果操作</h2><div class="controls">
 <label class="ctrl"><span>販売価格</span><output id="priceOut"></output><input id="price" type="range" min="80" max="180" value="120"></label>
 <label class="ctrl"><span>レジスタッフ</span><output id="staffOut"></output><input id="staff" type="range" min="1" max="5" value="2"></label>
@@ -31,36 +46,282 @@ body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px
 <label class="ctrl"><span>発注量</span><output id="orderOut"></output><input id="orderQty" type="range" min="10" max="80" value="35"></label>
 <label class="ctrl"><span>補充遅延</span><output id="leadOut"></output><input id="lead" type="range" min="10" max="120" value="45"></label>
 <label class="ctrl"><span>閉店前値引き</span><output id="discountOut"></output><input id="discount" type="range" min="0" max="50" value="15"></label>
-</div><div class="buttonRow"></div></section><section class="card"><h2>原因と結果</h2><div id="statusBox" class="status">状態を計算しています。</div><div class="legend"><span>青 来店客</span><span>黄 購入客</span><span>赤 欠品</span><span>紫 入荷便</span><span>緑 売上</span><span>下図 在庫・列・利益</span></div></section></div>
+</div><div class="buttonRow"></div></section><section class="card"><h2>原因と結果</h2><div id="statusBox" class="status">状態を計算しています。</div><div class="legend"><span>青 見ている客</span><span>黄 レジ待ち</span><span>緑 買えた客</span><span>赤 帰った客</span><span>紫 入荷トラック</span><span>下図 在庫・列・利益</span></div></section></div>
 <section class="second"><canvas id="secondCanvas" width="900" height="240" aria-label="同期する第二ビュー"></canvas></section>
-<section id="experimentBox" class="experiment"><b>★実験</b> 同じ需要で、発注点だけを低くする条件と高くする条件を比較する。欠品、廃棄、利益の三つを同時に見る。</section>
+<section id="experimentBox" class="experiment"><b>★実験</b> 同じ需要で、発注点だけを低くする条件と高くする条件を比較する。欠品、廃棄、利益の三つを同時に見る。つぎに、こんできた同じ場面で「店員をよぶ」と「おまけ」を別々に試し、帰った人とまち時間がどちらだけ変わるかを比べる。</section>
 <section class="card ab"><h2>同一初期条件のA/B比較</h2><div class="buttonRow"><button id="recA" class="primary">条件Aを記録</button><button id="recB">条件Bを記録</button><button id="clearAB">消す</button></div><div class="snapGrid"><div class="snap"><b>条件A</b><pre id="snapA">未記録</pre></div><div class="snap"><b>条件B</b><pre id="snapB">未記録</pre></div></div><div id="diffAB" class="diff">同じ初期条件でAを記録し、一つだけ操作を変えてBを記録します。</div></section>
-<div id="guideBack" class="modalBack"><section class="modal" role="dialog" aria-modal="true"><div class="modalHead"><h2>店の流れと在庫管理ラボの学び方</h2><button id="guideClose" aria-label="閉じる">×</button></div><h3>中心機構</h3><p>客は需要に応じて来店し、価格と在庫から購入を決め、レジ処理を待ちます。在庫が発注点を下回ると注文し、一定の遅延後に入荷します。売れ残りは時間とともに劣化し廃棄になります。</p><h3>失敗・限界状態の読み方</h3><p>欠品は機会損失、長いレジ列は離脱、過剰在庫は廃棄と仕入費増加につながります。スタッフ、価格、発注点、発注量を一つずつ変えます。</p><h3>模型の適用範囲</h3><p>商品は一種類に集約し、競合、税、賃料、複数仕入先、顧客属性は簡略化しています。実際の価格決定や経営判断には使えません。</p><h3>安全・倫理上の注意</h3><p>医薬品、食品安全、労働配置など法令や安全基準がある商品・業務は、この模型だけで決めません。</p></section></div>
+<div id="guideBack" class="modalBack"><section class="modal" role="dialog" aria-modal="true"><div class="modalHead"><h2>店の流れと在庫管理ラボの学び方</h2><button id="guideClose" aria-label="閉じる">×</button></div><h3>中心機構</h3><p>客は需要に応じて来店し、価格と在庫から購入を決め、レジ処理を待ちます。在庫が発注点を下回ると注文し、一定の遅延後に入荷します。売れ残りは時間とともに劣化し廃棄になります。</p><h3>失敗・限界状態の読み方</h3><p>欠品は機会損失、長いレジ列は離脱、過剰在庫は廃棄と仕入費増加につながります。スタッフ、価格、発注点、発注量を一つずつ変えます。</p><h3>絵のどこを見るか</h3><p>棚のすきまが在庫、レジ列の長さが待ち行列です。待つお客さんの頭の上のバーが減ると表情がこわばり、時計を見はじめ、やがて帰ってしまいます。店員は忙しいと動きが速くなり汗をかき、ひまだと手持ち無沙汰になります。天井の看板は店全体のこみぐあいを示します。</p><h3>タップでできること</h3><p>店員をよぶ、きゅうびん、せんでん、おまけの四つです。どれも数字を良くする一方で、人手や仕入れ代、広告代という代償があります。効果と代償の両方を、できごと欄と計器で確かめます。</p><h3>模型の適用範囲</h3><p>商品は一種類に集約し、競合、税、賃料、複数仕入先、顧客属性は簡略化しています。実際の価格決定や経営判断には使えません。</p><h3>安全・倫理上の注意</h3><p>医薬品、食品安全、労働配置など法令や安全基準がある商品・業務は、この模型だけで決めません。</p></section></div>
 <div id="tourBox" class="tourBox"><p id="tourText"></p><div class="buttonRow"><button id="tourClose">閉じる</button><button id="tourNext" class="primary">次へ</button></div></div>
 <script>
-const C=$('mainCanvas'),X=C.getContext('2d'),S=$('secondCanvas'),Y=S.getContext('2d');let seed=3405,sim,history=[];
+const C=$('mainCanvas'),X=C.getContext('2d'),S=$('secondCanvas'),Y=S.getContext('2d');
+let seed=3405,sim,history=[],floaters=[],ripples=[],feedItems=[],tool='staff',toolMsg='';
+// Scene geometry. The walking coordinates the model uses (enter at x=60/y=470,
+// pick-up at x=390, register at x=690/y=330) are kept, so the layout is built
+// around them instead of the other way round.
+const FLOOR={x:36,y:56,w:776,h:420};
+const BACKROOM={x:44,y:60,w:126,h:86};
+const GOND=[0,1,2,3].map(i=>({x:180+i*120,y:118,w:100,h:150}));
+const SLOTS=[];GOND.forEach((g,u)=>{for(let tier=0;tier<3;tier++)for(let s=0;s<4;s++)SLOTS.push({u:u,x:g.x+7+s*22,y:g.y+12+tier*44,w:17,h:26})});
+const COUNTER={x:656,y:312,w:144,h:52};
+const QROWS=[{y:406,x0:690,dx:-27,n:23},{y:452,x0:118,dx:27,n:22}];
+const QSPOTS=QROWS.reduce((a,b)=>a+b.n,0);
+// Canvas text keeps to plain glyphs; the emoji live on the HTML buttons and hint.
+const TOOLS={
+ staff:{icon:'👋',name:'店員をよぶ',hint:'店の絵を タップすると 店員が 1人 ふえて レジが 早くなる',col:'#8ce6a1'},
+ restock:{icon:'📦',name:'きゅうびん',hint:'たなを タップすると すぐ 商品が とどく。仕入れ代は 高め',col:'#bd7bff'},
+ promo:{icon:'📣',name:'せんでん',hint:'タップした ところに ポスター。お客さんが ふえるが 広告代が かかる',col:'#ffd65c'},
+ gift:{icon:'🎁',name:'おまけ',hint:'ならんでいる お客さんを タップすると まつ いらいらが へる',col:'#ff9ecb'}
+};
+function toolBanner(name){return TOOLS[name].name+'：'+TOOLS[name].hint}
+const BODY={browse:'#67d9ff',queue:'#ffd45c',happy:'#8ce6a1',upset:'#ff8b82'};
+const EXPRESS_COST=77,AD_COST=1200,GIFT_COST=20;
+function clampN(v,lo,hi){return Math.max(lo,Math.min(hi,v))}
+function reducedMotion(){return document.documentElement.classList.contains('r62-reduced-motion')}
+function staffCount(){return Number($('staff').value)}
+function queueSpot(i){let k=i;for(const row of QROWS){if(k<row.n)return{x:row.x0+row.dx*k,y:row.y};k-=row.n}const last=QROWS[QROWS.length-1];return{x:last.x0+last.dx*(last.n-1),y:last.y}}
+function clockText(){return Math.floor(8+sim.minute/60)+':'+String(Math.floor(sim.minute%60)).padStart(2,'0')}
 function r(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}function newRandomSeed(){seed=(Date.now()^Math.random()*1e9)>>>0}
 function syncLabels(){$('priceOut').textContent=$('price').value+'円';$('staffOut').textContent=$('staff').value+'人';$('reorderOut').textContent=$('reorder').value+'個';$('orderOut').textContent=$('orderQty').value+'個';$('leadOut').textContent=$('lead').value+'分';$('discountOut').textContent=$('discount').value+'%'}
-function resetModel(){r45Pulse=0;sim={minute:0,inventory:55,age:0,customers:[],queue:[],orders:[],revenue:0,cost:55*55,waste:0,lost:0,served:0,abandoned:0};history=[];syncLabels();setStatus()}
+function pushEvent(kind,text){const stamp=clockText(),top=feedItems[0];if(top&&top.text===text){top.count++;top.stamp=stamp}else{feedItems.unshift({kind:kind,text:text,stamp:stamp,count:1});if(feedItems.length>5)feedItems.pop()}renderFeed()}
+function renderFeed(){const ul=$('eventFeed');if(!ul)return;if(!feedItems.length){ul.innerHTML='<li>まだ 何も おきていません。▶ 再生 を おしてみよう。</li>';return}ul.innerHTML=feedItems.map(function(it){return '<li class="'+it.kind+'"><i>'+it.stamp+'</i>'+it.text+(it.count>1?'（'+it.count+'回）':'')+'</li>'}).join('')}
+// Repeats of the same message stack upwards instead of printing on top of each other.
+function floater(x,y,text,col){const now=performance.now(),same=floaters.filter(f=>f.text===text&&now-f.t<1500).length;if(same>=3)return;floaters.push({x:x+(same===2?26:same===1?-26:0),y:y-same*23,text:text,col:col,t:now});if(floaters.length>16)floaters.shift()}
+function ripple(x,y,col){ripples.push({x:x,y:y,col:col,t:performance.now()});if(ripples.length>10)ripples.shift()}
+function resetModel(){sim={minute:0,inventory:55,age:0,customers:[],queue:[],orders:[],revenue:0,cost:55*55,waste:0,lost:0,served:0,abandoned:0,qwaitSum:0,promo:0,promoUntil:0,posters:[],peakQueue:0,pickAt:0,fillAt:0,fillUnit:1,deliverAt:0,emptyFlag:false};history=[];floaters=[];ripples=[];feedItems=[];renderFeed();toolMsg=toolBanner(tool);syncLabels();setStatus()}
 function controlChanged(){}
-function demandRate(){let h=8+sim.minute/60,sc=$('scenarioSel').value,base=.08+.22*Math.exp(-Math.pow((h-12.3)/1.6,2))+.30*Math.exp(-Math.pow((h-17.4)/1.4,2));if(sc==='weekend')base*=1.35;if(sc==='storm')base*=1.7;if(sc==='fresh')base*=1.1;let price=Number($('price').value),disc=h>18?Number($('discount').value)/100:0;return base*Math.max(.35,1.35-price/190)*(1+disc*.8)}
-function updateModel(dt){r45Pulse++;let dm=dt*12;sim.minute+=dm;let h=8+sim.minute/60;if(r()<demandRate()*dm)sim.customers.push({x:60,y:470,state:'enter',want:1+Math.floor(r()*3),wait:0});for(const c of sim.customers){c.wait+=dm;if(c.state==='enter'){c.y-=dm*8;if(c.y<300){c.state='shop'}}else if(c.state==='shop'){c.x+=dm*9;if(c.x>390){if(sim.inventory>=c.want){sim.inventory-=c.want;c.buy=c.want;c.state='queue';sim.queue.push(c)}else{sim.lost+=c.want;c.state='leave'}}}else if(c.state==='leave'){c.x-=dm*12;c.y+=dm*5}}
-let cap=Number($('staff').value)*.16*dm;while(cap>0&&sim.queue.length){let c=sim.queue[0];c.service=(c.service||0)+cap;if(c.service>=1){sim.queue.shift();c.state='leave';c.x=690;c.y=330;let price=Number($('price').value)*(h>18?1-Number($('discount').value)/100:1);sim.revenue+=price*c.buy;sim.served++;cap=c.service-1}else cap=0}for(const c of sim.queue){if(c.wait>45&&r()<.01*dm){c.state='leave';sim.abandoned++;sim.queue=sim.queue.filter(x=>x!==c)}}sim.customers=sim.customers.filter(c=>c.y<520&&c.x>-20);if(sim.inventory<Number($('reorder').value)&&sim.orders.length===0)sim.orders.push({eta:sim.minute+Number($('lead').value),qty:Number($('orderQty').value)});for(const o of sim.orders)if(o.eta<=sim.minute&&!o.done){sim.inventory+=o.qty;sim.cost+=o.qty*55;o.done=true}sim.orders=sim.orders.filter(o=>!o.done);let spoilRate=($('scenarioSel').value==='fresh'?.012:.004)*dm;if(sim.inventory>0&&r()<spoilRate){sim.inventory--;sim.waste++;}if(history.length===0||sim.minute-history.at(-1).t>5){history.push({t:sim.minute,inv:sim.inventory,q:sim.queue.length,profit:profit(),lost:sim.lost});if(history.length>150)history.shift()}setStatus()}
+function demandRate(){let h=8+sim.minute/60,sc=$('scenarioSel').value,base=.08+.22*Math.exp(-Math.pow((h-12.3)/1.6,2))+.30*Math.exp(-Math.pow((h-17.4)/1.4,2));if(sc==='weekend')base*=1.35;if(sc==='storm')base*=1.7;if(sc==='fresh')base*=1.1;let price=Number($('price').value),disc=h>18?Number($('discount').value)/100:0,promo=sim.minute<sim.promoUntil?sim.promo:0;return base*Math.max(.35,1.35-price/190)*(1+disc*.8)*(1+promo)}
+function updateModel(dt){let dm=dt*12;sim.minute+=dm;let h=8+sim.minute/60;if(sim.promo&&sim.minute>=sim.promoUntil)sim.promo=0;if(sim.posters.length)sim.posters=sim.posters.filter(p=>p.until>sim.minute);if(r()<demandRate()*dm)sim.customers.push({x:60,y:470,state:'enter',want:1+Math.floor(r()*3),wait:0,qwait:0,tint:r()});for(const c of sim.customers){c.wait+=dm;if(c.state==='enter'){c.y-=dm*8;if(c.y<300){c.state='shop'}}else if(c.state==='shop'){c.x+=dm*9;if(c.x>390){if(sim.inventory>=c.want){sim.inventory-=c.want;c.buy=c.want;c.state='queue';sim.queue.push(c);sim.pickAt=performance.now()}else{sim.lost+=c.want;c.state='leave';c.sad=true;pushEvent('bad','ほしい品が なくて 帰っちゃった');floater(400,286,'ない…','#ff8b82')}}}else if(c.state==='queue'){c.qwait+=dm}else if(c.state==='leave'){c.x-=dm*12;c.y+=dm*5}}
+let cap=Number($('staff').value)*.16*dm;while(cap>0&&sim.queue.length){let c=sim.queue[0];c.service=(c.service||0)+cap;if(c.service>=1){sim.queue.shift();c.state='leave';c.x=690;c.y=330;let price=Number($('price').value)*(h>18?1-Number($('discount').value)/100:1);sim.revenue+=price*c.buy;sim.served++;sim.qwaitSum+=c.qwait||0;cap=c.service-1}else cap=0}for(const c of sim.queue){if(c.wait>45&&r()<.01*dm){c.state='leave';sim.abandoned++;c.mad=true;const s=queueSpot(sim.queue.indexOf(c));floater(clampN(s.x,130,640),s.y-44,'帰っちゃった','#ff8b82');pushEvent('bad','まちきれずに 帰っちゃった');sim.queue=sim.queue.filter(x=>x!==c)}}sim.customers=sim.customers.filter(c=>c.y<520&&c.x>-20);if(sim.inventory<Number($('reorder').value)&&sim.orders.length===0){sim.orders.push({eta:sim.minute+Number($('lead').value),qty:Number($('orderQty').value)});pushEvent('info','在庫が 発注点より へったので はっちゅう した')}for(const o of sim.orders)if(o.eta<=sim.minute&&!o.done){sim.inventory+=o.qty;sim.cost+=o.qty*55;o.done=true;sim.deliverAt=performance.now();floater(BACKROOM.x+63,BACKROOM.y+26,'+'+o.qty+'個','#8ce6a1');pushEvent('good','トラックが とうちゃく。商品が '+o.qty+'個 とどいた')}sim.orders=sim.orders.filter(o=>!o.done);let spoilRate=($('scenarioSel').value==='fresh'?.012:.004)*dm;if(sim.inventory>0&&r()<spoilRate){sim.inventory--;sim.waste++;pushEvent('warn','いたんだ 商品を すてた')}if(sim.inventory<=0){if(!sim.emptyFlag){sim.emptyFlag=true;pushEvent('bad','たなが 空っぽ。しなぎれ です');floater(490,292,'しなぎれ','#ff8b82')}}else sim.emptyFlag=false;sim.peakQueue=Math.max(sim.peakQueue,sim.queue.length);if(history.length===0||sim.minute-history.at(-1).t>5){history.push({t:sim.minute,inv:sim.inventory,q:sim.queue.length,profit:profit(),lost:sim.lost});if(history.length>150)history.shift()}setStatus()}
 function profit(){return sim.revenue-sim.cost-sim.waste*25}
-function drawMain(){X.clearRect(0,0,900,520);X.fillStyle='#173026';X.fillRect(0,0,900,520);X.fillStyle='#d5c39b';X.fillRect(120,50,660,420);X.fillStyle='#6c5840';for(let i=0;i<4;i++)X.fillRect(220+i*115,120,80,210);X.fillStyle='#485f70';X.fillRect(665,340,90,60);X.fillStyle='#24475b';X.fillRect(75,450,100,50);X.fillStyle='#9c7443';X.fillRect(30,65,140,80);X.fillStyle='#fff';X.font='12px sans-serif';X.fillText(`倉庫 ${sim.inventory}個`,50,105);X.fillText(`レジ列 ${sim.queue.length}人`,670,430);for(const c of sim.customers){X.fillStyle=c.state==='queue'?'#ffd45c':c.state==='leave'?'#ff8b82':'#67d9ff';let x=c.state==='queue'?690+(sim.queue.indexOf(c)%3)*18:c.x,y=c.state==='queue'?330-sim.queue.indexOf(c)*18:c.y;X.beginPath();X.arc(x,y,7,0,Math.PI*2);X.fill()}for(const o of sim.orders){let p=Math.max(0,Math.min(1,1-(o.eta-sim.minute)/Number($('lead').value)));X.fillStyle='#bd7bff';X.fillRect(790-p*620,75,36,18)}X.fillStyle='#fff';X.font='bold 14px sans-serif';X.fillText(`店内時刻 ${Math.floor(8+sim.minute/60)}:${String(Math.floor(sim.minute%60)).padStart(2,'0')}`,15,25);setMetrics()}
-function drawSecond(){Y.clearRect(0,0,900,240);Y.fillStyle='#08131f';Y.fillRect(0,0,900,240);Y.strokeStyle='#29465f';for(let i=0;i<5;i++){Y.beginPath();Y.moveTo(50,20+i*42);Y.lineTo(880,20+i*42);Y.stroke()}[['inv','#68d9ff',90],['q','#ffb45d',20],['profit','#7be6a5',5000]].forEach(([k,col,max])=>{Y.strokeStyle=col;Y.lineWidth=2;Y.beginPath();history.forEach((h,i)=>{let val=k==='profit'?Math.max(0,h[k]):h[k],x=55+i/Math.max(1,history.length-1)*820,y=210-Math.min(1,val/max)*180;i?Y.lineTo(x,y):Y.moveTo(x,y)});Y.stroke()});Y.fillStyle='#dcecff';Y.font='12px sans-serif';Y.fillText('水色 在庫　橙 レジ列　緑 利益',55,232)}
-function setMetrics(){[$('m0').textContent,$('m1').textContent,$('m2').textContent,$('m3').textContent,$('m4').textContent,$('m5').textContent]=[sim.inventory+'個',sim.queue.length+'人',sim.revenue.toFixed(0)+'円',profit().toFixed(0)+'円',sim.lost+'個',sim.waste+'個']}
-function setStatus(){let b=$('statusBox');if(sim.inventory===0||sim.lost>15){b.className='status bad';b.textContent=`欠品で${sim.lost}個の機会損失。発注点を上げる、発注量を増やす、補充遅延を短くする一方、廃棄と仕入費も比較してください。`}else if(sim.queue.length>10){b.className='status warn';b.textContent=`レジ列${sim.queue.length}人。スタッフ不足で待ちと離脱が増えます。スタッフ増員と価格・需要調整を比較します。`}else if(sim.waste>8){b.className='status warn';b.textContent='廃棄が増えています。過剰発注、長い保管、閉店前値引きの不足が原因候補です。'}else{b.className='status';b.textContent='客、商品、注文、現金が別の速度で流れます。欠品を減らす操作が廃棄や仕入費を増やさないか同時に見ます。'}}
-function makeSnapshot(){return{price:$('price').value,staff:$('staff').value,reorder:$('reorder').value,order:$('orderQty').value,inventory:sim.inventory,queue:sim.queue.length,revenue:+sim.revenue.toFixed(0),profit:+profit().toFixed(0),lost:sim.lost,waste:sim.waste}}
-function snapshotText(s){return`価格 ${s.price}円 / スタッフ ${s.staff} / 発注点 ${s.reorder}\n在庫 ${s.inventory}　列 ${s.queue}　売上 ${s.revenue}円\n利益 ${s.profit}円　機会損失 ${s.lost}　廃棄 ${s.waste}`}
-function compareSnapshots(a,b){return`B−A: 利益 ${b.profit-a.profit}円、機会損失 ${b.lost-a.lost}個、廃棄 ${b.waste-a.waste}個、列 ${b.queue-a.queue}人。単一指標の最大化を避けます。`}
-$('controlPanel').insertAdjacentHTML('beforeend','<div class="buttonRow"><button id="rushBtn">👥 急な来客</button><button id="delayBtn">🚚 仕入れ遅延</button></div>');$('rushBtn').onclick=()=>{for(let i=0;i<12;i++)sim.customers.push({x:60,y:470+i*2,state:'enter',want:1+Math.floor(r()*3),wait:0})};$('delayBtn').onclick=()=>sim.orders.forEach(o=>o.eta+=45);
+function browsingCount(){let n=0;for(const c of sim.customers)if(c.state==='enter'||c.state==='shop')n++;return n}
+function storeMood(){const q=sim.queue.length,st=Math.max(1,staffCount()),p=q/(st*3);
+ if(q===0&&browsingCount()<=2)return{key:'idle',p:0,label:'ひまです',col:'#7fd3ff',face:'sleepy'};
+ if(p<.7)return{key:'calm',p:p,label:'おちついている',col:'#75e6a6',face:'calm'};
+ if(p<1.6)return{key:'busy',p:p,label:'こんできた',col:'#ffb55d',face:'worry'};
+ return{key:'over',p:p,label:'パンク寸前',col:'#ff7d7d',face:'mad'}}
+function custMood(c){if(c.state==='leave')return c.mad?'mad':c.sad?'sad':'happy';
+ if(c.state==='queue'){const w=c.qwait||0;return w<6?'calm':w<14?'flat':w<24?'worry':'mad'}
+ return'calm'}
+function drawFace(g,cx,cy,rr,mood){g.save();g.lineWidth=Math.max(1.2,rr*.19);g.strokeStyle='#33241a';g.lineCap='round';const ex=rr*.36,ey=rr*.08;
+ if(mood==='happy'){g.beginPath();g.arc(cx-ex,cy+ey,rr*.24,Math.PI*1.06,Math.PI*1.94);g.stroke();g.beginPath();g.arc(cx+ex,cy+ey,rr*.24,Math.PI*1.06,Math.PI*1.94);g.stroke()}
+ else if(mood==='sleepy'){g.beginPath();g.moveTo(cx-ex-rr*.22,cy+ey);g.lineTo(cx-ex+rr*.22,cy+ey);g.moveTo(cx+ex-rr*.22,cy+ey);g.lineTo(cx+ex+rr*.22,cy+ey);g.stroke()}
+ else{g.fillStyle='#33241a';g.beginPath();g.arc(cx-ex,cy+ey,rr*.17,0,Math.PI*2);g.fill();g.beginPath();g.arc(cx+ex,cy+ey,rr*.17,0,Math.PI*2);g.fill();
+  if(mood==='mad'){g.beginPath();g.moveTo(cx-ex-rr*.32,cy-rr*.34);g.lineTo(cx-ex+rr*.2,cy-rr*.12);g.moveTo(cx+ex+rr*.32,cy-rr*.34);g.lineTo(cx+ex-rr*.2,cy-rr*.12);g.stroke()}}
+ const m={happy:1,calm:.65,flat:0,worry:-.65,mad:-.9,sad:-.85,sleepy:-.2}[mood]||0;
+ g.beginPath();g.moveTo(cx-rr*.4,cy+rr*.48);g.quadraticCurveTo(cx,cy+rr*.48+m*rr*.6,cx+rr*.4,cy+rr*.48);g.stroke();g.restore()}
+function drawPerson(g,x,y,col,mood,opt){opt=opt||{};const bob=opt.bob||0,hr=9,legs=8,torso=15,bw=17,by=y+bob-legs-torso,cy=by-hr+2,top=cy-hr;
+ g.save();
+ g.fillStyle='rgba(0,0,0,.22)';g.beginPath();g.ellipse(x,y+2,10,3.2,0,0,Math.PI*2);g.fill();
+ g.strokeStyle='#2b3a4b';g.lineWidth=3;g.lineCap='round';g.beginPath();g.moveTo(x-4,y);g.lineTo(x-4,y-legs);g.moveTo(x+4,y);g.lineTo(x+4,y-legs);g.stroke();
+ const sw=(opt.arm||0)*5;g.strokeStyle=col;g.lineWidth=3.6;
+ g.beginPath();g.moveTo(x-bw/2+2,by+4);g.lineTo(x-bw/2-3,by+11+sw);g.stroke();
+ g.beginPath();g.moveTo(x+bw/2-2,by+4);g.lineTo(x+bw/2+3,by+11-sw);g.stroke();
+ g.fillStyle=col;g.beginPath();g.roundRect(x-bw/2,by,bw,torso,5);g.fill();g.strokeStyle='rgba(0,0,0,.22)';g.lineWidth=1;g.stroke();
+ g.fillStyle='#f6d9b8';g.beginPath();g.arc(x,cy,hr,0,Math.PI*2);g.fill();g.strokeStyle='rgba(0,0,0,.2)';g.lineWidth=1;g.stroke();
+ g.fillStyle=opt.hair||'#4a3526';g.beginPath();g.arc(x,cy,hr,Math.PI*1.22,Math.PI*1.78);g.fill();
+ if(opt.cap){g.fillStyle='#f4f8fc';g.beginPath();g.arc(x,cy-.5,hr*.98,Math.PI*1.16,Math.PI*1.84);g.fill();g.fillRect(x-hr-4,cy-hr*.62,hr+4,2.6)}
+ drawFace(g,x,cy,hr,mood);
+ if(opt.basket){g.fillStyle='#d3543f';g.beginPath();g.roundRect(x+bw/2+1,by+9,9,8,2);g.fill()}
+ if(opt.bag){g.fillStyle='#f0e3c2';g.beginPath();g.roundRect(x+bw/2+1,by+7,10,12,2);g.fill();g.strokeStyle='#b9a880';g.lineWidth=1;g.stroke()}
+ if(opt.bar!=null){const w=22,p=clampN(opt.bar,0,1);g.fillStyle='rgba(0,0,0,.45)';g.beginPath();g.roundRect(x-w/2,top-9,w,5,2.5);g.fill();g.fillStyle=p>.6?'#8ce6a1':p>.3?'#ffb55d':'#ff7d7d';g.beginPath();g.roundRect(x-w/2,top-9,Math.max(2,w*p),5,2.5);g.fill()}
+ if(opt.sweat){const n=opt.sweat>1?3:2,ph=opt.phase||0;for(let k=0;k<n;k++){const a=(ph*.7+k*.34)%1;g.fillStyle='rgba(150,225,255,'+((1-a)*.9).toFixed(2)+')';g.beginPath();g.ellipse(x+hr+2+a*10,top+7-a*3+k*5,2,3,0,0,Math.PI*2);g.fill()}}
+ if(opt.clock){const kx=x+hr+8,ky=top-3;g.fillStyle='#fff';g.beginPath();g.arc(kx,ky,6,0,Math.PI*2);g.fill();g.strokeStyle='#d9534f';g.lineWidth=1.5;g.stroke();g.strokeStyle='#333';g.lineWidth=1.4;g.beginPath();g.moveTo(kx,ky);g.lineTo(kx,ky-4);g.moveTo(kx,ky);g.lineTo(kx+3,ky+1.6);g.stroke()}
+ if(opt.gift){g.strokeStyle='#ff9ecb';g.lineWidth=2;g.beginPath();g.arc(x,cy,hr+5,0,Math.PI*2);g.stroke()}
+ g.restore()}
+function drawClerk(g,x,y,i,t,busy,idle,red){const ph=t*(idle?1.1:3+busy*9)+i*1.3;
+ const bob=red?0:Math.sin(ph)*(idle?1.3:1.4+busy*3);
+ const arm=red?0:Math.sin(ph*1.6)*(idle?.15:.45+busy*.7);
+ drawPerson(g,x,y,'#ffd45c',idle?'sleepy':busy>.85?'worry':busy>.4?'flat':'calm',{bob:bob,arm:arm,cap:true,hair:'#3b2b1e',sweat:busy>.55?(busy>1?2:1):0,phase:t*.9+i});
+ if(busy>.95){g.save();g.strokeStyle='rgba(255,255,255,.42)';g.lineWidth=2;for(let k=0;k<3;k++){const yy=y-31+k*7;g.beginPath();g.moveTo(x-16-k*3,yy);g.lineTo(x-25-k*3,yy);g.stroke()}g.restore()}
+ if(idle&&i===0){g.save();g.font='bold 13px sans-serif';g.textAlign='center';const w=g.measureText('ひま…').width+14;
+  g.fillStyle='rgba(9,20,34,.86)';g.beginPath();g.roundRect(x-w/2,y-62,w,21,7);g.fill();
+  g.strokeStyle='#7fd3ff';g.lineWidth=1.4;g.stroke();
+  g.fillStyle='#bfe8ff';g.fillText('ひま…',x,y-47);g.restore()}}
+function drawShelves(now){const filled=clampN(Math.round(sim.inventory),0,SLOTS.length);
+ GOND.forEach(g0=>{X.fillStyle='#6a543c';X.beginPath();X.roundRect(g0.x,g0.y,g0.w,g0.h,7);X.fill();
+  X.fillStyle='#4b3b29';X.fillRect(g0.x+3,g0.y+3,g0.w-6,g0.h-6);
+  for(let tier=0;tier<3;tier++){X.fillStyle='#7d6449';X.fillRect(g0.x+3,g0.y+38+tier*44,g0.w-6,5)}});
+ SLOTS.forEach((s,i)=>{if(i<filled){const hue=[16,44,196,124][s.u];X.fillStyle='hsl('+hue+' 68% 57%)';X.beginPath();X.roundRect(s.x,s.y,s.w,s.h,3);X.fill();X.fillStyle='rgba(255,255,255,.5)';X.fillRect(s.x+2,s.y+4,s.w-4,3)}
+  else{X.fillStyle='rgba(0,0,0,.38)';X.beginPath();X.roundRect(s.x,s.y,s.w,s.h,3);X.fill()}});
+ GOND.forEach((g0,u)=>{const cnt=clampN(filled-u*12,0,12),f=cnt/12;
+  X.fillStyle='rgba(0,0,0,.4)';X.beginPath();X.roundRect(g0.x+8,g0.y+134,g0.w-16,8,4);X.fill();
+  X.fillStyle=f>.5?'#8ce6a1':f>.2?'#ffb55d':'#ff7d7d';X.beginPath();X.roundRect(g0.x+8,g0.y+134,Math.max(3,(g0.w-16)*f),8,4);X.fill();
+  if(cnt===0){X.save();X.fillStyle='rgba(255,90,90,.9)';X.beginPath();X.roundRect(g0.x+12,g0.y+58,g0.w-24,26,6);X.fill();X.fillStyle='#3a0b0b';X.font='bold 14px sans-serif';X.textAlign='center';X.fillText('からっぽ',g0.x+g0.w/2,g0.y+76);X.restore()}});
+ if(now-sim.pickAt<420){const g0=GOND[1],a=1-(now-sim.pickAt)/420;X.save();X.globalAlpha=a;X.strokeStyle='#ffe89a';X.lineWidth=4;X.beginPath();X.roundRect(g0.x-3,g0.y-3,g0.w+6,g0.h+6,9);X.stroke();X.strokeStyle='#fff';X.lineWidth=2.4;for(let k=0;k<3;k++){const ang=(-.35+k*.35)*Math.PI;X.beginPath();X.moveTo(g0.x+g0.w+4+Math.cos(ang)*6,g0.y+g0.h-24+Math.sin(ang)*6);X.lineTo(g0.x+g0.w+4+Math.cos(ang)*13,g0.y+g0.h-24+Math.sin(ang)*13);X.stroke()}X.restore()}
+ if(now-sim.fillAt<700){const g0=GOND[sim.fillUnit]||GOND[1],a=1-(now-sim.fillAt)/700;X.save();X.globalAlpha=a;X.strokeStyle='#bd7bff';X.lineWidth=5;X.beginPath();X.roundRect(g0.x-4,g0.y-4,g0.w+8,g0.h+8,9);X.stroke();X.restore()}}
+function drawRoad(){X.save();X.fillStyle='#2b3540';X.fillRect(0,10,744,36);
+ X.setLineDash([16,14]);X.strokeStyle='rgba(255,255,255,.32)';X.lineWidth=2;X.beginPath();X.moveTo(0,28);X.lineTo(744,28);X.stroke();X.setLineDash([]);
+ X.fillStyle='#8ba0b4';X.font='11px sans-serif';X.textAlign='left';X.fillText('はいそう道路',13,32);
+ for(const o of sim.orders){const lead=Math.max(1,Number($('lead').value)),p=clampN(1-(o.eta-sim.minute)/lead,0,1),tx=700-p*610;
+  X.fillStyle='#e2c9ff';X.beginPath();X.roundRect(tx,18,20,20,3);X.fill();
+  X.fillStyle='#bd7bff';X.beginPath();X.roundRect(tx+20,12,54,26,4);X.fill();
+  X.fillStyle='#1b2430';X.beginPath();X.arc(tx+12,40,5,0,Math.PI*2);X.arc(tx+34,40,5,0,Math.PI*2);X.arc(tx+62,40,5,0,Math.PI*2);X.fill();
+  X.fillStyle='#33115c';X.font='bold 12px sans-serif';X.textAlign='center';X.fillText(o.qty+'個',tx+47,30)}
+ X.restore()}
+function drawMoodSign(mood,t,red){const w=350,h=44,x=286,y=62;
+ X.save();X.strokeStyle='#7f6a4c';X.lineWidth=2;X.beginPath();X.moveTo(x+44,FLOOR.y);X.lineTo(x+44,y);X.moveTo(x+w-44,FLOOR.y);X.lineTo(x+w-44,y);X.stroke();
+ X.fillStyle='rgba(10,24,38,.94)';X.beginPath();X.roundRect(x,y,w,h,12);X.fill();X.strokeStyle=mood.col;X.lineWidth=3;X.stroke();
+ X.fillStyle=mood.col;X.beginPath();X.arc(x+25,y+22,13,0,Math.PI*2);X.fill();drawFace(X,x+25,y+22,13,mood.face);
+ X.fillStyle=mood.col;X.font='bold 16px sans-serif';X.textAlign='left';X.textBaseline='alphabetic';X.fillText('店のようす：'+mood.label,x+46,y+20);
+ const bw=w-60,bx=x+46,by=y+27;
+ X.fillStyle='rgba(255,255,255,.14)';X.beginPath();X.roundRect(bx,by,bw,9,5);X.fill();
+ const fill=clampN(mood.p/2.2,mood.key==='idle'?.03:.06,1);
+ X.fillStyle=mood.col;X.beginPath();X.roundRect(bx,by,Math.max(6,bw*fill),9,5);X.fill();
+ X.strokeStyle='rgba(255,255,255,.3)';X.lineWidth=1;[.32,.73].forEach(f=>{X.beginPath();X.moveTo(bx+bw*f,by);X.lineTo(bx+bw*f,by+9);X.stroke()});
+ X.restore()}
+function drawMain(){const now=performance.now(),t=now/1000,red=reducedMotion(),mood=storeMood();
+ X.clearRect(0,0,900,520);
+ X.fillStyle='#16281d';X.fillRect(0,0,900,520);
+ drawRoad();
+ X.fillStyle='rgba(0,0,0,.3)';X.beginPath();X.roundRect(FLOOR.x+6,FLOOR.y+9,FLOOR.w,FLOOR.h,15);X.fill();
+ X.fillStyle='#e7d8b7';X.beginPath();X.roundRect(FLOOR.x,FLOOR.y,FLOOR.w,FLOOR.h,15);X.fill();
+ X.save();X.beginPath();X.roundRect(FLOOR.x,FLOOR.y,FLOOR.w,FLOOR.h,15);X.clip();
+ X.strokeStyle='rgba(150,128,95,.3)';X.lineWidth=1;
+ for(let x=FLOOR.x+40;x<FLOOR.x+FLOOR.w;x+=40){X.beginPath();X.moveTo(x,FLOOR.y);X.lineTo(x,FLOOR.y+FLOOR.h);X.stroke()}
+ for(let y=FLOOR.y+40;y<FLOOR.y+FLOOR.h;y+=40){X.beginPath();X.moveTo(FLOOR.x,y);X.lineTo(FLOOR.x+FLOOR.w,y);X.stroke()}
+ X.fillStyle='rgba(255,255,255,.26)';X.fillRect(FLOOR.x+8,276,FLOOR.w-16,68);
+ X.setLineDash([6,7]);X.strokeStyle='rgba(120,100,70,.42)';X.lineWidth=2;
+ X.beginPath();X.moveTo(QROWS[0].x0,QROWS[0].y);X.lineTo(QROWS[0].x0+QROWS[0].dx*(QROWS[0].n-1),QROWS[0].y);X.stroke();
+ X.beginPath();X.moveTo(QROWS[1].x0,QROWS[1].y);X.lineTo(QROWS[1].x0+QROWS[1].dx*(QROWS[1].n-1),QROWS[1].y);X.stroke();
+ X.beginPath();X.moveTo(390,344);X.lineTo(390,278);X.stroke();X.setLineDash([]);
+ if(mood.key==='over'){X.fillStyle='rgba(255,90,90,'+(.06+(red?.03:.05*Math.abs(Math.sin(t*4)))).toFixed(3)+')';X.fillRect(FLOOR.x,FLOOR.y,FLOOR.w,FLOOR.h)}
+ else if(mood.key==='idle'){X.fillStyle='rgba(120,200,255,.05)';X.fillRect(FLOOR.x,FLOOR.y,FLOOR.w,FLOOR.h)}
+ X.restore();
+ X.fillStyle='#2f5f7a';X.beginPath();X.roundRect(FLOOR.x+4,398,78,72,6);X.fill();
+ X.fillStyle='#bfe6ff';X.font='bold 12px sans-serif';X.textAlign='center';X.fillText('入口',FLOOR.x+43,462);
+ X.strokeStyle='#bfe6ff';X.lineWidth=3;X.beginPath();X.moveTo(FLOOR.x+43,438);X.lineTo(FLOOR.x+43,412);X.moveTo(FLOOR.x+36,419);X.lineTo(FLOOR.x+43,411);X.lineTo(FLOOR.x+50,419);X.stroke();
+ X.fillStyle='#9c7443';X.beginPath();X.roundRect(BACKROOM.x,BACKROOM.y,BACKROOM.w,BACKROOM.h,7);X.fill();
+ X.fillStyle='#7d5b34';X.fillRect(BACKROOM.x+3,BACKROOM.y+3,BACKROOM.w-6,BACKROOM.h-6);
+ if(now-sim.deliverAt<800){const a=1-(now-sim.deliverAt)/800;X.save();X.globalAlpha=a;X.strokeStyle='#8ce6a1';X.lineWidth=4;X.beginPath();X.roundRect(BACKROOM.x-3,BACKROOM.y-3,BACKROOM.w+6,BACKROOM.h+6,9);X.stroke();X.restore()}
+ X.fillStyle='#fff6e4';X.font='bold 12px sans-serif';X.textAlign='left';X.fillText('バックヤード',BACKROOM.x+8,BACKROOM.y+20);
+ X.font='11px sans-serif';X.fillStyle='#f2e2c8';
+ X.fillText('たなの在庫 '+Math.round(sim.inventory)+'個',BACKROOM.x+8,BACKROOM.y+40);
+ X.fillText(sim.orders.length?'とうちゃくまで '+Math.max(0,Math.round(sim.orders[0].eta-sim.minute))+'分':'はっちゅう なし',BACKROOM.x+8,BACKROOM.y+58);
+ X.fillText('すてた '+sim.waste+'個',BACKROOM.x+8,BACKROOM.y+76);
+ drawShelves(now);
+ for(const po of sim.posters){X.save();X.translate(po.x,po.y);X.rotate(-.06);X.fillStyle='#ffd65c';X.beginPath();X.roundRect(-23,-17,46,34,5);X.fill();X.strokeStyle='#c79b1c';X.lineWidth=2;X.stroke();X.fillStyle='#3a2c00';X.font='bold 11px sans-serif';X.textAlign='center';X.fillText('セール',0,-2);X.fillText('中！',0,12);X.restore()}
+ X.fillStyle='#3d5567';X.beginPath();X.roundRect(COUNTER.x,COUNTER.y,COUNTER.w,COUNTER.h,7);X.fill();
+ X.fillStyle='#5e7d93';X.fillRect(COUNTER.x+3,COUNTER.y+3,COUNTER.w-6,11);
+ X.fillStyle='#dfe9f2';X.beginPath();X.roundRect(COUNTER.x+COUNTER.w-46,COUNTER.y+20,36,24,3);X.fill();
+ X.fillStyle='#33465a';X.fillRect(COUNTER.x+COUNTER.w-42,COUNTER.y+24,28,9);
+ X.fillStyle='#cfe4f6';X.font='bold 13px sans-serif';X.textAlign='left';X.fillText('レジ',COUNTER.x+10,COUNTER.y+38);
+ X.fillStyle=mood.col;X.font='bold 13px sans-serif';X.fillText('列 '+sim.queue.length+'人',COUNTER.x+44,COUNTER.y+38);
+ const st=Math.max(1,staffCount()),busy=clampN(sim.queue.length/(st*2),0,1.4),idle=sim.queue.length===0;
+ for(let i=0;i<st;i++)drawClerk(X,COUNTER.x+8+i*32,306,i,t,busy,idle,red);
+ for(const c of sim.customers){if(c.state==='queue')continue;
+  const col=c.state==='leave'?(c.mad||c.sad?BODY.upset:BODY.happy):BODY.browse;
+  const jx=c.state==='enter'?(c.tint-.5)*16:0;
+  drawPerson(X,c.x+jx,c.y,col,custMood(c),{basket:c.state!=='leave',bag:c.state==='leave'&&!c.mad&&!c.sad,hair:c.tint>.5?'#4a3526':'#2f2a3d'})}
+ const shown=Math.min(sim.queue.length,QSPOTS);
+ for(let i=0;i<shown;i++){const c=sim.queue[i],s=queueSpot(i),w=c.qwait||0,est=(i+1)*3.75/st;
+  drawPerson(X,s.x,s.y,BODY.queue,custMood(c),{bar:1-clampN(w/30,0,1),sweat:w>14?1:0,clock:w>=24,phase:t+i*.4,gift:c.gift&&now-c.gift<900,hair:c.tint>.5?'#4a3526':'#2f2a3d'});
+  if(i===0){X.save();X.font='bold 12px sans-serif';X.textAlign='center';const label='あと'+Math.round(est)+'分',bw2=X.measureText(label).width+14;
+   X.fillStyle='rgba(9,20,34,.86)';X.beginPath();X.roundRect(s.x-bw2/2,s.y+8,bw2,19,7);X.fill();
+   X.strokeStyle=est>25?'#ff7d7d':'#8ce6a1';X.lineWidth=1.4;X.stroke();
+   X.fillStyle=est>25?'#ff7d7d':'#c7f4d8';X.fillText(label,s.x,s.y+22);X.restore()}}
+ if(sim.queue.length>QSPOTS){const s=queueSpot(QSPOTS-1);X.save();X.fillStyle='#ff7d7d';X.font='bold 14px sans-serif';X.textAlign='left';X.fillText('+'+(sim.queue.length-QSPOTS)+'人',s.x+18,s.y-4);X.restore()}
+ drawMoodSign(mood,t,red);
+ if(sim.minute<sim.promoUntil){X.save();X.fillStyle='rgba(255,214,92,.92)';X.beginPath();X.roundRect(654,62,150,26,8);X.fill();X.fillStyle='#3a2c00';X.font='bold 12px sans-serif';X.textAlign='center';X.fillText('せんでん中 あと'+Math.max(0,Math.round(sim.promoUntil-sim.minute))+'分',729,79);X.restore()}
+ X.save();X.strokeStyle=mood.key==='over'?'rgba(255,120,120,'+(red?.8:.5+.4*Math.abs(Math.sin(t*5))).toFixed(2)+')':'rgba(150,180,164,.75)';X.lineWidth=mood.key==='over'?6:4;X.beginPath();X.roundRect(FLOOR.x,FLOOR.y,FLOOR.w,FLOOR.h,15);X.stroke();X.restore();
+ X.save();X.fillStyle='rgba(9,20,32,.9)';X.beginPath();X.roundRect(748,4,144,42,10);X.fill();X.strokeStyle='#3d6183';X.lineWidth=1;X.stroke();
+ X.fillStyle='#9fc9e8';X.font='11px sans-serif';X.textAlign='left';X.fillText('店内時刻',758,20);
+ X.fillStyle='#ffd65c';X.font='bold 20px ui-monospace,monospace';X.fillText(clockText(),816,26);
+ X.fillStyle='#9fc9e8';X.font='10px sans-serif';X.fillText('買えた '+sim.served+'人 / 帰った '+sim.abandoned+'人',758,40);X.restore();
+ drawFloaters(now);drawRipples(now);drawResultBand();
+ setMetrics()}
+function drawFloaters(now){X.save();X.textAlign='center';X.font='bold 13px sans-serif';
+ for(let i=floaters.length-1;i>=0;i--){const f=floaters[i],age=(now-f.t)/1800;
+  if(age>=1){floaters.splice(i,1);continue}
+  X.globalAlpha=1-age*age;const y=f.y-age*34,w=X.measureText(f.text).width+16;
+  X.fillStyle='rgba(9,20,34,.88)';X.beginPath();X.roundRect(f.x-w/2,y-15,w,21,7);X.fill();
+  X.strokeStyle=f.col;X.lineWidth=1.5;X.stroke();X.fillStyle=f.col;X.fillText(f.text,f.x,y)}X.restore()}
+function drawRipples(now){X.save();for(let i=ripples.length-1;i>=0;i--){const rp=ripples[i],age=(now-rp.t)/700;
+ if(age>=1){ripples.splice(i,1);continue}
+ X.globalAlpha=(1-age)*.9;X.strokeStyle=rp.col;X.lineWidth=4;X.beginPath();X.arc(rp.x,rp.y,14+age*88,0,Math.PI*2);X.stroke()}X.restore()}
+function drawResultBand(){X.save();X.fillStyle='rgba(7,17,29,.94)';X.beginPath();X.roundRect(16,480,868,34,10);X.fill();X.strokeStyle='#3d6183';X.lineWidth=1;X.stroke();
+ X.fillStyle='#ffd65c';X.font='bold 15px sans-serif';X.textAlign='left';X.textBaseline='alphabetic';X.fillText(toolMsg||toolBanner(tool),28,503);X.restore()}
+function drawSecond(){Y.clearRect(0,0,900,240);Y.fillStyle='#08131f';Y.fillRect(0,0,900,240);
+ Y.strokeStyle='#22405a';Y.lineWidth=1;for(let i=0;i<5;i++){const y=20+i*42;Y.beginPath();Y.moveTo(52,y);Y.lineTo(878,y);Y.stroke()}
+ // Scales grow with the run so a busy day does not flat-line against the ceiling.
+ const peak=(k,floorV)=>Math.max(floorV,...history.map(h=>k==='profit'?Math.max(0,h[k]):h[k]));
+ const invMax=peak('inv',90),qMax=peak('q',20),pfMax=peak('profit',5000);
+ const rp=Number($('reorder').value),ry=210-Math.min(1,rp/invMax)*180;
+ Y.setLineDash([6,6]);Y.strokeStyle='#ff9c6b';Y.lineWidth=1.5;Y.beginPath();Y.moveTo(52,ry);Y.lineTo(878,ry);Y.stroke();Y.setLineDash([]);
+ Y.fillStyle='#ff9c6b';Y.font='11px sans-serif';Y.textAlign='left';Y.fillText('発注点 '+rp+'個',56,ry-5);
+ const xAt=i=>55+i/Math.max(1,history.length-1)*820;
+ if(history.length>1){Y.fillStyle='rgba(255,180,93,.22)';Y.beginPath();Y.moveTo(xAt(0),210);history.forEach((h,i)=>Y.lineTo(xAt(i),210-Math.min(1,h.q/qMax)*180));Y.lineTo(xAt(history.length-1),210);Y.closePath();Y.fill()}
+ [['inv','#68d9ff',invMax],['q','#ffb45d',qMax],['profit','#7be6a5',pfMax]].forEach(([k,col,max])=>{Y.strokeStyle=col;Y.lineWidth=2.4;Y.beginPath();history.forEach((h,i)=>{let val=k==='profit'?Math.max(0,h[k]):h[k],x=xAt(i),y=210-Math.min(1,val/max)*180;i?Y.lineTo(x,y):Y.moveTo(x,y)});Y.stroke()});
+ for(let i=1;i<history.length;i++)if(history[i].lost>history[i-1].lost){Y.fillStyle='#ff7d7d';Y.beginPath();Y.roundRect(xAt(i)-1.5,213,3,13,1.5);Y.fill()}
+ Y.fillStyle='#7f9bb5';Y.font='10px sans-serif';Y.textAlign='right';Y.fillText('多い',48,26);Y.fillText('少ない',48,208);
+ Y.fillStyle='#dcecff';Y.font='12px sans-serif';Y.textAlign='left';Y.fillText('水色 棚在庫 上まで'+Math.round(invMax)+'個　橙 レジ列 上まで'+Math.round(qMax)+'人　緑 利益 上まで'+Math.round(pfMax)+'円　赤い印 しなぎれ',55,234)}
+function setMetrics(){const avg=sim.served?sim.qwaitSum/sim.served:0;
+ $('m0').textContent=Math.round(sim.inventory)+'個';
+ $('m1').textContent=sim.queue.length+'人';
+ $('m2').textContent=sim.revenue.toFixed(0)+'円';
+ $('m3').textContent=profit().toFixed(0)+'円';
+ $('m4').textContent=sim.lost+'個';
+ $('m5').textContent=sim.waste+'個';
+ $('m6').textContent=sim.abandoned+'人';
+ $('m7').textContent=avg.toFixed(0)+'分'}
+function setStatus(){const b=$('statusBox'),m=storeMood();let cls='status',txt;
+ if(sim.inventory<=0||sim.lost>15){cls='status bad';txt='たなが 空きはじめ、'+sim.lost+'個ぶんの お客さんを のがしました。発注点を 上げる、発注量を ふやす、補充遅延を みじかくする。そのかわり 廃棄と 仕入費が ふえないかも 見ます。'}
+ else if(m.key==='over'){cls='status bad';txt='レジ列 '+sim.queue.length+'人で パンク寸前。店員に 汗が うかび、まつ お客さんが 時計を 見はじめます。店員を よぶか、おまけで いらいらを へらします。'}
+ else if(m.key==='busy'){cls='status warn';txt='こんできました。レジ列 '+sim.queue.length+'人。いま 店員を ふやすと、帰ってしまう人を へらせます。'}
+ else if(sim.waste>8){cls='status warn';txt='廃棄が ふえています。発注しすぎ、長い保管、閉店前値引きの 不足が 原因の 候補です。'}
+ else if(m.key==='idle'){cls='status good';txt='いまは ひまで、店員は 手持ち無沙汰です。せんでんや ねだんを 見なおすと お客さんが ふえます。'}
+ else{cls='status';txt='客、商品、注文、現金が べつの 速さで 流れます。しなぎれを へらす操作が、廃棄や 仕入費を ふやさないかも 同時に 見ます。'}
+ if(b.className!==cls)b.className=cls;
+ if(b.dataset.msg!==txt){b.dataset.msg=txt;b.textContent=txt}}
+function makeSnapshot(){return{price:$('price').value,staff:$('staff').value,reorder:$('reorder').value,order:$('orderQty').value,inventory:Math.round(sim.inventory),queue:sim.queue.length,revenue:+sim.revenue.toFixed(0),profit:+profit().toFixed(0),lost:sim.lost,waste:sim.waste,left:sim.abandoned,wait:+(sim.served?sim.qwaitSum/sim.served:0).toFixed(1)}}
+function snapshotText(s){return`価格 ${s.price}円 / 店員 ${s.staff}人 / 発注点 ${s.reorder}\n在庫 ${s.inventory}　列 ${s.queue}人　売上 ${s.revenue}円\n利益 ${s.profit}円　機会損失 ${s.lost}　廃棄 ${s.waste}\n帰った人 ${s.left}人　へいきん まち ${s.wait}分`}
+function compareSnapshots(a,b){return`B−A: 利益 ${b.profit-a.profit}円、機会損失 ${b.lost-a.lost}個、廃棄 ${b.waste-a.waste}個、列 ${b.queue-a.queue}人、帰った人 ${b.left-a.left}人。単一指標の最大化を避けます。`}
+$('controlPanel').insertAdjacentHTML('beforeend','<div class="buttonRow"><button id="rushBtn">👥 急な来客</button><button id="delayBtn">🚚 仕入れ遅延</button></div>');
+$('rushBtn').onclick=()=>{for(let i=0;i<12;i++)sim.customers.push({x:60,y:470+i*2,state:'enter',want:1+Math.floor(r()*3),wait:0,qwait:0,tint:r()});pushEvent('warn','お客さんが どっと 入ってきた');floater(FLOOR.x+43,388,'12人 来た！','#67d9ff')};
+$('delayBtn').onclick=()=>{sim.orders.forEach(o=>o.eta+=45);pushEvent('warn','トラックが おくれた。とうちゃくが 45分 のびた')};
+const toolBtns={staff:$('toolStaff'),restock:$('toolRestock'),promo:$('toolPromo'),gift:$('toolGift')};
+function setTool(name){tool=name;Object.keys(toolBtns).forEach(k=>{const b=toolBtns[k];if(b){b.classList.toggle('on',k===name);b.setAttribute('aria-pressed',k===name?'true':'false')}});toolMsg=toolBanner(name);const h=$('tapHint');if(h)h.textContent='👆 '+TOOLS[name].icon+' '+toolBanner(name);drawAll()}
+Object.keys(toolBtns).forEach(k=>{const b=toolBtns[k];if(b)b.addEventListener('click',()=>setTool(k))});
+function canvasPoint(event){const box=C.getBoundingClientRect();return{x:(event.clientX-box.left)*900/box.width,y:(event.clientY-box.top)*520/box.height}}
+function applyTool(p){
+ if(tool==='staff'){
+  const el=$('staff'),cur=Number(el.value);
+  if(cur>=5){toolMsg='店員は もう 5人。これ以上は よべない';ripple(p.x,p.y,'#ff8b82');drawAll();return}
+  el.value=String(cur+1);el.dispatchEvent(new Event('input',{bubbles:true}));
+  ripple(p.x,p.y,'#8ce6a1');floater(COUNTER.x+40,286,'店員 +1','#8ce6a1');
+  pushEvent('good','店員が '+(cur+1)+'人に なった。レジが 早くなる');
+  toolMsg='店員 '+(cur+1)+'人 → レジの 進みが 早くなり、列が みじかくなる';
+ }else if(tool==='restock'){
+  const qty=Math.max(10,Math.round(Number($('orderQty').value)/2));
+  sim.inventory+=qty;sim.cost+=qty*EXPRESS_COST;
+  let g=GOND.find(u=>p.x>=u.x-24&&p.x<=u.x+u.w+24)||GOND[1];
+  sim.fillAt=performance.now();sim.fillUnit=GOND.indexOf(g);
+  ripple(p.x,p.y,'#bd7bff');floater(g.x+g.w/2,g.y+30,'+'+qty+'個','#bd7bff');
+  pushEvent('good','きゅうびんで 商品が '+qty+'個 とどいた。仕入れ代は 高め');
+  toolMsg='きゅうびん +'+qty+'個（1個 '+EXPRESS_COST+'円の 高い仕入れ）→ しなぎれは 減るが 利益も 減る';
+ }else if(tool==='promo'){
+  sim.promo=Math.min(1.2,sim.promo+.5);sim.promoUntil=sim.minute+90;sim.cost+=AD_COST;
+  sim.posters.push({x:clampN(p.x,FLOOR.x+30,FLOOR.x+FLOOR.w-30),y:clampN(p.y,FLOOR.y+30,FLOOR.y+FLOOR.h-30),until:sim.minute+90});
+  ripple(p.x,p.y,'#ffd65c');floater(p.x,p.y-26,'セール中！','#ffd65c');
+  pushEvent('info','せんでん した。お客さんが ふえる（広告代 '+AD_COST+'円）');
+  toolMsg='せんでん：これから 90分 お客さんが ふえる。広告代 '+AD_COST+'円は 利益から ひかれる';
+ }else if(tool==='gift'){
+  let hit=0;const now=performance.now();
+  sim.queue.forEach((c,i)=>{const s=queueSpot(i);if(Math.hypot(s.x-p.x,s.y-p.y)<86){c.wait=Math.max(0,c.wait-40);c.qwait=Math.max(0,(c.qwait||0)-16);c.gift=now;hit++}});
+  if(!hit){toolMsg='おまけ：レジに ならんでいる お客さんの ちかくを タップしよう';ripple(p.x,p.y,'#ff8b82');drawAll();return}
+  sim.cost+=hit*GIFT_COST;
+  ripple(p.x,p.y,'#ff9ecb');floater(p.x,p.y-40,'おまけ ありがとう','#ff9ecb');
+  pushEvent('good','おまけを '+hit+'人に わたした。まつ いらいらが へった');
+  toolMsg='おまけ '+hit+'人：まち時間の いらいらが へって、帰ってしまう人が 減る';
+ }
+ if(!running)setRunning(true);
+ drawAll()}
+C.addEventListener('pointerdown',event=>{event.preventDefault();applyTool(canvasPoint(event))});
 
 
 function $(id){return document.getElementById(id)}
-let running=false,speed=1,lastTs=performance.now(),accum=0,snapA=null,snapB=null,tourIndex=0,r45Pulse=0;
-const tourTargets=['playBtn','stepBtn','controlPanel','mainCanvas','secondCanvas','experimentBox'];
-const tourTexts=['再生で時間を進めます。一時停止中は一段送りで因果を確かめられます。','一段送りは同じ初期条件を少しだけ進めます。','操作は数値だけでなく、主図の経路・速度・量・分布・損失を変えます。','主図で物体や流れの変化を見ます。初期画面から中心機構が見えます。','第二ビューは同じ状態を時系列・分布・収支として示します。','★実験では一つだけ条件を変え、条件A/Bを比べます。'];
+let running=false,speed=1,lastTs=performance.now(),accum=0,snapA=null,snapB=null,tourIndex=0;
+const tourTargets=['playBtn','stepBtn','tapTools','mainCanvas','eventFeed','controlPanel','secondCanvas','experimentBox'];
+const tourTexts=['再生で時間を進めます。一時停止中は一段送りで因果を確かめられます。','一段送りは同じ初期条件を少しだけ進めます。','道具をえらんで、店の絵をタップします。店員をよぶ、きゅうびん、せんでん、おまけの四つです。','店の絵では、行列の長さ、お客さんの顔、店員の汗、棚のすきまを見ます。','できごと欄には、帰ってしまった客やトラック到着が言葉で残ります。','操作は数値だけでなく、主図の行列・棚・表情を変えます。','第二ビューは同じ状態を時系列・分布・収支として示します。','★実験では一つだけ条件を変え、条件A/Bを比べます。'];
 function setRunning(v){running=v;$('playBtn').textContent=v?'⏸ 一時停止':'▶ 再生';$('playBtn').classList.toggle('primary',!v)}
 $('playBtn').addEventListener('click',()=>setRunning(!running));
 $('stepBtn').addEventListener('click',()=>{setRunning(false);updateModel(0.25);drawAll()});
@@ -84,20 +345,9 @@ $('recB').addEventListener('click',()=>{snapB=makeSnapshot();$('snapB').textCont
 $('clearAB').addEventListener('click',()=>{snapA=snapB=null;$('snapA').textContent=$('snapB').textContent='未記録';$('diffAB').textContent='同じ初期条件でAを記録し、一つだけ操作を変えてBを記録します。'});
 function updateDiff(){$('diffAB').textContent=snapA&&snapB?compareSnapshots(snapA,snapB):'AとBの両方を記録してください。'}
 
-function drawR45Phase(){
-  const sel=$('scenarioSel'), label=sel&&sel.options[sel.selectedIndex]?sel.options[sel.selectedIndex].text:'標準';
-  [[X,C],[Y,S]].forEach(([g,cv])=>{
-    g.save();g.setTransform(1,0,0,1,0,0);g.globalAlpha=.94;
-    const w=Math.min(188,cv.width-18),x=cv.width-w-9,y=8;
-    g.fillStyle='hsl('+((r45Pulse*37)%360)+' 45% 22% / .95)';g.strokeStyle='#4f6f8d';g.lineWidth=1;g.beginPath();g.roundRect(x,y,w,28,9);g.fill();g.stroke();
-    g.fillStyle='#d9ecff';g.font='10px sans-serif';g.textAlign='left';g.fillText('更新位相 '+r45Pulse+' / '+label.slice(0,12),x+9,y+18);
-    g.fillStyle='#ffd65c';g.fillRect(x+8,y+22,(r45Pulse*23)%(w-16),4);g.beginPath();g.arc(x+10+(r45Pulse*19)%(w-20),y+24,3.2,0,Math.PI*2);g.fill();
-    g.restore();
-  });
-}
-function drawAll(){drawMain();drawSecond();drawR45Phase()}
+function drawAll(){drawMain();drawSecond()}
 function animationLoop(ts){const elapsed=Math.min(.12,(ts-lastTs)/1000);lastTs=ts;if(running){accum+=elapsed*speed;let guard=0;while(accum>=.05&&guard++<12){updateModel(.05);accum-=.05}}drawAll();requestAnimationFrame(animationLoop)}
-syncLabels();resetModel(false);drawAll();requestAnimationFrame(animationLoop);
+syncLabels();resetModel(false);setTool(tool);drawAll();requestAnimationFrame(animationLoop);
 </script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
 const ready=()=>{

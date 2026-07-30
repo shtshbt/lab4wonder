@@ -17,11 +17,11 @@ input[type="checkbox"],input[type="radio"]{min-width:28px;min-height:28px}
 a[href="index.html"],a[href="kids-index.html"]{display:inline-flex;align-items:center;min-height:40px;padding:8px 4px}
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
 </style><meta name="r60-explicit-accessibility" content="static-control-labels"><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
-</head><body data-first="深海の主画面に現れる生物や地形をタップして発見しよう。深度を変えると出会いも変わる。">
+</head><body data-first="主画面をなぞって探査灯を向け、明かりに浮かんだ生き物をタップして発見しよう。深く潜ると出会う生き物が変わる。">
 <header class="hdr"><div><span class="badge">深海・探査</span><h1><ruby>深海探査<rt>しんかいたんさ</rt></ruby>・資源と圧力ラボ</h1><div class="sub">浮力、推進、圧力、照明、ソナー、採取、電池、酸素、通信遅延を時間発展させる。</div></div><div class="headActions"><button id="guideBtn" aria-label="？ ガイド">？ ガイド</button><button id="speakBtn" aria-label="🔊 読む">🔊 読む</button><button id="tourBtn" aria-label="👣 操作">👣 操作</button><button id="resetBtn" aria-label="↺ リセット">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>深海探査艇の鉛直運動と限られた資源を結ぶ概念模型。</p></div><div><b>どこを見る？</b><p>深度、圧力、電池、酸素、船殻余裕、通信遅延。</p></div><div><b>何を変える？</b><p>バラスト、推進、照明、ソナー、採取、船殻性能。</p></div><div><b>持ち帰る一文</b><p>深く行くほど観測機会は増えるが、圧力と通信遅延が増え、帰還資源も減る。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 照明を強くすると観測範囲と帰還余裕はどう変わるか</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
-<section class="stage"><canvas id="mainCanvas" width="800" height="430" aria-label="深海を潜航する探査艇と、ゆっくり現れる深海生物。生物をタップして発見できる" role="img"></canvas><div id="creatureStatus" class="callout" role="status" aria-live="polite">▶ 再生を押すと、光の中へ生物がゆっくり入ってきます。現れた生物をタップしよう。</div></section>
+<section class="stage"><canvas id="mainCanvas" width="800" height="430" aria-label="深海を潜航する探査艇と探査灯。画面をなぞって灯りを向け、明かりに浮かんだ生物をタップして発見できる" role="img"></canvas><div id="creatureStatus" class="callout" role="status" aria-live="polite">▶ 再生を押すと、生き物がゆっくり動き出します。画面をなぞって探査灯を向け、明かりに浮かんだ生き物をタップして図鑑に記録しよう。深く潜ると出会う生き物が変わります。</div></section>
 <div class="toolbar"><button id="playBtn" class="primary" aria-label="▶ 再生">▶ 再生</button><button id="stepBtn" aria-label="⏭ 一段">⏭ 一段</button><select id="speedSel" aria-label="速度"><option value="0.5">0.5倍</option><option value="1" selected>1倍</option><option value="2">2倍</option><option value="4">4倍</option></select><select id="scenarioSel" aria-label="シナリオ"><option value="0">沿岸調査</option><option value="1">夜間採取</option><option value="2">省電力深海</option><option value="3">高負荷海溝</option></select><button id="randomBtn" aria-label="🎲 課題">🎲 課題</button><button id="sameSeedBtn" aria-label="同じ初期へ">同じ初期へ</button></div>
 <section class="metrics"><div class="metric"><b>深度</b><strong id="m0">—</strong></div><div class="metric"><b>圧力</b><strong id="m1">—</strong></div><div class="metric"><b>電池</b><strong id="m2">—</strong></div><div class="metric"><b>酸素</b><strong id="m3">—</strong></div><div class="metric"><b>船殻余裕</b><strong id="m4">—</strong></div><div class="metric"><b>通信遅延</b><strong id="m5">—</strong></div></section>
 <div class="layout"><section class="card"><h2>因果操作</h2><label class="control"><span>バラスト</span><output id="ballastOut"></output><input id="ballast" type="range" min="0" max="100" value="55" step="1" aria-label="バラスト"></label><label class="control"><span>上下推進</span><output id="thrustOut"></output><input id="thrust" type="range" min="0" max="100" value="45" step="1" aria-label="上下推進"></label><label class="control"><span>照明出力</span><output id="lightsOut"></output><input id="lights" type="range" min="0" max="100" value="35" step="1" aria-label="照明出力"></label><label class="control"><span>ソナー出力</span><output id="sonarOut"></output><input id="sonar" type="range" min="0" max="100" value="30" step="1" aria-label="ソナー出力"></label><label class="control"><span>採取負荷</span><output id="samplingOut"></output><input id="sampling" type="range" min="0" max="100" value="20" step="1" aria-label="採取負荷"></label><label class="control"><span>船殻性能</span><output id="hullOut"></output><input id="hull" type="range" min="30" max="100" value="80" step="1" aria-label="船殻性能"></label></section><section class="card"><h2>状態の説明</h2><div id="explain" class="callout" aria-live="polite"></div><h2 style="margin-top:10px">A/B比較</h2><div class="row"><button id="saveA" class="primary" aria-label="条件Aを記録">条件Aを記録</button><button id="saveB" aria-label="条件Bを記録">条件Bを記録</button><button id="clearAB" aria-label="消去">消去</button></div><div class="ab"><div><div class="small">条件A</div><div id="snapA" class="snap">未記録</div></div><div><div class="small">条件B</div><div id="snapB" class="snap">未記録</div></div></div><div id="diff" class="callout" style="margin-top:8px">同じ初期条件でAを走らせ、戻して一つだけ操作を変え、Bを記録する。</div></section></div>
@@ -41,38 +41,124 @@ function controlValues(){const out={};document.querySelectorAll('.control input,
 function controlText(){return Object.entries(controlValues()).map(([k,v])=>k+'='+v).join(', ')}
 
 const C={ballast:$('ballast'),thrust:$('thrust'),lights:$('lights'),sonar:$('sonar'),sampling:$('sampling'),hull:$('hull')};let s={},scenarioApplied=-1;
-const deepSpecies=[
-  {name:'ハダカイワシ',icon:'🐟',depth:350,kind:'fish'},
-  {name:'クシクラゲ',icon:'🪼',depth:900,kind:'glow'},
-  {name:'ダイオウイカ',icon:'🦑',depth:1800,kind:'giant'},
-  {name:'メンダコ',icon:'🐙',depth:3200,kind:'soft'},
-  {name:'チョウチンアンコウ',icon:'🐡',depth:4700,kind:'angler'}
-];
-function makeDeepCreatures(){return deepSpecies.map((d,i)=>({...d,x:i%2?805:-18,vx:(i%2?-1:1)*(5+rng()*2),age:-(.6+i*1.7),flash:0,renderX:0,renderY:0,hitRadius:38}))}
-function resetSim(seed){rng=mulberry32(seed);const q=$('scenarioSel').selectedIndex;if(q!==scenarioApplied){const a=[[55,45,35,30,20,80],[75,55,70,65,45,75],[35,65,20,15,10,95],[80,35,60,80,70,65]][q];[C.ballast.value,C.thrust.value,C.lights.value,C.sonar.value,C.sampling.value,C.hull.value]=a.map(String);scenarioApplied=q}s={t:0,depth:120,v:0,battery:100,oxygen:100,temp:13,samples:0,stress:0,hist:[],path:[],creatures:makeDeepCreatures(),found:new Set()};$('creatureStatus').textContent='▶ 再生を押すと、光の中へ生物がゆっくり入ってきます。現れた生物をタップしよう。';drawAll()}
-function calc(){const depth=s.depth,pressure=1+depth/10,ball=(Number(C.ballast.value)-50)/50,thrust=(Number(C.thrust.value)-50)/50,power=1.3+Number(C.lights.value)*.035+Number(C.sonar.value)*.028+Number(C.sampling.value)*.02+Math.abs(thrust)*2.1,stress=pressure/(8+Number(C.hull.value)*.1),comm=depth/750+.25;return{pressure,ball,thrust,power,stress,comm}}
-function advance(){const q=calc(),buoy=-q.ball*.22-q.thrust*.32;s.v=clamp((s.v+buoy)*.93,-4.5,4.5);s.depth=clamp(s.depth+s.v*4,0,6000);s.battery=Math.max(0,s.battery-q.power*.035);s.oxygen=Math.max(0,s.oxygen-(.035+Number(C.sampling.value)*.0008));s.temp=13-11*clamp(s.depth/4000,0,1);if(Number(C.sampling.value)>45&&s.depth>700&&s.battery>3)s.samples+=Number(C.sampling.value)/500;s.stress=calc().stress;s.t++;s.path.push([s.t,s.depth]);if(s.path.length>90)s.path.shift();s.hist.push({t:s.t,d:s.depth,b:s.battery,o:s.oxygen,stress:s.stress,samp:s.samples});if(s.hist.length>140)s.hist.shift()}
-function advanceCreatures(dt,active){for(const a of s.creatures){a.flash=Math.max(0,a.flash-dt*4);if(!active)continue;a.age+=dt;if(a.age>0&&a.kind!=='giant')a.x+=a.vx*dt;if(a.x>830){a.x=805;a.vx=-Math.abs(a.vx)}if(a.x<-30){a.x=-18;a.vx=Math.abs(a.vx)}if(a.kind==='giant'&&a.age>48)a.age=.2}}
-function creatureY(a){return 45+clamp(a.depth/6000,0,1)*330}
+/* Depth window of each 図鑑 の海域. A creature drawn at that depth may only stand in
+   for cards that really live there, so the whole catalogue becomes reachable by
+   diving through the layers. Windows are matched by keyword to keep labels free. */
+const ZONE_DEPTH=[['薄明帯',200,1000],['漸深海帯',1000,4000],['深海平原',4000,5500],['超深海帯',5500,6000],['熱水噴出孔',2200,3200],['冷湧水',900,2100]];
+/* Fish that fish with their own light get the lure body plan. */
+const LURE_FISH=new Set(['チョウチンアンコウ','ホウライエソ','ホテイエソ','ワニトカゲギス','ヒカリキンメダイ','ヨコエソ','ムネエソ','ボウエンギョ']);
+const DEEP_PER_ZONE=4,ROTATE_EVERY=1.1,TAP_LIT=.3,DIM_LIT=.05;
+const INTRO_TEXT='▶ 再生を押すと、生き物がゆっくり動き出します。画面をなぞって探査灯を向け、明かりに浮かんだ生き物をタップして図鑑に記録しよう。深く潜ると出会う生き物が変わります。';
+let cardRng=mulberry32(390101),deepPool=null,deepCards=null;
+/* Card draws run on their own generator so saved progress never shifts the model. */
+function cardRand(){return cardRng()}
+function zoneWindow(zone){const text=String(zone||'');for(const z of ZONE_DEPTH)if(text.indexOf(z[0])>=0)return z;return null}
+/* The catalogue and the shared behaviour script both arrive after this one, so the
+   pool is picked up the first time it is available. */
+function deepReady(){if(deepCards)return true;const pool=window.lwAtlasCardPool?.();if(!pool)return false;const list=pool.cards.filter(card=>zoneWindow(card.zone));if(!list.length)return false;deepPool=pool;deepCards=list;return true}
+/* Cards whose depth window fits this depth best. Ties keep every equally close
+   card, so a vent field also offers the open water species around it. */
+function deepCandidates(depth){let best=Infinity,out=[];for(const card of deepCards){const w=zoneWindow(card.zone),gap=depth<w[1]?w[1]-depth:depth>w[2]?depth-w[2]:0;if(gap<best-1){best=gap;out=[card]}else if(gap<best+1)out.push(card)}return out}
+function deepForm(card){if(card.name==='ダイオウイカ')return'giant';if(LURE_FISH.has(card.name))return'angler';if(card.group==='頭足類')return'soft';if(card.group==='刺胞動物'||card.group==='有櫛動物')return'glow';return'plain'}
+function deepTaken(){const taken=new Map();for(const a of s.creatures||[])if(a.card)taken.set(a.card,(taken.get(a.card)||0)+1);return taken}
+function rollDeepCard(a,taken){if(!deepReady())return false;const list=deepCandidates(a.depth);if(!list.length)return false;const card=deepPool.pick(list,taken||deepTaken(),cardRand);if(!card)return false;a.card=card.name;a.icon=card.icon||'？';a.group=card.group||'';a.zone=card.zone||'';a.form=deepForm(card);a.hitRadius=a.form==='giant'?64:a.form==='glow'||a.form==='angler'?42:34;a.age=-.15;a.leaving=0;return true}
+/* Give a card to individuals that do not have one yet. Runs every frame because the
+   catalogue and the shared behaviour script both load after this script. */
+function fillDeepCards(){if(!deepReady()||!s.creatures)return;let taken=null;for(const a of s.creatures){if(a.card)continue;if(!taken)taken=deepTaken();rollDeepCard(a,taken)}}
+/* Deal a fresh hand to everyone, keeping each individual where it is in its own
+   fade in. Used when the scene is reset and again once saved progress is loaded,
+   so the ✓ marks and the weighting match what the visitor already has. */
+function claimDeepCards(){if(!deepReady()||!s.creatures)return;const taken=deepTaken();for(const a of s.creatures){if(a.leaving>0)continue;const age=a.age;if(rollDeepCard(a,taken))a.age=age}}
+function makeDeepCreatures(){const out=[];for(const z of ZONE_DEPTH)for(let i=0;i<DEEP_PER_ZONE;i++){const t=(i+.2+rng()*.6)/DEEP_PER_ZONE;out.push({depth:z[1]+t*(z[2]-z[1]),x:20+rng()*760,vx:(rng()<.5?-1:1)*(7+rng()*11),bob:rng()*6.28,age:-(rng()*1.4),flash:0,card:'',icon:'？',group:'',zone:'',form:'plain',renderX:0,renderY:0,hitRadius:34,leaving:0,lit:0})}return out}
+function resetSim(seed){rng=mulberry32(seed);const q=$('scenarioSel').selectedIndex;if(q!==scenarioApplied){const a=[[55,45,35,30,20,80],[75,55,70,65,45,75],[35,65,20,15,10,95],[80,35,60,80,70,65]][q];[C.ballast.value,C.thrust.value,C.lights.value,C.sonar.value,C.sampling.value,C.hull.value]=a.map(String);scenarioApplied=q}cardRng=mulberry32((seed^0x5f3a)>>>0);s={t:0,depth:120,v:0,battery:100,oxygen:100,temp:13,samples:0,stress:0,hist:[],path:[],creatures:makeDeepCreatures(),found:new Set(),beamAngle:0,rotate:0,rotateAt:0};claimDeepCards();$('creatureStatus').textContent=INTRO_TEXT;drawAll()}
+function calc(){const depth=s.depth,pressure=1+depth/10,ball=(Number(C.ballast.value)-50)/50,thrust=(Number(C.thrust.value)-50)/50,power=1.3+Number(C.lights.value)*.035+Number(C.sonar.value)*.028+Number(C.sampling.value)*.02+Math.abs(thrust)*2.1,stress=pressure/(60+Number(C.hull.value)*5.4),comm=depth/750+.25;return{pressure,ball,thrust,power,stress,comm}}
+/* A step moves the boat far enough that one dive can visit every depth layer, and
+   hull margin now runs out near the depth its rating allows instead of at 160 m. */
+function advance(){const q=calc(),buoy=-q.ball*.22-q.thrust*.32;s.v=clamp((s.v+buoy)*.93,-4.5,4.5);s.depth=clamp(s.depth+s.v*22,0,6000);s.battery=Math.max(0,s.battery-q.power*.035);s.oxygen=Math.max(0,s.oxygen-(.035+Number(C.sampling.value)*.0008));s.temp=13-11*clamp(s.depth/4000,0,1);if(Number(C.sampling.value)>45&&s.depth>700&&s.battery>3)s.samples+=Number(C.sampling.value)/500;s.stress=calc().stress;s.t++;s.path.push([s.t,s.depth]);if(s.path.length>90)s.path.shift();s.hist.push({t:s.t,d:s.depth,b:s.battery,o:s.oxygen,stress:s.stress,samp:s.samples});if(s.hist.length>140)s.hist.shift()}
+function advanceCreatures(dt,active){
+  if(!s.creatures)return;
+  fillDeepCards();
+  for(const a of s.creatures){
+    a.flash=Math.max(0,a.flash-dt*4);
+    if(!active)continue;
+    a.age+=dt;a.bob+=dt*.7;
+    if(a.leaving>0){a.leaving-=dt;a.x+=a.vx*dt*2.6;if(a.leaving<=0)rollDeepCard(a)}
+    else if(a.age>0)a.x+=a.vx*dt;
+    if(a.x>828){a.x=828;a.vx=-Math.abs(a.vx)}
+    if(a.x<-28){a.x=-28;a.vx=Math.abs(a.vx)}
+  }
+  syncDeepCreatures();
+  if(!active)return;
+  s.rotate+=dt;
+  if(s.rotate>=ROTATE_EVERY){s.rotate=0;rotateDarkCreature();syncDeepCreatures()}
+}
+/* Only creatures outside the lamp are swapped for another card: what the beam
+   already shows stays where it is, and the dark keeps offering something new. */
+function rotateDarkCreature(){const list=s.creatures;if(!list||!list.length)return;const taken=deepTaken();for(let i=0;i<list.length;i++){const a=list[(s.rotateAt+i)%list.length];if(a.leaving>0||a.lit>DIM_LIT)continue;s.rotateAt=(s.rotateAt+i+1)%list.length;rollDeepCard(a,taken);return}s.rotateAt=(s.rotateAt+1)%list.length}
+function creatureY(depth){return 45+clamp(depth/6000,0,1)*330}
+function subY(){return creatureY(s.depth)}
+/* The lamp reaches further and spreads wider as 照明出力 rises, and it is aimed by
+   dragging across the main scene. */
+function beamState(){const power=Number(C.lights.value)/100;return{x:414,y:subY(),angle:s.beamAngle||0,half:.18+.2*power,len:70+150*power,power}}
+/* Light is the only way to see anything down here. Brightness falls off along the
+   beam and towards its edge, and outside the cone nothing shows at all. */
+function litLevel(a){const b=beamState(),dx=a.renderX-b.x,dy=a.renderY-b.y,d=Math.hypot(dx,dy);if(d>b.len)return 0;let da=Math.abs(Math.atan2(dy,dx)-b.angle);if(da>Math.PI)da=Math.PI*2-da;const half=d<26?Math.PI:b.half;if(da>half)return 0;const edge=1-clamp(da/half,0,1),reach=1-clamp(d/b.len,0,1);return clamp((.25+.75*edge)*reach*(.5+.5*b.power),0,1)}
+function syncDeepCreatures(){if(!s.creatures)return;for(const a of s.creatures){a.renderX=a.x+13;a.renderY=creatureY(a.depth)+Math.sin(a.bob)*5-9;a.lit=a.age>0&&a.card?litLevel(a):0}}
 function drawCreatureLabel(a,x,y,color='#d9f4ff'){
+  if(!a.card)return;
   ctx.font='bold 11px sans-serif';
-  const width=ctx.measureText(a.name).width+10;
+  const width=ctx.measureText(a.card).width+10;
   ctx.fillStyle='rgba(2,12,22,.78)';
   ctx.fillRect(x-5,y+9,width,17);
   ctx.fillStyle=color;
-  ctx.fillText(a.name,x,y+22);
+  ctx.fillText(a.card,x,y+22);
 }
-function drawGiantSquid(a,y){
-  const reveal=clamp(a.age/3,0,1);
-  const x=a.age<3?825-a.age*18:825-(a.age-3)*20;
-  const scale=.52+.48*reveal;
-  a.renderX=x-18;
-  a.renderY=y;
-  a.hitRadius=65+45*reveal;
+/* A ✓ shows the card is already in the 図鑑, a ? shows it is still new. */
+function drawDeepMark(a,x,y){
+  const known=deepPool?Boolean(deepPool.isFound(a.card)):false;
   ctx.save();
-  ctx.translate(x,y);
+  ctx.lineWidth=2;
+  ctx.strokeStyle=known?'#79f2a2':'#eef5fb';
+  ctx.setLineDash(known?[]:[3,4]);
+  ctx.beginPath();
+  ctx.arc(x,y,known?21:19,0,Math.PI*2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle=known?'#126d3c':'#27394b';
+  ctx.beginPath();
+  ctx.arc(x+16,y-16,10,0,Math.PI*2);
+  ctx.fill();
+  ctx.fillStyle='#fff';
+  ctx.font='bold 13px sans-serif';
+  ctx.textAlign='center';
+  ctx.fillText(known?'✓':'?',x+16,y-11);
+  ctx.restore();
+}
+/* Creatures that make their own light stay as a faint spark in the dark, so the
+   visitor knows where to aim the lamp. */
+function drawDeepSpark(a){
+  const warm=a.form==='angler';
+  ctx.save();
+  ctx.globalAlpha=.5;
+  const halo=ctx.createRadialGradient(a.renderX,a.renderY,0,a.renderX,a.renderY,15);
+  halo.addColorStop(0,warm?'rgba(255,240,150,.95)':'rgba(170,246,255,.9)');
+  halo.addColorStop(1,'rgba(110,160,255,0)');
+  ctx.fillStyle=halo;
+  ctx.beginPath();
+  ctx.arc(a.renderX,a.renderY,15,0,Math.PI*2);
+  ctx.fill();
+  ctx.fillStyle=warm?'#fff6cf':'#e6fbff';
+  ctx.beginPath();
+  ctx.arc(a.renderX,a.renderY,2.6+Math.sin(a.bob*2)*.7,0,Math.PI*2);
+  ctx.fill();
+  ctx.restore();
+}
+function drawGiantSquid(a){
+  const reveal=clamp(a.age/3,0,1);
+  const scale=.52+.48*reveal;
+  ctx.save();
+  ctx.translate(a.renderX,a.renderY);
   ctx.scale(scale,scale);
-  ctx.globalAlpha=.16+.72*reveal;
   ctx.fillStyle=a.flash?'#d9b6ff':'#432d67';
   ctx.beginPath();
   ctx.ellipse(-18,0,62,29,-.12,0,Math.PI*2);
@@ -100,27 +186,23 @@ function drawGiantSquid(a,y){
   ctx.arc(-45,-8,6,0,Math.PI*2);
   ctx.fill();
   ctx.restore();
-  ctx.save();
-  ctx.globalAlpha=reveal;
-  drawCreatureLabel(a,Math.max(18,x-85),y+35,a.flash?'#ffe278':'#d9c9ff');
-  ctx.restore();
-  if(a.age<3){
-    ctx.fillStyle=`rgba(217,201,255,${.35+.2*reveal})`;
+  if(reveal<1){
+    ctx.fillStyle=`rgba(217,201,255,${.5-.2*reveal})`;
     ctx.font='bold 12px sans-serif';
-    ctx.fillText('遠くに、とても大きな影…',535,y-46);
+    ctx.fillText('とても大きな影…',clamp(a.renderX-60,10,660),a.renderY-58);
   }
 }
 function drawDeepCreature(a){
-  if(a.age<=0)return;
-  const y=creatureY(a);
-  if(a.kind==='giant'){drawGiantSquid(a,y);return}
-  const alpha=clamp(a.age/1.4,0,1),x=a.x;
-  a.renderX=x+13;
-  a.renderY=y-9;
-  a.hitRadius=a.kind==='glow'||a.kind==='angler'?46:38;
+  if(a.age<=0||!a.card)return;
+  if(a.lit<=0){if(a.form==='glow'||a.form==='angler')drawDeepSpark(a);return}
+  const bright=a.lit>=TAP_LIT;
+  const alpha=clamp(a.age/1.4,0,1)*(bright?clamp(.5+.6*a.lit,0,1):.32);
+  const x=a.renderX-13,y=a.renderY+9;
   ctx.save();
+  if(!bright&&'filter'in ctx)ctx.filter='blur(2px)';
   ctx.globalAlpha=alpha;
-  if(a.kind==='glow'){
+  if(a.form==='giant'){drawGiantSquid(a)}
+  else if(a.form==='glow'){
     const pulse=1+.08*Math.sin(a.age*2.2);
     const halo=ctx.createRadialGradient(x+12,y-10,3,x+12,y-10,38);
     halo.addColorStop(0,'rgba(170,246,255,.7)');
@@ -140,7 +222,7 @@ function drawDeepCreature(a){
       ctx.quadraticCurveTo(x-2+i*5,y-8,x+3+i*3,y+12);
       ctx.stroke();
     }
-  }else if(a.kind==='soft'){
+  }else if(a.form==='soft'){
     ctx.fillStyle=a.flash?'#ffe278':'#dc7d8d';
     ctx.beginPath();
     ctx.arc(x+13,y-12,18,0,Math.PI*2);
@@ -157,7 +239,7 @@ function drawDeepCreature(a){
       ctx.quadraticCurveTo(x-2+i*8,y+13+Math.sin(a.age+i)*4,x+i*7,y+23);
       ctx.stroke();
     }
-  }else if(a.kind==='angler'){
+  }else if(a.form==='angler'){
     const glow=ctx.createRadialGradient(x+43,y-38,2,x+43,y-38,35);
     glow.addColorStop(0,'rgba(255,239,130,.9)');
     glow.addColorStop(1,'rgba(255,210,70,0)');
@@ -187,17 +269,27 @@ function drawDeepCreature(a){
     ctx.font=`${a.flash?34:27}px sans-serif`;
     ctx.fillText(a.icon,x,y);
   }
-  drawCreatureLabel(a,x-7,y,a.flash?'#ffe278':'#d9f4ff');
+  ctx.restore();
+  /* Only a creature standing in the beam can be named and tapped. At the edge of
+     the light it stays a blurred outline. */
+  if(!bright)return;
+  ctx.save();
+  ctx.globalAlpha=clamp(alpha+.3,0,1);
+  drawCreatureLabel(a,clamp(a.renderX-22,4,700),a.renderY+9,a.flash?'#ffe278':'#d9f4ff');
+  drawDeepMark(a,a.renderX,a.renderY);
   if(a.flash){
     ctx.strokeStyle='#ffe278';
     ctx.lineWidth=3;
     ctx.beginPath();
-    ctx.arc(a.renderX,a.renderY,28,0,Math.PI*2);
+    ctx.arc(a.renderX,a.renderY,32,0,Math.PI*2);
     ctx.stroke();
   }
   ctx.restore();
 }
-function drawMain(){clearCanvas(ctx,800,430,'#061421');const grad=ctx.createLinearGradient(0,0,0,430);grad.addColorStop(0,'#164d72');grad.addColorStop(1,'#02070d');ctx.fillStyle=grad;ctx.fillRect(0,0,800,430);for(let i=0;i<7;i++){const y=45+i*55;ctx.strokeStyle='rgba(150,210,255,.12)';ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(800,y);ctx.stroke();ctx.fillStyle='#8cb5cf';ctx.font='11px sans-serif';ctx.fillText(`${i*1000} m`,8,y-4)}for(const a of s.creatures)drawDeepCreature(a);const y=45+clamp(s.depth/6000,0,1)*330,x=410;ctx.save();ctx.translate(x,y);ctx.fillStyle='#ffd85a';ctx.beginPath();ctx.ellipse(0,0,44,18,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#72b8e6';ctx.fillRect(-10,-22,20,12);ctx.fillStyle='#fff';ctx.fillRect(35,-4,10,8);ctx.restore();const beam=Number(C.lights.value)/100;ctx.fillStyle=`rgba(255,245,170,${.08+.35*beam})`;ctx.beginPath();ctx.moveTo(x+45,y);ctx.lineTo(x+80+160*beam,y-35-20*beam);ctx.lineTo(x+80+160*beam,y+35+20*beam);ctx.closePath();ctx.fill();ctx.strokeStyle='#79d0ff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,55+Number(C.sonar.value),-.45,.45);ctx.stroke();ctx.fillStyle='#fff';ctx.font='bold 14px sans-serif';ctx.fillText(`深度 ${fmt(s.depth,0)} m`,560,30);ctx.fillText(`発見 ${s.found.size}/${deepSpecies.length}`,560,53);for(let i=0;i<Math.floor(Number(C.sampling.value)/12);i++){ctx.fillStyle='#b77857';ctx.beginPath();ctx.arc(90+i*25,390-(i%2)*8,6,0,Math.PI*2);ctx.fill()}}
+/* The beam is drawn before the creatures so the ones inside it stay crisp. */
+function drawBeam(){const b=beamState();ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.angle);const grad=ctx.createLinearGradient(0,0,b.len,0);grad.addColorStop(0,`rgba(255,246,190,${.10+.34*b.power})`);grad.addColorStop(.6,`rgba(255,244,175,${.05+.16*b.power})`);grad.addColorStop(1,'rgba(255,244,175,0)');ctx.fillStyle=grad;ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,b.len,-b.half,b.half);ctx.closePath();ctx.fill();ctx.restore()}
+function atlasCount(){const p=deepPool?deepPool.progress():null;return p?`${p.found}/${p.total}`:`${s.found.size}/96`}
+function drawMain(){clearCanvas(ctx,800,430,'#061421');const grad=ctx.createLinearGradient(0,0,0,430);grad.addColorStop(0,'#0f3552');grad.addColorStop(.45,'#05131f');grad.addColorStop(1,'#02070d');ctx.fillStyle=grad;ctx.fillRect(0,0,800,430);for(let i=0;i<7;i++){const y=45+i*55;ctx.strokeStyle='rgba(150,210,255,.12)';ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(800,y);ctx.stroke();ctx.fillStyle='#8cb5cf';ctx.font='11px sans-serif';ctx.fillText(`${i*1000} m`,8,y-4)}syncDeepCreatures();drawBeam();for(const a of s.creatures)drawDeepCreature(a);const y=subY(),x=410;ctx.save();ctx.translate(x,y);ctx.fillStyle='#ffd85a';ctx.beginPath();ctx.ellipse(0,0,44,18,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#72b8e6';ctx.fillRect(-10,-22,20,12);ctx.fillStyle='#fff';ctx.fillRect(35,-4,10,8);ctx.restore();ctx.strokeStyle='#79d0ff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,55+Number(C.sonar.value),-.45,.45);ctx.stroke();ctx.fillStyle='#fff';ctx.font='bold 14px sans-serif';ctx.fillText(`深度 ${fmt(s.depth,0)} m`,560,30);ctx.fillText(`図鑑 ${atlasCount()}`,560,53);ctx.font='11px sans-serif';ctx.fillStyle='#ffe9a8';ctx.fillText('画面をなぞって探査灯を向けよう',560,74);for(let i=0;i<Math.floor(Number(C.sampling.value)/12);i++){ctx.fillStyle='#b77857';ctx.beginPath();ctx.arc(90+i*25,390-(i%2)*8,6,0,Math.PI*2);ctx.fill()}}
 function drawChart(){clearCanvas(cctx,800,240,'#0b1928');const H=s.hist;if(!H.length)return;const x=i=>35+i/Math.max(1,H.length-1)*740;line(cctx,H.map((d,i)=>[x(i),35+clamp(d.d/6000,0,1)*170]),'#70c8ff',2);line(cctx,H.map((d,i)=>[x(i),205-clamp(d.b/100,0,1)*165]),'#ffd85a',2);line(cctx,H.map((d,i)=>[x(i),205-clamp(d.stress/1.5,0,1)*165]),'#ef796e',2);cctx.fillStyle='#fff';cctx.font='12px sans-serif';cctx.fillText('深度',38,20);cctx.fillText('電池',88,20);cctx.fillText('船殻応力比',138,20)}
 function drawAll(){drawMain();drawChart();const q=calc(),margin=(1-q.stress)*100;[fmt(s.depth,0)+'m',fmt(q.pressure,0)+'気圧',fmt(s.battery,1)+'%',fmt(s.oxygen,1)+'%',fmt(margin,0)+'%',fmt(q.comm,2)+'秒'].forEach((v,i)=>$('m'+i).textContent=v);let msg='バラストと推進で鉛直運動を変え、照明・ソナー・採取が電池と観測量を消費する。',cls='callout ok';if(q.stress>=1){msg='船殻余裕が尽きた模型状態。深度を浅くするか船殻性能を上げる。実物の潜航判断には使わない。';cls='callout warn'}else if(s.battery<15||s.oxygen<15){msg='帰還資源が不足。照明・ソナー・採取を減らし、浮上側へバラストと推進を調整する。';cls='callout warn'}$('explain').className=cls;$('explain').textContent=msg;$('chartNote').textContent='主図は深度、光、ソナー、採取を示す。第二ビューは深度、電池、船殻応力比の時間履歴。'}
 function formatControl(el){return el.value+'%'}function onControlChange(id){drawAll()}
@@ -208,12 +300,58 @@ function compareSnapshots(a,b){return`B−A：深度 ${fmt(b.d-a.d,0)} m、電�
 function setPlay(on){playing=on;$('playBtn').textContent=on?'⏸ 一時停止':'▶ 再生';$('playBtn').classList.toggle('on',on)}
 $('playBtn').onclick=()=>setPlay(!playing);$('stepBtn').onclick=()=>{setPlay(false);advance();advanceCreatures(.5,true);drawAll()};$('speedSel').onchange=e=>speed=Number(e.target.value);$('resetBtn').onclick=()=>{setPlay(false);resetSim(baseSeed)};$('sameSeedBtn').onclick=()=>{setPlay(false);resetSim(baseSeed)};$('scenarioSel').onchange=()=>{baseSeed=390101+$('scenarioSel').selectedIndex*1009;setPlay(false);resetSim(baseSeed)};$('randomBtn').onclick=()=>{baseSeed=Math.floor(Math.random()*1e9);setPlay(false);resetSim(baseSeed)};
 resetSim(baseSeed);
-main.addEventListener('pointerdown',e=>{const r=main.getBoundingClientRect(),x=(e.clientX-r.left)*main.width/r.width,y=(e.clientY-r.top)*main.height/r.height;const hit=s.creatures.filter(a=>a.age>0).find(a=>Math.hypot(x-a.renderX,y-a.renderY)<a.hitRadius);if(!hit)return;hit.flash=8;if(hit.kind!=='giant')hit.vx*=-1;s.found.add(hit.name);window.__lwAtlas?.collect?.(hit.name,false);const action=hit.kind==='giant'?'遠景の巨大な影が近づき、長い触腕の一部が画面を横切った':hit.kind==='glow'||hit.kind==='angler'?'暗い水中で発光のしかたが強く見えた':hit.kind==='soft'?'大きなひれと柔らかな腕を広げて向きを変えた':'タップに反応して向きを変えた';$('creatureStatus').textContent=`${hit.name}を発見！ ${action}（${s.found.size}/${deepSpecies.length}種）。`;drawAll()});
+function canvasPoint(e){const r=main.getBoundingClientRect();return{x:(e.clientX-r.left)*main.width/r.width,y:(e.clientY-r.top)*main.height/r.height}}
+function aimBeam(x,y){const b=beamState();if(Math.hypot(x-b.x,y-b.y)<6)return;s.beamAngle=Math.atan2(y-b.y,x-b.x);syncDeepCreatures()}
+/* Only what the beam already shows can be collected, so the light has to be swept
+   across the dark water first. */
+function litCreatureAt(x,y){let hit=null,best=Infinity;for(const a of s.creatures){if(a.age<=0||!a.card||a.lit<TAP_LIT)continue;const d=Math.hypot(x-a.renderX,y-a.renderY);if(d<a.hitRadius&&d<best){best=d;hit=a}}return hit}
+function collectDeepCreature(a){
+  a.flash=8;
+  a.leaving=1.5;
+  a.vx=a.renderX<beamState().x?-Math.abs(a.vx):Math.abs(a.vx);
+  let recorded=false;
+  try{recorded=Boolean(window.__lwAtlas?.collect?.(a.card,false))}catch(_e){recorded=false}
+  s.found.add(a.card);
+  const action=a.form==='giant'?'長い触腕を広げてゆっくり離れていった':a.form==='glow'||a.form==='angler'?'自分の光を強くまたたかせた':a.form==='soft'?'柔らかな腕を広げて向きを変えた':'明かりに驚いて向きを変えた';
+  const where=a.zone?`${a.zone}の${a.group||'生き物'}。`:'';
+  $('creatureStatus').textContent=`${recorded?'✓ '+a.card+'を発見！':a.card+'は記録ずみ。'} ${where}${action}（図鑑 ${atlasCount()}）。`;
+  drawAll();
+}
+let beamDrag=false;
+main.addEventListener('pointerdown',e=>{
+  if(e.pointerType==='mouse'&&e.button!==0)return;
+  e.preventDefault();
+  const p=canvasPoint(e);
+  syncDeepCreatures();
+  const hit=litCreatureAt(p.x,p.y);
+  if(hit){collectDeepCreature(hit);return}
+  beamDrag=true;
+  try{main.setPointerCapture?.(e.pointerId)}catch(_e){}
+  aimBeam(p.x,p.y);
+  const power=Number(C.lights.value);
+  $('creatureStatus').textContent=`探査灯をそちらへ向けた。明かりの中に浮かんだ生き物をタップしよう。照明出力は${power}%で、上げるほど遠くまで広く届きます（図鑑 ${atlasCount()}）。`;
+  drawAll();
+});
+main.addEventListener('pointermove',e=>{if(!beamDrag)return;const p=canvasPoint(e);aimBeam(p.x,p.y);drawAll()});
+main.addEventListener('pointerup',e=>{beamDrag=false;try{main.releasePointerCapture?.(e.pointerId)}catch(_e){}});
+main.addEventListener('pointercancel',()=>{beamDrag=false});
 document.querySelectorAll('.control input,.control select,.checks input').forEach(el=>{const sync=()=>{const out=$(el.id+'Out');if(out)out.textContent=formatControl(el);if(typeof onControlChange==='function')onControlChange(el.id);drawAll()};el.addEventListener('input',sync);el.addEventListener('change',sync);sync()});
 $('saveA').onclick=()=>{snapA=makeSnapshot();$('snapA').textContent=snapshotText(snapA);updateDiff()};$('saveB').onclick=()=>{snapB=makeSnapshot();$('snapB').textContent=snapshotText(snapB);updateDiff()};$('clearAB').onclick=()=>{snapA=snapB=null;$('snapA').textContent=$('snapB').textContent='未記録';$('diff').textContent='同じ初期条件でAを走らせ、戻して一つだけ操作を変え、Bを記録する。'};
 function updateDiff(){if(snapA&&snapB)$('diff').textContent=compareSnapshots(snapA,snapB)}
 function setupModal(){const back=$('guideBack');$('guideBtn').onclick=$('tourBtn').onclick=()=>back.classList.add('show');$('guideClose').onclick=()=>back.classList.remove('show');back.onclick=e=>{if(e.target===back)back.classList.remove('show')};$('speakBtn').onclick=()=>{if(!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(document.querySelector('h1').textContent+'。'+document.querySelector('.take').textContent);u.lang='ja-JP';u.rate=.92;speechSynthesis.speak(u)}}setupModal();
-function frame(t){if(!lastTime)lastTime=t;const dt=Math.min(100,t-lastTime);lastTime=t;advanceCreatures(dt/1000,playing);if(playing){acc+=dt*speed;let guard=0;while(acc>=500&&guard++<20){advance();acc-=500}}drawAll();requestAnimationFrame(frame)}requestAnimationFrame(frame);
+/* Creature time follows the speed selector too, so 4倍 also brings encounters faster. */
+function frame(t){if(!lastTime)lastTime=t;const dt=Math.min(100,t-lastTime);lastTime=t;advanceCreatures(dt/1000*(playing?speed:1),playing);if(playing){acc+=dt*speed;let guard=0;while(acc>=500&&guard++<20){advance();acc-=500}}drawAll();requestAnimationFrame(frame)}requestAnimationFrame(frame);
+/* Inspection surface for the discovery layer: which cards stand in the light right
+   now, where they are on the canvas, and how to aim the lamp without a pointer. */
+window.__lwHunt={
+  progress:()=>deepPool?deepPool.progress():null,
+  list:()=>{syncDeepCreatures();return(s.creatures||[]).map(a=>({card:a.card,zone:a.zone,form:a.form,depth:Math.round(a.depth),x:a.renderX,y:a.renderY,lit:Number((a.lit||0).toFixed(3)),tappable:a.age>0&&Boolean(a.card)&&a.lit>=TAP_LIT}))},
+  aim:(x,y)=>{aimBeam(x,y);drawAll()},
+  rotate:(times=1)=>{for(let i=0;i<times;i++)rotateDarkCreature();syncDeepCreatures();drawAll()}
+};
+/* The atlas reads its saved progress in its own ready handler, so claim cards once
+   more after that so already recorded cards are weighted and marked correctly. */
+if(document.readyState==='complete')claimDeepCards();else window.addEventListener('load',()=>{claimDeepCards();drawAll()},{once:true});
 </script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
 const ready=()=>{
@@ -268,7 +406,7 @@ const zones=['すべて',...new Set(DATA.map(x=>x.zone))];
 const openDetail=x=>{const d=document.getElementById('r59-atlas-detail');d.innerHTML=`<button style="float:right" aria-label="閉じる">×</button><h2>${x.icon} ${ruby(x)}</h2><p><b>区画：</b>${esc(x.zone)}</p><p><b>分類：</b>${esc(x.group)}　<b>発見難度：</b><span style="color:#ffd85a">${'★'.repeat(x.rarity)}</span></p><p>${esc(x.fact)}</p><p style="color:#9fc5df">模型・図鑑は学習用の簡略表示です。実際の分布、保全状態、観察条件は地域と研究により異なります。</p>`;d.classList.add('open');d.querySelector('button').onclick=()=>d.classList.remove('open');};
 const render=()=>{const list=DATA.filter(x=>(zone==='すべて'||x.zone===zone)&&(!query||(x.name+x.reading+x.group+x.fact).includes(query))).sort((a,b)=>(found.has(b.name)?1:0)-(found.has(a.name)?1:0));const g=document.getElementById('r59-atlas-grid');g.innerHTML=list.map(x=>{const ok=found.has(x.name);return `<article class="r59-atlas-card ${ok?'':'locked'}"><span class="lock">${ok?'✓':'🔒'}</span><div class="icon">${ok?x.icon:'❔'}</div><h3>${ok?ruby(x):'未発見カード'}</h3><p>${ok?esc(x.zone):'探索して正体を確かめよう'}</p><p class="stars">${ok?'★'.repeat(x.rarity):'□□□□□'}</p>${ok?`<button type="button">くわしく見る</button>`:''}</article>`}).join('');[...g.querySelectorAll('article')].forEach((el,i)=>{const x=list[i];if(found.has(x.name))el.querySelector('button').onclick=()=>openDetail(x);});const n=found.size;document.getElementById('r59-atlas-count').textContent=`${n} / ${DATA.length}`;document.getElementById('r59-atlas-fill').style.width=`${100*n/DATA.length}%`;};
 const explore=()=>{let pool=DATA.filter(x=>!found.has(x.name)&&(zone==='すべて'||x.zone===zone));if(!pool.length){toast(zone==='すべて'?'全カード発見済み！':'この区画は発見済み！');return;}const how=Math.min(pool.length,Math.random()<.28?2:1);for(let i=0;i<how;i++){const j=Math.floor(Math.random()*pool.length);found.add(pool[j].name);pool.splice(j,1);}persist();render();toast(`新しい発見 +${how}`);};
-window.__lwAtlas={kind:KIND,getEncounter:()=>{const pool=DATA.filter(x=>!found.has(x.name)&&(zone==='すべて'||x.zone===zone));return pool.length?pool[Math.floor(Math.random()*pool.length)]:null;},collect:(name,showDetail=true)=>{const x=DATA.find(item=>item.name===name);if(!x||found.has(name))return false;found.add(name);persist();render();if(showDetail)openDetail(x);return true;}};
+window.__lwAtlas={kind:KIND,catalog:()=>DATA.map(x=>({name:x.name,zone:x.zone,group:x.group,icon:x.icon,rarity:x.rarity,fact:x.fact})),isFound:name=>found.has(name),progress:()=>({found:found.size,total:DATA.length}),getEncounter:()=>{const pool=DATA.filter(x=>!found.has(x.name)&&(zone==='すべて'||x.zone===zone));return pool.length?pool[Math.floor(Math.random()*pool.length)]:null;},collect:(name,showDetail=true)=>{const x=DATA.find(item=>item.name===name);if(!x||found.has(name))return false;found.add(name);persist();render();if(showDetail)openDetail(x);return true;}};
 const build=()=>{load();const sec=document.createElement('section');sec.id='r59-atlas';sec.setAttribute('aria-label',TITLE);sec.innerHTML=`<div class="ah"><div class="title">🔎 ${TITLE}</div><button id="r59-atlas-close">研究モードへ</button></div><div class="wrap"><div class="intro">${DESC}<div class="savebox"><label><input id="r59-atlas-save" type="checkbox" aria-label="発見記録をこの端末へ保存" ${save?'checked':''}> この端末だけに発見記録を保存</label><button id="r59-atlas-clear">記録を消す</button></div></div><div class="controls"><select id="r59-atlas-zone" aria-label="探索区画">${zones.map(z=>`<option>${esc(z)}</option>`).join('')}</select><button class="primary" id="r59-atlas-scan">${ACTION}</button><button id="r59-atlas-random">発見済みを1枚</button><input id="r59-atlas-search" placeholder="名前・分類・特徴を検索" aria-label="図鑑検索"></div><div class="progress"><div><b>図鑑の進み具合</b><div class="track"><div class="fill" id="r59-atlas-fill"></div></div></div><strong id="r59-atlas-count"></strong></div><div class="zone-note">区画を変えると出会えるカードが変わります。保存OFFでは、このページを閉じると今回の発見を引き継ぎません。</div><div class="r59-atlas-grid" id="r59-atlas-grid"></div></div><div id="r59-atlas-detail"></div>`;document.body.appendChild(sec);const bar=document.getElementById('r59-globalbar');const op=document.createElement('button');op.id='r59-atlas-open';op.textContent='🔎 図鑑探索';op.setAttribute('aria-label','図鑑探索モードを開く');bar?.insertBefore(op,bar.querySelector('#r66-global-guide'));op.onclick=()=>{sec.classList.add('open');document.body.style.overflow='hidden';render();};sec.querySelector('#r59-atlas-close').onclick=()=>{sec.classList.remove('open');document.body.style.overflow='';};sec.querySelector('#r59-atlas-zone').onchange=e=>{zone=e.target.value;render();};sec.querySelector('#r59-atlas-search').oninput=e=>{query=e.target.value.trim();render();};sec.querySelector('#r59-atlas-scan').onclick=explore;sec.querySelector('#r59-atlas-random').onclick=()=>{const a=DATA.filter(x=>found.has(x.name));if(!a.length)toast('まず探索しよう');else openDetail(a[Math.floor(Math.random()*a.length)]);};sec.querySelector('#r59-atlas-save').onchange=e=>{save=e.target.checked;if(save)persist();else try{localStorage.removeItem(KEY)}catch(_e){};};sec.querySelector('#r59-atlas-clear').onclick=()=>{if(confirm('この図鑑の発見記録を消しますか？')){found.clear();try{localStorage.removeItem(KEY)}catch(_e){}render();}};render();};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',build,{once:true});else build();
 })();</script>

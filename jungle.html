@@ -47,11 +47,11 @@ a[href="index.html"],a[href="kids-index.html"]{display:inline-flex;align-items:c
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
 </style>
 <meta name="r60-explicit-accessibility" content="static-control-labels"><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
-</head><body data-first="雨林の主画面に現れる生き物をタップして発見し、条件を変えて出会いを比べよう。">
+</head><body data-first="森の上、林冠、樹冠下、林床、水辺、土の中の生き物をタップして発見し、条件を変えて出会いを比べよう。">
 <header class="hdr"><div><span class="badge">熱帯雨林・探査</span><h1><ruby>熱帯雨林<rt>ねったいうりん</rt></ruby>・<ruby>階層<rt>かいそう</rt></ruby>探索図鑑72／生態系ラボ</h1><div class="sub">光、水、養分、分解、競争、攪乱、遷移を時間発展させる。</div></div><div class="headActions"><button id="guideBtn" aria-label="？ ガイド">？ ガイド</button><button id="speakBtn" aria-label="🔊 読む">🔊 読む</button><button id="tourBtn" aria-label="👣 操作">👣 操作</button><button id="resetBtn" aria-label="↺ リセット">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>熱帯林の林冠・林床・土壌資源をつなぐ概念模型。</p></div><div><b>どこを見る？</b><p>林冠、林床光、水、養分、多様性、炭素蓄積。</p></div><div><b>何を変える？</b><p>降雨、伐採、養分入力、分解者、種多様性、攪乱。</p></div><div><b>持ち帰る一文</b><p>森は木の本数だけでなく、水と養分の循環、分解、光競争、攪乱履歴で変わる。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 分解者を減らすと落葉と土壌養分はどう変わるか</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
-<section class="stage"><canvas id="mainCanvas" width="800" height="430" aria-label="林冠と林床、雨、落葉。再生すると生き物がゆっくり現れ、タップして発見できる" role="img"></canvas><div id="animalStatus" class="callout" role="status" aria-live="polite">▶ 再生を押すと、生き物が林冠や林床へゆっくり現れる。見つけたらタップしよう。</div></section>
+<section class="stage"><canvas id="mainCanvas" width="800" height="430" aria-label="林冠と林床、雨、落葉。再生すると森の上から土の中まで生き物がゆっくり現れ、タップして発見できる" role="img"></canvas><div id="animalStatus" class="callout" role="status" aria-live="polite">▶ 再生を押すと、森の上から土の中まで生き物がゆっくり現れます。見つけたらタップして図鑑に記録しよう。階層ごとに出会える相手が変わります。</div></section>
 <div class="toolbar"><button id="playBtn" class="primary" aria-label="▶ 再生">▶ 再生</button><button id="stepBtn" aria-label="⏭ 一段">⏭ 一段</button><select id="speedSel" aria-label="速度"><option value="0.5">0.5倍</option><option value="1" selected>1倍</option><option value="2">2倍</option><option value="4">4倍</option></select><select id="scenarioSel" aria-label="シナリオ"><option value="0">安定した雨林</option><option value="1">乾燥と伐採</option><option value="2">高生産林</option><option value="3">強い攪乱</option></select><button id="randomBtn" aria-label="🎲 課題">🎲 課題</button><button id="sameSeedBtn" aria-label="同じ初期へ">同じ初期へ</button></div>
 <section class="metrics"><div class="metric"><b>林冠量</b><strong id="m0">—</strong></div><div class="metric"><b>林床光</b><strong id="m1">—</strong></div><div class="metric"><b>土壌水</b><strong id="m2">—</strong></div><div class="metric"><b>土壌養分</b><strong id="m3">—</strong></div><div class="metric"><b>多様性</b><strong id="m4">—</strong></div><div class="metric"><b>炭素蓄積</b><strong id="m5">—</strong></div></section>
 <div class="layout"><section class="card"><h2>因果操作</h2><label class="control"><span>降雨</span><output id="rainOut"></output><input id="rain" type="range" min="0" max="100" value="65" step="1" aria-label="降雨"></label><label class="control"><span>伐採圧</span><output id="cutOut"></output><input id="cut" type="range" min="0" max="100" value="5" step="1" aria-label="伐採圧"></label><label class="control"><span>養分入力</span><output id="nutrientOut"></output><input id="nutrient" type="range" min="0" max="100" value="45" step="1" aria-label="養分入力"></label><label class="control"><span>分解者活性</span><output id="decompOut"></output><input id="decomp" type="range" min="0" max="100" value="55" step="1" aria-label="分解者活性"></label><label class="control"><span>種供給</span><output id="diversityOut"></output><input id="diversity" type="range" min="0" max="100" value="70" step="1" aria-label="種供給"></label><label class="control"><span>攪乱強度</span><output id="disturbOut"></output><input id="disturb" type="range" min="0" max="100" value="5" step="1" aria-label="攪乱強度"></label></section><section class="card"><h2>状態の説明</h2><div id="explain" class="callout" aria-live="polite"></div><h2 style="margin-top:10px">A/B比較</h2><div class="row"><button id="saveA" class="primary" aria-label="条件Aを記録">条件Aを記録</button><button id="saveB" aria-label="条件Bを記録">条件Bを記録</button><button id="clearAB" aria-label="消去">消去</button></div><div class="ab"><div><div class="small">条件A</div><div id="snapA" class="snap">未記録</div></div><div><div class="small">条件B</div><div id="snapB" class="snap">未記録</div></div></div><div id="diff" class="callout" style="margin-top:8px">同じ初期条件でAを走らせ、戻して一つだけ操作を変え、Bを記録する。</div></section></div>
@@ -71,9 +71,31 @@ function controlValues(){const out={};document.querySelectorAll('.control input,
 function controlText(){return Object.entries(controlValues()).map(([k,v])=>k+'='+v).join(', ')}
 
 const C={rain:$('rain'),cut:$('cut'),nutrient:$('nutrient'),decomp:$('decomp'),diversity:$('diversity'),disturb:$('disturb')};let s={},scenarioApplied=-1;
-const rainAnimals=[['オオハシ','🦜',105],['ナマケモノ','🦥',175],['モルフォチョウ','🦋',235],['ジャガー','🐆',330],['ヤドクガエル','🐸',370]];
-// Animals start hidden (age<=0) off both edges and emerge one by one only while playing.
-function makeRainAnimals(){return rainAnimals.map((a,i)=>({name:a[0],icon:a[1],y:a[2],x:i%2?805:-18,vx:(i%2?-1:1)*(5+rng()*2),age:-(1+i*1.8),flash:0}))}
+/* Height band of each 図鑑 の森林階層 on the main scene. A card can only be shown by
+   an individual standing in its own layer, so the whole catalogue is reachable by
+   looking through every layer. Layers are matched by keyword to keep labels free. */
+const LAYER_BAND=[['超高木層',60,104],['林冠',114,168],['樹冠下',182,258],['林床',306,340],['水辺',348,378],['土壌',386,416]];
+/* These do not walk away: plants, fungi, microbes and whole cycle cards stay put. */
+const ROOTED_GROUPS=new Set(['植物','菌類','微生物','共生','生態系','線形動物']);
+const PER_LAYER=3,ROTATE_EVERY=1.6;
+const INTRO_TEXT='▶ 再生を押すと、森の上から土の中まで生き物がゆっくり現れます。見つけたらタップして図鑑に記録しよう。階層ごとに出会える相手が変わります。';
+let cardRng=mulberry32(390202),junglePool=null,jungleCards=null;
+/* Card draws run on their own generator so saved progress never shifts the model. */
+function cardRand(){return cardRng()}
+function layerBand(zone){const text=String(zone||'');for(const b of LAYER_BAND)if(text.indexOf(b[0])>=0)return b;return null}
+/* The catalogue and the shared behaviour script both arrive after this one, so the
+   pool is picked up the first time it is available. */
+function jungleReady(){if(jungleCards)return true;const pool=window.lwAtlasCardPool?.();if(!pool)return false;const list=pool.cards.filter(card=>layerBand(card.zone));if(!list.length)return false;junglePool=pool;jungleCards=list;return true}
+function layerCards(band){return jungleCards.filter(card=>layerBand(card.zone)===band)}
+function jungleTaken(){const taken=new Map();for(const a of s.animals||[])if(a.card)taken.set(a.card,(taken.get(a.card)||0)+1);return taken}
+function rollJungleCard(a,taken){if(!jungleReady())return false;const list=layerCards(a.band);if(!list.length)return false;const card=junglePool.pick(list,taken||jungleTaken(),cardRand);if(!card)return false;a.card=card.name;a.icon=card.icon||'？';a.group=card.group||'';a.zone=card.zone||'';a.rooted=ROOTED_GROUPS.has(a.group);a.y=a.band[1]+a.slot*(a.band[2]-a.band[1]);a.age=-.2;a.leaving=0;return true}
+/* Give a card to individuals that do not have one yet. Runs every frame because the
+   catalogue and the shared behaviour script both load after this script. */
+function fillJungleCards(){if(!jungleReady()||!s.animals)return;let taken=null;for(const a of s.animals){if(a.card)continue;if(!taken)taken=jungleTaken();rollJungleCard(a,taken)}}
+/* Deal a fresh hand to everyone, keeping each individual in its own fade in. */
+function claimJungleCards(){if(!jungleReady()||!s.animals)return;const taken=jungleTaken();for(const a of s.animals){if(a.leaving>0)continue;const age=a.age;if(rollJungleCard(a,taken))a.age=age}}
+// Animals start hidden (age<=0) and emerge one by one only while playing.
+function makeRainAnimals(){const out=[];LAYER_BAND.forEach((band,li)=>{for(let i=0;i<PER_LAYER;i++)out.push({band,slot:(i+.5)/PER_LAYER,y:band[1],x:50+(i+(li%2)*.5)/PER_LAYER*660+rng()*30,vx:(rng()<.5?-1:1)*(6+rng()*9),sway:rng()*6.28,age:-(.6+(li*PER_LAYER+i)*.35),flash:0,card:'',icon:'？',group:'',zone:'',rooted:false,leaving:0})});return out}
 const CANOPY_SLOTS=16,UNDER_SLOTS=13;
 // Rank decides which trunks are shown as a layer thickens. Farthest first keeps a
 // sparse forest spread across the width instead of clumped on one side.
@@ -83,15 +105,84 @@ function spreadOrder(count){if(count<1)return[];const order=[0];if(count>1)order
 // Trunk positions are decided once per seed and never re-randomized while drawing.
 function makeTreeSlots(count,left,right,jitter){const step=(right-left)/Math.max(1,count-1),slots=[];for(let i=0;i<count;i++)slots.push({x:left+i*step+(rng()-.5)*jitter,bump:i%3,phase:rng()*Math.PI*2,rank:i});spreadOrder(count).forEach((idx,r)=>{slots[idx].rank=r});return slots}
 function makeForest(){return{canopy:makeTreeSlots(CANOPY_SLOTS,30,770,14),under:makeTreeSlots(UNDER_SLOTS,50,750,10)}}
-function resetSim(seed){rng=mulberry32(seed);const q=$('scenarioSel').selectedIndex;if(q!==scenarioApplied){const a=[[65,5,45,55,70,5],[35,30,25,35,40,20],[85,10,70,80,85,8],[45,55,30,25,30,65]][q];[C.rain.value,C.cut.value,C.nutrient.value,C.decomp.value,C.diversity.value,C.disturb.value]=a.map(String);scenarioApplied=q}windPhase=0;s={t:0,canopy:55,under:42,water:55,nutr:48,litter:30,div:55,carbon:45,hist:[],forest:makeForest(),animals:makeRainAnimals(),found:new Set()};$('animalStatus').textContent='▶ 再生を押すと、生き物が林冠や林床へゆっくり現れる。見つけたらタップしよう。';drawAll()}
+function resetSim(seed){rng=mulberry32(seed);const q=$('scenarioSel').selectedIndex;if(q!==scenarioApplied){const a=[[65,5,45,55,70,5],[35,30,25,35,40,20],[85,10,70,80,85,8],[45,55,30,25,30,65]][q];[C.rain.value,C.cut.value,C.nutrient.value,C.decomp.value,C.diversity.value,C.disturb.value]=a.map(String);scenarioApplied=q}windPhase=0;cardRng=mulberry32((seed^0x5f3a)>>>0);s={t:0,canopy:55,under:42,water:55,nutr:48,litter:30,div:55,carbon:45,hist:[],forest:makeForest(),animals:makeRainAnimals(),found:new Set(),rotate:0,rotateAt:0};claimJungleCards();$('animalStatus').textContent=INTRO_TEXT;drawAll()}
 function advance(){const rain=Number(C.rain.value)/100,cut=Number(C.cut.value)/100,nIn=Number(C.nutrient.value)/100,dec=Number(C.decomp.value)/100,seed=Number(C.diversity.value)/100,dist=Number(C.disturb.value)/100;const evap=.025*s.canopy/100+.02;s.water=clamp(s.water+(rain*.9-evap*10-s.under*.002)*.55,0,100);const decomposed=s.litter*dec*.012;s.litter=clamp(s.litter+s.canopy*.018+dist*.35-decomposed,0,100);s.nutr=clamp(s.nutr+nIn*.32+decomposed*.45-(s.canopy+s.under)*.003,0,100);const stress=(1-s.water/100)*.65+dist*.45+cut*.35;s.canopy=clamp(s.canopy+(s.water/100*s.nutr/100*.75-seed*.03-stress*.8-cut*.65),0,100);s.under=clamp(s.under+((100-s.canopy)/100*seed*.8+s.water/100*.25-dist*.55),0,100);s.div=clamp(s.div+(seed*.45+dec*.15-(Math.abs(s.canopy-55)/100+dist+cut)*.35),0,100);s.carbon=clamp(s.canopy*.65+s.under*.22+s.litter*.2,0,100);s.t++;s.hist.push({t:s.t,c:s.canopy,u:s.under,w:s.water,n:s.nutr,d:s.div,car:s.carbon});if(s.hist.length>140)s.hist.shift()}
 // Emergence and motion advance only while playing; a paused scene keeps every animal in place.
-function advanceAnimals(dt){if(!s.animals)return;for(const a of s.animals){a.age+=dt;if(a.age>0)a.x+=a.vx*dt;if(a.x>830){a.x=805;a.vx=-Math.abs(a.vx)}if(a.x<-30){a.x=-18;a.vx=Math.abs(a.vx)}}}
+function advanceAnimals(dt){
+  if(!s.animals)return;
+  fillJungleCards();
+  for(const a of s.animals){
+    a.age+=dt;a.sway+=dt*.8;
+    if(a.leaving>0){a.leaving-=dt;if(!a.rooted)a.x+=a.vx*dt*2.4;if(a.leaving<=0)rollJungleCard(a)}
+    else if(a.age>0&&!a.rooted)a.x+=a.vx*dt;
+    if(a.x>822){a.x=822;a.vx=-Math.abs(a.vx)}
+    if(a.x<-22){a.x=-22;a.vx=Math.abs(a.vx)}
+  }
+  s.rotate+=dt;
+  if(s.rotate>=ROTATE_EVERY){s.rotate=0;rotateJungleCard()}
+}
+/* One individual at a time takes on another card of its own layer, so the line up
+   keeps changing and every card of every layer comes round. */
+function rotateJungleCard(){const list=s.animals;if(!list||!list.length)return;const taken=jungleTaken();for(let i=0;i<list.length;i++){const a=list[(s.rotateAt+i)%list.length];if(a.leaving>0||a.flash>0)continue;s.rotateAt=(s.rotateAt+i+1)%list.length;rollJungleCard(a,taken);return}s.rotateAt=(s.rotateAt+1)%list.length}
 function fadeAnimalFlash(dt){if(!s.animals)return;for(const a of s.animals)a.flash=Math.max(0,a.flash-dt*4)}
 // Leaves only: a very small crown offset. The trunk never moves.
 function crownSway(tr){return Math.sin(windPhase*.9+tr.phase)*1.1}
+/* The six layers of the atlas are marked on the scene itself: a wet band for the
+   waterside and a darker band for the soil, with a small name on the left edge. */
+function drawLayerBands(){
+  ctx.fillStyle='#2c2015';
+  ctx.fillRect(0,382,800,48);
+  ctx.fillStyle='rgba(58,136,170,.5)';
+  ctx.beginPath();
+  ctx.moveTo(0,382);
+  for(let x=0;x<=800;x+=20)ctx.lineTo(x,347+Math.sin(x*.04+windPhase)*3);
+  ctx.lineTo(800,382);
+  ctx.closePath();
+  ctx.fill();
+  ctx.font='10px sans-serif';
+  ctx.fillStyle='rgba(228,247,224,.55)';
+  [['森の上',72],['林冠',126],['樹冠下',196],['林床',316],['水辺',368],['土の中',404]].forEach(([label,y])=>ctx.fillText(label,5,y));
+}
+/* A ✓ shows the card is already in the 図鑑, a ? shows it is still new. */
+function drawAnimalMark(a,x,y){
+  const known=junglePool?Boolean(junglePool.isFound(a.card)):false;
+  ctx.save();
+  ctx.lineWidth=2;
+  ctx.strokeStyle=known?'#8ff0b4':'#f4ffe8';
+  ctx.setLineDash(known?[]:[3,4]);
+  ctx.beginPath();
+  ctx.arc(x,y,known?20:18,0,Math.PI*2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle=known?'#14663a':'#2c3f22';
+  ctx.beginPath();
+  ctx.arc(x+15,y-15,10,0,Math.PI*2);
+  ctx.fill();
+  ctx.fillStyle='#fff';
+  ctx.font='bold 13px sans-serif';
+  ctx.textAlign='center';
+  ctx.fillText(known?'✓':'?',x+15,y-10);
+  ctx.restore();
+}
+function drawRainAnimal(a){
+  if(a.age<=0||!a.card)return;
+  const x=a.x+(a.rooted?Math.sin(a.sway)*1.6:0),y=a.y;
+  ctx.globalAlpha=clamp(a.age/1.4,0,1)*(a.leaving>0?clamp(a.leaving,0,1):1);
+  ctx.font=`${a.flash?36:28}px sans-serif`;
+  ctx.fillText(a.icon,x,y);
+  ctx.font='bold 11px sans-serif';
+  const width=ctx.measureText(a.card).width+10;
+  ctx.fillStyle='rgba(6,22,14,.72)';
+  ctx.fillRect(clamp(x-12,2,780),y+5,width,16);
+  ctx.fillStyle=a.flash?'#ffd85a':'#f1ffd9';
+  ctx.fillText(a.card,clamp(x-7,6,784),y+17);
+  drawAnimalMark(a,x+14,y-9);
+  if(a.flash){ctx.strokeStyle='#ffd85a';ctx.lineWidth=3;ctx.beginPath();ctx.arc(x+14,y-9,28,0,Math.PI*2);ctx.stroke()}
+  ctx.globalAlpha=1;
+}
 function drawTree(x,base,h,crown,alpha=1,sway=0){ctx.globalAlpha=alpha;ctx.fillStyle='#6c432b';ctx.fillRect(x-3,base-h,6,h);ctx.fillStyle=crown;ctx.beginPath();ctx.arc(x+sway,base-h,12+h*.08,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1}
-function drawMain(){clearCanvas(ctx,800,430,'#0b271d');const sky=ctx.createLinearGradient(0,0,0,250);sky.addColorStop(0,'#79b8d4');sky.addColorStop(1,'#173a2d');ctx.fillStyle=sky;ctx.fillRect(0,0,800,300);ctx.fillStyle='#3d2e21';ctx.fillRect(0,300,800,130);const forest=s.forest||{canopy:[],under:[]};const n=clamp(Math.floor(s.canopy/6),3,CANOPY_SLOTS);for(const tr of forest.canopy){if(tr.rank>=n)continue;drawTree(tr.x,310,90+s.canopy*.8+tr.bump*12,'#2f8a4b',1,crownSway(tr))}const m=clamp(Math.round(s.under/100*UNDER_SLOTS),2,UNDER_SLOTS);for(const tr of forest.under){if(tr.rank>=m)continue;drawTree(tr.x,340,35+s.under*.25,'#65ad55',.9,crownSway(tr))}for(const a of s.animals){if(a.age<=0)continue;ctx.globalAlpha=clamp(a.age/1.4,0,1);ctx.font=`${a.flash?36:28}px sans-serif`;ctx.fillText(a.icon,a.x,a.y);ctx.font='bold 11px sans-serif';ctx.fillStyle=a.flash?'#ffd85a':'#f1ffd9';ctx.fillText(a.name,a.x-7,a.y+17);if(a.flash){ctx.strokeStyle='#ffd85a';ctx.lineWidth=3;ctx.beginPath();ctx.arc(a.x+14,a.y-9,26,0,Math.PI*2);ctx.stroke()}ctx.globalAlpha=1}ctx.fillStyle=`rgba(79,157,224,${Number(C.rain.value)/180})`;for(let i=0;i<35;i++){const x=(i*67+s.t*13)%800,y=(i*31+s.t*18)%290;ctx.fillRect(x,y,2,10)}ctx.fillStyle='#d9b95f';for(let i=0;i<Math.floor(s.litter/7);i++){ctx.fillRect(30+i*45,365+(i%3)*7,22,4)}ctx.fillStyle='#fff';ctx.font='bold 14px sans-serif';ctx.fillText(`発見 ${s.found.size}/${rainAnimals.length}種　多様性 ${fmt(s.div,0)}`,550,26)}
+function drawMain(){clearCanvas(ctx,800,430,'#0b271d');const sky=ctx.createLinearGradient(0,0,0,250);sky.addColorStop(0,'#79b8d4');sky.addColorStop(1,'#173a2d');ctx.fillStyle=sky;ctx.fillRect(0,0,800,300);ctx.fillStyle='#3d2e21';ctx.fillRect(0,300,800,130);drawLayerBands();const forest=s.forest||{canopy:[],under:[]};const n=clamp(Math.floor(s.canopy/6),3,CANOPY_SLOTS);for(const tr of forest.canopy){if(tr.rank>=n)continue;drawTree(tr.x,310,90+s.canopy*.8+tr.bump*12,'#2f8a4b',1,crownSway(tr))}const m=clamp(Math.round(s.under/100*UNDER_SLOTS),2,UNDER_SLOTS);for(const tr of forest.under){if(tr.rank>=m)continue;drawTree(tr.x,340,35+s.under*.25,'#65ad55',.9,crownSway(tr))}for(const a of s.animals)drawRainAnimal(a);ctx.fillStyle=`rgba(79,157,224,${Number(C.rain.value)/180})`;for(let i=0;i<35;i++){const x=(i*67+s.t*13)%800,y=(i*31+s.t*18)%290;ctx.fillRect(x,y,2,10)}ctx.fillStyle='#d9b95f';for(let i=0;i<Math.floor(s.litter/7);i++){ctx.fillRect(30+i*45,365+(i%3)*7,22,4)}ctx.fillStyle='#fff';ctx.font='bold 14px sans-serif';ctx.fillText(`図鑑 ${atlasCount()}　多様性 ${fmt(s.div,0)}`,550,26)}
+function atlasCount(){const p=junglePool?junglePool.progress():null;return p?`${p.found}/${p.total}`:`${s.found.size}/72`}
 function drawChart(){clearCanvas(cctx,800,240,'#0b1c18');const H=s.hist;if(!H.length)return;const x=i=>35+i/Math.max(1,H.length-1)*740,y=v=>205-clamp(v/100,0,1)*165;line(cctx,H.map((d,i)=>[x(i),y(d.c)]),'#5fd17a',2);line(cctx,H.map((d,i)=>[x(i),y(d.w)]),'#6eb7f1',2);line(cctx,H.map((d,i)=>[x(i),y(d.n)]),'#ffd85a',2);line(cctx,H.map((d,i)=>[x(i),y(d.d)]),'#d889ed',2);cctx.fillStyle='#fff';cctx.font='12px sans-serif';cctx.fillText('林冠',38,20);cctx.fillText('水',82,20);cctx.fillText('養分',115,20);cctx.fillText('多様性',165,20)}
 function drawAll(){drawMain();drawChart();const light=100-s.canopy*.75,runoff=clamp(Number(C.rain.value)-s.water*.5,0,100);[fmt(s.canopy,0),fmt(light,0)+'%',fmt(s.water,0),fmt(s.nutr,0),fmt(s.div,0),fmt(s.carbon,0)].forEach((v,i)=>$('m'+i).textContent=v);let msg='雨、水、養分、分解、光、競争がつながり、林冠と林床は異なる時間尺度で変化する。',cls='callout ok';if(s.water<15||s.nutr<12){msg='資源不足で成長が止まりやすい。降雨・養分・分解を一つずつ変えて原因を分ける。';cls='callout warn'}else if(s.div<20){msg='多様性が低下。攪乱と伐採を下げ、種供給と分解循環を上げて比較する。';cls='callout warn'}$('explain').className=cls;$('explain').textContent=msg;$('chartNote').textContent='主図は林冠、林床、雨、落葉を示す。第二ビューは林冠、水、養分、多様性の時間履歴。'}
 function formatControl(el){return el.value+'%'}function onControlChange(id){drawAll()}
@@ -102,12 +193,40 @@ function compareSnapshots(a,b){return`B−A：林冠 ${fmt(b.c-a.c,1)}、水 ${f
 function setPlay(on){playing=on;$('playBtn').textContent=on?'⏸ 一時停止':'▶ 再生';$('playBtn').classList.toggle('on',on)}
 $('playBtn').onclick=()=>setPlay(!playing);$('stepBtn').onclick=()=>{setPlay(false);advance();advanceAnimals(.5);windPhase+=.5;drawAll()};$('speedSel').onchange=e=>speed=Number(e.target.value);$('resetBtn').onclick=()=>{setPlay(false);resetSim(baseSeed)};$('sameSeedBtn').onclick=()=>{setPlay(false);resetSim(baseSeed)};$('scenarioSel').onchange=()=>{baseSeed=390202+$('scenarioSel').selectedIndex*1009;setPlay(false);resetSim(baseSeed)};$('randomBtn').onclick=()=>{baseSeed=Math.floor(Math.random()*1e9);setPlay(false);resetSim(baseSeed)};
 resetSim(baseSeed);
-main.addEventListener('pointerdown',e=>{const r=main.getBoundingClientRect(),x=(e.clientX-r.left)*main.width/r.width,y=(e.clientY-r.top)*main.height/r.height;const hit=s.animals.filter(a=>a.age>0).find(a=>Math.hypot(x-(a.x+14),y-(a.y-9))<40);if(!hit)return;hit.flash=8;hit.vx*=-1;s.found.add(hit.name);window.__lwAtlas?.collect?.(hit.name,false);$('animalStatus').textContent=`${hit.name}を発見！ タップに驚いて向きを変えた（${s.found.size}/${rainAnimals.length}種）。`;drawAll()});
+function animalAt(x,y){let hit=null,best=44;for(const a of s.animals){if(a.age<=0||!a.card||a.leaving>0)continue;const d=Math.hypot(x-(a.x+14),y-(a.y-9));if(d<best){best=d;hit=a}}return hit}
+function collectRainAnimal(a){
+  a.flash=8;
+  a.leaving=1.4;
+  if(!a.rooted)a.vx*=-1;
+  let recorded=false;
+  try{recorded=Boolean(window.__lwAtlas?.collect?.(a.card,false))}catch(_e){recorded=false}
+  s.found.add(a.card);
+  const action=a.rooted?'葉をかき分けると、すぐそばで観察できた':'タップに驚いて向きを変えた';
+  $('animalStatus').textContent=`${recorded?'✓ '+a.card+'を発見！':a.card+'は記録ずみ。'} ${a.zone}の${a.group||'生き物'}。${action}（図鑑 ${atlasCount()}）。`;
+  drawAll();
+}
+main.addEventListener('pointerdown',e=>{
+  if(e.pointerType==='mouse'&&e.button!==0)return;
+  const r=main.getBoundingClientRect(),x=(e.clientX-r.left)*main.width/r.width,y=(e.clientY-r.top)*main.height/r.height;
+  const hit=animalAt(x,y);
+  if(!hit){$('animalStatus').textContent=`いまタップした場所には生き物がいません。森の上、林冠、樹冠下、林床、水辺、土の中を順に見てみよう（図鑑 ${atlasCount()}）。`;drawAll();return}
+  collectRainAnimal(hit);
+});
+/* Inspection surface for the discovery layer: which cards stand in which layer now
+   and where they are on the canvas. */
+window.__lwHunt={
+  progress:()=>junglePool?junglePool.progress():null,
+  list:()=>(s.animals||[]).map(a=>({card:a.card,zone:a.zone,x:a.x+14,y:a.y-9,tappable:a.age>0&&Boolean(a.card)&&a.leaving<=0})),
+  rotate:(times=1)=>{for(let i=0;i<times;i++)rotateJungleCard();drawAll()}
+};
+/* The atlas reads its saved progress in its own ready handler, so claim cards once
+   more after that so already recorded cards are weighted and marked correctly. */
+if(document.readyState==='complete')claimJungleCards();else window.addEventListener('load',()=>{claimJungleCards();drawAll()},{once:true});
 document.querySelectorAll('.control input,.control select,.checks input').forEach(el=>{const sync=()=>{const out=$(el.id+'Out');if(out)out.textContent=formatControl(el);if(typeof onControlChange==='function')onControlChange(el.id);drawAll()};el.addEventListener('input',sync);el.addEventListener('change',sync);sync()});
 $('saveA').onclick=()=>{snapA=makeSnapshot();$('snapA').textContent=snapshotText(snapA);updateDiff()};$('saveB').onclick=()=>{snapB=makeSnapshot();$('snapB').textContent=snapshotText(snapB);updateDiff()};$('clearAB').onclick=()=>{snapA=snapB=null;$('snapA').textContent=$('snapB').textContent='未記録';$('diff').textContent='同じ初期条件でAを走らせ、戻して一つだけ操作を変え、Bを記録する。'};
 function updateDiff(){if(snapA&&snapB)$('diff').textContent=compareSnapshots(snapA,snapB)}
 function setupModal(){const back=$('guideBack');$('guideBtn').onclick=$('tourBtn').onclick=()=>back.classList.add('show');$('guideClose').onclick=()=>back.classList.remove('show');back.onclick=e=>{if(e.target===back)back.classList.remove('show')};$('speakBtn').onclick=()=>{if(!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(document.querySelector('h1').textContent+'。'+document.querySelector('.take').textContent);u.lang='ja-JP';u.rate=.92;speechSynthesis.speak(u)}}setupModal();
-function frame(t){if(!lastTime)lastTime=t;const dt=Math.min(100,t-lastTime),sec=dt/1000;lastTime=t;fadeAnimalFlash(sec);if(playing){windPhase+=sec;advanceAnimals(sec);acc+=dt*speed;let guard=0;while(acc>=500&&guard++<20){advance();acc-=500}}drawAll();requestAnimationFrame(frame)}requestAnimationFrame(frame);
+function frame(t){if(!lastTime)lastTime=t;const dt=Math.min(100,t-lastTime),sec=dt/1000;lastTime=t;fadeAnimalFlash(sec);if(playing){windPhase+=sec;advanceAnimals(sec*speed);acc+=dt*speed;let guard=0;while(acc>=500&&guard++<20){advance();acc-=500}}drawAll();requestAnimationFrame(frame)}requestAnimationFrame(frame);
 </script><script id="r59-common-ui-script">
 (()=>{if(window.__r59CommonUI)return;window.__r59CommonUI=true;
 const ready=()=>{
@@ -167,7 +286,7 @@ const openDetail=x=>{const d=document.getElementById('r60-atlas-detail'),note=no
 const openNotebook=()=>{const d=document.getElementById('r60-atlas-detail'),items=DATA.filter(x=>found.has(x.name)&&notes[x.name]);d.innerHTML=`<button type="button" style="float:right" aria-label="閉じる">×</button><h2>📝 ${esc(CFG.noteTitle||'観察ノート')}</h2>${items.length?`<ul>${items.map(x=>`<li><b>${ruby(x)}</b><br>${esc(notes[x.name])}</li>`).join('')}</ul>`:'<p>まだノートはありません。発見済みカードの詳細から記録できます。</p>'}`;d.classList.add('open');d.querySelector('button').onclick=closeDetail;d.querySelector('button').focus();};
 const render=()=>{const rz=resolvedZone(),list=DATA.map((x,i)=>({...x,_i:i})).filter(x=>(rz==='すべて'||x.zone===rz)&&(!query||(x.name+(x.reading||'')+x.group+x.fact+x.zone).includes(query))).sort((a,b)=>Number(found.has(b.name))-Number(found.has(a.name))||a._i-b._i);const g=document.getElementById('r60-atlas-grid');g.innerHTML=list.map(x=>{const ok=found.has(x.name),hasNote=Boolean(notes[x.name]);return `<article class="r60-atlas-card ${ok?'':'locked'}"><span class="lock">${ok?(hasNote?'<span class="r60-note-mark">📝</span>':'✓'):'🔒'}</span><div class="icon">${ok?x.icon:'❔'}</div><h3>${ok?ruby(x):'未発見カード'}</h3><p>${ok?esc(x.zone):'探索して正体を確かめよう'}</p><p class="stars">${ok?'★'.repeat(x.rarity):'□□□□□'}</p>${ok?`<button type="button" aria-label="${esc(x.name)}の詳細を見る">くわしく見る</button>`:''}</article>`}).join('');[...g.querySelectorAll('article')].forEach((el,i)=>{const x=list[i];if(found.has(x.name))el.querySelector('button').onclick=()=>openDetail(x);});const n=found.size;document.getElementById('r60-atlas-count').textContent=`${n} / ${DATA.length}`;document.getElementById('r60-atlas-fill').style.width=`${100*n/DATA.length}%`;const c=document.getElementById('r60-atlas-condition');if(c)c.textContent=CFG.autoZone?`現在の条件：${contextZone()||'判定できません'}`:`選択中：${rz}`;document.getElementById('r60-atlas-empty').hidden=list.length!==0;};
 const explore=()=>{const rz=resolvedZone();let pool=DATA.filter(x=>!found.has(x.name)&&(rz==='すべて'||x.zone===rz));if(!pool.length){toast(rz==='すべて'?'全カード発見済み！':'この区画は発見済み！');return;}const how=Math.min(pool.length,Math.random()<.30?2:1);for(let i=0;i<how;i++){const j=Math.floor(Math.random()*pool.length);found.add(pool[j].name);pool.splice(j,1);}persist();render();toast(`新しい発見 +${how}`);};
-window.__lwAtlas={kind:CFG.key,getEncounter:()=>{const rz=resolvedZone(),pool=DATA.filter(x=>!found.has(x.name)&&(rz==='すべて'||x.zone===rz));return pool.length?pool[Math.floor(Math.random()*pool.length)]:null;},collect:(name,showDetail=true)=>{const x=DATA.find(item=>item.name===name);if(!x||found.has(name))return false;found.add(name);persist();render();if(showDetail)openDetail(x);return true;}};
+window.__lwAtlas={kind:CFG.key,catalog:()=>DATA.map(x=>({name:x.name,zone:x.zone,group:x.group,icon:x.icon,rarity:x.rarity,fact:x.fact})),isFound:name=>found.has(name),progress:()=>({found:found.size,total:DATA.length}),getEncounter:()=>{const rz=resolvedZone(),pool=DATA.filter(x=>!found.has(x.name)&&(rz==='すべて'||x.zone===rz));return pool.length?pool[Math.floor(Math.random()*pool.length)]:null;},collect:(name,showDetail=true)=>{const x=DATA.find(item=>item.name===name);if(!x||found.has(name))return false;found.add(name);persist();render();if(showDetail)openDetail(x);return true;}};
 const build=()=>{load();const sec=document.createElement('section');sec.id='r60-atlas';sec.setAttribute('role','dialog');sec.setAttribute('aria-modal','true');sec.setAttribute('aria-labelledby','r60-atlas-title');sec.setAttribute('aria-hidden','true');sec.innerHTML=`<div class="ah"><div class="title" id="r60-atlas-title">${esc(CFG.icon||'🔎')} ${esc(CFG.title)}</div>${CFG.notes?`<button id="r60-atlas-notebook" type="button" aria-label="${esc(CFG.noteTitle||'観察ノート')}を開く">📝 ノート</button>`:''}<button id="r60-atlas-close" type="button" aria-label="図鑑を閉じて研究モードへ戻る">研究モードへ</button></div><div class="wrap"><div class="intro">${esc(CFG.desc)}<div class="condition" id="r60-atlas-condition"></div><div class="savebox"><label><input id="r60-atlas-save" type="checkbox" aria-label="発見記録をこの端末だけに保存" ${save?'checked':''}> この端末だけに発見記録を保存</label><button id="r60-atlas-clear" type="button" aria-label="この図鑑の発見記録とノートを消す">記録を消す</button></div></div><div class="controls"><select id="r60-atlas-zone" aria-label="${esc(CFG.zoneLabel||'探索区画')}">${zones.map(z=>`<option>${esc(z)}</option>`).join('')}</select><button class="primary" id="r60-atlas-scan" type="button" aria-label="${esc(CFG.action)}">${esc(CFG.action)}</button><button id="r60-atlas-random" type="button" aria-label="発見済みカードをランダムに一枚開く">発見済みを1枚</button><input id="r60-atlas-search" placeholder="名前・分類・特徴を検索" aria-label="図鑑カードを検索"></div><div class="progress"><div><b>図鑑の進み具合</b><div class="track" aria-hidden="true"><div class="fill" id="r60-atlas-fill"></div></div></div><strong id="r60-atlas-count" aria-live="polite"></strong></div><div class="zone-note">${esc(CFG.zoneNote)}</div><p id="r60-atlas-empty" hidden>条件に合うカードがありません。</p><div class="r60-atlas-grid" id="r60-atlas-grid"></div></div><div id="r60-atlas-detail" role="dialog" aria-live="polite"></div>`;document.body.appendChild(sec);const bar=document.getElementById('r59-globalbar');const op=document.createElement('button');op.id='r60-atlas-open';op.type='button';op.textContent=CFG.openLabel||'🔎 図鑑探索';op.setAttribute('aria-label',CFG.openAria||'図鑑探索モードを開く');bar?.insertBefore(op,bar.querySelector('#r66-global-guide'));const open=()=>{lastFocus=document.activeElement;sec.classList.add('open');sec.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';if(CFG.autoZone)zone='現在の条件';sec.querySelector('#r60-atlas-zone').value=zone;render();sec.querySelector('#r60-atlas-close').focus();};const close=()=>{closeDetail();sec.classList.remove('open');sec.setAttribute('aria-hidden','true');document.body.style.overflow='';lastFocus?.focus?.();};op.onclick=open;sec.querySelector('#r60-atlas-close').onclick=close;sec.querySelector('#r60-atlas-zone').onchange=e=>{zone=e.target.value;render();};sec.querySelector('#r60-atlas-search').oninput=e=>{query=e.target.value.trim();render();};sec.querySelector('#r60-atlas-scan').onclick=explore;sec.querySelector('#r60-atlas-random').onclick=()=>{const a=DATA.filter(x=>found.has(x.name));if(!a.length)toast('まず探索しよう');else openDetail(a[Math.floor(Math.random()*a.length)]);};if(CFG.notes)sec.querySelector('#r60-atlas-notebook').onclick=openNotebook;sec.querySelector('#r60-atlas-save').onchange=e=>{save=e.target.checked;if(save)persist();else try{localStorage.removeItem(CFG.key)}catch(_e){};};sec.querySelector('#r60-atlas-clear').onclick=()=>{if(confirm('この図鑑の発見記録とノートを消しますか？')){found.clear();notes={};try{localStorage.removeItem(CFG.key)}catch(_e){}closeDetail();render();}};sec.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();close();}});render();};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',build,{once:true});else build();
 })();

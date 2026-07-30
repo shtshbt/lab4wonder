@@ -367,6 +367,67 @@
     });
   }
 
+  // Apps that draw their own creatures on the main canvas used to bind that canvas
+  // to a handful of hard coded names, so only those few atlas cards could ever be
+  // collected while the rest of the catalogue stayed locked. This pool lets an app
+  // lend a real card to every individual it draws: undiscovered cards win the draw,
+  // cards another individual is already showing are damped, and the app decides
+  // which cards suit each individual (depth band, forest layer, and so on).
+  function atlasCardPool() {
+    const atlas = window.__lwAtlas;
+    if (!atlas || typeof atlas.catalog !== "function") return null;
+    let list = null;
+    try {
+      list = atlas.catalog();
+    } catch (_error) {
+      list = null;
+    }
+    if (!Array.isArray(list) || !list.length) return null;
+    const byName = new Map();
+    for (const card of list) {
+      if (card && card.name) byName.set(card.name, card);
+    }
+    if (!byName.size) return null;
+    const isFound = (name) => {
+      try {
+        return Boolean(atlas.isFound?.(name));
+      } catch (_error) {
+        return false;
+      }
+    };
+    return {
+      cards: [...byName.values()],
+      get: (name) => byName.get(name) || null,
+      isFound,
+      progress: () => {
+        try {
+          return atlas.progress?.() || null;
+        } catch (_error) {
+          return null;
+        }
+      },
+      // taken maps a card name to how many individuals currently show it.
+      pick(candidates, taken, random) {
+        if (!Array.isArray(candidates) || !candidates.length) return null;
+        const roll = typeof random === "function" ? random : Math.random;
+        const weights = candidates.map((card) => {
+          const shown = Number(taken?.get?.(card.name) || 0);
+          return (isFound(card.name) ? 1 : 7) * Math.pow(0.12, shown);
+        });
+        let total = 0;
+        for (const weight of weights) total += weight;
+        if (!(total > 0)) return candidates[0];
+        let cut = roll() * total;
+        for (let i = 0; i < candidates.length; i += 1) {
+          cut -= weights[i];
+          if (cut <= 0) return candidates[i];
+        }
+        return candidates[candidates.length - 1];
+      },
+    };
+  }
+  window.lwAtlasCardPool = atlasCardPool;
+
   function installMainExploration(atlasRoot) {
     if (document.querySelector(".lw-main-exploration")) return;
     const nativeStatus = document.querySelector("#creatureStatus,#animalStatus,#organismStatus");

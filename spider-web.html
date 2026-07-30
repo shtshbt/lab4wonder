@@ -19,12 +19,12 @@ body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px
 </style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
 </head><body data-first="同じ糸強度でらせん密度だけを増やし、捕獲確率・残り糸・最大張力を比べよう。">
 <header class="hdr"><div><span class="badge">r33・生態・構造・動的探究版</span><h1>クモの巣・建設・振動伝達ラボ</h1><div class="sub">枠糸、放射糸、粘着らせんを順に張り、材料・風荷重・振動伝達・捕獲性能の交換条件を調べる。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetTop">↺ リセット</button></div></header>
-<section class="learn"><div><b>これは何？</b><p>枠糸、放射糸、粘着らせんを順に張り、材料・風荷重・振動伝達・捕獲性能の交換条件を調べる。</p></div><div><b>どこを見る？</b><p>建設工程、糸の張力、獲物の振動波、破損、材料配分、捕獲確率。</p></div><div><b>何を変える？</b><p>放射糸数、らせん密度、糸の強さ、粘着性、風、獲物、突風。</p></div><div><b>持ち帰る一文</b><p data-takeaway="">巣の形は装飾ではなく、振動を中心へ伝える骨格と獲物を止める捕獲面を、限られた糸で両立させる設計である。</p></div></section>
+<section class="learn"><div><b>これは何？</b><p>枠糸、放射糸、粘着らせんを順に張り、材料・風荷重・振動伝達・捕獲性能の交換条件を調べる。</p></div><div><b>どこを見る？</b><p>建設工程、糸の張力、獲物の振動波、ゆれが中心へ届くまでの時間、破損、材料配分、捕獲確率。</p></div><div><b>何を変える？</b><p>放射糸数、らせん密度、糸の強さ、粘着性、風、獲物、突風。</p></div><div><b>持ち帰る一文</b><p data-takeaway="">巣の形は装飾ではなく、振動を中心へ伝える骨格と獲物を止める捕獲面を、限られた糸で両立させる設計である。</p></div></section>
 <section class="toolbar" data-tour="controls"><button class="primary" id="playPause">▶ 建設</button><button id="stepBtn">1工程</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option selected="" value="1">×1</option><option value="3">×3</option><option value="8">×8</option></select><button id="preyBtn">獲物を落とす</button><button id="gustBtn">突風</button><button id="scenarioBtn">別の枠</button></section>
 <section class="stage" data-tour="stage"><canvas aria-label="クモが枠糸、放射糸、らせん糸を順に張り、獲物の振動が伝わるアニメーション" height="590" id="mainCv" width="900"></canvas></section>
-<div class="panel grid2"><section class="card"><h2>巣の設計</h2><label class="control">放射糸の本数 <output id="radialOut"></output><input id="radial" max="28" min="8" type="range" value="18"/></label><label class="control">らせんの密度 <output id="spiralOut"></output><input id="spiral" max="28" min="6" type="range" value="17"/></label><label class="control">糸の強さ <output id="silkOut"></output><input id="silk" max="100" min="20" type="range" value="65"/></label><label class="control">粘着性 <output id="stickyOut"></output><input id="sticky" max="100" min="0" type="range" value="62"/></label><label class="control">風の強さ <output id="windOut"></output><input id="wind" max="100" min="0" type="range" value="20"/></label><div class="callout" id="explain"></div></section><section class="card" data-tour="metrics"><h2>巣の計器</h2><div class="metrics"><div class="metric"><b>完成度</b><strong id="buildM"></strong></div><div class="metric"><b>残りの糸</b><strong id="silkM"></strong></div><div class="metric"><b>最大張力</b><strong id="tensionM"></strong></div><div class="metric"><b>捕獲確率</b><strong id="captureM"></strong></div></div><div class="callout" id="stateText"></div></section></div>
+<div class="panel grid2"><section class="card"><h2>巣の設計</h2><label class="control">放射糸の本数 <output id="radialOut"></output><input id="radial" max="28" min="8" type="range" value="18"/></label><label class="control">らせんの密度 <output id="spiralOut"></output><input id="spiral" max="28" min="6" type="range" value="17"/></label><label class="control">糸の強さ <output id="silkOut"></output><input id="silk" max="100" min="20" type="range" value="65"/></label><label class="control">粘着性 <output id="stickyOut"></output><input id="sticky" max="100" min="0" type="range" value="62"/></label><label class="control">風の強さ <output id="windOut"></output><input id="wind" max="100" min="0" type="range" value="20"/></label><div class="callout" id="explain"></div></section><section class="card" data-tour="metrics"><h2>巣の計器</h2><div class="metrics"><div class="metric"><b>完成度</b><strong id="buildM"></strong></div><div class="metric"><b>残りの糸</b><strong id="silkM"></strong></div><div class="metric"><b>最大張力</b><strong id="tensionM"></strong></div><div class="metric"><b>捕獲確率</b><strong id="captureM"></strong></div><div class="metric"><b>とどいた時間</b><strong id="reachM">まだ</strong></div><div class="metric"><b>つかまえた</b><strong id="caughtM">0ひき</strong></div></div><div class="callout" id="stateText"></div><div class="callout" id="captureLog">えものを 落とすと、ゆれが 糸を つたわって クモに とどきます。</div></section></div>
 <section class="deep"><h2>振動伝達と材料配分</h2><canvas aria-label="巣の各方向へ伝わる振動と、枠糸・放射糸・らせん糸への材料配分" height="330" id="graphCv" width="900"></canvas><p>放射糸は振動を中心へ伝え、粘着らせんは獲物を止めます。密度を上げると捕獲しやすくなりますが、材料と風荷重が増えます。</p></section>
-<div class="sheetBack" id="guideBack"><section class="sheet" role="dialog" aria-modal="true"><div class="sheetHead"><h2>クモの巣・建設・振動伝達ラボ の学び方</h2><button id="guideClose" aria-label="閉じる">×</button></div><h3>最初の予想</h3><p>同じ糸強度でらせん密度だけを増やし、捕獲確率・残り糸・最大張力を比較しよう。突風後の破損も確認する。</p><h3>★★★ 探究</h3><p>同じ糸強度でらせん密度だけを増やし、捕獲確率・残り糸・最大張力を比較しよう。突風後の破損も確認する。</p><h3>模型で省いているもの</h3><p>実際のクモは糸の種類を使い分け、張力を調整し、巣の向きや場所を選び、損傷を修理します。材料と力学は相対模型です。</p></section></div>
+<div class="sheetBack" id="guideBack"><section class="sheet" role="dialog" aria-modal="true"><div class="sheetHead"><h2>クモの巣・建設・振動伝達ラボ の学び方</h2><button id="guideClose" aria-label="閉じる">×</button></div><h3>最初の予想</h3><p>同じ糸強度でらせん密度だけを増やし、捕獲確率・残り糸・最大張力を比較しよう。突風後の破損も確認する。</p><h3>★★★ 探究</h3><p>同じ糸強度でらせん密度だけを増やし、捕獲確率・残り糸・最大張力を比較しよう。突風後の破損も確認する。</p><h3>ゆれを見る</h3><p>獲物が糸に当たると、ゆれが放射糸を通ってクモへ伝わります。糸の強さを上げると伝わる速さが増し、距離が長いほど届くゆれは小さくなります。「ゆれが とどいた時間」と「とどいた ゆれ」の大きさを見比べ、クモが気づいてから動き出すまでを追いましょう。</p><h3>模型で省いているもの</h3><p>実際のクモは糸の種類を使い分け、張力を調整し、巣の向きや場所を選び、損傷を修理します。材料と力学は相対模型です。</p></section></div>
 <div class="tourBox" id="tourBox"><div class="hint" id="tourText"></div><div class="row"><button id="tourPrev">←</button><span class="small" id="tourCount"></span><button class="primary" id="tourNext">次へ →</button><button id="tourStop">終わる</button></div></div>
 <button class="trayOpen" id="trayOpen">🔬 探究トレイ</button><div class="sheetBack" id="trayBack"><section class="sheet" role="dialog" aria-modal="true"><div class="sheetHead"><h2>クモの巣・建設・振動伝達ラボ を条件比較する</h2><button id="trayClose" aria-label="閉じる">×</button></div><p class="hint">保存はしません。条件Aと条件Bを記録し、なるべく一つだけ変えた比較を作ります。</p><div class="traySection"><h3>ことば</h3><div class="terms"><span class="term"><ruby>放射糸<rt>ほうしゃし</rt></ruby></span><span class="term"><ruby>粘着糸<rt>ねんちゃくし</rt></ruby></span><span class="term"><ruby>張力<rt>ちょうりょく</rt></ruby></span><span class="term"><ruby>振動伝達<rt>しんどうでんたつ</rt></ruby></span><span class="term"><ruby>材料配分<rt>ざいりょうはいぶん</rt></ruby></span></div></div><div class="traySection"><h3>★★★ 探究</h3><div class="callout">同じ糸強度でらせん密度だけを増やし、捕獲確率・残り糸・最大張力を比較しよう。突風後の破損も確認する。</div></div><div class="traySection"><h3>条件A / 条件B</h3><div class="row"><button class="primary" id="recA">条件Aを記録</button><button id="recB">条件Bを記録</button><button id="clearAB">消す</button></div><div class="snapGrid"><div class="snap"><b>条件A</b><pre id="snapA">まだ記録していません。</pre></div><div class="snap"><b>条件B</b><pre id="snapB">まだ記録していません。</pre></div></div><div class="callout" id="diffAB">Aを記録し、一つだけ条件を変えてBを記録しよう。</div></div><div class="traySection"><h3>予想と観察</h3><div class="noteGrid"><label>先に予想<textarea placeholder="何を変えると、どこがどう変わる？"></textarea></label><label>見つけたこと<textarea placeholder="予想と同じ点、違った点は？"></textarea></label></div></div><div class="traySection"><button id="zoomToggle">🔍 図をタップして拡大</button></div></section></div>
 <div class="modalBack" id="zoomBack"><section class="sheet" role="dialog" aria-modal="true"><div class="sheetHead"><h2>図の拡大</h2><button id="zoomClose" aria-label="閉じる">×</button></div><div class="zoomBody" id="zoomBody"></div></section></div>
@@ -51,11 +51,8 @@ function draw(){const p=par(),st=stats(),pts=framePoints();c.clearRect(0,0,900,5
 function drawGraph(st){g.clearRect(0,0,900,330);g.fillStyle='#09131f';g.fillRect(0,0,900,330);if(hist.length>1){const t0=hist[0].wall,t1=hist.at(-1).wall,xx=v=>45+(v-t0)/Math.max(1,t1-t0)*500;function line(get,max,col){g.strokeStyle=col;g.lineWidth=3;g.beginPath();hist.forEach((h,i)=>{const x=xx(h.wall),y=270-Math.min(max,get(h))/max*210;i?g.lineTo(x,y):g.moveTo(x,y)});g.stroke()}line(h=>h.amp,1,'#ffe36a');line(h=>h.tension,2,'#ff8b7c');line(h=>h.build,1,'#7fd5ff')}g.fillStyle='#ffe36a';g.fillText('振動',45,24);g.fillStyle='#ff8b7c';g.fillText('張力',95,24);g.fillStyle='#7fd5ff';g.fillText('完成度',145,24);const p=par(),frame=620,rad=p.rad*310,spir=p.spir*2*Math.PI*170,total=frame+rad+spir;const arr=[['枠糸',frame,'#8fcdf7'],['放射糸',rad,'#a9e9c2'],['らせん糸',spir,'#ffe36a']];arr.forEach((q,i)=>{const y=75+i*65;g.fillStyle='#17283a';g.fillRect(620,y,220,24);g.fillStyle=q[2];g.fillRect(620,y,220*q[1]/total,24);g.fillStyle='#fff';g.fillText(`${q[0]} ${(q[1]/total*100).toFixed(0)}%`,620,y-7)})}
 const baseDraw=draw;
 draw=()=>{
-  if(prey&&!prey.result&&prey.t>1.15){
-    const st=stats(),inside=Math.hypot(prey.x-center.x,(prey.y-center.y)/.64)<305;
-    prey.result=inside&&st.capture>=.46?'caught':'escaped';
-    lastOutcome=prey.result==='caught'?'つかまえた！ 振動が中心のクモまで届いた':'逃げた！ 糸の密度・粘り・張り方を変えて再挑戦';
-  }
+  syncPrey();
+  resolveOutcome();
   baseDraw();
   c.save();
   c.lineCap='round';
@@ -64,12 +61,8 @@ draw=()=>{
     c.lineWidth=index===customStrands.length-1?4:2.4;
     c.beginPath();c.moveTo(strand.x1,strand.y1);c.lineTo(strand.x2,strand.y2);c.stroke();
   });
-  c.fillStyle='#161116';c.beginPath();c.arc(center.x,center.y,12,0,Math.PI*2);c.fill();
-  c.strokeStyle='#d7c2a0';c.lineWidth=3;
-  for(let i=0;i<8;i++){const a=i/8*Math.PI*2;c.beginPath();c.moveTo(center.x+Math.cos(a)*8,center.y+Math.sin(a)*8);c.lineTo(center.x+Math.cos(a)*22,center.y+Math.sin(a)*16);c.stroke()}
-  c.fillStyle=lastOutcome.startsWith('つかまえた')?'rgba(24,91,57,.94)':lastOutcome.startsWith('逃げた')?'rgba(112,43,43,.94)':'rgba(9,24,38,.94)';
-  c.fillRect(20,10,860,48);c.fillStyle='#fff';c.font='bold 15px system-ui';c.fillText(lastOutcome,36,39);
   c.restore();
+  drawFx();
 };
 function canvasPoint(event){const rect=cv.getBoundingClientRect();return{x:(event.clientX-rect.left)*cv.width/rect.width,y:(event.clientY-rect.top)*cv.height/rect.height}}
 let webPointer=null;
@@ -86,9 +79,457 @@ cv.addEventListener('pointerup',event=>{
     prey={x:end.x,y:end.y,vx:0,vy:5,amp:1,t:0,result:null};
     lastOutcome=progress<.55?'まだ巣が未完成。ドラッグで糸を張って助けよう':'判定中… 黄色い波が中心へ届くか見よう';
   }
-  webPointer=null;draw();
+  webPointer=null;fx.dragTo=null;draw();
 });
-function bind(id,out,fmt=v=>v){$(id).oninput=e=>{$(out).textContent=fmt(+e.target.value);draw()};$(id).dispatchEvent(new Event('input'))}bind('radial','radialOut',v=>v+'本');bind('spiral','spiralOut',v=>v+'周');bind('silk','silkOut',v=>v+'%');bind('sticky','stickyOut',v=>v+'%');bind('wind','windOut',v=>v+'%');$('playPause').onclick=()=>{running=!running;$('playPause').textContent=running?'⏸ 一時停止':'▶ 建設'};$('stepBtn').onclick=()=>{step(2);draw()};$('speedSel').onchange=e=>speed=+e.target.value;$('preyBtn').onclick=()=>prey={x:160+r49Rand()*580,y:100+r49Rand()*320,vx:(r49Rand()-.5)*30,vy:10,amp:1,t:0};$('gustBtn').onclick=()=>gust=1;$('scenarioBtn').onclick=()=>{for(const id of ['radial','spiral','silk','sticky','wind']){const el=$(id);el.value=Math.round(+el.min+r49Rand()*(+el.max-+el.min));el.dispatchEvent(new Event('input'))}reset()};function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(running)step(dt*speed);draw();requestAnimationFrame(loop)}reset();requestAnimationFrame(loop);window.getSnapshot=()=>({放射糸:$('radialOut').textContent,らせん:$('spiralOut').textContent,糸強度:$('silkOut').textContent,粘着:$('stickyOut').textContent,風:$('windOut').textContent,完成:$('buildM').textContent,残糸:$('silkM').textContent,張力:$('tensionM').textContent,捕獲:$('captureM').textContent});
+/* Capture drama layer: impact shock, struggle pulses, vibration travel, spider response. */
+const web={rx:330,ry:205};
+const preyKinds=[
+  {name:'ハエ',body:'#ffb45f',rim:'#ffe7c6',wing:'rgba(214,240,255,.62)',size:8,beat:23,gap:.4},
+  {name:'チョウ',body:'#ffd76a',rim:'#fff4cc',wing:'rgba(255,240,196,.62)',size:10,beat:13,gap:.58},
+  {name:'バッタ',body:'#a3e58c',rim:'#e8ffdc',wing:'rgba(208,255,208,.52)',size:9,beat:17,gap:.5}
+];
+const fx={waves:[],rings:[],arrivals:[],larder:[],caught:0,escaped:0,lastTravel:0,lastReach:0,
+  note:lastOutcome,tone:'info',ping:0,flash:0,pop:null,clock:0,uiClock:0,wall:performance.now(),dragTo:null};
+const spider={state:'wait',a:-Math.PI/2,face:-Math.PI/2,u:0,leg:0,wrap:0,hold:0,carry:null,mark:0};
+let preyRef=null,reachCache='',caughtCache='',logCache='';
+function reduceMotion(){return !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)}
+function buzz(pattern){try{if(navigator.vibrate)navigator.vibrate(pattern)}catch(err){}}
+function webPoint(a,u){return{x:center.x+Math.cos(a)*web.rx*u,y:center.y+Math.sin(a)*web.ry*u}}
+function radialLength(a){return Math.hypot(Math.cos(a)*web.rx,Math.sin(a)*web.ry)}
+function screenAngle(a){return Math.atan2(Math.sin(a)*web.ry,Math.cos(a)*web.rx)}
+function webCoord(x,y){const dx=(x-center.x)/web.rx,dy=(y-center.y)/web.ry;return{a:Math.atan2(dy,dx),u:Math.hypot(dx,dy)}}
+function snapRadial(a){const n=Math.max(4,par().rad);return Math.round(a/(Math.PI*2)*n)/n*Math.PI*2}
+/* Wave speed rises with silk tension; amplitude falls off over decayLength along the thread. */
+function waveSpeed(){return 150+560*Math.sqrt(Math.max(.05,par().silk))}
+function decayLength(){const p=par();return 190+430*p.silk+120*(1-p.sticky)}
+function waveAmpAt(w,u){return w.amp*Math.exp(-Math.max(0,w.u0-u)*w.len/w.lam)}
+function turnTo(cur,target,rate){const d=((target-cur+Math.PI*3)%(Math.PI*2))-Math.PI;return cur+Math.max(-rate,Math.min(rate,d))}
+function setNote(text,tone){fx.note=text;fx.tone=tone||'info';lastOutcome=text}
+function ring(x,y,max,life,col,w){if(fx.rings.length>14)fx.rings.shift();fx.rings.push({x,y,max,life,col,w,t:0})}
+function fxReset(){
+  fx.waves.length=0;fx.rings.length=0;fx.arrivals.length=0;fx.larder.length=0;
+  fx.caught=0;fx.escaped=0;fx.lastTravel=0;fx.lastReach=0;fx.ping=0;fx.flash=0;fx.pop=null;
+  fx.clock=0;fx.dragTo=null;preyRef=null;
+  spider.state='wait';spider.a=-Math.PI/2;spider.face=-Math.PI/2;spider.u=0;spider.wrap=0;spider.hold=0;spider.carry=null;spider.mark=0;
+  setNote('巣を つくって、画面を タップして えものを 落とそう','info');
+}
+const baseReset=reset;
+reset=()=>{baseReset();fxReset()};
+window.resetSimulation=reset;
+function nudgeRun(){
+  if(running)return;
+  if(reduceMotion()){setNote('「1工程」ボタンを おすと ゆれが すすむよ','info');return}
+  running=true;$('playPause').textContent='⏸ 一時停止';
+}
+function syncPrey(){
+  if(prey&&prey.kind&&prey===preyRef)return;
+  if(!prey&&!preyRef)return;
+  preyRef=prey;
+  if(!prey)return;
+  const kind=preyKinds[Math.min(preyKinds.length-1,Math.floor(r49Rand()*preyKinds.length))];
+  const spot=webCoord(prey.x,prey.y);
+  prey.kind=kind;prey.hit=false;prey.noticed=false;prey.wob=r49Rand()*6.28;prey.pulse=0;prey.trail=[];
+  prey.u=spot.u;prey.a=spot.a;prey.line=snapRadial(spot.a);
+  ring(prey.x,prey.y,54,.45,'rgba(190,228,255,.85)',2);
+  setNote(progress<.2?kind.name+'が とんできた！ でも 巣が すきまだらけ':kind.name+'が とんできた！ 糸に あたるかな',progress<.2?'bad':'info');
+  buzz(14);nudgeRun();
+}
+/* Outcome rule unchanged: inside the capture face and capture probability at or above .46. */
+function resolveOutcome(){
+  if(!prey||prey.result||prey.t<=1.15)return;
+  const st=stats(),inside=Math.hypot(prey.x-center.x,(prey.y-center.y)/.64)<305;
+  prey.result=inside&&st.capture>=.46?'caught':'escaped';
+  if(prey.result==='caught'){setNote('ねばる糸に からまった！ もがく ゆれが つづく','good');return}
+  prey.free=true;fx.flash=1;
+  ring(prey.x,prey.y,110,.6,'rgba(255,150,150,.85)',3);
+  setNote('もがいて 糸から はずれた… おちていく','bad');
+  if(spider.state==='move'||spider.state==='alert')spider.state='return';
+}
+function emitWave(amp){
+  if(!prey||fx.waves.length>6)return;
+  const a=prey.line==null?prey.a:prey.line,u=Math.max(.1,Math.min(1,prey.u));
+  fx.waves.push({a,u,u0:u,len:radialLength(a),amp:Math.max(.14,Math.min(1.3,amp)),lam:decayLength(),t:0});
+}
+function arriveWave(w){
+  const amp=waveAmpAt(w,0);
+  fx.lastTravel=w.t;fx.lastReach=amp;
+  if(amp<.075){setNote('ゆれが 弱くなって クモまで とどかない','bad');return}
+  fx.arrivals.push({wall:modelTime,amp});if(fx.arrivals.length>60)fx.arrivals.shift();
+  fx.ping=1;spider.mark=1.2;
+  const free=!!(prey&&prey.free);
+  if(!free&&(spider.state==='wait'||spider.state==='return')){spider.state='alert';spider.hold=.4;if(spider.u<.06)spider.a=w.a}
+  if(prey&&!prey.noticed){prey.noticed=true;setNote('ゆれが つたわった！ クモが 気づいた','good');buzz(16)}
+}
+function finishCatch(){
+  if(!prey)return;
+  const kind=prey.kind;
+  fx.caught++;fx.flash=1;fx.pop={x:prey.x,y:prey.y,t:0};
+  ring(prey.x,prey.y,150,.7,'rgba(160,255,200,.8)',3);
+  prey.__done=true;prey=null;preyRef=null;fx.waves.length=0;
+  spider.carry=kind;spider.state='return';spider.wrap=0;
+  setNote('つかまえた！ まゆに つつんで もちかえる','good');buzz([24,40,70]);
+}
+function storeCatch(){
+  const kind=spider.carry;spider.carry=null;if(!kind)return;
+  fx.larder.push({a:-Math.PI/2+(fx.larder.length%5)*.62,u:.2+(fx.larder.length%3)*.05,kind});
+  if(fx.larder.length>8)fx.larder.shift();
+  ring(center.x,center.y,62,.5,'rgba(190,255,220,.8)',2);
+  setNote('えさ場に '+fx.caught+'ひき ためた！ つぎの えものを 待とう','good');
+}
+function noticeGone(before){
+  if(!before||prey===before||before.__done)return;
+  preyRef=null;fx.escaped++;fx.flash=1;fx.waves.length=0;
+  setNote(before.hit?'にげられた… ねばりや らせんを ふやして もう一度':'巣に あたらず 通りすぎた… 糸を もっと 張ろう','bad');
+  if(spider.state!=='wait')spider.state='return';
+  buzz(30);
+}
+function advanceSpider(h){
+  const target=prey&&prey.hit?Math.max(.05,Math.min(.98,prey.u)):0;
+  const line=prey&&prey.line!=null?prey.line:spider.a;
+  if(spider.state==='alert'){
+    spider.hold-=h;
+    spider.face=turnTo(spider.face,screenAngle(spider.a),h*7);
+    if(spider.hold<=0){
+      if(prey&&prey.hit&&!prey.free&&prey.amp>.05){spider.state='move';setNote('クモが ゆれの もとへ 動きだした','info')}
+      else spider.state='return';
+    }
+  }else if(spider.state==='move'){
+    if(!prey||!prey.hit||prey.free){spider.state='return';return}
+    spider.a=turnTo(spider.a,line,h*2.8);
+    spider.u=Math.min(target,spider.u+h*230/radialLength(spider.a));
+    spider.face=turnTo(spider.face,screenAngle(spider.a),h*8);
+    const aligned=Math.abs(((line-spider.a+Math.PI*3)%(Math.PI*2))-Math.PI)<.26;
+    if(target-spider.u<.035&&aligned){
+      if(prey.result==='caught'){spider.state='wrap';spider.wrap=0;setNote('とうちゃく！ 糸で ぐるぐる つつみはじめた','good')}
+      else if(prey.result==='escaped'){spider.state='return';setNote('あと少し… えものが 糸から はずれていく','bad')}
+    }
+  }else if(spider.state==='wrap'){
+    if(!prey||prey.result!=='caught'){spider.state='return';return}
+    spider.u=Math.max(spider.u,target-.01);
+    spider.wrap+=h/1.6;
+    if(spider.wrap>=1)finishCatch();
+  }else if(spider.state==='return'){
+    spider.u=Math.max(0,spider.u-h*250/radialLength(spider.a));
+    spider.face=turnTo(spider.face,screenAngle(spider.a+Math.PI),h*6);
+    if(spider.u<=.002){spider.u=0;spider.state='wait';storeCatch()}
+  }else if(prey&&prey.hit){
+    spider.face=turnTo(spider.face,screenAngle(prey.a),h*3);
+  }
+}
+function fxAdvance(h){
+  fx.clock+=h;
+  spider.leg+=h*(spider.state==='move'?9:spider.state==='wrap'?6:2.6);
+  spider.mark=Math.max(0,spider.mark-h*.85);
+  if(prey){
+    const spot=webCoord(prey.x,prey.y);prey.u=spot.u;prey.a=spot.a;
+    if(!prey.hit){
+      if(spot.u<=1&&progress>.2){
+        prey.hit=true;prey.line=snapRadial(spot.a);fx.flash=1;
+        ring(prey.x,prey.y,124,.5,'#ffe36a',4);
+        ring(prey.x,prey.y,198,.85,'rgba(255,227,106,.55)',2);
+        emitWave(Math.max(.6,prey.amp));
+        setNote('ドン！ '+prey.kind.name+'が 糸に あたって 大きく ゆれた','info');
+        buzz(20);
+      }
+    }else if(spider.state!=='wrap'&&!prey.free&&prey.amp>.05&&prey.u<=1.05){
+      prey.pulse+=h;
+      const gap=Math.max(.3,prey.kind.gap*(1.5-.6*Math.min(1,prey.amp)));
+      if(prey.pulse>=gap){prey.pulse=0;emitWave(prey.amp*.85);ring(prey.x,prey.y,56,.5,'rgba(255,227,106,.5)',2)}
+    }
+    if(prey.result==='escaped'&&prey.u>.2){
+      prey.trail.push({x:prey.x,y:prey.y});if(prey.trail.length>14)prey.trail.shift();
+    }
+    resolveOutcome();
+  }
+  const v=waveSpeed();
+  for(let i=fx.waves.length-1;i>=0;i--){
+    const w=fx.waves[i];w.t+=h;w.u-=h*v/w.len;
+    if(w.u<=0){w.u=0;arriveWave(w);fx.waves.splice(i,1)}
+  }
+  advanceSpider(h);
+}
+const baseStepFn=step;
+step=dt=>{
+  syncPrey();
+  const before=prey;
+  baseStepFn(dt);
+  noticeGone(before);
+  let left=Math.min(2.5,Math.max(0,dt)),guard=0;
+  while(left>1e-4&&guard++<60){const h=Math.min(.05,left);left-=h;fxAdvance(h)}
+};
+function ageUi(){
+  const now=performance.now(),dt=Math.min(.06,Math.max(0,(now-fx.wall)/1000));
+  fx.wall=now;fx.uiClock+=dt;
+  for(let i=fx.rings.length-1;i>=0;i--){const r=fx.rings[i];r.t+=dt;if(r.t>=r.life)fx.rings.splice(i,1)}
+  if(fx.pop){fx.pop.t+=dt;if(fx.pop.t>1.1)fx.pop=null}
+  fx.flash=Math.max(0,fx.flash-dt*2.2);
+  fx.ping=Math.max(0,fx.ping-dt*1.7);
+}
+function drawLoadedThread(){
+  if(!prey||!prey.hit||prey.free)return;
+  const p=par(),a=prey.line,sa=screenAngle(a),px=-Math.sin(sa),py=Math.cos(sa);
+  const wob=Math.sin(fx.clock*prey.kind.beat*.5+prey.wob)*prey.amp*5;
+  const pull=Math.min(1,.4+prey.amp*.6),rim=webPoint(a,1),att=webPoint(a,Math.max(.08,Math.min(1,prey.u)));
+  const bx=att.x+(prey.x-att.x)*pull,by=att.y+(prey.y-att.y)*pull+wob;
+  c.save();
+  c.shadowColor='rgba(255,216,90,.8)';c.shadowBlur=10;
+  c.strokeStyle='rgba(255,232,155,.94)';c.lineWidth=2.6;
+  c.beginPath();c.moveTo(center.x,center.y);
+  c.quadraticCurveTo((center.x+bx)/2+px*wob*1.2,(center.y+by)/2+py*wob*1.2,bx,by);
+  c.lineTo(rim.x,rim.y);c.stroke();
+  c.shadowBlur=0;
+  const gap=Math.max(.055,(300/Math.max(6,p.spir))/web.rx);
+  for(let k=-1;k<=1;k++){
+    const u=Math.max(.06,Math.min(1,prey.u+k*gap)),spread=.5;
+    const s=webPoint(a-spread,u),e=webPoint(a+spread,u),mid=webPoint(a,u);
+    const grab=(1-Math.abs(k)*.45)*(.5+.5*prey.amp);
+    const cx=mid.x+(prey.x-mid.x)*grab*1.7,cy=mid.y+(prey.y-mid.y)*grab*1.7+wob*.6;
+    c.strokeStyle=k===0?'rgba(255,247,208,.9)':'rgba(226,240,255,.58)';
+    c.lineWidth=k===0?2.2:1.5;
+    c.beginPath();c.moveTo(s.x,s.y);c.quadraticCurveTo(cx,cy,e.x,e.y);c.stroke();
+  }
+  c.restore();
+}
+function drawWaves(){
+  if(!fx.waves.length)return;
+  c.save();
+  for(const w of fx.waves){
+    const sa=screenAngle(w.a),px=-Math.sin(sa),py=Math.cos(sa);
+    const strength=Math.max(.08,Math.min(1,waveAmpAt(w,w.u))),span=.19,steps=22;
+    const amp=(8+16*strength)*(.35+.65*Math.min(1,w.u/.45));
+    c.shadowColor='rgba(255,226,120,.85)';c.shadowBlur=12;
+    c.strokeStyle='rgba(255,'+Math.round(226+24*strength)+','+Math.round(148+72*strength)+','+(.4+.6*strength).toFixed(2)+')';
+    c.lineWidth=1.4+3*strength;
+    c.beginPath();
+    let started=false;
+    for(let i=0;i<=steps;i++){
+      const t=-1+2*i/steps,u=w.u+t*span*.5;
+      if(u<0||u>1)continue;
+      const env=Math.pow(Math.cos(t*Math.PI/2),2),off=env*Math.sin(t*Math.PI*1.35)*amp,base=webPoint(w.a,u);
+      const x=base.x+px*off,y=base.y+py*off;
+      if(started)c.lineTo(x,y);else{c.moveTo(x,y);started=true}
+    }
+    if(started)c.stroke();
+    const head=webPoint(w.a,w.u);
+    c.fillStyle='rgba(255,250,220,.95)';
+    c.beginPath();c.arc(head.x,head.y,2.4+3.2*strength,0,6.28);c.fill();
+  }
+  c.restore();
+}
+function drawRings(){
+  c.save();
+  for(const r of fx.rings){
+    const k=Math.min(1,r.t/r.life);
+    c.globalAlpha=Math.max(0,1-k);c.strokeStyle=r.col;c.lineWidth=r.w;
+    c.beginPath();c.arc(r.x,r.y,6+(r.max-6)*k,0,6.28);c.stroke();
+  }
+  c.restore();
+}
+function drawCenterPing(){
+  if(fx.ping<=0)return;
+  c.save();c.globalAlpha=Math.min(1,fx.ping);c.strokeStyle='#c4f2ff';c.lineWidth=3;
+  for(let i=0;i<2;i++){
+    const u=.05+(1-fx.ping)*.4+i*.09;
+    c.beginPath();c.ellipse(center.x,center.y,web.rx*u,web.ry*u,0,0,6.28);c.stroke();
+  }
+  c.restore();
+}
+function drawDragPreview(){
+  if(!webPointer||!fx.dragTo)return;
+  const d=Math.hypot(fx.dragTo.x-webPointer.x,fx.dragTo.y-webPointer.y);
+  if(d<10)return;
+  c.save();c.setLineDash([7,6]);
+  c.strokeStyle=d>38?'rgba(114,231,255,.95)':'rgba(160,190,215,.7)';c.lineWidth=3;
+  c.beginPath();c.moveTo(webPointer.x,webPointer.y);c.lineTo(fx.dragTo.x,fx.dragTo.y);c.stroke();
+  c.setLineDash([]);
+  c.fillStyle='#c9f4ff';c.font='12px system-ui';
+  c.fillText(d>38?'ここに 糸を 張る':'指を もっと うごかそう',fx.dragTo.x+10,fx.dragTo.y-8);
+  c.restore();
+}
+function drawPreyFx(){
+  if(!prey)return;
+  const kind=prey.kind||preyKinds[0],sa=screenAngle(prey.line==null?prey.a:prey.line);
+  const px=-Math.sin(sa),py=Math.cos(sa);
+  const osc=Math.sin(fx.clock*kind.beat+prey.wob),shake=prey.hit?Math.min(9,2+7*prey.amp):0;
+  const x=prey.x+px*osc*shake,y=prey.y+py*osc*shake;
+  c.save();
+  if(prey.result==='escaped'&&prey.trail.length>1){
+    c.setLineDash([5,7]);c.strokeStyle='rgba(255,150,150,.6)';c.lineWidth=2;
+    c.beginPath();prey.trail.forEach((q,i)=>i?c.lineTo(q.x,q.y):c.moveTo(q.x,q.y));c.stroke();c.setLineDash([]);
+  }
+  if(prey.hit&&prey.amp>.06){
+    c.strokeStyle='rgba(255,226,120,'+(.16+.3*prey.amp).toFixed(2)+')';c.lineWidth=1.6;
+    for(let j=0;j<3;j++){c.beginPath();c.arc(x,y,12+j*9+Math.abs(osc)*6*prey.amp,0,6.28);c.stroke()}
+  }
+  c.translate(x,y);c.rotate(sa+osc*.25*(prey.hit?1:.2));
+  const flap=Math.abs(Math.sin(fx.clock*kind.beat*.6+prey.wob))*.9+.12;
+  c.fillStyle=kind.wing;
+  c.beginPath();c.ellipse(-2,-kind.size*.7*flap-2,kind.size*1.25,kind.size*.5*flap+1.6,-.5,0,6.28);c.fill();
+  c.beginPath();c.ellipse(-2,kind.size*.7*flap+2,kind.size*1.25,kind.size*.5*flap+1.6,.5,0,6.28);c.fill();
+  c.strokeStyle='rgba(58,38,18,.8)';c.lineWidth=1.6;
+  for(let i=0;i<3;i++){
+    const kick=Math.sin(fx.clock*kind.beat*1.3+i)*3*(prey.hit?1:.3);
+    for(const s of[-1,1]){
+      c.beginPath();c.moveTo(0,0);
+      c.lineTo((i-1)*kind.size*.8,s*(kind.size*1.05)+kick*s);c.stroke();
+    }
+  }
+  c.fillStyle=kind.body;c.beginPath();c.ellipse(0,0,kind.size*1.15,kind.size*.78,0,0,6.28);c.fill();
+  c.strokeStyle=kind.rim;c.lineWidth=1.4;c.stroke();
+  c.fillStyle='#2b1d12';c.beginPath();c.arc(kind.size,0,kind.size*.42,0,6.28);c.fill();
+  if(spider.state==='wrap'&&spider.wrap>0){
+    const wr=Math.min(1,spider.wrap);
+    c.fillStyle='rgba(242,248,255,'+(.25+.6*wr).toFixed(2)+')';
+    c.beginPath();c.ellipse(0,0,kind.size*1.5,kind.size*1.05,0,0,6.28);c.fill();
+    c.strokeStyle='rgba(255,255,255,.95)';c.lineWidth=1.5;
+    const turns=Math.max(1,Math.floor(wr*9));
+    for(let i=0;i<turns;i++){
+      const t=i/9;
+      c.beginPath();c.ellipse(0,0,kind.size*(1.55-t*.25),kind.size*(1.1-t*.16),t*1.1,0,6.28);c.stroke();
+    }
+  }
+  c.restore();
+}
+function drawLarder(){
+  c.save();
+  for(const b of fx.larder){
+    const pos=webPoint(b.a,b.u);
+    c.translate(pos.x,pos.y);c.rotate(screenAngle(b.a));
+    c.fillStyle='rgba(240,247,255,.92)';c.beginPath();c.ellipse(0,0,9,6,0,0,6.28);c.fill();
+    c.strokeStyle='rgba(186,212,238,.9)';c.lineWidth=1.2;
+    for(let j=0;j<3;j++){c.beginPath();c.moveTo(-5+j*4,-5.5);c.lineTo(-2.5+j*4,5.5);c.stroke()}
+    c.setTransform(1,0,0,1,0,0);
+  }
+  c.restore();
+  if(fx.pop){
+    const k=fx.pop.t/1.1;
+    c.save();c.globalAlpha=Math.max(0,1-k);c.fillStyle='#a8ffcf';c.font='bold 20px system-ui';
+    c.fillText('+1',fx.pop.x-10,fx.pop.y-16-k*34);c.restore();
+  }
+}
+function drawSpiderFx(){
+  const wrapping=spider.state==='wrap'&&prey;
+  const u=wrapping?Math.max(.03,Math.min(.98,prey.u)):spider.u,sa=screenAngle(spider.a),off=wrapping?17:0;
+  const base=webPoint(spider.a,u),pos={x:base.x-Math.sin(sa)*off,y:base.y+Math.cos(sa)*off};
+  const f=wrapping?Math.atan2(prey.y-pos.y,prey.x-pos.x):spider.face;
+  c.save();
+  if(u>.02){
+    c.strokeStyle='rgba(216,234,255,.34)';c.lineWidth=1.4;
+    c.beginPath();c.moveTo(center.x,center.y);c.lineTo(pos.x,pos.y);c.stroke();
+  }
+  if(wrapping){
+    c.strokeStyle='rgba(255,255,255,.72)';c.lineWidth=1.3;
+    for(let i=0;i<3;i++){
+      const t=.3+.4*((fx.clock*2.2+i/3)%1);
+      const mx=pos.x+(prey.x-pos.x)*t+Math.sin(fx.clock*9+i*2)*4;
+      const my=pos.y+(prey.y-pos.y)*t+Math.cos(fx.clock*9+i*2)*4;
+      c.beginPath();c.moveTo(pos.x,pos.y);c.quadraticCurveTo(mx,my,prey.x,prey.y);c.stroke();
+    }
+  }
+  c.strokeStyle='#ecdcbe';c.lineWidth=2.7;
+  for(let i=0;i<8;i++){
+    const side=i<4?1:-1,k=i%4;
+    const swing=Math.sin(spider.leg*1.7+i*1.1)*(spider.state==='move'?.24:spider.state==='wrap'?.32:.09);
+    const a1=f+side*(.5+k*.42)+swing;
+    const kneeX=pos.x+Math.cos(a1)*13,kneeY=pos.y+Math.sin(a1)*12;
+    c.beginPath();c.moveTo(pos.x,pos.y);c.lineTo(kneeX,kneeY);
+    c.lineTo(kneeX+Math.cos(a1+side*.55)*14,kneeY+Math.sin(a1+side*.55)*13);c.stroke();
+  }
+  c.translate(pos.x,pos.y);c.rotate(f);
+  c.fillStyle='#2a1c12';c.beginPath();c.ellipse(-6,0,12,9.5,0,0,6.28);c.fill();
+  c.strokeStyle='#8d7053';c.lineWidth=1.6;c.stroke();
+  c.fillStyle='#452f20';c.beginPath();c.ellipse(8,0,7,6,0,0,6.28);c.fill();
+  c.fillStyle='#ffe9a8';
+  c.beginPath();c.arc(12,-2.6,1.7,0,6.28);c.fill();
+  c.beginPath();c.arc(12,2.6,1.7,0,6.28);c.fill();
+  if(spider.carry){
+    c.fillStyle='rgba(240,247,255,.9)';c.beginPath();c.ellipse(-13,0,8.5,6,0,0,6.28);c.fill();
+  }
+  c.setTransform(1,0,0,1,0,0);
+  if(spider.mark>0){
+    c.globalAlpha=Math.min(1,spider.mark);
+    c.fillStyle='#ffe36a';c.font='bold 20px system-ui';c.fillText('!',pos.x-3,pos.y-20);
+    c.globalAlpha=1;
+  }
+  c.restore();
+}
+function pill(x,y,text,font,bg,fg){
+  c.font=font;const w=c.measureText(text).width+18;
+  c.fillStyle=bg;c.fillRect(x,y,w,23);
+  c.fillStyle=fg;c.fillText(text,x+9,y+16);
+  return w;
+}
+function drawBanner(){
+  c.save();
+  c.fillStyle=fx.tone==='good'?'rgba(24,91,57,.94)':fx.tone==='bad'?'rgba(112,43,43,.94)':'rgba(9,24,38,.94)';
+  c.fillRect(20,10,860,48);
+  if(fx.flash>0){c.fillStyle='rgba(255,255,255,'+(fx.flash*.22).toFixed(2)+')';c.fillRect(20,10,860,48)}
+  c.fillStyle='#fff';c.font='bold 15px system-ui';c.fillText(fx.note,36,39);
+  const travel=fx.lastTravel?fx.lastTravel.toFixed(2)+'びょう':'まだ',reach=fx.lastReach?Math.round(fx.lastReach*100)+'%':'まだ';
+  pill(20,64,'ゆれの はやさ '+Math.round(waveSpeed())+' ・ とどくまで '+travel+' ・ とどいた 大きさ '+reach,'12px system-ui','rgba(6,16,27,.85)','#ffe9a8');
+  pill(20,556,'きいろい なみ = ゆれ ／ しろい 糸 = たわみ ／ まゆ = つかまえた えもの','11px system-ui','rgba(6,16,27,.7)','#bcd3e8');
+  if(!prey&&progress>.3){
+    const text='巣を タップ すると えものが とんでくる';
+    c.font='bold 14px system-ui';
+    const w=c.measureText(text).width;
+    c.globalAlpha=reduceMotion()?1:.55+.45*Math.sin(fx.uiClock*3);
+    c.fillStyle='rgba(9,24,38,.8)';c.fillRect(450-w/2-10,520,w+20,24);
+    c.fillStyle='#ffe36a';c.fillText(text,450-w/2,537);
+    c.globalAlpha=1;
+  }
+  c.restore();
+}
+function drawGraphMarks(){
+  if(hist.length<2)return;
+  const t0=hist[0].wall,t1=hist[hist.length-1].wall,span=Math.max(1,t1-t0);
+  g.save();g.fillStyle='#ffe36a';g.font='12px system-ui';
+  g.fillText('▲ ゆれが クモに とどいた',215,24);
+  for(const a of fx.arrivals){
+    if(a.wall<t0)continue;
+    const x=45+(a.wall-t0)/span*500;
+    g.globalAlpha=Math.max(.35,Math.min(1,a.amp*2));
+    g.beginPath();g.moveTo(x,284);g.lineTo(x-6,297);g.lineTo(x+6,297);g.closePath();g.fill();
+  }
+  g.restore();
+}
+function syncReadouts(){
+  const reach=fx.lastTravel?fx.lastTravel.toFixed(2)+'秒':'まだ',caught=fx.caught+'ひき';
+  if($('reachM')&&reach!==reachCache){reachCache=reach;$('reachM').textContent=reach}
+  if($('caughtM')&&caught!==caughtCache){caughtCache=caught;$('caughtM').textContent=caught}
+  const tip=fx.caught===0&&fx.escaped>0?' ねばりや らせんを ふやすと つかまえやすい。':fx.caught>0?' ゆれが つたわると クモが 動く。':'';
+  const quiet=!fx.caught&&!fx.escaped&&!fx.arrivals.length;
+  const log=quiet?'えものを 落とすと、ゆれが 糸を つたわって クモに とどきます。'
+    :'つかまえた '+fx.caught+'ひき ／ にげられた '+fx.escaped+'ひき ／ とどいた ゆれ '+(fx.lastReach?Math.round(fx.lastReach*100)+'%':'—')+'。'+tip;
+  if($('captureLog')&&log!==logCache){logCache=log;$('captureLog').textContent=log}
+}
+window.__spiderFx=()=>({state:spider.state,u:+spider.u.toFixed(3),waves:fx.waves.length,rings:fx.rings.length,
+  arrivals:fx.arrivals.length,caught:fx.caught,escaped:fx.escaped,larder:fx.larder.length,
+  travel:+fx.lastTravel.toFixed(3),reach:+fx.lastReach.toFixed(3),wrap:+spider.wrap.toFixed(2),
+  hit:!!(prey&&prey.hit),kind:prey&&prey.kind?prey.kind.name:null,result:prey?prey.result||null:null,speed:Math.round(waveSpeed())});
+function drawFx(){
+  ageUi();
+  c.save();c.lineCap='round';c.lineJoin='round';
+  drawLoadedThread();
+  drawWaves();
+  drawRings();
+  drawCenterPing();
+  drawDragPreview();
+  drawPreyFx();
+  drawLarder();
+  drawSpiderFx();
+  drawBanner();
+  c.restore();
+  drawGraphMarks();
+  syncReadouts();
+}
+cv.addEventListener('pointerdown',event=>{
+  const spot=canvasPoint(event);
+  ring(spot.x,spot.y,34,.35,'rgba(196,232,255,.9)',2);
+  buzz(10);
+});
+cv.addEventListener('pointermove',event=>{if(webPointer)fx.dragTo=canvasPoint(event)});
+cv.addEventListener('pointercancel',()=>{webPointer=null;fx.dragTo=null});
+function bind(id,out,fmt=v=>v){$(id).oninput=e=>{$(out).textContent=fmt(+e.target.value);draw()};$(id).dispatchEvent(new Event('input'))}bind('radial','radialOut',v=>v+'本');bind('spiral','spiralOut',v=>v+'周');bind('silk','silkOut',v=>v+'%');bind('sticky','stickyOut',v=>v+'%');bind('wind','windOut',v=>v+'%');$('playPause').onclick=()=>{running=!running;$('playPause').textContent=running?'⏸ 一時停止':'▶ 建設'};$('stepBtn').onclick=()=>{step(2);draw()};$('speedSel').onchange=e=>speed=+e.target.value;$('preyBtn').onclick=()=>prey={x:160+r49Rand()*580,y:100+r49Rand()*320,vx:(r49Rand()-.5)*30,vy:10,amp:1,t:0};$('gustBtn').onclick=()=>gust=1;$('scenarioBtn').onclick=()=>{for(const id of ['radial','spiral','silk','sticky','wind']){const el=$(id);el.value=Math.round(+el.min+r49Rand()*(+el.max-+el.min));el.dispatchEvent(new Event('input'))}reset()};function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(running)step(dt*speed);draw();requestAnimationFrame(loop)}reset();requestAnimationFrame(loop);window.getSnapshot=()=>({放射糸:$('radialOut').textContent,らせん:$('spiralOut').textContent,糸強度:$('silkOut').textContent,粘着:$('stickyOut').textContent,風:$('windOut').textContent,完成:$('buildM').textContent,残糸:$('silkM').textContent,張力:$('tensionM').textContent,捕獲:$('captureM').textContent,ゆれ速さ:String(Math.round(waveSpeed()))});
 </script><script>
 (()=>{const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];const guide=q('#guideBack'),tray=q('#trayBack'),zoomBack=q('#zoomBack');q('#guideBtn').addEventListener('click',()=>guide.classList.add('show'));q('#guideClose').addEventListener('click',()=>guide.classList.remove('show'));guide.addEventListener('click',e=>{if(e.target===guide)guide.classList.remove('show')});q('#trayOpen').addEventListener('click',()=>tray.classList.add('show'));q('#trayClose').addEventListener('click',()=>tray.classList.remove('show'));tray.addEventListener('click',e=>{if(e.target===tray)tray.classList.remove('show')});q('#resetTop').addEventListener('click',()=>window.resetSimulation&&window.resetSimulation());q('#speakBtn').addEventListener('click',()=>{if(!('speechSynthesis'in window))return; speechSynthesis.cancel();const t=new SpeechSynthesisUtterance(q('h1').innerText+'。'+q('[data-takeaway]').innerText);t.lang='ja-JP';speechSynthesis.speak(t)});
 const tourTargets=['[data-tour="stage"]','[data-tour="controls"]','[data-tour="metrics"]'],tourTexts=['まず主図を見ます。動いているものが、時間とともに何を運び、変えているかを追います。','次に条件を一つだけ変えます。再生・停止・一段送りで違いを確かめます。','最後に数値や第二ビューを見ます。見た目の変化を量の変化として説明します。'];let ti=0;function showTour(){qa('.tourGlow').forEach(e=>e.classList.remove('tourGlow'));const el=q(tourTargets[ti]);if(el){el.classList.add('tourGlow');el.scrollIntoView({behavior:'smooth',block:'center'})}q('#tourText').textContent=tourTexts[ti];q('#tourCount').textContent=(ti+1)+' / 3';q('#tourBox').classList.add('show')}q('#tourBtn').addEventListener('click',()=>{ti=0;showTour()});q('#tourPrev').addEventListener('click',()=>{ti=(ti+2)%3;showTour()});q('#tourNext').addEventListener('click',()=>{if(ti===2){stopTour()}else{ti++;showTour()}});function stopTour(){qa('.tourGlow').forEach(e=>e.classList.remove('tourGlow'));q('#tourBox').classList.remove('show')}q('#tourStop').addEventListener('click',stopTour);

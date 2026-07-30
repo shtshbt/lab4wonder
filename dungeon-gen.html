@@ -10,7 +10,7 @@
 @media(max-width:420px){#r59-globalbar{gap:5px;padding:6px}#r59-globalbar a,#r59-globalbar button{min-height:36px!important;font-size:10px!important;padding:5px 7px!important}}
 </style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
 </head><body data-first="ループ率を上げると行き止まりがどう変わるか予想しよう。">
-<header class="hdr"><div><span class="badge">r39・動的探究版</span><h1>ダンジョン<ruby>生成<rt>せいせい</rt></ruby>・接続性ラボ</h1><div class="sub">部屋配置、分離制約、通路、ループ、行き止まり、到達性を段階的に生成する。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
+<header class="hdr"><div><h1>ダンジョン<ruby>生成<rt>せいせい</rt></ruby>・接続性ラボ</h1><div class="sub">部屋配置、分離制約、通路、ループ、行き止まり、到達性を段階的に生成する。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>ランダム地図生成を、配置とグラフ接続の二段階に分ける模型。</p></div><div><b>どこを見る？</b><p>部屋数、通路数、ループ、行き止まり、到達率、床面積。</p></div><div><b>何を変える？</b><p>部屋数、部屋サイズ、ループ率、通路コスト、分離、宝物偏り。</p></div><div><b>持ち帰る一文</b><p>見た目のランダムさだけでなく、全室到達、代替経路、行き止まり、密度を測る。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> ループ率を上げると行き止まりと到達性はどう変わるか</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
 <section class="stage"><canvas id="mainCanvas" width="800" height="430" aria-label="部屋と通路が段階生成されるダンジョン"></canvas></section>

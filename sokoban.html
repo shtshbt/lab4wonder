@@ -14,7 +14,7 @@ body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
 </style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
 </head><body data-first="デッドロック回避を下げると、箱が角へ寄るか予想しよう。">
-<header class="hdr"><div><span class="badge">r40・動的探究版</span><h1><ruby>倉庫番<rt>そうこばん</rt></ruby>・可逆性と計画ラボ</h1><div class="sub">箱押しを、到達可能性、デッドロック、先読み、可逆性の時間発展として調べる。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
+<header class="hdr"><div><h1><ruby>倉庫番<rt>そうこばん</rt></ruby>・可逆性と計画ラボ</h1><div class="sub">箱押しを、到達可能性、デッドロック、先読み、可逆性の時間発展として調べる。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>人と箱の位置を更新し、押した後にも必要な側へ回り込めるかを評価する計画模型。</p></div><div><b>どこを見る？</b><p>達成箱、押し数、到達範囲、危険箱、推定残手、探索量。</p></div><div><b>何を変える？</b><p>目標優先、デッドロック回避、先読み深さ、押しコスト、通路余裕、探索ゆらぎ。</p></div><div><b>持ち帰る一文</b><p>今押せる手より、押した後にも戻れる手を選ぶことが長期計画の核心。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> デッドロック回避を下げると、箱が角へ寄るか予想する。</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
 <section class="stage"><canvas id="mainCanvas" width="800" height="430" aria-label="倉庫番盤面と自動計画の進行"></canvas></section>

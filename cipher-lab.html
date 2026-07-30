@@ -8,7 +8,7 @@
 @media(max-width:420px){#r59-globalbar{gap:5px;padding:6px}#r59-globalbar a,#r59-globalbar button{min-height:36px!important;font-size:10px!important;padding:5px 7px!important}}
 </style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
 </head><body data-first="転置幅を変えると、文字頻度と並びがどう変わるか予想しよう。">
-<header class="hdr"><div><span class="badge">r40・動的探究版</span><h1><ruby>暗号<rt>あんごう</rt></ruby>ラボ・頻度証拠と復元限界</h1><div class="sub">置換、転置、鍵長、通信誤り、既知平文、解析予算から復元可能性を比較する。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
+<header class="hdr"><div><h1><ruby>暗号<rt>あんごう</rt></ruby>ラボ・頻度証拠と復元限界</h1><div class="sub">置換、転置、鍵長、通信誤り、既知平文、解析予算から復元可能性を比較する。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>平文を文字置換とブロック転置へ通し、頻度証拠と既知平文を使った簡略解析を進める模型。</p></div><div><b>どこを見る？</b><p>処理文字、エントロピー、一致指数、復元率、通信誤り、解析量。</p></div><div><b>何を変える？</b><p>置換ずれ、転置幅、鍵長、通信誤り、既知平文率、解析予算。</p></div><div><b>持ち帰る一文</b><p>暗号文の見かけの乱雑さだけでは安全性を判断できず、構造、鍵、利用可能な証拠、攻撃予算を分ける必要がある。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 転置幅を変えると、文字頻度は保たれたまま並びだけがどう変わるか予想する。</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
 <section class="stage"><canvas id="mainCanvas" width="800" height="430" aria-label="平文が置換、転置、通信路、解析を通る情報経路"></canvas></section>

@@ -8,7 +8,7 @@
 @media(max-width:420px){#r59-globalbar{gap:5px;padding:6px}#r59-globalbar a,#r59-globalbar button{min-height:36px!important;font-size:10px!important;padding:5px 7px!important}}
 </style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
 </head><body data-first="奥行き判定を加える前後で、重なりがどう変わるか予想しよう。">
-<header class="hdr"><div><span class="badge">r40・動的探究版</span><h1>ドーナツ・3D<ruby>描画<rt>びょうが</rt></ruby>パイプライン</h1><div class="sub">形状半径、回転、光、標本密度、投影距離から三次元表示を時間発展させる。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
+<header class="hdr"><div><h1>ドーナツ・3D<ruby>描画<rt>びょうが</rt></ruby>パイプライン</h1><div class="sub">形状半径、回転、光、標本密度、投影距離から三次元表示を時間発展させる。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>トーラス表面の三次元点を回転し、二次元投影、奥行き判定、法線照明へ順に変換する模型。</p></div><div><b>どこを見る？</b><p>可視点、奥行き幅、平均輝度、隠れ点、演算量、回転位相。</p></div><div><b>何を変える？</b><p>主半径、管半径、回転速度、光方向、標本密度、投影距離。</p></div><div><b>持ち帰る一文</b><p>立体感は物体そのものではなく、座標変換、投影、隠面処理、法線と光の計算から作られる。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 標本密度を下げると輪郭と演算量がどう変わるか予想する。</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
 <section class="stage"><canvas id="mainCanvas" width="800" height="430" aria-label="回転する三次元トーラスの投影と陰影"></canvas></section>

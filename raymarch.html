@@ -14,7 +14,7 @@ body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
 </style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
 </head><body data-first="命中許容差を粗くすると輪郭と計算回数がどう変わるか予想しよう。">
-<header class="hdr"><div><span class="badge">r40・動的探究版</span><h1>レイマーチング・<ruby>距離場<rt>きょりば</rt></ruby>ラボ</h1><div class="sub">距離場、形状混合、カメラ、歩数上限、命中許容差、光を時間発展させる。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
+<header class="hdr"><div><h1>レイマーチング・<ruby>距離場<rt>きょりば</rt></ruby>ラボ</h1><div class="sub">距離場、形状混合、カメラ、歩数上限、命中許容差、光を時間発展させる。</div></div><div class="headActions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>現在地から物体までの推定距離だけ安全に進み、表面へ収束する反復描画模型。</p></div><div><b>どこを見る？</b><p>命中率、平均歩数、最大歩数、欠落率、許容差、演算量。</p></div><div><b>何を変える？</b><p>形状混合、カメラ角、歩数上限、命中許容差、影強度、光方向。</p></div><div><b>持ち帰る一文</b><p>距離場が正しければ大きく安全に進めるが、歩数と許容差の不足は輪郭欠落や誤差を生む。</p></div></section>
 <div class="first" id="firstSteps"><span><strong>1 予想</strong> 歩数上限を下げると、どの輪郭から消えるか予想する。</span><span><strong>2 再生</strong> 主図と計器を同時に見る</span><span><strong>3 比較</strong> 同じ初期条件で一つだけ変える</span></div>
 <section class="stage"><canvas id="mainCanvas" width="800" height="430" aria-label="距離場を反復して描く二次元断面"></canvas></section>

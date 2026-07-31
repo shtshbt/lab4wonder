@@ -17,17 +17,21 @@ body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px
 <header class="hdr"><div><span class="badge">流体・粘塑性</span><h1 id="title"><ruby>底<rt>そこ</rt></ruby>なし<ruby>沼<rt>ぬま</rt></ruby>・<ruby>粘塑性沈降<rt>ねんそせいちんこう</rt></ruby>ラボ</h1><div class="sub">物体の密度・体積・接地面積・吸水性と、沼の密度・粘度・降伏応力・チキソトロピーを変えて沈降と停止を見る。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="resetBtn">↺ リセット</button></div></header>
 <section class="learn"><div><b>浮力</b><p>排除した泥の重さが上向きに働き、物体と泥の密度差が沈みやすさを左右する。</p></div><div><b>降伏応力</b><p>一定以下の力では泥が固体のように支え、閾値を超えると流れ始める。</p></div><div><b>粘性抵抗</b><p>動き始めた後は粘度と接地形状が沈降速度を抑える。</p></div><div><b>時間依存</b><p>攪乱で構造が崩れ、静置で回復するチキソトロピーを簡略化して扱う。</p></div></section><div class="steps"><span class="step"><strong>1 予想</strong> 変える量と結果を予想</span><span class="step"><strong>2 操作</strong> 一つだけ変える</span><span class="step"><strong>3 比較</strong> 条件A/Bを記録</span></div>
 <section class="toolbar"><button id="playPause" class="primary">▶ 再生</button><button id="stepBtn">一段進める</button><select id="speedSel" aria-label="再生速度"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option><option value="4">×4</option></select><button id="scenarioBtn">課題 S1</button></section>
-<section class="stage"><canvas id="mainCv" width="900" height="520" aria-label="底なし沼・粘塑性沈降ラボの中心模型"></canvas></section><div class="panel"><section class="card"><h2>操作条件</h2><label class="control">物体密度<output id="c1Out"></output><input data-control id="c1" type="range" min="300" max="3000" step="50" value="1050" data-unit="kg/m³"></label><label class="control">物体体積<output id="c2Out"></output><input data-control id="c2" type="range" min="0.01" max="0.5" step="0.01" value="0.12" data-unit="m³"></label><label class="control">接地面積<output id="c3Out"></output><input data-control id="c3" type="range" min="0.02" max="1" step="0.02" value="0.25" data-unit="m²"></label><label class="control">吸水性<output id="c4Out"></output><input data-control id="c4" type="range" min="0" max="1" step="0.05" value="0.2" data-unit=""></label><label class="control">沼の密度<output id="c5Out"></output><input data-control id="c5" type="range" min="900" max="1800" step="25" value="1350" data-unit="kg/m³"></label><label class="control">塑性粘度<output id="c6Out"></output><input data-control id="c6" type="range" min="1" max="100" step="2" value="35" data-unit="Pa·s"></label><label class="control">降伏応力<output id="c7Out"></output><input data-control id="c7" type="range" min="50" max="2500" step="50" value="700" data-unit="Pa"></label><label class="control">チキソトロピー<output id="c8Out"></output><input data-control id="c8" type="range" min="0" max="1" step="0.05" value="0.55" data-unit=""></label></section><section class="card"><h2>計器</h2><div class="metrics"><div class="metric"><b>沈み込み深さ</b><strong id="m1">—</strong></div><div class="metric"><b>沈降速度</b><strong id="m2">—</strong></div><div class="metric"><b>重量−浮力</b><strong id="m3">—</strong></div><div class="metric"><b>降伏抵抗</b><strong id="m4">—</strong></div><div class="metric"><b>粘性抵抗</b><strong id="m5">—</strong></div><div class="metric"><b>構造強度</b><strong id="m6">—</strong></div><div class="metric"><b>模型進行</b><strong id="progress">0 u</strong></div></div><div class="callout" id="explain"></div></section></div>
-<section class="deep"><h2>同期する第二Canvas</h2><canvas id="graphCv" width="900" height="280" aria-label="底なし沼・粘塑性沈降ラボの定量グラフ"></canvas><p>第二Canvasは主画面と異なる問いに答える定量表示です。</p></section><section class="take"><strong>最初の操作：</strong>物体密度だけを沼の密度より上下へ変え、浮力と停止深さの違いを確かめよう。</section><section class="deep"><h2>★ 実験</h2><p>同じ質量相当で接地面積を小・大へ変え、初動閾値と沈降速度を比較する。</p></section><section class="deep"><h2>模型の限界・非用途</h2><p>現実の流砂・泥炭・軟弱地盤を単純化したHerschel–Bulkley型模型です。実際の救助、地盤、安全判断には使えません。現実の流砂は通常「底なし」ではなく、完全に吸い込まれる挙動を一般化できません。</p></section>
+<section class="stage"><canvas id="mainCv" width="900" height="520" aria-label="底なし沼・粘塑性沈降ラボの中心模型"></canvas></section><div class="panel"><section class="card"><h2>操作条件</h2><label class="control">物体密度<output id="c1Out"></output><input data-control id="c1" type="range" min="300" max="3000" step="50" value="1050" data-unit="kg/m³"></label><label class="control">物体体積<output id="c2Out"></output><input data-control id="c2" type="range" min="0.01" max="0.5" step="0.01" value="0.12" data-unit="m³"></label><label class="control">接地面積<output id="c3Out"></output><input data-control id="c3" type="range" min="0.02" max="1" step="0.02" value="0.25" data-unit="m²"></label><label class="control">吸水性<output id="c4Out"></output><input data-control id="c4" type="range" min="0" max="1" step="0.05" value="0.2" data-unit=""></label><label class="control">沼の密度<output id="c5Out"></output><input data-control id="c5" type="range" min="900" max="1800" step="25" value="1350" data-unit="kg/m³"></label><label class="control">塑性粘度<output id="c6Out"></output><input data-control id="c6" type="range" min="1" max="100" step="2" value="35" data-unit="Pa·s"></label><label class="control">降伏応力<output id="c7Out"></output><input data-control id="c7" type="range" min="50" max="2500" step="50" value="700" data-unit="Pa"></label><label class="control">チキソトロピー<output id="c8Out"></output><input data-control id="c8" type="range" min="0" max="1" step="0.05" value="0.55" data-unit=""></label></section><section class="card"><h2>計器</h2><div class="metrics"><div class="metric"><b>沈み込み深さ</b><strong id="m1">—</strong></div><div class="metric"><b>沈降速度</b><strong id="m2">—</strong></div><div class="metric"><b>重量−浮力</b><strong id="m3">—</strong></div><div class="metric"><b>降伏抵抗</b><strong id="m4">—</strong></div><div class="metric"><b>粘性抵抗</b><strong id="m5">—</strong></div><div class="metric"><b>構造強度</b><strong id="m6">—</strong></div><div class="metric"><b>止まった深さ</b><strong id="m7">—</strong></div><div class="metric"><b>模型の時間</b><strong id="progress">0 秒</strong></div></div><div class="callout" id="explain"></div></section></div>
+<section class="deep"><h2>同期する第二Canvas</h2><canvas id="graphCv" width="900" height="280" aria-label="底なし沼・粘塑性沈降ラボの定量グラフ"></canvas><p>第二Canvasは主画面と異なる問いに答える定量表示です。</p></section><section class="take"><strong>最初の操作：</strong>物体密度だけを沼の密度より上下へ変え、浮力と停止深さの違いを確かめよう。</section><section class="deep"><h2>沼が底なしにならない理由</h2><p>沈むほど、押しのける泥がふえます。押しのけた泥の重さがそのまま上向きの力（浮力）になるので、深くなるほど体は支えられます。体の密度が泥の密度より小さいかぎり、どこかで重さと浮力がつり合い、そこで沈むのが止まります。画面に出る緑の線が、そのつり合いの深さです。物体密度を沼の密度より大きくすると、つり合う深さがなくなり、模型の底まで沈みます。</p></section><section class="deep"><h2>★ 実験</h2><p>同じ質量相当で接地面積を小・大へ変え、動き出すまでの時間といちばん速い沈降速度を比較する。ストップウォッチ代わりに「模型の時間」を使うとよい。</p></section><section class="deep"><h2>模型の限界・非用途</h2><p>現実の流砂・泥炭・軟弱地盤を単純化したHerschel–Bulkley型模型です。実際の救助、地盤、安全判断には使えません。現実の流砂は通常「底なし」ではなく、完全に吸い込まれる挙動を一般化できません。</p></section>
 <button id="trayOpen" class="trayOpen">🔬 探究トレイ</button><div id="guideBack" class="back"><section class="sheet" role="dialog" aria-modal="true"><div class="sheetHead"><h2>使い方</h2><button id="guideClose" aria-label="閉じる">×</button></div><p>物体密度だけを沼の密度より上下へ変え、浮力と停止深さの違いを確かめよう。</p><p>再生・一段送り・速度変更を使い、条件を一つだけ変えて因果方向を確かめます。音声が使えなくても全情報は画面にあります。</p></section></div><div id="trayBack" class="back"><section class="sheet" role="dialog" aria-modal="true"><div class="sheetHead"><h2>同一初期条件A/B</h2><button id="trayClose" aria-label="閉じる">×</button></div><p>一つの条件だけを変え、同じ更新回数で結果を比較します。</p><div class="row"><button id="recA">条件Aを記録</button><button id="recB">条件Bを記録</button><button id="clearAB">消す</button></div><div class="snapGrid"><div class="snap"><b>A</b><pre id="snapA"></pre></div><div class="snap"><b>B</b><pre id="snapB"></pre></div></div><p id="diffAB"></p></section></div>
 <script>const APP={"f":"quicksand-simulator.html","type":"quicksand","title":"底なし沼・粘塑性沈降ラボ","badge":"r58・流体・粘塑性","cat":"terrain","emoji":"🫧","sub":"物体の密度・体積・接地面積・吸水性と、沼の密度・粘度・降伏応力・チキソトロピーを変えて沈降と停止を見る。","first":"物体密度だけを沼の密度より上下へ変え、浮力と停止深さの違いを確かめよう。","scenarios":[{"c1":1050,"c2":0.12,"c3":0.25,"c4":0.2,"c5":1350,"c6":35,"c7":700,"c8":0.55},{"c1":700,"c2":0.2,"c3":0.7,"c4":0,"c5":1450,"c6":70,"c7":1500,"c8":0.8},{"c1":2200,"c2":0.05,"c3":0.05,"c4":0.1,"c5":1200,"c6":10,"c7":200,"c8":0.1},{"c1":1000,"c2":0.3,"c3":0.1,"c4":0.9,"c5":1500,"c6":55,"c7":900,"c8":0.7},{"c1":1600,"c2":0.08,"c3":0.5,"c4":0.4,"c5":1300,"c6":95,"c7":2200,"c8":0.9}],"metrics":["沈み込み深さ","沈降速度","重量−浮力","降伏抵抗","粘性抵抗","構造強度"],"seed":580808,"step":0.1};
+// Herschel-Bulkley sinking model constants. tau = tauY(structure) + K(structure) * rate^n,
+// with the shear localised in a thin band of mud next to the body.
+APP.qs={band:.0014,nHB:.95,kStruct:15,kBrk:.15,kRec:.05,vRef:.01,kAgit:.6,kCalm:.5,modeTau:1.2,nc0:1.2,ncD:3.6,structMin:.1,fullDepth:1.2,maxDepth:1.25,vMax:.3,stillVel:3e-4,stillHold:1.5,px:150,surf:236,bodyH:1.4,cx:430};
+APP.qsMarks=[{d:.10,label:'足首'},{d:.38,label:'ひざ'},{d:.63,label:'こし'},{d:.87,label:'むね'},{d:1.09,label:'かた'}];
 const $=id=>document.getElementById(id),clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),lerp=(a,b,t)=>a+(b-a)*t;
 let seed=APP.seed,running=false,last=performance.now(),scenarioIndex=0,manualUpdates=0,state={},A=null,B=null;
 function setSeed(s){seed=(s>>>0)||1}function rnd(){seed=(1664525*seed+1013904223)>>>0;return seed/4294967296}function normal(){let u=Math.max(1e-9,rnd()),v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
 function controls(){return [...document.querySelectorAll('[data-control]')]}function val(id){return $(id).value}function num(id){return +val(id)}function speed(){return +$('speedSel').value}
 function updateOutputs(){controls().forEach(el=>{const out=$(el.id+'Out');out.textContent=el.tagName==='SELECT'?el.options[el.selectedIndex].text:el.value+(el.dataset.unit||'')})}
 function softmax(xs,temp=1){const m=Math.max(...xs),z=xs.map(x=>Math.exp((x-m)/Math.max(.03,temp))),s=z.reduce((a,b)=>a+b,0);return z.map(x=>x/s)}function entropy(ps){return -ps.reduce((a,p)=>a+(p>0?p*Math.log(p):0),0)}
-function domainReset(){state={t:0,hist:[],phase:0,product:0,photons:[],vortices:[],generation:0,crack:num('c2')||1,depth:0,vel:0,structure:1,wet:0,storage:0,runoff:0,infil:0,rain:0};if(APP.type==='genetics'){state.reps=Array.from({length:8},()=>num('c5'));state.histReps=[]}if(APP.type==='slit')state.photons=[];if(APP.type==='vortex')state.vortices=[];compute();pushHistory()}
+function domainReset(){state={t:0,hist:[],phase:0,product:0,photons:[],vortices:[],generation:0,crack:num('c2')||1,depth:0,vel:0,structure:1,wet:0,storage:0,runoff:0,infil:0,rain:0,action:'watch',agit:0,settle:0,pulse:0,ripples:[],eqDepth:null,eqTime:null,still:0,peakVel:0,peakHold:0,prevSpeed:0,refSpeed:0,lastPush:-9,note:'',noteT:0};if(APP.type==='genetics'){state.reps=Array.from({length:8},()=>num('c5'));state.histReps=[]}if(APP.type==='slit')state.photons=[];if(APP.type==='vortex')state.vortices=[];compute();pushHistory()}
 function compute(){const t=APP.type;let d={};
  if(t==='attention'){const n=Math.round(num('c3')),heads=Math.round(num('c1')),sharp=num('c2'),res=num('c4'),temp=num('c5');let mats=[],ent=[];for(let h=0;h<heads;h++){let row=[];for(let j=0;j<n;j++){let dist=Math.abs(j-((n-1-state.phase*.15+h*1.7)%n));row.push(-dist*sharp+(h%2?Math.sin((j+1)*(h+1)):Math.cos((j+1)*.8))*0.7)}let p=softmax(row,1);mats.push(p);ent.push(entropy(p))}let diversity=0;for(let h=1;h<mats.length;h++)diversity+=mats[h].reduce((a,p,j)=>a+Math.abs(p-mats[0][j]),0)/2;diversity/=Math.max(1,heads-1);let pooled=Array(n).fill(0);mats.forEach(m=>m.forEach((p,j)=>pooled[j]+=p/heads));let logits=[1.1+pooled[n-1]*2,0.8+pooled[0]*1.7,0.5+diversity,0.25+res,0.15+pooled[Math.floor(n/2)]*1.5];let probs=softmax(logits,temp);d={n,heads,mats,ent:ent.reduce((a,b)=>a+b,0)/heads,diversity,pooled,probs,concentration:1-entropy(pooled)/Math.log(n),top:Math.max(...probs),res,contextUse:pooled.filter(p=>p>.04).length/n}}
  if(t==='slit'){let lam=num('c1')*1e-9,sep=num('c2')*1e-3,width=num('c3')*1e-3,L=num('c4'),coh=num('c5');let fringe=L*lam/sep,env=2*L*lam/width;d={lam,sep,width,L,coh,fringe,env,contrast:coh,bright:Math.max(1,Math.floor(env/Math.max(fringe,1e-9))),intensity:x=>{let beta=Math.PI*width*x/(lam*L),alpha=Math.PI*sep*x/(lam*L);let sinc=Math.abs(beta)<1e-8?1:Math.sin(beta)/beta;return sinc*sinc*(1+coh*Math.cos(2*alpha))/2}}}
@@ -37,7 +41,15 @@ function compute(){const t=APP.type;let d={};
  if(t==='enzyme'){let S=num('c1'),E=num('c2'),I=num('c3'),kind=val('c4'),temp=num('c5'),ph=num('c6'),env=Math.exp(-(((temp-37)/14)**2)-(((ph-7.2)/1.8)**2)),V=10*E*env,K=2;let Vapp=V,Kapp=K;if(kind==='competitive')Kapp=K*(1+I/1.4);if(kind==='noncompetitive')Vapp=V/(1+I/1.8);if(kind==='uncompetitive'){Vapp=V/(1+I/1.6);Kapp=K/(1+I/1.6)}let rate=Vapp*S/(Kapp+S);d={S,E,I,kind,temp,ph,env,Vapp,Kapp,rate,product:state.product,occ:S/(Kapp+S)}}
  if(t==='genetics'){let N=Math.round(num('c1')),s=num('c2'),mig=num('c3'),mut=num('c4'),p0=num('c5'),mean=state.reps.reduce((a,b)=>a+b,0)/state.reps.length,sd=Math.sqrt(state.reps.reduce((a,p)=>a+(p-mean)**2,0)/state.reps.length),het=2*mean*(1-mean);d={N,s,mig,mut,p0,mean,sd,het,fixed:state.reps.filter(p=>p>.999).length,lost:state.reps.filter(p=>p<.001).length,expected:s*mean*(1-mean)}}
  if(t==='crack'){let stress=num('c1'),a=state.crack/1000,C=1e-11*num('c3'),m=num('c4'),Kc=num('c5'),Y=1.12,dK=Y*stress*Math.sqrt(Math.PI*a),dadn=C*Math.max(dK,0)**m,acrit=(Kc/(Y*Math.max(stress,1)))**2/Math.PI,remain=dadn>0?Math.max(0,(acrit-a)/(dadn*1e3)):1e12;d={stress,aMm:state.crack,C,m,Kc,dK,dadnMm:dadn*1000,acritMm:acrit*1000,remain,margin:Kc-dK}}
- if(t==='quicksand'){let rhoO=num('c1'),V=num('c2'),area=num('c3'),abs=num('c4'),rhoM=num('c5'),mu=num('c6'),yieldS=num('c7'),thix=num('c8'),g=9.81,absorbed=abs*rhoM*V*clamp(state.t/25,0,1)*.35,weight=(rhoO*V+absorbed)*g,sub=clamp(state.depth/1.1,0,1),buoy=rhoM*g*V*sub,struct=state.structure,yieldF=yieldS*area*struct,visc=mu*area*Math.abs(state.vel)*12,net=weight-buoy-yieldF*Math.sign(Math.max(state.vel,.001));d={rhoO,V,area,abs,rhoM,mu,yieldS,thix,absorbed,weight,buoy,yieldF,visc,net,depth:state.depth,vel:state.vel,structure:state.structure}}
+ if(t==='quicksand'){const Q=APP.qs;let rhoO=num('c1'),V=num('c2'),area=num('c3'),abs=num('c4'),rhoM=num('c5'),mu=num('c6'),yieldS=num('c7'),thix=num('c8'),g=9.81;
+  let absorbed=abs*rhoM*V*clamp(state.t/25,0,1)*.35,mass=rhoO*V+absorbed,weight=mass*g;
+  let sub=clamp(state.depth/Q.fullDepth,0,1),buoy=rhoM*g*V*sub,struct=state.structure;
+  // bearing-capacity factor: a shallow footing is held less firmly than a deeply buried one
+  let nc=Q.nc0+Q.ncD*sub,yieldF=yieldS*area*nc*struct;
+  // thixotropy raises the apparent consistency of undisturbed mud
+  let kEff=mu*(1+Q.kStruct*struct),kc=kEff*area/Math.pow(Q.band,Q.nHB),visc=kc*Math.pow(Math.abs(state.vel),Q.nHB);
+  let drive=weight-buoy,net=Math.abs(drive)>yieldF?drive-Math.sign(drive)*yieldF:0,hold=clamp(drive,-yieldF,yieldF);
+  d={rhoO,V,area,abs,rhoM,mu,yieldS,thix,absorbed,mass,weight,buoy,sub,nc,yieldF,hold,kEff,kc,visc,drive,net,depth:state.depth,vel:state.vel,structure:state.structure}}
  state.d=d;return d}
 function domainStep(dt){state.t+=dt;state.phase+=dt;const t=APP.type;
  if(t==='slit'){let d=compute();for(let k=0;k<Math.max(1,Math.round(5*dt));k++){let x=0,tries=0;do{x=(rnd()-.5)*.08;tries++}while(rnd()>d.intensity(x)&&tries<50);state.photons.push({x,age:0});if(state.photons.length>180)state.photons.shift()}state.photons.forEach(p=>p.age+=dt)}
@@ -46,12 +58,57 @@ function domainStep(dt){state.t+=dt;state.phase+=dt;const t=APP.type;
  if(t==='enzyme'){let d=compute();state.product+=d.rate*dt*.15}
  if(t==='genetics'){state.genAcc=(state.genAcc||0)+dt*1.5;while(state.genAcc>=1){state.genAcc-=1;let N=Math.round(num('c1')),s=num('c2'),mig=num('c3'),mut=num('c4');state.reps=state.reps.map(p=>{let sel=clamp(p+s*p*(1-p),0,1),pm=sel*(1-mig)+.5*mig,pu=pm*(1-mut)+(1-pm)*mut,alleles=2*N,count=0;for(let i=0;i<alleles;i++)if(rnd()<pu)count++;return count/alleles});state.generation++}state.histReps.push(state.reps.slice());if(state.histReps.length>180)state.histReps.shift()}
  if(t==='crack'){let d=compute();state.crack=Math.min(d.acritMm*1.02,state.crack+d.dadnMm*dt*2e5)}
- if(t==='quicksand'){let d=compute(),drive=d.weight-d.buoy,threshold=d.yieldF;let yielded=Math.abs(drive)>threshold,acc=yielded?(drive-Math.sign(drive)*threshold-d.mu*d.area*state.vel*12)/Math.max(1,d.rhoO*d.V):0;state.vel=yielded?state.vel+acc*dt:state.vel*.75;state.vel=clamp(state.vel,-.2,.35);state.depth=clamp(state.depth+state.vel*dt,0,1.18);state.structure=clamp(state.structure+((1-state.structure)*.12-d.thix*Math.abs(state.vel)*1.6)*dt,.15,1)}
+ if(t==='quicksand')quicksandStep(dt);
  compute();pushHistory();manualUpdates++}
-function pushHistory(){const d=state.d||compute();let y1=0,y2=0;if(APP.type==='attention'){y1=d.ent;y2=d.top}if(APP.type==='slit'){y1=state.photons.length;y2=d.contrast}if(APP.type==='capillary'){y1=d.h;y2=d.v}if(APP.type==='soil'){y1=d.infil;y2=d.runoff}if(APP.type==='vortex'){y1=d.cl;y2=d.f}if(APP.type==='enzyme'){y1=d.rate;y2=d.product}if(APP.type==='genetics'){y1=d.mean;y2=d.sd}if(APP.type==='crack'){y1=d.aMm;y2=d.dadnMm}if(APP.type==='quicksand'){y1=d.depth;y2=d.vel}state.hist.push({t:state.t,y1,y2});if(state.hist.length>180)state.hist.shift()}
+// Backward-Euler velocity: the resisting force is stiff, so solve it implicitly instead of
+// letting an explicit step overshoot and get caught by a clamp.
+function qsVelocity(v0,drive,yieldF,kc,m,dt){const Q=APP.qs;
+ const resid=v=>m*(v-v0)/dt-drive+Math.sign(v)*(yieldF+kc*Math.pow(Math.abs(v),Q.nHB));
+ const atZero=m*(0-v0)/dt-drive;
+ if(atZero-yieldF<=0&&atZero+yieldF>=0)return 0;
+ let lo,hi;if(atZero+yieldF<0){lo=0;hi=Q.vMax}else{lo=-Q.vMax;hi=0}
+ for(let i=0;i<48;i++){const mid=(lo+hi)/2;if(resid(mid)<0)lo=mid;else hi=mid}
+ return clamp((lo+hi)/2,-Q.vMax,Q.vMax)}
+function quicksandStep(dt){const Q=APP.qs,parts=Math.max(1,Math.min(12,Math.ceil(dt/.05))),h=dt/parts;
+ for(let k=0;k<parts;k++){const d=compute(),m=Math.max(1,d.mass);
+  state.vel=qsVelocity(state.vel,d.drive,d.yieldF,d.kc,m,h);
+  state.depth=clamp(state.depth+state.vel*h,0,Q.maxDepth);
+  const sp=Math.abs(state.vel);
+  const brk=d.thix*(Q.kBrk*sp/(sp+Q.vRef)+Q.kAgit*state.agit);
+  const rec=(1-state.structure)*(Q.kRec+Q.kCalm*state.settle);
+  state.structure=clamp(state.structure+(rec-brk)*h,Q.structMin,1);
+  // the three助け方 are modes, not one-shot pokes: they keep acting until another one is chosen
+  const wantAgit=state.action==='struggle'?1:0,wantSettle=state.action==='calm'?1:state.action==='spread'?.6:0,ease=Math.min(1,h/Q.modeTau);
+  state.agit+=(wantAgit-state.agit)*ease;
+  state.settle+=(wantSettle-state.settle)*ease;
+  state.pulse=Math.max(0,state.pulse-h/.9);
+  if(sp>state.peakVel)state.peakVel=sp;
+  state.refSpeed+=(sp-state.refSpeed)*Math.min(1,h/2);
+  // hold the terminal-speed label a few seconds so the flat top of the curve is readable
+  const flat=state.refSpeed>0&&sp>state.peakVel*.5&&Math.abs(sp/state.refSpeed-1)<.02;
+  state.peakHold=flat?4:Math.max(0,state.peakHold-h);
+  if(sp<Q.stillVel){state.still+=h;if(state.still>=Q.stillHold&&state.eqDepth===null){state.eqDepth=state.depth;state.eqTime=state.t}}
+  else{state.still=0;if(sp>Q.stillVel*6){state.eqDepth=null;state.eqTime=null}}
+  state.prevSpeed=sp}
+ state.ripples=state.ripples.filter(r=>{r.age+=dt;return r.age<1.6});
+ if(state.noteT>0)state.noteT=Math.max(0,state.noteT-dt)}
+function pushHistory(){const d=state.d||compute();let y1=0,y2=0;if(APP.type==='attention'){y1=d.ent;y2=d.top}if(APP.type==='slit'){y1=state.photons.length;y2=d.contrast}if(APP.type==='capillary'){y1=d.h;y2=d.v}if(APP.type==='soil'){y1=d.infil;y2=d.runoff}if(APP.type==='vortex'){y1=d.cl;y2=d.f}if(APP.type==='enzyme'){y1=d.rate;y2=d.product}if(APP.type==='genetics'){y1=d.mean;y2=d.sd}if(APP.type==='crack'){y1=d.aMm;y2=d.dadnMm}if(APP.type==='quicksand'){y1=d.depth;y2=d.vel;if(state.hist.length&&state.t-state.lastPush<.2)return;state.lastPush=state.t;state.hist.push({t:state.t,y1,y2});if(state.hist.length>460)state.hist.shift();return}state.hist.push({t:state.t,y1,y2});if(state.hist.length>180)state.hist.shift()}
 function fmt(x,d=2){if(!Number.isFinite(x))return'—';if(Math.abs(x)>=1e6)return x.toExponential(2);if(Math.abs(x)>=1000)return x.toFixed(0);if(Math.abs(x)<.001&&x!==0)return x.toExponential(2);return x.toFixed(d)}
-function metricValues(){let d=state.d||compute();if(APP.type==='attention')return[fmt(d.ent),fmt(d.diversity),fmt(d.concentration),fmt(d.top*100,1)+'%',fmt(d.res*100,0)+'%',fmt(d.contextUse*100,0)+'%'];if(APP.type==='slit')return[fmt(d.fringe*1000,2)+' mm',fmt(d.env*1000,1)+' mm',fmt(d.contrast*100,0)+'%',String(d.bright),String(state.photons.length),fmt(d.intensity(0),2)];if(APP.type==='capillary')return[fmt(d.pc/1000,2)+' kPa',fmt(d.h*100,1)+' cm',fmt(d.v*1000,2)+' mm/s',fmt(d.heq*100,1)+' cm',fmt(d.water*100,0)+'%',fmt(d.volume,1)];if(APP.type==='soil')return[fmt(d.cap,1)+' mm/h',fmt(d.rainCum,1)+' mm',fmt(d.infil,1)+' mm',fmt(d.runoff,1)+' mm',fmt(d.storage,1)+' mm',fmt(d.balance,3)+' mm'];if(APP.type==='vortex')return[fmt(d.Re,0),fmt(d.St,3),fmt(d.f,2)+' Hz',fmt(d.cl,2),fmt(d.cd,2),fmt(d.stable*100,0)+'%'];if(APP.type==='enzyme')return[fmt(d.rate,2),fmt(d.Vapp,2),fmt(d.Kapp,2)+' mM',fmt(d.product,2),fmt(d.occ*100,0)+'%',fmt(d.env*100,0)+'%'];if(APP.type==='genetics')return[fmt(d.mean,3),fmt(d.sd,3),fmt(d.het,3),String(d.fixed),String(d.lost),fmt(d.expected,4)];if(APP.type==='crack')return[fmt(d.aMm,3)+' mm',fmt(d.dK,2),fmt(d.dadnMm,5)+' mm/cyc',fmt(d.acritMm,2)+' mm',fmt(d.remain,0),fmt(d.margin,2)];if(APP.type==='quicksand')return[fmt(d.depth,2)+' m',fmt(d.vel,3)+' m/s',fmt(d.weight-d.buoy,0)+' N',fmt(d.yieldF,0)+' N',fmt(d.visc,0)+' N',fmt(d.structure*100,0)+'%'];return[]}
-function explain(){const m=metricValues();return `${APP.metrics[0]}は ${m[0]}。一つの入力だけを変え、同じ更新回数で主Canvas・第二Canvas・計器の方向を比較してください。`}
+function metricValues(){let d=state.d||compute();if(APP.type==='attention')return[fmt(d.ent),fmt(d.diversity),fmt(d.concentration),fmt(d.top*100,1)+'%',fmt(d.res*100,0)+'%',fmt(d.contextUse*100,0)+'%'];if(APP.type==='slit')return[fmt(d.fringe*1000,2)+' mm',fmt(d.env*1000,1)+' mm',fmt(d.contrast*100,0)+'%',String(d.bright),String(state.photons.length),fmt(d.intensity(0),2)];if(APP.type==='capillary')return[fmt(d.pc/1000,2)+' kPa',fmt(d.h*100,1)+' cm',fmt(d.v*1000,2)+' mm/s',fmt(d.heq*100,1)+' cm',fmt(d.water*100,0)+'%',fmt(d.volume,1)];if(APP.type==='soil')return[fmt(d.cap,1)+' mm/h',fmt(d.rainCum,1)+' mm',fmt(d.infil,1)+' mm',fmt(d.runoff,1)+' mm',fmt(d.storage,1)+' mm',fmt(d.balance,3)+' mm'];if(APP.type==='vortex')return[fmt(d.Re,0),fmt(d.St,3),fmt(d.f,2)+' Hz',fmt(d.cl,2),fmt(d.cd,2),fmt(d.stable*100,0)+'%'];if(APP.type==='enzyme')return[fmt(d.rate,2),fmt(d.Vapp,2),fmt(d.Kapp,2)+' mM',fmt(d.product,2),fmt(d.occ*100,0)+'%',fmt(d.env*100,0)+'%'];if(APP.type==='genetics')return[fmt(d.mean,3),fmt(d.sd,3),fmt(d.het,3),String(d.fixed),String(d.lost),fmt(d.expected,4)];if(APP.type==='crack')return[fmt(d.aMm,3)+' mm',fmt(d.dK,2),fmt(d.dadnMm,5)+' mm/cyc',fmt(d.acritMm,2)+' mm',fmt(d.remain,0),fmt(d.margin,2)];if(APP.type==='quicksand')return[fmt(d.depth,2)+' m',fmt(d.vel*100,2)+' cm/s',fmt(d.weight-d.buoy,0)+' N',fmt(d.yieldF,0)+' N',fmt(d.visc,0)+' N',fmt(d.structure*100,0)+'%',state.depth>=APP.qs.maxDepth-1e-3?'模型の底':state.eqDepth===null?'まだ 沈んでいる':state.eqDepth<.02?'沈まなかった':fmt(state.eqDepth,2)+' m'];return[]}
+function qsMarkAt(depth){let hit=null;APP.qsMarks.forEach(mk=>{if(depth>=mk.d)hit=mk});return hit}
+function qsPhase(){const d=state.d||compute(),Q=APP.qs,sp=Math.abs(d.vel);
+ if(state.t<.3&&d.depth<1e-6)return{key:'ready',tag:'これから沈む',line:'再生を押すと、体が泥に入りはじめる。どこで止まるか先に予想してみよう。'};
+ if(d.depth>=Q.maxDepth-1e-3)return{key:'bottom',tag:'この模型の底',line:'泥より重いので、模型のいちばん下まで沈んだ。浮力だけでは止まらない重さだった。'};
+ if(state.eqDepth!==null&&state.eqDepth>=.02)return{key:'stop',tag:'止まった',line:`深さ ${fmt(state.eqDepth,2)} m で止まった。押しのけた泥の重さ（浮力）が体の重さとつり合ったから、沼は底なしにならない。`};
+ if(sp<Q.stillVel&&d.depth<.02)return{key:'held',tag:'沈まない',line:'泥のねばりだけで体の重さを支えきっている。はげしくもがくと、この支えは弱くなる。'};
+ if(sp<Q.stillVel)return{key:'held',tag:'とまりかけ',line:'いまはほとんど動いていない。もう少し見ていると、止まった深さがはっきりする。'};
+ const ref=state.refSpeed||sp;
+ if(state.peakHold>0)return{key:'terminal',tag:'いちばん速い（終端速度）',line:`沈める力と泥の抵抗がつり合い、速さが ${fmt(state.peakVel*100,2)} cm/s でそれ以上ふえなくなった。`};
+ if(sp>ref*1.02)return{key:'accel',tag:'だんだん速く',line:'動くほど泥の構造がこわれて、ゆるくなる。だから少しずつ速くなる。'};
+ if(sp<ref*.98)return{key:'slow',tag:'ゆっくりに',line:'深く入るほど押しのける泥がふえ、浮力が強くなる。だから速さが落ちていく。'};
+ return{key:'terminal',tag:'いちばん速い（終端速度）',line:'沈める力と泥の抵抗がつり合って、速さがそれ以上ふえなくなった。'}}
+function explain(){if(APP.type==='quicksand'){const p=qsPhase(),d=state.d||compute();const extra=state.noteT>0&&state.note?` ${state.note}`:'';return `いま「${p.tag}」。${p.line} 深さ ${fmt(d.depth,2)} m、沈む速さ ${fmt(d.vel*100,2)} cm/s、泥のかたさ ${fmt(d.structure*100,0)}%。${extra}`}
+ const m=metricValues();return `${APP.metrics[0]}は ${m[0]}。一つの入力だけを変え、同じ更新回数で主Canvas・第二Canvas・計器の方向を比較してください。`}
 function clear(cv){const c=$(cv),x=c.getContext('2d');x.clearRect(0,0,c.width,c.height);x.fillStyle='#081522';x.fillRect(0,0,c.width,c.height);return x}function txt(x,s,text,px,py,color='#dceafa',align='left'){x.fillStyle=color;x.font=`${s}px -apple-system,sans-serif`;x.textAlign=align;x.fillText(String(text),px,py)}function line(x,pts,color='#5fd3ff',w=2){if(!pts.length)return;x.strokeStyle=color;x.lineWidth=w;x.beginPath();pts.forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));x.stroke()}function arrow(x,x1,y1,x2,y2,color='#ffd85a'){x.strokeStyle=color;x.fillStyle=color;x.lineWidth=3;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();let a=Math.atan2(y2-y1,x2-x1);x.beginPath();x.moveTo(x2,y2);x.lineTo(x2-12*Math.cos(a-.5),y2-12*Math.sin(a-.5));x.lineTo(x2-12*Math.cos(a+.5),y2-12*Math.sin(a+.5));x.fill()}
 function axes(x,w,h,xlab,ylab){x.strokeStyle='#36506c';x.lineWidth=1;x.beginPath();x.moveTo(58,18);x.lineTo(58,h-38);x.lineTo(w-18,h-38);x.stroke();txt(x,11,xlab,w-25,h-16,'#9fb8cc','right');txt(x,11,ylab,12,18,'#9fb8cc')}
 function drawMain(){const x=clear('mainCv'),d=state.d,W=900,H=520;txt(x,14,APP.title,24,28,'#ffd85a');txt(x,11,`t=${fmt(state.t,2)} u / 更新 ${manualUpdates}`,24,49,'#9fb8cc');
@@ -63,9 +120,65 @@ function drawMain(){const x=clear('mainCv'),d=state.d,W=900,H=520;txt(x,14,APP.t
  if(APP.type==='enzyme'){let rate=d.rate;for(let i=0;i<36;i++){let px=80+(i*113%720),py=80+(i*71%320);x.fillStyle=i<Math.floor(d.occ*36)?'#5fd3ff':'#416078';x.beginPath();x.arc(px,py,8,0,Math.PI*2);x.fill()}for(let i=0;i<Math.round(d.E*8);i++){let px=110+(i*97%670),py=110+(i*139%300);x.strokeStyle='#69e0b0';x.lineWidth=5;x.beginPath();x.arc(px,py,18,0,Math.PI*1.5);x.stroke()}for(let i=0;i<Math.round(d.I*6);i++){let px=90+(i*151%720),py=90+(i*89%330);x.fillStyle='#ff8d8d';x.fillRect(px-7,py-7,14,14)}txt(x,15,`速度 ${fmt(rate,2)} / 生成物 ${fmt(d.product,2)}`,450,55,'#ffd85a','center');txt(x,12,`阻害型: ${$('c4Out').textContent}`,450,485,'#9fcdf5','center')}
  if(APP.type==='genetics'){let cols=40,rows=12,p=d.mean;for(let i=0;i<cols*rows;i++){let px=55+(i%cols)*20,py=80+Math.floor(i/cols)*27;let local=state.reps[i%state.reps.length];x.fillStyle=((i*37%100)/100<local)?'#ffd85a':'#345877';x.beginPath();x.arc(px,py,6,0,Math.PI*2);x.fill()}state.reps.forEach((p,i)=>{x.fillStyle='#162a3f';x.fillRect(70+i*100,425,70,18);x.fillStyle='#69e0b0';x.fillRect(70+i*100,425,70*p,18);txt(x,10,fmt(p,2),105+i*100,466,'#dceafa','center')});txt(x,14,`世代 ${state.generation} / 平均A ${fmt(d.mean,3)}`,450,50,'#ffd85a','center')}
  if(APP.type==='crack'){x.fillStyle='#6d7d8b';x.fillRect(90,130,720,250);x.fillStyle='#081522';let len=clamp(d.aMm/Math.max(d.acritMm,1),0,1)*310;x.beginPath();x.moveTo(450,130);for(let i=0;i<14;i++)x.lineTo(450+(i%2?12:-12),130+i*len/13);x.lineTo(450,130+len);x.lineTo(450,130);x.fill();arrow(x,180,95,180,35,'#ff8d8d');arrow(x,720,95,720,35,'#ff8d8d');arrow(x,180,415,180,485,'#5fd3ff');arrow(x,720,415,720,485,'#5fd3ff');txt(x,15,`a=${fmt(d.aMm,3)} mm / ΔK=${fmt(d.dK,2)}`,450,55,'#ffd85a','center');txt(x,12,`臨界 a≈${fmt(d.acritMm,2)} mm`,450,410,'#9fcdf5','center')}
- if(APP.type==='quicksand'){x.fillStyle='#152b3c';x.fillRect(0,0,W,150);let grad=x.createLinearGradient(0,150,0,H);grad.addColorStop(0,'#8a6f45');grad.addColorStop(1,'#3a2f27');x.fillStyle=grad;x.fillRect(0,150,W,H-150);for(let i=0;i<45;i++){let px=(i*89+state.phase*13)%W,py=180+(i*61%(H-210));x.fillStyle=i%3?'rgba(180,150,95,.3)':'rgba(90,65,40,.4)';x.beginPath();x.arc(px,py,3+(i%5),0,Math.PI*2);x.fill()}let y=110+d.depth*290,w=90+Math.sqrt(d.area)*80,h=55+Math.cbrt(d.V)*90;x.fillStyle='#d9aa55';x.strokeStyle='#ffe5a5';x.lineWidth=3;x.fillRect(450-w/2,y-h/2,w,h);x.strokeRect(450-w/2,y-h/2,w,h);arrow(x,450,y,450,y+90,'#ff8d8d');arrow(x,420,y,420,y-70,'#5fd3ff');arrow(x,480,y,480,y-50,'#69e0b0');txt(x,11,'重量',455,y+100,'#ff8d8d');txt(x,11,'浮力',385,y-78,'#5fd3ff');txt(x,11,'降伏抵抗',490,y-57,'#69e0b0');txt(x,15,`深さ ${fmt(d.depth,2)} m / 速度 ${fmt(d.vel,3)} m/s`,450,55,'#ffd85a','center')}
+ if(APP.type==='quicksand')drawQuicksand(x,d,W,H);
+ x.textAlign='left';
 }
-function drawGraph(){const x=clear('graphCv'),d=state.d,W=900,H=280;axes(x,W,H,'時間・位置','定量値');
+function qsPose(){const a=state.action,wob=a==='struggle'?Math.sin(state.phase*7):0;
+ if(a==='spread')return{arm:64,armY:4,leg:34,foot:8};
+ if(a==='struggle')return{arm:46,armY:-30+wob*12,leg:22,foot:wob*7};
+ return{arm:24,armY:22,leg:17,foot:0}}
+function drawQsFigure(x,feetY){const Q=APP.qs,cx=Q.cx,BH=Q.bodyH*Q.px,p=qsPose();
+ const head=feetY-BH*.90,shoulder=feetY-BH*.78,hip=feetY-BH*.45,knee=feetY-BH*.27;
+ x.lineCap='round';x.lineJoin='round';
+ x.fillStyle='rgba(60,44,26,.5)';x.beginPath();x.ellipse(cx,feetY,46,9,0,0,Math.PI*2);x.fill();
+ x.strokeStyle='#4d86c6';x.lineWidth=13;x.beginPath();
+ x.moveTo(cx,hip);x.lineTo(cx-p.leg,knee);x.lineTo(cx-p.leg-p.foot,feetY-4);
+ x.moveTo(cx,hip);x.lineTo(cx+p.leg,knee);x.lineTo(cx+p.leg+p.foot,feetY-4);x.stroke();
+ x.strokeStyle='#2e2735';x.lineWidth=17;x.beginPath();x.moveTo(cx,shoulder-4);x.lineTo(cx,hip);x.stroke();
+ x.strokeStyle='#f4c85c';x.lineWidth=11;x.beginPath();
+ x.moveTo(cx,shoulder+6);x.lineTo(cx-p.arm,shoulder+6+p.armY);
+ x.moveTo(cx,shoulder+6);x.lineTo(cx+p.arm,shoulder+6+p.armY);x.stroke();
+ x.fillStyle='#ffd6ad';x.beginPath();x.arc(cx,head,19,0,Math.PI*2);x.fill();
+ x.strokeStyle='#2e2735';x.lineWidth=3;x.stroke();
+ return{head,shoulder,hip,knee}}
+function drawQuicksand(x,d,W,H){const Q=APP.qs,SURF=Q.surf,PX=Q.px,cx=Q.cx;
+ // small labels sit over the mud, so give them a dark halo instead of letting the texture eat them
+ const stxt=(s,text,px,py,color,align)=>{x.save();x.shadowColor='rgba(0,0,0,.92)';x.shadowBlur=5;txt(x,s,text,px,py,color,align);x.restore()};
+ let sky=x.createLinearGradient(0,0,0,SURF);sky.addColorStop(0,'#0c1826');sky.addColorStop(1,'#20374b');x.fillStyle=sky;x.fillRect(0,0,W,SURF);
+ x.fillStyle='#17301f';x.beginPath();x.moveTo(0,SURF);x.lineTo(0,SURF-30);for(let i=0;i<=W;i+=24)x.lineTo(i,SURF-26-13*Math.sin(i*.016));x.lineTo(W,SURF);x.closePath();x.fill();
+ let mud=x.createLinearGradient(0,SURF,0,H);mud.addColorStop(0,'#ab8753');mud.addColorStop(.45,'#6f5636');mud.addColorStop(1,'#2f261f');
+ x.fillStyle=mud;x.fillRect(0,SURF,W,H-SURF);
+ const feetY=SURF+d.depth*PX,joints=drawQsFigure(x,feetY);
+ x.save();x.globalAlpha=.87;x.fillStyle=mud;x.fillRect(0,SURF,W,H-SURF);x.restore();
+ for(let i=0;i<70;i++){let px=(i*97+state.phase*3)%W,py=SURF+16+(i*53)%(H-SURF-22);x.fillStyle=i%3?'rgba(216,186,128,.2)':'rgba(58,42,26,.3)';x.beginPath();x.arc(px,py,2+(i%4),0,Math.PI*2);x.fill()}
+ x.strokeStyle='#e8c684';x.lineWidth=3;x.beginPath();for(let i=0;i<=W;i+=8){let yy=SURF+Math.sin(i*.033+state.phase*1.5)*2.6;i?x.lineTo(i,yy):x.moveTo(i,yy)}x.stroke();
+ state.ripples.forEach(r=>{const rad=14+r.age*150,a=clamp(1-r.age/1.6,0,1);x.save();x.globalAlpha=a*.8;x.strokeStyle=r.color;x.lineWidth=3;x.beginPath();x.ellipse(cx,SURF,rad,rad*.22,0,0,Math.PI*2);x.stroke();x.restore()});
+ APP.qsMarks.forEach(mk=>{const my=feetY-mk.d*PX;if(my<18||my>H-16)return;const on=d.depth>=mk.d;x.strokeStyle=on?'rgba(255,216,90,.75)':'rgba(200,220,240,.28)';x.lineWidth=on?2:1;x.beginPath();x.moveTo(cx-98,my);x.lineTo(cx-74,my);x.stroke();x.fillStyle='rgba(6,17,28,.7)';x.fillRect(cx-130,my-9,30,17);stxt(11,mk.label,cx-104,my+4,on?'#ffd85a':'#93a9bd','right')});
+ if(state.eqDepth!==null&&state.eqDepth>=.02){const ey=SURF+state.eqDepth*PX;x.save();x.setLineDash([10,7]);x.strokeStyle='#69e0b0';x.lineWidth=2;x.beginPath();x.moveTo(20,ey);x.lineTo(812,ey);x.stroke();x.restore();
+  x.fillStyle='rgba(8,32,25,.92)';x.strokeStyle='#69e0b0';x.lineWidth=1;x.fillRect(20,ey+7,268,46);x.strokeRect(20,ey+7,268,46);
+  txt(x,13,`ここで止まった　深さ ${fmt(state.eqDepth,2)} m`,32,ey+27,'#69e0b0');
+  const mk=qsMarkAt(state.eqDepth);txt(x,12,mk?`泥は ${mk.label} の高さで止まった`:'泥はまだ足首より下',32,ey+45,'#cfe6dc')}
+ const mid=(joints.shoulder+joints.hip)/2,support=Math.abs(d.hold),fmax=Math.max(d.weight,d.buoy,support,1),alen=v=>12+Math.sqrt(clamp(v/fmax,0,1))*72;
+ let labY=clamp(mid+62,158,H-44);if(labY+16>SURF-16&&labY-12<SURF+16)labY=SURF+30;
+ const drawForce=(px,val,color,label,up)=>{const L=alen(val);if(up)arrow(x,px,mid+L/2,px,mid-L/2,color);else arrow(x,px,mid-L/2,px,mid+L/2,color);stxt(11,label,px,labY,color,'center');stxt(11,fmt(val,0)+' N',px,labY+16,color,'center')};
+ drawForce(cx+96,d.weight,'#ff8d8d','重さ',false);
+ drawForce(cx+156,d.buoy,'#5fd3ff','浮力',true);
+ drawForce(cx+216,support,'#69e0b0','泥の支え',true);
+ x.fillStyle='rgba(6,17,28,.9)';x.strokeStyle='#37536f';x.lineWidth=1;x.fillRect(16,64,268,116);x.strokeRect(16,64,268,116);
+ txt(x,12,'赤 ↓ 重さ　沈めようとする力',28,86,'#ff8d8d');
+ txt(x,12,'青 ↑ 浮力　押しのけた泥の重さ',28,110,'#5fd3ff');
+ txt(x,12,'緑 ↑ 泥のねばりの支え',28,134,'#69e0b0');
+ txt(x,12,'黄の線　いまの泥の高さ',28,158,'#ffd85a');
+ const sx=828;x.strokeStyle='rgba(210,228,244,.3)';x.lineWidth=2;x.beginPath();x.moveTo(sx,SURF);x.lineTo(sx,SURF+Q.maxDepth*PX);x.stroke();
+ for(let m=.25;m<=Q.maxDepth+1e-6;m+=.25){const yy=SURF+m*PX;x.beginPath();x.moveTo(sx-7,yy);x.lineTo(sx+7,yy);x.stroke();stxt(11,m.toFixed(2)+' m',sx+12,yy+4,'#9fb8cc')}
+ stxt(11,'泥の面からの深さ',890,SURF-14,'#9fb8cc','right');
+ stxt(16,`深さ ${fmt(d.depth,2)} m`,884,32,'#ffd85a','right');
+ stxt(13,`沈む速さ ${fmt(d.vel*100,2)} cm/s`,884,54,'#5fd3ff','right');
+ stxt(13,`泥のかたさ ${fmt(d.structure*100,0)}%`,884,74,'#69e0b0','right');
+ const ph=qsPhase();stxt(16,ph.tag,26,206,ph.key==='stop'?'#69e0b0':ph.key==='accel'?'#ffb36b':'#ffd85a');
+ const now=qsMarkAt(d.depth);stxt(12,now?`泥は ${now.label} まで来ている`:'泥はまだ足首より下',26,226,'#dceafa');
+ if(state.noteT>0&&state.note){x.save();x.globalAlpha=clamp(state.noteT/1.6,0,1);x.fillStyle='rgba(8,20,32,.92)';x.strokeStyle='#ffd85a';x.lineWidth=1;x.fillRect(300,H-46,470,32);x.strokeRect(300,H-46,470,32);txt(x,13,state.note,535,H-25,'#ffd85a','center');x.restore()}}
+function drawGraph(){const x=clear('graphCv'),d=state.d,W=900,H=280;axes(x,W,H,APP.type==='quicksand'?'':'時間・位置',APP.type==='quicksand'?'深さと速さ':'定量値');
  if(APP.type==='attention'){let colors=['#5fd3ff','#69e0b0','#ff8d8d','#ffd85a','#c5a6ff'];d.probs.forEach((p,i)=>{x.fillStyle=colors[i];x.fillRect(90+i*145,H-38-p*180,90,p*180);txt(x,10,fmt(p*100,1)+'%',135+i*145,H-45-p*180,colors[i],'center')});line(x,state.hist.map((h,i)=>[58+i*4,H-38-h.y1*55]),'#ffd85a',2);txt(x,11,'棒: 次候補確率 / 線: 注意エントロピー',70,22,'#9fcdf5')}
  if(APP.type==='slit'){let pts=[];for(let i=0;i<760;i++){let pos=(i/759-.5)*.08;pts.push([80+i,H-38-d.intensity(pos)*190])}line(x,pts,'#ffd85a',2);let marker=(state.phase*.004)%0.08-.04;let mx=80+(marker+.04)/.08*760;x.strokeStyle='#ff8d8d';x.beginPath();x.moveTo(mx,30);x.lineTo(mx,H-38);x.stroke();txt(x,11,'スクリーン位置に対する規格化強度',70,22,'#9fcdf5')}
  if(APP.type==='capillary'){let pts=[];for(let i=0;i<160;i++){let tt=i/159*Math.max(20,state.t+5),h=Math.min(d.heq,Math.sqrt(Math.max(0,d.r*d.gamma*Math.cos(d.theta)*tt/(2*d.mu))),1.5);pts.push([70+i*4.8,H-38-h/1.5*190])}line(x,pts,'#5fd3ff',3);let mx=70+Math.min(159,state.t/Math.max(20,state.t+5)*159)*4.8;x.fillStyle='#ffd85a';x.beginPath();x.arc(mx,H-38-d.h/1.5*190,6,0,Math.PI*2);x.fill();txt(x,11,'濡れ前線高さ h(t)',70,22,'#9fcdf5')}
@@ -74,9 +187,20 @@ function drawGraph(){const x=clear('graphCv'),d=state.d,W=900,H=280;axes(x,W,H,'
  if(APP.type==='enzyme'){let pts=[];for(let i=0;i<160;i++){let S=i/159*10,rate=d.Vapp*S/(d.Kapp+S);pts.push([70+i*4.8,H-38-rate/20*190])}line(x,pts,'#69e0b0',3);let mx=70+d.S/10*159*4.8,my=H-38-d.rate/20*190;x.fillStyle='#ffd85a';x.beginPath();x.arc(mx,my,7,0,Math.PI*2);x.fill();line(x,state.hist.map((h,i)=>[60+i*4.5,H-38-clamp(h.y2/Math.max(1,d.product+1),0,1)*80]),'#ff8d8d',2);txt(x,11,'緑:基質–速度曲線 / 赤:生成物履歴',70,22,'#9fcdf5')}
  if(APP.type==='genetics'){if(state.histReps?.length){}state.reps.forEach((p,r)=>{let col=['#5fd3ff','#69e0b0','#ff8d8d','#ffd85a','#c5a6ff','#ffa86b','#8dd8ff','#c8ff88'][r];line(x,state.hist.map((h,i)=>[60+i*4.5,H-38-clamp((state.histReps?.[i]?.[r]??p),0,1)*190]),col,1.5)});x.fillStyle='#ffd85a';x.beginPath();x.arc(60+(state.hist.length-1)*4.5,H-38-d.mean*190,6,0,Math.PI*2);x.fill();txt(x,11,'8反復集団のA頻度（現在点を強調）',70,22,'#9fcdf5')}
  if(APP.type==='crack'){let max=Math.max(d.acritMm,5);line(x,state.hist.map((h,i)=>[60+i*4.5,H-38-clamp(h.y1/max,0,1)*190]),'#ff8d8d',3);let pts=[];for(let i=0;i<150;i++){let a=.1+(max-.1)*i/149,K=1.12*d.stress*Math.sqrt(Math.PI*a/1000),rate=d.C*K**d.m*1000;let yy=clamp((Math.log10(Math.max(rate,1e-12))+12)/10,0,1);pts.push([80+i*5,H-38-yy*150])}line(x,pts,'#5fd3ff',2);txt(x,11,'赤:亀裂長の履歴 / 青:亀裂長別 da/dN',70,22,'#9fcdf5')}
- if(APP.type==='quicksand'){line(x,state.hist.map((h,i)=>[60+i*4.5,H-38-clamp(h.y1/1.2,0,1)*180]),'#ffd85a',3);line(x,state.hist.map((h,i)=>[60+i*4.5,150-h.y2*250]),'#5fd3ff',2);let forces=[d.weight,d.buoy,d.yieldF,d.visc],mx=Math.max(...forces,1);forces.forEach((v,i)=>{x.fillStyle=['#ff8d8d','#5fd3ff','#69e0b0','#c5a6ff'][i];x.fillRect(610+i*60,H-38-v/mx*120,35,v/mx*120)});txt(x,11,'黄:深さ 青:速度 / 右:重量・浮力・降伏・粘性',70,22,'#9fcdf5')}
+ if(APP.type==='quicksand'){const Q=APP.qs,x0=58,x1=732,y0=32,y1=H-38;
+  const tMax=Math.max(20,state.t*1.05),vTop=Math.max(.008,state.peakVel*1.15),tx=t=>x0+clamp(t/tMax,0,1)*(x1-x0);
+  x.strokeStyle='#233a52';x.lineWidth=1;for(let k=1;k<=4;k++){const yy=y1-(y1-y0)*k/4;x.beginPath();x.moveTo(x0,yy);x.lineTo(x1,yy);x.stroke()}
+  for(let s=0;s<=tMax;s+=tMax>90?30:tMax>40?20:10){const px=tx(s);x.strokeStyle='#233a52';x.beginPath();x.moveTo(px,y0);x.lineTo(px,y1);x.stroke();txt(x,10,s.toFixed(0),px,y1+15,'#7f97ad','center')}
+  txt(x,10,'秒',x1+8,y1+15,'#7f97ad');
+  line(x,state.hist.map(h=>[tx(h.t),y1-clamp(h.y1/Q.maxDepth,0,1)*(y1-y0)]),'#ffd85a',3);
+  line(x,state.hist.map(h=>[tx(h.t),y1-clamp(Math.abs(h.y2)/vTop,0,1)*(y1-y0)]),'#5fd3ff',2);
+  if(state.eqDepth!==null&&state.eqDepth>=.02){const ey=y1-clamp(state.eqDepth/Q.maxDepth,0,1)*(y1-y0);x.save();x.setLineDash([8,6]);x.strokeStyle='#69e0b0';x.lineWidth=2;x.beginPath();x.moveTo(x0,ey);x.lineTo(x1,ey);x.stroke();x.restore();txt(x,11,`止まった深さ ${fmt(state.eqDepth,2)} m`,x1-6,ey-7,'#69e0b0','right')}
+  if(state.peakVel>0){const py=y1-clamp(state.peakVel/vTop,0,1)*(y1-y0);txt(x,10,`いちばん速い ${fmt(state.peakVel*100,2)} cm/s`,x0+6,py-6,'#5fd3ff')}
+  let forces=[d.weight,d.buoy,d.yieldF,d.visc],names=['重さ','浮力','支え','ねばり'],mx=Math.max(...forces,1);
+  forces.forEach((v,i)=>{const bh=clamp(v/mx,0,1)*118,bx=762+i*34;x.fillStyle=['#ff8d8d','#5fd3ff','#69e0b0','#c5a6ff'][i];x.fillRect(bx,y1-bh,24,bh);txt(x,10,names[i],bx+12,y1+15,'#9fb8cc','center')});
+  txt(x,11,'黄: 深さ　青: 沈む速さ　よこ: 時間（秒）　右: 力くらべ',70,22,'#9fcdf5')}
 }
-function drawAll(){compute();drawMain();drawGraph();metricValues().forEach((v,i)=>$('m'+(i+1)).textContent=v);$('progress').textContent=fmt(state.t,2)+' u';$('explain').textContent=explain();updateOutputs()}
+function drawAll(){compute();drawMain();drawGraph();metricValues().forEach((v,i)=>{const el=$('m'+(i+1));if(el)el.textContent=v});$('progress').textContent=fmt(state.t,1)+' 秒';$('explain').textContent=explain();updateOutputs()}
 function resetState(){running=false;$('playPause').textContent='▶ 再生';manualUpdates=0;setSeed(APP.seed+scenarioIndex*1009);domainReset();if(APP.type==='genetics'){state.histReps=[state.reps.slice()]}drawAll()}
 function setScenario(i){scenarioIndex=(i+APP.scenarios.length)%APP.scenarios.length;let s=APP.scenarios[scenarioIndex];controls().forEach(e=>{if(s[e.id]!==undefined)e.value=String(s[e.id])});$('scenarioBtn').textContent='課題 S'+(scenarioIndex+1);resetState()}
 function snapshot(){return {scenario:scenarioIndex,updates:manualUpdates,inputs:Object.fromEntries(controls().map(e=>[e.id,e.value])),metrics:metricValues(),state:{t:+state.t.toFixed(6),y1:+(state.hist.at(-1)?.y1||0).toFixed(6),y2:+(state.hist.at(-1)?.y2||0).toFixed(6)}}}
@@ -200,7 +324,7 @@ show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
 <style id="v11-quicksand-style">
-.v11-direct{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;padding:9px;border:2px solid #ffd85a;border-radius:14px;background:#182635}.v11-direct b{flex:1 1 100%;font-size:13px}.v11-direct button{flex:1;min-width:150px}.v11-direct .safe{background:#69e0b0;color:#08251c}.v11-direct .danger{background:#ff8d8d;color:#301010}.stage canvas{cursor:pointer;touch-action:none}
+.v11-direct{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;padding:9px;border:2px solid #ffd85a;border-radius:14px;background:#182635}.v11-direct b{flex:1 1 100%;font-size:13px}.v11-direct button{flex:1;min-width:150px;min-height:48px}.v11-direct .safe{background:#69e0b0;color:#08251c}.v11-direct .danger{background:#ff8d8d;color:#301010}.v11-direct button[aria-pressed="true"]{outline:3px solid #ffd85a;outline-offset:2px}.v11-say{flex:1 1 100%;margin:0;font-size:12px;line-height:1.7;color:#ffe9a8}.v11-bar{flex:1 1 100%;display:flex;align-items:center;gap:8px;font-size:12px;color:#cfe0ee}.v11-bar span{flex:0 0 auto}.v11-track{flex:1;height:12px;border-radius:999px;background:#0b1725;border:1px solid #35506c;overflow:hidden}.v11-fill{display:block;height:100%;background:linear-gradient(90deg,#ff8d8d,#ffd85a,#69e0b0);transition:width .18s linear}.stage canvas{cursor:pointer;touch-action:none}@media(max-width:420px){.v11-direct button{flex:1 1 100%}}
 </style>
 <script id="v11-quicksand-interaction">
 (()=>{
@@ -208,42 +332,38 @@ const canvas=document.getElementById('mainCv');
 if(!canvas)return;
 const actions=document.createElement('div');
 actions.className='v11-direct';
-actions.innerHTML='<b>👆 人をタップするか、助け方を選ぼう</b><button class="safe" data-action="spread">👐 手足を広げる</button><button data-action="calm">😮‍💨 じっと落ち着く</button><button class="danger" data-action="struggle">💥 はげしくもがく</button>';
+actions.innerHTML='<b>👆 人をタップするか、助け方をえらぼう</b>'
+ +'<button type="button" class="safe" data-action="spread" aria-pressed="false">👐 手足を広げる</button>'
+ +'<button type="button" data-action="calm" aria-pressed="false">😮‍💨 じっと落ち着く</button>'
+ +'<button type="button" class="danger" data-action="struggle" aria-pressed="false">💥 はげしくもがく</button>'
+ +'<div class="v11-bar"><span>泥のかたさ</span><i class="v11-track"><b class="v11-fill" style="width:100%"></b></i><span class="v11-num">100%</span></div>'
+ +'<p class="v11-say" role="status" aria-live="polite">えらんだ助け方は、はなすまでずっと続きます。</p>';
 canvas.closest('.stage').insertAdjacentElement('afterend',actions);
-let action='calm',pulse=0;
+const say=actions.querySelector('.v11-say'),fill=actions.querySelector('.v11-fill'),num=actions.querySelector('.v11-num');
+const NOTE={spread:'手足を広げた。泥にふれる面がふえて、支える力が強くなった。',calm:'動きを止めた。泥の構造が戻り、沈むのがゆっくりのままになる。',struggle:'もがきつづけている。泥の構造がこわれて、支える力が一気に弱くなった。'};
+const RING={spread:'#69e0b0',calm:'#5fd3ff',struggle:'#ff8d8d'};
 function applyAction(next){
- action=next;pulse=24;
- if(next==='spread'){document.getElementById('c3').value='.9';state.structure=Math.min(1,state.structure+.2)}
- if(next==='calm'){state.vel*=.25;state.structure=Math.min(1,state.structure+.3)}
- if(next==='struggle'){state.structure=Math.max(.08,state.structure-.65);state.vel+=.12}
- document.getElementById('c3').dispatchEvent(new Event('input',{bubbles:true}));
- for(let i=0;i<5;i++)domainStep(APP.step);
- drawAll();
+ const area=document.getElementById('c3');
+ state.action=next;state.pulse=1;state.note=NOTE[next]||'';state.noteT=3.2;
+ state.ripples.push({age:0,color:RING[next]||'#ffd85a'});
+ if(next==='spread'){area.value=String(Math.min(+area.max,+area.value+.34));area.dispatchEvent(new Event('input',{bubbles:true}));state.agit=0;state.settle=Math.min(1,state.settle+.4)}
+ if(next==='calm'){state.vel*=.15;state.agit=0;state.settle=1;state.structure=Math.min(1,state.structure+.2)}
+ if(next==='struggle'){state.agit=1;state.settle=0;state.structure=Math.max(APP.qs.structMin,state.structure-.45);state.vel+=.012}
+ actions.querySelectorAll('[data-action]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.action===next)));
+ for(let i=0;i<4;i++)domainStep(.05);
+ drawAll();refresh();
 }
+function refresh(){const pct=Math.round((state.structure||0)*100);fill.style.width=pct+'%';num.textContent=pct+'%';
+ say.textContent=(state.noteT>0&&state.note?state.note+' ':'')+qsPhase().line}
 actions.addEventListener('click',event=>{const button=event.target.closest('[data-action]');if(button)applyAction(button.dataset.action)});
 canvas.addEventListener('pointerdown',event=>{
  event.preventDefault();event.stopImmediatePropagation();
  const box=canvas.getBoundingClientRect(),x=(event.clientX-box.left)/box.width;
  applyAction(x<.36?'spread':x>.67?'struggle':'calm');
 },{capture:true});
-const originalDraw=drawMain;
-drawMain=function(){
- originalDraw();
- const g=canvas.getContext('2d'),d=state.d,y=110+d.depth*290;
- g.save();
- g.fillStyle='rgba(5,15,24,.82)';g.fillRect(22,62,292,112);
- g.font='bold 14px system-ui';g.fillStyle='#fff';g.fillText('赤↓ 重さ（沈める）',42,88);g.fillStyle='#5fd3ff';g.fillText('青↑ 浮力（押し上げる）',42,113);g.fillStyle='#69e0b0';g.fillText('緑↑ 泥の支え',42,138);
- g.fillStyle=action==='struggle'?'#ff8d8d':'#ffd85a';g.fillText(action==='spread'?'手足を広げて圧力を分散':action==='struggle'?'もがいて泥の構造が崩れた':'動きを止めて泥が回復',42,163);
- g.translate(450,y-22);g.strokeStyle='#27202a';g.lineWidth=14;g.lineCap='round';
- g.beginPath();g.moveTo(0,-4);g.lineTo(0,48);g.stroke();
- g.fillStyle='#ffd0aa';g.beginPath();g.arc(0,-24,18,0,Math.PI*2);g.fill();
- g.strokeStyle='#f4c85c';g.lineWidth=11;g.beginPath();
- const arm=action==='spread'?62:action==='struggle'?42:26;
- g.moveTo(0,8);g.lineTo(-arm,action==='struggle'?-15:18);g.moveTo(0,8);g.lineTo(arm,action==='struggle'?24:18);g.stroke();
- g.strokeStyle='#4d86c6';g.beginPath();g.moveTo(0,45);g.lineTo(-24,76);g.moveTo(0,45);g.lineTo(24,76);g.stroke();
- if(pulse>0){g.strokeStyle=action==='struggle'?'#ff8d8d':'#69e0b0';g.lineWidth=5;g.globalAlpha=pulse/24;g.beginPath();g.arc(0,18,90-pulse,0,Math.PI*2);g.stroke();pulse--}
- g.restore();
-};
+const originalDraw=drawAll;
+drawAll=function(){originalDraw();refresh()};
+window.r58TestAction=applyAction;
 drawAll();
 })();
 </script>

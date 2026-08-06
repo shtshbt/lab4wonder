@@ -1,0 +1,216 @@
+name: Apply cohesive water-responsive mud
+
+on:
+  push:
+    branches:
+      - agent/element-sandbox-mud-clump-water
+    paths:
+      - .github/workflows/apply-mud-clump-water.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply cohesive mud model
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('element-sandbox.html')
+          text = path.read_text()
+
+          text = text.replace(
+              '<meta name="r72-release" content="mud-cohesion-wood-ball-ignition">',
+              '<meta name="r72-release" content="mud-cohesion-wood-ball-ignition">\n<meta name="r73-release" content="cohesive-water-responsive-mud">'
+          )
+          text = text.replace(
+              '砂はさらさら落ち、泥は小さな塊を保ちながらもったり動きます。',
+              '砂はさらさら落ちます。泥は湿った塊を保ってもったり動き、水に触れるとゆっくり流されます。'
+          )
+
+          helpers = r'''function canMudFlowInto(t){return t===EMPTY||t===SMOKE||t===WATER}
+          function collectMudCluster(sx,sy,maxCells){
+            const out=[],queue=[[sx,sy]],seen=new Set([idx(sx,sy)]),maxRadius=10;
+            for(let head=0;head<queue.length&&out.length<maxCells;head++){
+              const [x,y]=queue[head];
+              if(grid[idx(x,y)]!==MUD)continue;
+              out.push({x,y});
+              for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+                const nx=x+dx,ny=y+dy;
+                if(!inBounds(nx,ny)||Math.abs(nx-sx)>maxRadius||Math.abs(ny-sy)>maxRadius)continue;
+                const ni=idx(nx,ny);
+                if(seen.has(ni)||grid[ni]!==MUD)continue;
+                seen.add(ni);queue.push([nx,ny]);
+              }
+            }
+            return out;
+          }
+          function mudWaterContact(cluster){
+            let contact=0;
+            for(const p of cluster){
+              for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,1],[1,-1],[-1,-1]]){
+                const x=p.x+dx,y=p.y+dy;
+                if(inBounds(x,y)&&grid[idx(x,y)]===WATER)contact++;
+              }
+            }
+            return contact;
+          }
+          function translateMudCluster(cluster,dx,dy){
+            const sourceSet=new Set(cluster.map(p=>idx(p.x,p.y)));
+            const targets=cluster.map(p=>({x:p.x+dx,y:p.y+dy}));
+            const targetSet=new Set();
+            let displacedWater=0;
+            for(const p of targets){
+              if(!inBounds(p.x,p.y))return false;
+              const ti=idx(p.x,p.y),t=grid[ti];
+              targetSet.add(ti);
+              if(!sourceSet.has(ti)&&!canMudFlowInto(t))return false;
+              if(!sourceSet.has(ti)&&t===WATER)displacedWater++;
+            }
+            const vacated=[];
+            for(const p of cluster){
+              const si=idx(p.x,p.y);
+              if(!targetSet.has(si)){vacated.push(si);setCell(si,EMPTY)}
+              moved[si]=1;
+            }
+            for(const p of targets){const ti=idx(p.x,p.y);setCell(ti,MUD);moved[ti]=1}
+            for(let n=0;n<Math.min(displacedWater,vacated.length);n++)setCell(vacated[n],WATER);
+            return true;
+          }
+          function mudOpenRatio(cluster){
+            const sourceSet=new Set(cluster.map(p=>idx(p.x,p.y)));
+            let edge=0,open=0;
+            for(const p of cluster){
+              const y=p.y+1;
+              if(y>=H)continue;
+              const below=idx(p.x,y);
+              if(sourceSet.has(below))continue;
+              edge++;
+              if(canMudFlowInto(grid[below]))open++;
+            }
+            return edge?open/edge:0;
+          }
+          function processMud(x,y){
+            const preview=collectMudCluster(x,y,96);
+            if(!preview.length)return;
+            const wet=mudWaterContact(preview)>0;
+            const cluster=wet?preview.slice(0,Math.min(24,preview.length)):preview;
+            for(const p of cluster)moved[idx(p.x,p.y)]=1;
+            const openness=mudOpenRatio(cluster);
+            const moveChance=wet?.46:(.08+openness*.18);
+            if(Math.random()>moveChance)return;
+            const dir=Math.random()<.5?-1:1;
+            if(translateMudCluster(cluster,0,1))return;
+            if(wet){
+              for(const dx of [dir,-dir]){
+                if(Math.random()<.78&&translateMudCluster(cluster,dx,1))return;
+              }
+              if(Math.random()<.58){
+                for(const dx of [dir,-dir])if(translateMudCluster(cluster,dx,0))return;
+              }
+            }else if(openness>.12){
+              for(const dx of [dir,-dir]){
+                if(Math.random()<.28&&translateMudCluster(cluster,dx,1))return;
+              }
+            }
+          }
+          function step(){'''
+
+          text, n = re.subn(
+              r'function canMudFlowInto\(t\)\{return t===EMPTY\|\|t===SMOKE\}.*?function step\(\)\{',
+              helpers,
+              text,
+              count=1,
+              flags=re.S
+          )
+          if n != 1:
+              raise SystemExit(f'helper replacement count={n}')
+
+          mud_branch = r'''}else if(t===MUD){
+                processMud(x,y);
+              }else if(t===WATER){'''
+          text, n = re.subn(
+              r'\}else if\(t===MUD\)\{.*?\}else if\(t===WATER\)\{',
+              mud_branch,
+              text,
+              count=1,
+              flags=re.S
+          )
+          if n != 1:
+              raise SystemExit(f'mud branch replacement count={n}')
+
+          path.write_text(text)
+          PY
+
+      - name: Validate syntax and mud behavior
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          text=Path('element-sandbox.html').read_text()
+          script=re.search(r'<script>(.*)</script>',text,re.S).group(1)
+          Path('/tmp/element-sandbox.js').write_text(script)
+          assert 'function collectMudCluster' in text
+          assert 'function mudWaterContact' in text
+          assert 'const wet=mudWaterContact(preview)>0' in text
+          assert 'preview.slice(0,Math.min(24,preview.length))' in text
+          assert 'r73-release' in text
+          PY
+          node --check /tmp/element-sandbox.js
+          node <<'JS'
+          const fs=require('fs');
+          const full=fs.readFileSync('/tmp/element-sandbox.js','utf8');
+          const start=full.indexOf('function canMudFlowInto');
+          const end=full.indexOf('function step(){',start);
+          if(start<0||end<0)throw new Error('mud helpers not found');
+          const helpers=full.slice(start,end);
+          const EMPTY=0,SAND=1,WATER=2,WALL=3,WOOD=4,FIRE=5,SMOKE=6,ERASE=7,MUD=8;
+          let W=20,H=20,grid,life,moved;
+          const idx=(x,y)=>y*W+x;
+          const inBounds=(x,y)=>x>=0&&x<W&&y>=0&&y<H;
+          function setCell(i,t){grid[i]=t;life[i]=0}
+          eval(helpers);
+          const reset=()=>{grid=new Uint8Array(W*H);life=new Uint8Array(W*H);moved=new Uint8Array(W*H)};
+          const mudCount=()=>Array.from(grid).filter(v=>v===MUD).length;
+          const xs=()=>{const out=[];for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(grid[idx(x,y)]===MUD)out.push(x);return out};
+          const oldRandom=Math.random;Math.random=()=>0;
+
+          reset();
+          for(let y=2;y<=4;y++)for(let x=5;x<=7;x++)grid[idx(x,y)]=MUD;
+          processMud(6,4);
+          if(mudCount()!==9)throw new Error('dry mud mass changed');
+          for(let x=5;x<=7;x++)if(grid[idx(x,2)]===MUD)throw new Error('dry mud did not leave its top row');
+          for(let x=5;x<=7;x++)if(grid[idx(x,5)]!==MUD)throw new Error('dry mud cluster did not fall together');
+
+          reset();
+          for(let y=2;y<=3;y++)for(let x=5;x<=6;x++)grid[idx(x,y)]=MUD;
+          grid[idx(7,2)]=WATER;
+          grid[idx(5,4)]=WALL;grid[idx(6,4)]=WALL;
+          processMud(5,3);
+          if(Math.min(...xs())!==4)throw new Error('water-contact mud did not flow laterally');
+
+          reset();
+          for(let y=2;y<=3;y++)for(let x=5;x<=6;x++)grid[idx(x,y)]=MUD;
+          grid[idx(5,4)]=WALL;grid[idx(6,4)]=WALL;
+          processMud(5,3);
+          if(Math.min(...xs())!==5)throw new Error('unwatered mud flowed like water');
+          Math.random=oldRandom;
+          console.log('mud cohesion tests passed');
+          JS
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add element-sandbox.html
+          git commit -m "Improve mud cohesion and water-driven flow"
+          git push origin HEAD:agent/element-sandbox-mud-clump-water

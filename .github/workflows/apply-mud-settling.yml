@@ -1,0 +1,190 @@
+name: Apply mud settling fix
+
+on:
+  push:
+    branches:
+      - agent/element-sandbox-mud-settling
+    paths:
+      - .github/workflows/apply-mud-settling.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply settling-priority mud model
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('element-sandbox.html')
+          text = path.read_text()
+          text = text.replace(
+              '<meta name="r73-release" content="cohesive-water-responsive-mud">',
+              '<meta name="r73-release" content="cohesive-water-responsive-mud">\n<meta name="r74-release" content="mud-settling-priority">'
+          )
+          text = text.replace(
+              '砂はさらさら落ちます。泥は湿った塊を保ってもったり動き、水に触れるとゆっくり流されます。',
+              '砂はさらさら落ちます。泥は湿った塊を保ってもったり動き、水に触れると流されながら底へ沈みます。'
+          )
+
+          replacement = r'''function wetMudBottomCandidates(cluster){
+            const sourceSet=new Set(cluster.map(p=>idx(p.x,p.y)));
+            return cluster.filter(p=>{
+              const y=p.y+1;
+              if(y>=H)return false;
+              const below=idx(p.x,y);
+              return !sourceSet.has(below)&&canMudFlowInto(grid[below]);
+            }).sort((a,b)=>b.y-a.y);
+          }
+          function collectWetMudPlug(seed){
+            const plug=[];
+            for(const dx of [0,-1,1]){
+              const x=seed.x+dx;
+              if(!inBounds(x,seed.y)||grid[idx(x,seed.y)]!==MUD)continue;
+              const by=seed.y+1;
+              if(by>=H||!canMudFlowInto(grid[idx(x,by)]))continue;
+              for(let h=0;h<4;h++){
+                const y=seed.y-h;
+                if(y<0||grid[idx(x,y)]!==MUD)break;
+                plug.push({x,y});
+              }
+            }
+            return plug;
+          }
+          function settleWetMud(cluster,candidates){
+            if(!candidates.length)return false;
+            const deepest=candidates[0].y;
+            const band=candidates.filter(p=>p.y>=deepest-1);
+            const start=Math.floor(Math.random()*band.length);
+            for(let n=0;n<band.length;n++){
+              const seed=band[(start+n)%band.length];
+              const plug=collectWetMudPlug(seed);
+              if(plug.length>=2&&translateMudCluster(plug,0,1))return true;
+              if(plug.length===1&&Math.random()<.35&&translateMudCluster(plug,0,1))return true;
+            }
+            return false;
+          }
+          function processMud(x,y){
+            const preview=collectMudCluster(x,y,96);
+            if(!preview.length)return;
+            const wet=mudWaterContact(preview)>0;
+            if(wet){
+              const settling=wetMudBottomCandidates(preview);
+              if(settling.length){
+                for(const p of preview)moved[idx(p.x,p.y)]=1;
+                if(Math.random()<.74)settleWetMud(preview,settling);
+                return;
+              }
+            }
+            const cluster=wet?preview.slice(0,Math.min(24,preview.length)):preview;
+            for(const p of cluster)moved[idx(p.x,p.y)]=1;
+            const openness=mudOpenRatio(cluster);
+            const moveChance=wet?.34:(.08+openness*.18);
+            if(Math.random()>moveChance)return;
+            const dir=Math.random()<.5?-1:1;
+            if(translateMudCluster(cluster,0,1))return;
+            if(wet){
+              for(const dx of [dir,-dir]){
+                if(Math.random()<.38&&translateMudCluster(cluster,dx,1))return;
+              }
+              if(Math.random()<.16){
+                for(const dx of [dir,-dir])if(translateMudCluster(cluster,dx,0))return;
+              }
+            }else if(openness>.12){
+              for(const dx of [dir,-dir]){
+                if(Math.random()<.28&&translateMudCluster(cluster,dx,1))return;
+              }
+            }
+          }
+          function step(){'''
+
+          text, n = re.subn(
+              r'function processMud\(x,y\)\{.*?function step\(\)\{',
+              replacement,
+              text,
+              count=1,
+              flags=re.S
+          )
+          if n != 1:
+              raise SystemExit(f'processMud replacement count={n}')
+          path.write_text(text)
+          PY
+
+      - name: Validate syntax and sedimentation behavior
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          text=Path('element-sandbox.html').read_text()
+          scripts=re.findall(r'<script>(.*?)</script>',text,re.S)
+          script=next(s for s in scripts if 'function processMud' in s)
+          Path('/tmp/element-sandbox.js').write_text(script)
+          assert 'function wetMudBottomCandidates' in text
+          assert 'function collectWetMudPlug' in text
+          assert 'if(settling.length)' in text
+          assert 'moveChance=wet?.34' in text
+          assert 'r74-release' in text
+          PY
+          node --check /tmp/element-sandbox.js
+          node <<'JS'
+          const fs=require('fs');
+          const full=fs.readFileSync('/tmp/element-sandbox.js','utf8');
+          const start=full.indexOf('function canMudFlowInto');
+          const end=full.indexOf('function step(){',start);
+          if(start<0||end<0)throw new Error('mud helpers not found');
+          const helpers=full.slice(start,end);
+          const EMPTY=0,SAND=1,WATER=2,WALL=3,WOOD=4,FIRE=5,SMOKE=6,ERASE=7,MUD=8;
+          let W=16,H=16,grid,life,moved;
+          const idx=(x,y)=>y*W+x;
+          const inBounds=(x,y)=>x>=0&&x<W&&y>=0&&y<H;
+          function setCell(i,t){grid[i]=t;life[i]=0}
+          eval(helpers);
+          const reset=()=>{grid=new Uint8Array(W*H);life=new Uint8Array(W*H);moved=new Uint8Array(W*H)};
+          const mudCells=()=>{const out=[];for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(grid[idx(x,y)]===MUD)out.push({x,y});return out};
+          const oldRandom=Math.random;Math.random=()=>0;
+
+          reset();
+          for(let y=3;y<=6;y++)for(let x=5;x<=8;x++)grid[idx(x,y)]=MUD;
+          for(let y=7;y<=12;y++)for(let x=3;x<=10;x++)grid[idx(x,y)]=WATER;
+          grid[idx(5,7)]=WALL;
+          const before=mudCells();
+          processMud(6,6);
+          const after=mudCells();
+          if(after.length!==before.length)throw new Error('mud mass changed during settling');
+          if(Math.max(...after.map(p=>p.y))<=Math.max(...before.map(p=>p.y)))throw new Error('wet mud did not settle downward');
+          if(Math.min(...after.map(p=>p.x))<5)throw new Error('wet mud wandered laterally before settling');
+
+          reset();
+          for(let y=3;y<=5;y++)for(let x=6;x<=8;x++)grid[idx(x,y)]=MUD;
+          for(let y=6;y<=12;y++)for(let x=4;x<=10;x++)grid[idx(x,y)]=WATER;
+          for(let x=4;x<=10;x++)grid[idx(x,13)]=WALL;
+          for(let n=0;n<28;n++){
+            moved.fill(0);
+            const cells=mudCells();
+            const lowest=cells.reduce((a,b)=>b.y>a.y?b:a,cells[0]);
+            processMud(lowest.x,lowest.y);
+          }
+          const settled=mudCells();
+          if(Math.max(...settled.map(p=>p.y))<12)throw new Error('mud never reached the bottom');
+          if(settled.filter(p=>p.y<=7).length>3)throw new Error('too much mud remained suspended');
+
+          Math.random=oldRandom;
+          console.log('mud settling tests passed');
+          JS
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add element-sandbox.html
+          git commit -m "Make water-mixed mud settle completely"
+          git push origin HEAD:agent/element-sandbox-mud-settling

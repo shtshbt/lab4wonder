@@ -157,7 +157,9 @@ jobs:
           from pathlib import Path
           import re
           text=Path('element-sandbox.html').read_text()
-          script=re.search(r'<script>(.*)</script>',text,re.S).group(1)
+          scripts=re.findall(r'<script>(.*?)</script>',text,re.S)
+          script=next((s for s in scripts if "'use strict';" in s),None)
+          assert script is not None
           Path('/tmp/element-sandbox.js').write_text(script)
           assert 'function collectMudCluster' in text
           assert 'function mudWaterContact' in text
@@ -187,9 +189,9 @@ jobs:
           reset();
           for(let y=2;y<=4;y++)for(let x=5;x<=7;x++)grid[idx(x,y)]=MUD;
           processMud(6,4);
-          if(mudCount()!==9)throw new Error('dry mud mass changed');
-          for(let x=5;x<=7;x++)if(grid[idx(x,2)]===MUD)throw new Error('dry mud did not leave its top row');
-          for(let x=5;x<=7;x++)if(grid[idx(x,5)]!==MUD)throw new Error('dry mud cluster did not fall together');
+          if(mudCount()!==9)throw new Error('mud mass changed');
+          for(let x=5;x<=7;x++)if(grid[idx(x,2)]===MUD)throw new Error('mud did not leave its top row');
+          for(let x=5;x<=7;x++)if(grid[idx(x,5)]!==MUD)throw new Error('mud cluster did not fall together');
 
           reset();
           for(let y=2;y<=3;y++)for(let x=5;x<=6;x++)grid[idx(x,y)]=MUD;
@@ -202,7 +204,7 @@ jobs:
           for(let y=2;y<=3;y++)for(let x=5;x<=6;x++)grid[idx(x,y)]=MUD;
           grid[idx(5,4)]=WALL;grid[idx(6,4)]=WALL;
           processMud(5,3);
-          if(Math.min(...xs())!==5)throw new Error('unwatered mud flowed like water');
+          if(Math.min(...xs())!==5)throw new Error('mud flowed laterally without water');
           Math.random=oldRandom;
           console.log('mud cohesion tests passed');
           JS

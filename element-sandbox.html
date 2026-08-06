@@ -6,6 +6,7 @@
 <meta name="r69-release" content="restored-element-sandbox">
 <meta name="r70-release" content="stability-accessibility-undo">
 <meta name="r72-release" content="mud-cohesion-wood-ball-ignition">
+<meta name="r73-release" content="cohesive-water-responsive-mud">
 <meta name="r71-release" content="mud-and-material-balls">
 <title>砂・水・火のふしぎキャンバス</title>
 <style>
@@ -124,7 +125,7 @@ h1{font-size:clamp(18px,4.8vw,27px);line-height:1.3;margin:0;color:var(--accent)
       <div class="guide-card"><b>やってみる　坂と火</b>壁で坂を作って球を転がそう。木の玉だけ火に触れると燃え、水に入ると消えます。</div>
       <div class="guide-card wide"><b>この模型の約束</b>
         <ul>
-          <li>砂はさらさら落ち、泥は小さな塊を保ちながらもったり動きます。</li>
+          <li>砂はさらさら落ちます。泥は湿った塊を保ってもったり動き、水に触れるとゆっくり流されます。</li>
           <li>水は低い場所へ流れます。</li>
           <li>木の玉は軽く水に浮き、火で燃えます。</li>
           <li>鉄の玉は重く、水や泥へ深く沈みます。</li>
@@ -235,34 +236,91 @@ function resizeSimulation(preserve=true){
   ctx.imageSmoothingEnabled=false;
   render();
 }
-function canMudFlowInto(t){return t===EMPTY||t===SMOKE}
-function countMudNeighbors(x,y){
-  let n=0;
-  for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
-    if((dx||dy)&&inBounds(x+dx,y+dy)&&grid[idx(x+dx,y+dy)]===MUD)n++;
+function canMudFlowInto(t){return t===EMPTY||t===SMOKE||t===WATER}
+function collectMudCluster(sx,sy,maxCells){
+  const out=[],queue=[[sx,sy]],seen=new Set([idx(sx,sy)]),maxRadius=10;
+  for(let head=0;head<queue.length&&out.length<maxCells;head++){
+    const [x,y]=queue[head];
+    if(grid[idx(x,y)]!==MUD)continue;
+    out.push({x,y});
+    for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+      const nx=x+dx,ny=y+dy;
+      if(!inBounds(nx,ny)||Math.abs(nx-sx)>maxRadius||Math.abs(ny-sy)>maxRadius)continue;
+      const ni=idx(nx,ny);
+      if(seen.has(ni)||grid[ni]!==MUD)continue;
+      seen.add(ni);queue.push([nx,ny]);
+    }
   }
-  return n;
+  return out;
 }
-function moveMudClump(x,y,dx){
-  const sources=[{x,y}];
-  if(y>0&&grid[idx(x,y-1)]===MUD&&Math.random()<.82)sources.push({x,y:y-1});
-  const side=Math.random()<.5?-1:1;
-  if(inBounds(x+side,y)&&grid[idx(x+side,y)]===MUD&&Math.random()<.62)sources.push({x:x+side,y});
-  const sourceSet=new Set(sources.map(p=>idx(p.x,p.y)));
-  const targets=sources.map(p=>({x:p.x+dx,y:p.y+1}));
+function mudWaterContact(cluster){
+  let contact=0;
+  for(const p of cluster){
+    for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,1],[1,-1],[-1,-1]]){
+      const x=p.x+dx,y=p.y+dy;
+      if(inBounds(x,y)&&grid[idx(x,y)]===WATER)contact++;
+    }
+  }
+  return contact;
+}
+function translateMudCluster(cluster,dx,dy){
+  const sourceSet=new Set(cluster.map(p=>idx(p.x,p.y)));
+  const targets=cluster.map(p=>({x:p.x+dx,y:p.y+dy}));
+  const targetSet=new Set();
+  let displacedWater=0;
   for(const p of targets){
     if(!inBounds(p.x,p.y))return false;
-    const ti=idx(p.x,p.y);
-    if(!sourceSet.has(ti)&&!canMudFlowInto(grid[ti]))return false;
+    const ti=idx(p.x,p.y),t=grid[ti];
+    targetSet.add(ti);
+    if(!sourceSet.has(ti)&&!canMudFlowInto(t))return false;
+    if(!sourceSet.has(ti)&&t===WATER)displacedWater++;
   }
-  const targetSet=new Set(targets.map(p=>idx(p.x,p.y)));
-  for(const p of sources){
+  const vacated=[];
+  for(const p of cluster){
     const si=idx(p.x,p.y);
-    if(!targetSet.has(si))setCell(si,EMPTY);
+    if(!targetSet.has(si)){vacated.push(si);setCell(si,EMPTY)}
     moved[si]=1;
   }
   for(const p of targets){const ti=idx(p.x,p.y);setCell(ti,MUD);moved[ti]=1}
+  for(let n=0;n<Math.min(displacedWater,vacated.length);n++)setCell(vacated[n],WATER);
   return true;
+}
+function mudOpenRatio(cluster){
+  const sourceSet=new Set(cluster.map(p=>idx(p.x,p.y)));
+  let edge=0,open=0;
+  for(const p of cluster){
+    const y=p.y+1;
+    if(y>=H)continue;
+    const below=idx(p.x,y);
+    if(sourceSet.has(below))continue;
+    edge++;
+    if(canMudFlowInto(grid[below]))open++;
+  }
+  return edge?open/edge:0;
+}
+function processMud(x,y){
+  const preview=collectMudCluster(x,y,96);
+  if(!preview.length)return;
+  const wet=mudWaterContact(preview)>0;
+  const cluster=wet?preview.slice(0,Math.min(24,preview.length)):preview;
+  for(const p of cluster)moved[idx(p.x,p.y)]=1;
+  const openness=mudOpenRatio(cluster);
+  const moveChance=wet?.46:(.08+openness*.18);
+  if(Math.random()>moveChance)return;
+  const dir=Math.random()<.5?-1:1;
+  if(translateMudCluster(cluster,0,1))return;
+  if(wet){
+    for(const dx of [dir,-dir]){
+      if(Math.random()<.78&&translateMudCluster(cluster,dx,1))return;
+    }
+    if(Math.random()<.58){
+      for(const dx of [dir,-dir])if(translateMudCluster(cluster,dx,0))return;
+    }
+  }else if(openness>.12){
+    for(const dx of [dir,-dir]){
+      if(Math.random()<.28&&translateMudCluster(cluster,dx,1))return;
+    }
+  }
 }
 function step(){
   moved.fill(0);
@@ -285,30 +343,8 @@ function step(){
           }
         }
       }else if(t===MUD){
-        const pressed=y>0&&(grid[idx(x,y-1)]===MUD||grid[idx(x,y-1)]===SAND);
-        const cohesion=countMudNeighbors(x,y);
-        const moveChance=(pressed?.19:.065)/(1+cohesion*.035);
-        if(Math.random()>moveChance)continue;
-        if(y+1<H){
-          const down=idx(x,y+1),downType=grid[down];
-          if(canMudFlowInto(downType)&&moveMudClump(x,y,0))continue;
-          if(downType===WATER&&Math.random()<.28){swapCells(i,down);continue}
-          const dir=Math.random()<.5?-1:1;
-          let movedMud=false;
-          for(const dx of [dir,-dir]){
-            if(!inBounds(x+dx,y+1))continue;
-            const diagonal=idx(x+dx,y+1),dt=grid[diagonal];
-            if(canMudFlowInto(dt)&&Math.random()<.32&&moveMudClump(x,y,dx)){movedMud=true;break}
-            if(dt===WATER&&Math.random()<.14){swapCells(i,diagonal);movedMud=true;break}
-          }
-          if(movedMud)continue;
-          if(pressed&&Math.random()<.035){
-            for(const dx of [dir,-dir]){
-              if(inBounds(x+dx,y)&&grid[idx(x+dx,y)]===EMPTY){swapCells(i,idx(x+dx,y));break}
-            }
-          }
-        }
-      }else if(t===WATER){
+      processMud(x,y);
+    }else if(t===WATER){
         if(y+1<H&&(grid[idx(x,y+1)]===EMPTY||grid[idx(x,y+1)]===SMOKE)){swapCells(i,idx(x,y+1));continue}
         const dir=Math.random()<.5?-1:1;
         let done=false;

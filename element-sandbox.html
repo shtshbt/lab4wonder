@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="r69-release" content="restored-element-sandbox">
 <meta name="r70-release" content="stability-accessibility-undo">
+<meta name="r72-release" content="mud-cohesion-wood-ball-ignition">
 <meta name="r71-release" content="mud-and-material-balls">
 <title>砂・水・火のふしぎキャンバス</title>
 <style>
@@ -123,7 +124,7 @@ h1{font-size:clamp(18px,4.8vw,27px);line-height:1.3;margin:0;color:var(--accent)
       <div class="guide-card"><b>やってみる　坂と火</b>壁で坂を作って球を転がそう。木の玉だけ火に触れると燃え、水に入ると消えます。</div>
       <div class="guide-card wide"><b>この模型の約束</b>
         <ul>
-          <li>砂はさらさら落ち、泥はまとまりながらゆっくり動きます。</li>
+          <li>砂はさらさら落ち、泥は小さな塊を保ちながらもったり動きます。</li>
           <li>水は低い場所へ流れます。</li>
           <li>木の玉は軽く水に浮き、火で燃えます。</li>
           <li>鉄の玉は重く、水や泥へ深く沈みます。</li>
@@ -234,6 +235,35 @@ function resizeSimulation(preserve=true){
   ctx.imageSmoothingEnabled=false;
   render();
 }
+function canMudFlowInto(t){return t===EMPTY||t===SMOKE}
+function countMudNeighbors(x,y){
+  let n=0;
+  for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
+    if((dx||dy)&&inBounds(x+dx,y+dy)&&grid[idx(x+dx,y+dy)]===MUD)n++;
+  }
+  return n;
+}
+function moveMudClump(x,y,dx){
+  const sources=[{x,y}];
+  if(y>0&&grid[idx(x,y-1)]===MUD&&Math.random()<.82)sources.push({x,y:y-1});
+  const side=Math.random()<.5?-1:1;
+  if(inBounds(x+side,y)&&grid[idx(x+side,y)]===MUD&&Math.random()<.62)sources.push({x:x+side,y});
+  const sourceSet=new Set(sources.map(p=>idx(p.x,p.y)));
+  const targets=sources.map(p=>({x:p.x+dx,y:p.y+1}));
+  for(const p of targets){
+    if(!inBounds(p.x,p.y))return false;
+    const ti=idx(p.x,p.y);
+    if(!sourceSet.has(ti)&&!canMudFlowInto(grid[ti]))return false;
+  }
+  const targetSet=new Set(targets.map(p=>idx(p.x,p.y)));
+  for(const p of sources){
+    const si=idx(p.x,p.y);
+    if(!targetSet.has(si))setCell(si,EMPTY);
+    moved[si]=1;
+  }
+  for(const p of targets){const ti=idx(p.x,p.y);setCell(ti,MUD);moved[ti]=1}
+  return true;
+}
 function step(){
   moved.fill(0);
   const leftToRight=Math.random()<.5;
@@ -256,17 +286,23 @@ function step(){
         }
       }else if(t===MUD){
         const pressed=y>0&&(grid[idx(x,y-1)]===MUD||grid[idx(x,y-1)]===SAND);
-        if(Math.random()>(pressed?.68:.24))continue;
+        const cohesion=countMudNeighbors(x,y);
+        const moveChance=(pressed?.19:.065)/(1+cohesion*.035);
+        if(Math.random()>moveChance)continue;
         if(y+1<H){
-          const down=idx(x,y+1);
-          if(grid[down]===EMPTY||grid[down]===WATER||grid[down]===SMOKE){swapCells(i,down);continue}
+          const down=idx(x,y+1),downType=grid[down];
+          if(canMudFlowInto(downType)&&moveMudClump(x,y,0))continue;
+          if(downType===WATER&&Math.random()<.28){swapCells(i,down);continue}
           const dir=Math.random()<.5?-1:1;
+          let movedMud=false;
           for(const dx of [dir,-dir]){
             if(!inBounds(x+dx,y+1))continue;
-            const diagonal=idx(x+dx,y+1);
-            if((grid[diagonal]===EMPTY||grid[diagonal]===WATER)&&Math.random()<.48){swapCells(i,diagonal);break}
+            const diagonal=idx(x+dx,y+1),dt=grid[diagonal];
+            if(canMudFlowInto(dt)&&Math.random()<.32&&moveMudClump(x,y,dx)){movedMud=true;break}
+            if(dt===WATER&&Math.random()<.14){swapCells(i,diagonal);movedMud=true;break}
           }
-          if(pressed&&Math.random()<.16){
+          if(movedMud)continue;
+          if(pressed&&Math.random()<.035){
             for(const dx of [dir,-dir]){
               if(inBounds(x+dx,y)&&grid[idx(x+dx,y)]===EMPTY){swapCells(i,idx(x+dx,y));break}
             }
@@ -284,6 +320,7 @@ function step(){
           if(inBounds(x+dx,y)&&grid[idx(x+dx,y)]===EMPTY){swapCells(i,idx(x+dx,y));break}
         }
       }else if(t===FIRE){
+        igniteWoodBallsNear(x+.5,y+.5,1.35);
         if(life[i]>0)life[i]--;
         if(life[i]===0){setCell(i,Math.random()<.6?SMOKE:EMPTY);continue}
         let quenched=false;
@@ -372,6 +409,18 @@ function resolveEmbeddedBall(b){
     const [dx,dy]=tries[n%tries.length];b.x=Math.max(b.r,Math.min(W-b.r,b.x+dx));b.y=Math.max(b.r,Math.min(H-b.r,b.y+dy));
   }
 }
+function igniteWoodBall(b){
+  if(b.type!==WOOD_BALL||b.burning||b.dead)return false;
+  b.burning=true;b.burnLife=420+Math.floor(Math.random()*120);
+  return true;
+}
+function igniteWoodBallsNear(x,y,r){
+  let ignited=false;
+  for(const b of balls){
+    if(b.type===WOOD_BALL&&Math.hypot(b.x-x,b.y-y)<=b.r+r+1.1)ignited=igniteWoodBall(b)||ignited;
+  }
+  return ignited;
+}
 function spawnBurnEffects(b){
   if(Math.random()<.18){
     const x=Math.round(b.x+(Math.random()-.5)*b.r),y=Math.round(b.y-b.r*.72);
@@ -399,9 +448,9 @@ function updateBall(b){
   moveBallAxis(b,'x',b.vx);moveBallAxis(b,'y',b.vy);
   b.angle+=b.vx/Math.max(2,b.r);
   if(wood){
-    if(!b.burning&&touchesCellType(b,FIRE,.8)){b.burning=true;b.burnLife=360+Math.floor(Math.random()*120)}
+    if(!b.burning&&touchesCellType(b,FIRE,2.1))igniteWoodBall(b);
     if(b.burning){
-      if(f.water>.16){b.burning=false;b.burnLife=0}
+      if(f.water>.58){b.burning=false;b.burnLife=0}
       else{
         b.burnLife--;spawnBurnEffects(b);
         if(b.burnLife<=0)b.dead=true;
@@ -486,6 +535,7 @@ function removeBallsAt(x,y,r){
 function paintAt(x,y){
   const cx=Math.floor(x),cy=Math.floor(y),t=current===ERASE?EMPTY:current;
   if(current===ERASE)removeBallsAt(x,y,brush+1);
+  else if(current===FIRE)igniteWoodBallsNear(x,y,brush+1);
   for(let dy=-brush;dy<=brush;dy++)for(let dx=-brush;dx<=brush;dx++){
     if(dx*dx+dy*dy>brush*brush)continue;
     if(!inBounds(cx+dx,cy+dy))continue;

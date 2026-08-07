@@ -19,197 +19,23 @@ jobs:
           ref: agent/direct-interaction-upgrades
           fetch-depth: 0
 
-      - name: Patch spider web and quicksand interactions
+      - name: Apply interaction patch from previous workflow revision
         shell: bash
         run: |
+          git show HEAD^:.github/workflows/apply-direct-interaction-upgrades.yml > /tmp/previous-workflow.yml
           python3 - <<'PY'
           from pathlib import Path
-
-          spider = Path('spider-web.html')
-          s = spider.read_text(encoding='utf-8')
-          marker = '<script id="r76-spider-direct-interaction">'
-          if marker not in s:
-              inject = r'''
-          <script id="r76-spider-direct-interaction">
-          (()=>{
-            if(window.__r76SpiderDirectInteraction)return;
-            window.__r76SpiderDirectInteraction=true;
-            const toolbar=document.querySelector('.toolbar');
-            const preyModeBtn=document.getElementById('preyBtn');
-            const gustButton=document.getElementById('gustBtn');
-            const stimBtn=document.createElement('button');
-            stimBtn.id='stimBtn';stimBtn.type='button';stimBtn.textContent='☝ 巣をゆらす';
-            toolbar.insertBefore(stimBtn,gustButton);
-            preyModeBtn.textContent='🪰 獲物を置く';
-            let interactionMode='prey',stimDown=null,repairDown=null;
-            const setMode=mode=>{
-              interactionMode=mode;
-              preyModeBtn.classList.toggle('on',mode==='prey');
-              stimBtn.classList.toggle('on',mode==='stim');
-              setNote(mode==='stim'?'刺激モード：巣の好きな場所をタップして、ゆれの伝わり方を見よう':'獲物モード：巣の好きな場所をタップして獲物を置こう','info');
-              draw();
-            };
-            setMode('prey');
-            preyModeBtn.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();setMode('prey')},true);
-            stimBtn.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();setMode('stim')},true);
-
-            const hint=document.createElement('div');
-            hint.className='callout';hint.id='webDamageGuide';
-            hint.innerHTML='<b>👆 巣を直接ためす：</b>「巣をゆらす」で好きな糸をタップ。<b style="color:#ff7474">赤い×は糸が切れた場所</b>で、そこを越える振動が弱まり捕獲性能も下がります。切断点をまたぐようにドラッグして補強糸を張ると修復できます。';
-            document.querySelector('.stage').insertAdjacentElement('afterend',hint);
-
-            const angleDiff=(a,b)=>Math.abs(((a-b+Math.PI*3)%(Math.PI*2))-Math.PI);
-            const segDist=(px,py,a,b)=>{
-              const dx=b.x-a.x,dy=b.y-a.y,l2=dx*dx+dy*dy||1;
-              const t=Math.max(0,Math.min(1,((px-a.x)*dx+(py-a.y)*dy)/l2));
-              return Math.hypot(px-(a.x+t*dx),py-(a.y+t*dy));
-            };
-            const damageXY=d=>({x:center.x+Math.cos(d.a)*d.r*300,y:center.y+Math.sin(d.a)*d.r*190});
-            const originalWaveAmpAt=waveAmpAt;
-            waveAmpAt=(w,u)=>{
-              let amp=originalWaveAmpAt(w,u);
-              const tol=Math.PI/Math.max(8,par().rad)*.92;
-              let cuts=0;
-              for(const d of damage){
-                if(angleDiff(d.a,w.a)<tol && d.r<=w.u0+.04 && d.r>=Math.max(0,u)-.04)cuts++;
-              }
-              return amp*Math.pow(.28,cuts);
-            };
-            const originalStats=stats;
-            stats=()=>{
-              const st=originalStats();
-              const penalty=Math.min(.48,damage.length*.045);
-              st.capture*=1-penalty;st.damagePenalty=penalty;st.breaks=damage.length;
-              return st;
-            };
-            const stimulate=(point)=>{
-              if(progress<.2){setNote('まだ骨格が少ない。まず巣を少し建設しよう','bad');return}
-              const spot=webCoord(point.x,point.y);
-              if(spot.u>.99||spot.u<.08){setNote('糸の上をタップしてゆらしてみよう','info');return}
-              const a=snapRadial(spot.a),u=Math.max(.1,Math.min(.97,spot.u));
-              fx.waves.push({a,u,u0:u,len:radialLength(a),amp:.9,lam:decayLength(),t:0,direct:true});
-              ring(point.x,point.y,90,.55,'rgba(255,224,100,.9)',3);
-              const cut=damage.some(d=>angleDiff(d.a,a)<Math.PI/Math.max(8,par().rad)*.92&&d.r<u);
-              setNote(cut?'糸をゆらした。途中の切断点で振動が大きく弱まる':'糸をゆらした！ 黄色い波が中心へ届くか見よう',cut?'bad':'good');
-              if(!running){running=true;document.getElementById('playPause').textContent='⏸ 一時停止';last=performance.now()}
-              draw();
-            };
-            cv.addEventListener('pointerdown',e=>{
-              const p=canvasPoint(e);repairDown=p;
-              if(interactionMode!=='stim')return;
-              e.preventDefault();e.stopImmediatePropagation();stimDown=p;cv.setPointerCapture?.(e.pointerId);
-            },true);
-            cv.addEventListener('pointerup',e=>{
-              const end=canvasPoint(e);
-              if(interactionMode==='stim'){
-                e.preventDefault();e.stopImmediatePropagation();
-                if(stimDown&&Math.hypot(end.x-stimDown.x,end.y-stimDown.y)<34)stimulate(end);
-                stimDown=null;repairDown=null;return;
-              }
-              if(repairDown&&Math.hypot(end.x-repairDown.x,end.y-repairDown.y)>38&&damage.length){
-                const before=damage.length;
-                damage=damage.filter(d=>{const p=damageXY(d);return segDist(p.x,p.y,repairDown,end)>34});
-                const repaired=before-damage.length;
-                if(repaired){setNote(`補強糸で切断点を ${repaired}か所 修復した！`,'good');ring(end.x,end.y,85,.55,'rgba(150,255,190,.85)',3);draw()}
-              }
-              repairDown=null;
-            });
-
-            const previousDraw=draw;
-            draw=()=>{
-              previousDraw();
-              const st=stats();
-              for(const d of damage){
-                const p=damageXY(d),ux=Math.cos(d.a),uy=Math.sin(d.a)*.64,n=Math.hypot(ux,uy)||1,vx=ux/n,vy=uy/n;
-                c.save();
-                c.fillStyle='#07101a';c.beginPath();c.arc(p.x,p.y,13,0,Math.PI*2);c.fill();
-                c.strokeStyle='rgba(225,240,255,.72)';c.lineWidth=2.3;
-                c.beginPath();c.moveTo(p.x-vx*25,p.y-vy*25);c.lineTo(p.x-vx*9,p.y-vy*9);c.moveTo(p.x+vx*9,p.y+vy*9);c.lineTo(p.x+vx*25,p.y+vy*25);c.stroke();
-                c.strokeStyle='#ff7474';c.lineWidth=3.5;c.beginPath();c.moveTo(p.x-7,p.y-7);c.lineTo(p.x+7,p.y+7);c.moveTo(p.x+7,p.y-7);c.lineTo(p.x-7,p.y+7);c.stroke();
-                c.restore();
-              }
-              if(damage.length){
-                c.save();c.fillStyle='rgba(7,16,26,.9)';c.fillRect(655,18,225,48);c.strokeStyle='#ff7474';c.strokeRect(655,18,225,48);
-                c.fillStyle='#ff9a9a';c.font='bold 12px system-ui';c.fillText(`糸切れ ${damage.length}か所`,667,38);
-                c.fillStyle='#dceafa';c.font='11px system-ui';c.fillText(`捕獲性能 −${Math.round(st.damagePenalty*100)}%`,667,56);c.restore();
-              }
-            };
-          })();
-          </script>
-          '''
-              s = s.replace('</body>', inject + '\n</body>', 1)
-              spider.write_text(s, encoding='utf-8')
-
-          quick = Path('quicksand-simulator.html')
-          q = quick.read_text(encoding='utf-8')
-          qmarker = '<script id="r76-quicksand-direct-interaction">'
-          if qmarker not in q:
-              qinject = r'''
-          <script id="r76-quicksand-direct-interaction">
-          (()=>{
-            if(window.__r76QuicksandDirectInteraction)return;
-            window.__r76QuicksandDirectInteraction=true;
-            const toolbar=document.querySelector('.toolbar');
-            const dropBtn=document.createElement('button');dropBtn.id='qsDropBtn';dropBtn.type='button';dropBtn.textContent='⬇ 上から落とす';
-            toolbar.insertBefore(dropBtn,document.getElementById('scenarioBtn'));
-            const guide=document.createElement('div');guide.className='callout';guide.id='qsDirectGuide';
-            guide.innerHTML='<b>👆 沼を直接さわる：</b> 人を上下にドラッグすると、沈めたり引き上げたりできます。人以外の泥をドラッグすると泥をかき混ぜ、構造がくずれて柔らかくなります。手を離すと再び物理計算へ戻ります。';
-            document.querySelector('.stage').insertAdjacentElement('afterend',guide);
-            const cv=document.getElementById('mainCv'),Q=APP.qs;
-            let direct=null,lastP=null,lastT=0;
-            const point=e=>{const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*cv.width/r.width,y:(e.clientY-r.top)*cv.height/r.height}};
-            const bodyHit=p=>{const feet=Q.surf+state.depth*Q.px,top=feet-Q.bodyH*Q.px*.98;return Math.abs(p.x-Q.cx)<92&&p.y>top-28&&p.y<feet+28};
-            const note=(text)=>{state.note=text;state.noteT=1.6};
-            const wake=()=>{if(!running){running=true;document.getElementById('playPause').textContent='⏸ 一時停止';last=performance.now()}};
-            dropBtn.onclick=()=>{
-              state.depth=0;state.vel=.085;state.structure=1;state.eqDepth=null;state.eqTime=null;state.still=0;state.action='watch';
-              state.ripples.push({age:0,color:'#ffd85a'});note('上から落とした。泥の支えと浮力でどこまで沈むか見よう');wake();drawAll();
-            };
-            cv.addEventListener('pointerdown',e=>{
-              const p=point(e);lastP=p;lastT=performance.now();
-              if(bodyHit(p)){
-                e.preventDefault();e.stopImmediatePropagation();
-                const feet=Q.surf+state.depth*Q.px;direct={kind:'body',grip:p.y-feet};running=false;document.getElementById('playPause').textContent='▶ 再生';cv.setPointerCapture?.(e.pointerId);
-                note('つかんだ。上へ引くと引き抜き、下へ押すと沈められる');drawAll();
-              }else if(p.y>Q.surf){
-                e.preventDefault();e.stopImmediatePropagation();direct={kind:'stir'};cv.setPointerCapture?.(e.pointerId);
-                note('泥をかき混ぜている。構造がこわれ、支えが弱くなる');
-              }
-            },true);
-            cv.addEventListener('pointermove',e=>{
-              if(!direct)return;
-              e.preventDefault();e.stopImmediatePropagation();const p=point(e),now=performance.now(),dt=Math.max(.016,(now-lastT)/1000),dist=lastP?Math.hypot(p.x-lastP.x,p.y-lastP.y):0;
-              if(direct.kind==='body'){
-                compute();const d=state.d,target=Math.max(0,Math.min(Q.maxDepth,(p.y-direct.grip-Q.surf)/Q.px));
-                const resistance=Math.max(0,Math.min(3,(d.yieldF+d.visc)/Math.max(1,d.weight)));
-                const gain=.72/(1+.45*resistance),old=state.depth;
-                state.depth+= (target-state.depth)*gain;state.vel=Math.max(-Q.vMax,Math.min(Q.vMax,(state.depth-old)/dt));
-                state.structure=Math.max(Q.structMin,state.structure-Math.abs(state.depth-old)*(.035+.08*num('c8')));
-                state.eqDepth=null;state.eqTime=null;state.still=0;state.ripples.push({age:0,color:state.vel<0?'#69e0b0':'#ffd85a'});
-              }else{
-                const intensity=Math.min(1,dist/55);
-                state.agit=Math.min(1,state.agit+intensity*.7);
-                state.structure=Math.max(Q.structMin,state.structure-intensity*(.025+.055*num('c8')));
-                state.eqDepth=null;state.eqTime=null;state.still=0;state.ripples.push({age:0,color:'#ffb36b'});
-              }
-              lastP=p;lastT=now;drawAll();
-            },true);
-            const release=e=>{
-              if(!direct)return;
-              e.preventDefault();e.stopImmediatePropagation();
-              const was=direct.kind;direct=null;lastP=null;state.action='watch';
-              note(was==='body'?'手を離した。ここから浮力・泥の支え・粘性で動きが決まる':'かき混ぜ終わった。静かにすると泥の構造が少しずつ回復する');wake();drawAll();
-            };
-            cv.addEventListener('pointerup',release,true);cv.addEventListener('pointercancel',release,true);
-            const style=document.createElement('style');style.textContent='#mainCv{cursor:grab}#mainCv:active{cursor:grabbing}';document.head.appendChild(style);
-          })();
-          </script>
-          '''
-              q = q.replace('</body>', qinject + '\n</body>', 1)
-              quick.write_text(q, encoding='utf-8')
+          src=Path('/tmp/previous-workflow.yml').read_text(encoding='utf-8')
+          token="          python3 - <<'PY'\n"
+          start=src.index(token)+len(token)
+          end=src.index("\n          PY",start)
+          body=src[start:end]
+          body='\n'.join(line[10:] if line.startswith('          ') else line for line in body.splitlines())
+          Path('/tmp/apply-interactions.py').write_text(body+'\n',encoding='utf-8')
           PY
+          python3 /tmp/apply-interactions.py
 
-      - name: Validate inline JavaScript
+      - name: Validate executable inline JavaScript
         shell: bash
         run: |
           python3 - <<'PY'
@@ -218,13 +44,17 @@ jobs:
           for name in ['spider-web.html','quicksand-simulator.html']:
               text=Path(name).read_text(encoding='utf-8')
               assert 'r76-' in text
-              scripts=re.findall(r'<script[^>]*>(.*?)</script>',text,re.S)
-              for i,src in enumerate(scripts):
-                  if not src.strip(): continue
+              scripts=re.findall(r'<script([^>]*)>(.*?)</script>',text,re.S|re.I)
+              for i,(attrs,src) in enumerate(scripts):
+                  m=re.search(r'type=["\']([^"\']+)["\']',attrs,re.I)
+                  if m and m.group(1).lower() not in ('text/javascript','application/javascript','module'):
+                      continue
+                  if not src.strip():
+                      continue
                   p=Path(tempfile.gettempdir())/f'{Path(name).stem}-{i}.js'
                   p.write_text(src,encoding='utf-8')
                   subprocess.run(['node','--check',str(p)],check=True)
-          print('inline JavaScript syntax OK')
+          print('executable inline JavaScript syntax OK')
           PY
 
       - name: Validate expected interaction hooks

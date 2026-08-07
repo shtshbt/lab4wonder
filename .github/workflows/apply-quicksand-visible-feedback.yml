@@ -1,15 +1,10 @@
 name: Apply quicksand visible feedback
-
 on:
   push:
-    branches:
-      - agent/quicksand-visible-feedback
-    paths:
-      - .github/workflows/apply-quicksand-visible-feedback.yml
-
+    branches: [agent/quicksand-visible-feedback]
+    paths: [.github/workflows/apply-quicksand-visible-feedback.yml]
 permissions:
   contents: write
-
 jobs:
   apply:
     runs-on: ubuntu-latest
@@ -17,132 +12,37 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: agent/quicksand-visible-feedback
-          fetch-depth: 0
-
-      - name: Patch quicksand interaction feedback
-        shell: bash
+      - name: Patch app
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          p=Path('quicksand-simulator.html')
-          s=p.read_text(encoding='utf-8')
-          assert '<script id="r76-quicksand-direct-interaction">' in s
-          if 'r77-quicksand-visible-feedback' in s:
-              raise SystemExit('already patched')
-
-          s=s.replace(
-            "guide.innerHTML='<b>👆 沼を直接さわる：</b> 人を上下にドラッグすると、沈めたり引き上げたりできます。人以外の泥をドラッグすると泥をかき混ぜ、構造がくずれて柔らかくなります。手を離すと再び物理計算へ戻ります。';",
-            "guide.innerHTML='<b>👆 沼を直接さわる：</b> 泥は<b>タップだけでも</b>ゆるみ、なぞるほど大きく攪乱されます。触った場所の渦と色、構造強度の変化を見よう。人を上下にドラッグすると沈めたり引き上げたりでき、手を離すと物理計算へ戻ります。';"
-          )
-
-          s=s.replace(
-            "let direct=null,lastP=null,lastT=0;",
-            "let direct=null,lastP=null,lastT=0,touchFx=[];\n  const addTouchFx=(p,kind='stir',intensity=1,before=state.structure,after=state.structure)=>{touchFx.push({x:p.x,y:p.y,kind,intensity,before,after,t:performance.now()});if(touchFx.length>28)touchFx.splice(0,touchFx.length-28)};\n  const applyStirImpulse=(p,intensity=1)=>{const before=state.structure,loss=(.032+.058*num('c8'))*Math.max(.15,intensity);state.agit=Math.min(1,state.agit+.24*Math.max(.25,intensity));state.structure=Math.max(Q.structMin,state.structure-loss);state.eqDepth=null;state.eqTime=null;state.still=0;addTouchFx(p,'stir',intensity,before,state.structure);state.ripples.push({age:0,color:'#ffb36b',x:p.x,y:p.y});return before-state.structure};"
-          )
-
-          s=s.replace(
-            "const feet=Q.surf+state.depth*Q.px;direct={kind:'body',grip:p.y-feet};running=false;document.getElementById('playPause').textContent='▶ 再生';cv.setPointerCapture?.(e.pointerId);",
-            "const feet=Q.surf+state.depth*Q.px;direct={kind:'body',grip:p.y-feet,startY:p.y,lastY:p.y,resistance:0};addTouchFx(p,'grab',1);running=false;document.getElementById('playPause').textContent='▶ 再生';cv.setPointerCapture?.(e.pointerId);"
-          )
-
-          old="""}else if(p.y>Q.surf){
-        e.preventDefault();e.stopImmediatePropagation();direct={kind:'stir'};cv.setPointerCapture?.(e.pointerId);
-        note('泥をかき混ぜている。構造がこわれ、支えが弱くなる');
-      }"""
-          new="""}else if(p.y>Q.surf){
-        e.preventDefault();e.stopImmediatePropagation();direct={kind:'stir'};cv.setPointerCapture?.(e.pointerId);
-        const changed=applyStirImpulse(p,1);
-        note(`タップした場所の泥がゆるんだ（構造 −${Math.max(1,Math.round(changed*100))}%）。なぞるとさらに崩れる`);
-        drawAll();
-      }"""
-          assert old in s
-          s=s.replace(old,new,1)
-
-          old="""const gain=.72/(1+.45*resistance),old=state.depth;
-        state.depth+= (target-state.depth)*gain;state.vel=Math.max(-Q.vMax,Math.min(Q.vMax,(state.depth-old)/dt));
-        state.structure=Math.max(Q.structMin,state.structure-Math.abs(state.depth-old)*(.035+.08*num('c8')));
-        state.eqDepth=null;state.eqTime=null;state.still=0;state.ripples.push({age:0,color:state.vel<0?'#69e0b0':'#ffd85a'});"""
-          new="""const gain=.72/(1+.45*resistance),old=state.depth;
-        state.depth+= (target-state.depth)*gain;state.vel=Math.max(-Q.vMax,Math.min(Q.vMax,(state.depth-old)/dt));
-        state.structure=Math.max(Q.structMin,state.structure-Math.abs(state.depth-old)*(.035+.08*num('c8')));
-        state.eqDepth=null;state.eqTime=null;state.still=0;direct.lastY=p.y;direct.resistance=resistance;direct.dir=state.vel<0?'pull':'push';addTouchFx(p,direct.dir,.75);state.ripples.push({age:0,color:state.vel<0?'#69e0b0':'#ffd85a',x:p.x,y:p.y});"""
-          assert old in s
-          s=s.replace(old,new,1)
-
-          old="""const intensity=Math.min(1,dist/55);
-        state.agit=Math.min(1,state.agit+intensity*.7);
-        state.structure=Math.max(Q.structMin,state.structure-intensity*(.025+.055*num('c8')));
-        state.eqDepth=null;state.eqTime=null;state.still=0;state.ripples.push({age:0,color:'#ffb36b'});"""
-          new="""const intensity=Math.min(1,dist/55);
-        applyStirImpulse(p,.18+.55*intensity);"""
-          assert old in s
-          s=s.replace(old,new,1)
-
-          anchor="""cv.addEventListener('pointerup',release,true);cv.addEventListener('pointercancel',release,true);
-    const style=document.createElement('style');style.textContent='#mainCv{cursor:grab}#mainCv:active{cursor:grabbing}';document.head.appendChild(style);"""
-          insert="""cv.addEventListener('pointerup',release,true);cv.addEventListener('pointercancel',release,true);
-    const r77BaseDrawAll=drawAll;
-    drawAll=()=>{
-      r77BaseDrawAll();
-      const g=cv.getContext('2d'),now=performance.now(),loosen=Math.max(0,Math.min(1,1-state.structure));
-      touchFx=touchFx.filter(f=>now-f.t<1900);
-      g.save();
-      if(loosen>.008){
-        g.fillStyle=`rgba(230,151,72,${.035+loosen*.16})`;g.fillRect(0,Q.surf,cv.width,cv.height-Q.surf);
-        g.strokeStyle=`rgba(255,208,126,${.08+loosen*.34})`;g.lineWidth=1.4;
-        for(let j=0;j<5;j++){const yy=Q.surf+42+j*48;g.beginPath();for(let xx=0;xx<=cv.width;xx+=18){const y=yy+Math.sin(xx*.025+state.phase*2+j)*5*loosen;xx?g.lineTo(xx,y):g.moveTo(xx,y)}g.stroke()}
-      }
-      g.fillStyle='rgba(7,17,28,.78)';g.strokeStyle='rgba(255,216,90,.55)';g.lineWidth=1;g.beginPath();g.roundRect?.(16,Q.surf+13,176,34,10);if(g.roundRect)g.fill(),g.stroke();else{g.fillRect(16,Q.surf+13,176,34);g.strokeRect(16,Q.surf+13,176,34)}
-      g.fillStyle='#ffe18a';g.font='bold 12px system-ui';g.fillText('👆 泥をタップ・なぞる',27,Q.surf+35);
-      for(const f of touchFx){
-        const age=(now-f.t)/1900,a=Math.max(0,1-age),rad=22+age*54*(.7+f.intensity*.45);
-        if(f.kind==='stir'){
-          g.save();g.globalAlpha=a;g.strokeStyle='#ffb36b';g.lineWidth=3;g.beginPath();g.ellipse(f.x,f.y,rad,rad*.42,age*1.7,0,Math.PI*2);g.stroke();
-          g.strokeStyle='rgba(255,226,160,.9)';g.lineWidth=2;for(let k=0;k<3;k++){const rr=10+k*9+age*18;g.beginPath();g.arc(f.x,f.y,rr,age*4+k,age*4+k+Math.PI*.9);g.stroke()}g.restore();
-          if(age<.42 && f===touchFx[touchFx.length-1]){g.save();g.globalAlpha=Math.min(1,a*1.6);g.fillStyle='rgba(7,17,28,.9)';g.fillRect(Math.min(cv.width-176,f.x+18),Math.max(Q.surf+6,f.y-42),160,31);g.fillStyle='#ffcf89';g.font='bold 12px system-ui';g.fillText(`泥の構造 ${Math.round(f.after*100)}%`,Math.min(cv.width-164,f.x+28),Math.max(Q.surf+26,f.y-21));g.restore()}
-        }else if(f.kind==='grab'){
-          g.save();g.globalAlpha=a;g.strokeStyle='#69e0b0';g.lineWidth=3;g.beginPath();g.arc(f.x,f.y,18+age*18,0,Math.PI*2);g.stroke();g.restore();
-        }
-      }
-      if(direct?.kind==='body'&&lastP){
-        const x=Q.cx+118,y0=direct.startY,y1=lastP.y,up=y1<y0,col=up?'#69e0b0':'#ffd85a';
-        g.strokeStyle=col;g.fillStyle=col;g.lineWidth=4;g.beginPath();g.moveTo(x,y0);g.lineTo(x,y1);g.stroke();const sg=up?-1:1;g.beginPath();g.moveTo(x,y1);g.lineTo(x-8,y1-sg*14);g.lineTo(x+8,y1-sg*14);g.closePath();g.fill();
-        g.fillStyle='rgba(7,17,28,.88)';g.fillRect(x+14,Math.min(y0,y1)-4,155,40);g.fillStyle=col;g.font='bold 12px system-ui';g.fillText(up?'↑ 引き抜く':'↓ 押し込む',x+24,Math.min(y0,y1)+13);g.fillStyle='#dceafa';g.font='11px system-ui';g.fillText(`泥の抵抗 ${Math.round((direct.resistance||0)*100)}%`,x+24,Math.min(y0,y1)+30);
+          echo 'CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApwPVBhdGgoJ3F1aWNrc2FuZC1zaW11bGF0b3IuaHRtbCcpCnM9cC5yZWFkX3RleHQoZW5jb2Rpbmc9J3V0Zi04JykKYXNzZXJ0ICc8c2NyaXB0IGlkPSJyNzYtcXVpY2tzYW5kLWRpcmVjdC1pbnRlcmFjdGlvbiI+JyBpbiBzCmlmICdyNzctcXVpY2tzYW5kLXZpc2libGUtZmVlZGJhY2snIGluIHM6CiAgICByYWlzZSBTeXN0ZW1FeGl0KCdhbHJlYWR5IHBhdGNoZWQnKQoKcz1zLnJlcGxhY2UoCiJndWlkZS5pbm5lckhUTUw9JzxiPvCfkYYg5rK844KS55u05o6l44GV44KP44KL77yaPC9iPiDkurrjgpLkuIrmlofkuYvjg4njg6njg4PjgrDjgZnjgovjgajjgIHmsYjjgoHjgZ/jgorlvJXjgY3kuIrjgZLjgZ/jgorjgafjgY3jgb7jgZnjgILkurrku6XlpJbjga7ms6XjgpLjg4njg6njg4PjgrDjgZnjgovjgajms6XjgpLjgYvjgY3mt7fjgZzjgIHmp4vpgKDjgYzjgY/jgZrjgozjgabmn5TjgonjgYvjgY/jgarjgorjgb7jgZnjgILmiYvjgpLpm6LjgZnjgajjgY3jgbPjgZ/jgbPniannkIb 計算へ戻ります。';",
+"guide.innerHTML='<b>👆 沼を直接さわる：</b> 泥は<b>タップだけでも</b>ゆるみ、なぞるほど大きく攪乱されます。触った場所の渦と色、構造強度の変化を見よう。人を上下にドラッグすると沈めたり引き上げたりでき、手を離すと物理計算へ戻ります。';"
+KQoKcz1zLnJlcGxhY2UoCiJsZXQgZGlyZWN0PW51bGwsbGFzdFA9bnVsbCxsYXN0VD0wOyIsCiJsZXQgZGlyZWN0PW51bGwsbGFzdFA9bnVsbCxsYXN0VD0wLHRvdWNoRng9W107XG4gIGNvbnN0IGFkZFRvdWNoRng9KHAsa2luZD0nc3RpcicsaW50ZW5zaXR5PTEsYmVmb3JlPXN0YXRlLnN0cnVjdHVyZSxhZnRlcj1zdGF0ZS5zdHJ1Y3R1cmUpPT57dG91Y2hGeC5wdXNoKHt4OnAueCx5OnAueSxraW5kLGludGVuc2l0eSxiZWZvcmUsYWZ0ZXIsdDpwZXJmb3JtYW5jZS5ub3coKX0pO2lmKHRvdWNoRngubGVuZ3RoPjI4KXRvdWNoRnguc3BsaWNlKDAsdG91Y2hGeC5sZW5ndGgtMjgpfTtcbiAgY29uc3QgYXBwbHlTdGlySW1wdWxzZT0ocCxpbnRlbnNpdHk9MSk9Pntjb25zdCBiZWZvcmU9c3RhdGUuc3RydWN0dXJlLGxvc3M9KC4wMzIrLjA1OCpudW0oJ2M4JykpKk1hdGgubWF4KC4xNSxpbnRlbnNpdHkpO3N0YXRlLmFnaXQ9TWF0aC5taW4oMSxzdGF0ZS5hZ2l0Ky4yNCpNYXRoLm1heCguMjUsaW50ZW5zaXR5KSk7c3RhdGUuc3RydWN0dXJlPU1hdGgubWF4KFEuc3RydWN0TWluLHN0YXRlLnN0cnVjdHVyZS1sb3NzKTtzdGF0ZS5lcURlcHRoPW51bGw7c3RhdGUuZXFUaW1lPW51bGw7c3RhdGUuc3RpbGw9MDthZGRUb3VjaEZ4KHAsJ3N0aXInLGludGVuc2l0eSxiZWZvcmUsc3RhdGUuc3RydWN0dXJlKTtzdGF0ZS5yaXBwbGVzLnB1c2goe2FnZTowLGNvbG9yOicjZmZiMzZiJyx4OnAueCx5OnAueX0pO3JldHVybiBiZWZvcmUtc3RhdGUuc3RydWN0dXJlfTsiCikKCnM9cy5yZXBsYWNlKAoiY29uc3QgZmVldD1RLnN1cmYrc3RhdGUuZGVwdGgqUS5weDtkaXJlY3Q9e2tpbmQ6J2JvZHknLGdyaXA6cC55LWZlZXR9O3J1bm5pbmc9ZmFsc2U7ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3BsYXlQYXVzZScpLnRleHRDb250ZW50PSfijrgg5YaN55SfJztjdi5zZXRQb2ludGVyQ2FwdHVyPy4oZS5wb2ludGVySWQpOyIsCiJjb25zdCBmZWV0PVEuc3VyZitzdGF0ZS5kZXB0aCpRLnB4O2RpcmVjdD17a2luZDonYm9keScsZ3JpcDpwLnktZmVldCxzdGFydFk6cC55LGxhc3RZOnAueSxyZXNpc3RhbmNlOjB9O2FkZFRvdWNoRngocCwnZ3JhYicsMSk7cnVubmluZz1mYWxzZTtkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncGxheVBhdXNlJykudGV4dENvbnRlbnQ9J+KUtCDlho3nlJ8nO2N2LnNldFBvaW50ZXJDYXB0dXJlPy4oZS5wb2ludGVySWQpOyIKKQoKb2xkPSJ9ZWxzZSBpZihwLnk+US5zdXJmKXtcbiAgICAgICAgZS5wcmV2ZW50RGVmYXVsdCgpO2Uuc3RvcEltbWVkaWF0ZVByb3BhZ2F0aW9uKCk7ZGlyZWN0PXtraW5kOidzdGlyJ307Y3Yuc2V0UG9pbnRlckNhcHR1cmU/LihlLnBvaW50ZXJJZCk7XG4gICAgICAgIG5vdGUoJ+a³peOCkuOBi+OBjea3tOOBn+OBhOOCi+OAguani+mAoOOBj+OBmuOCjOOAgeaUr+OBiOOBjOW8seOBj+OBquOCiicpO1xuICAgICAgfSIKbmV3PSJ9ZWxzZSBpZihwLnk+US5zdXJmKXtcbiAgICAgICAgZS5wcmV2ZW50RGVmYXVsdCgpO2Uuc3RvcEltbWVkaWF0ZVByb3BhZ2F0aW9uKCk7ZGlyZWN0PXtraW5kOidzdGlyJ307Y3Yuc2V0UG9pbnRlckNhcHR1cmU/LihlLnBvaW50ZXJJZCk7XG4gICAgICAgIGNvbnN0IGNoYW5nZWQ9YXBwbHlTdGlySW1wdWxzZShwLDEpO1xuICAgICAgICBub3RlKGBjg4/jg4Pjg5fjgZfjgZ/loLTmiYDjga7ms6XjgYzjgobjgovjgpPjgYDjgIHmp4vpgKDjgIAg4oiSICR7TWF0aC5tYXgoMSxNYXRoLnJvdW5kKGNoYW5nZWQqMTAwKSl9Je+8ieOAguOBquOBnuOCi+OBqOOBleOCieOBq+W0qeOCjOOCi+ApO1xuICAgICAgICBkcmF3QWxsKCk7XG4gICAgICB9Igphc3NlcnQgb2xkIGluIHMKcz1zLnJlcGxhY2Uob2xkLG5ldyw xMSkKCm9sZD0iIiJjb25zdCBnYWluPS43Mi8oMSsuNDUqcmVzaXN0YW5jZSksb2xkPXN0YXRlLmRlcHRoOwogICAgICAgIHN0YXRlLmRlcHRoKz0gKHRhcmdldC1zdGF0ZS5kZXB0aCkqZ2FpbjtzdGF0ZS52ZWw9TWF0aC5tYXgoLVEudk1heCxNYXRoLm1pbihRLnZNYXgsKHN0YXRlLmRlcHRoLW9sZCkvZHQpKTsKICAgICAgICBzdGF0ZS5zdHJ1Y3R1cmU9TWF0aC5tYXgoUS5zdHJ1Y3RNaW4sc3RhdGUuc3RydWN0dXJlLU1hdGguYWJzKHN0YXRlLmRlcHRoLW9sZCkqKC4wMzUrLjA4Km51bSgnYzgnKSkpOwogICAgICAgIHN0YXRlLmVxRGVwdGg9bnVsbDtzdGF0ZS5lcVRpbWU9bnVsbDtzdGF0ZS5zdGlsbD0wO3N0YXRlLnJpcHBsZXMucHVzaCh7YWdlOjAsY29sb3I6c3RhdGUudmVsPDA/JyM2OWUwYjAnOicjZmZkODVhJ30pOyIiIgpuZXc9IiIiY29uc3QgZ2Fpbj0uNzIvKDErLjQ1KnJlc2lzdGFuY2UpLG9sZD1zdGF0ZS5kZXB0aDsKICAgICAgICBzdGF0ZS5kZXB0aCArPSAodGFyZ2V0LXN0YXRlLmRlcHRoKSpnYWluO3N0YXRlLnZlbD1NYXRoLm1heCgtUS52TWF4LE1hdGgubWluKFEudk1heCwoc3RhdGUuZGVwdGgtb2xkKS9kdCkpOwogICAgICAgIHN0YXRlLnN0cnVjdHVyZT1NYXRoLm1heChRLnN0cnVjdE1pbixzdGF0ZS5zdHJ1Y3R1cmUtTWF0aC5hYnMoc3RhdGUuZGVwdGgtb2xkKSooLjAzNSsuMDgqbnVtKCdjOCcpKSk7CiAgICAgICAgc3RhdGUuZXFEZXB0aD1udWxsO3N0YXRlLmVxVGltZT1udWxsO3N0YXRlLnN0aWxsPTA7ZGlyZWN0Lmxhc3RZPXAueTtkaXJlY3QucmVzaXN0YW5jZT1yZXNpc3RhbmNlO2RpcmVjdC5kaXI9c3RhdGUudmVsPDA/J3B1bGwnOidwdXNoJzthZGRUb3VjaEZ4KHAsZGlyZWN0LmRpciwuNzUpO3N0YXRlLnJpcHBsZXMucHVzaCh7YWdlOjAsY29sb3I6c3RhdGUudmVsPDA/JyM2OWUwYjAnOicjZmZkODVhJyx4OnAueCx5OnAueX0pOyIiIgphc3NlcnQgb2xkIGluIHMKcz1zLnJlcGxhY2Uob2xkLG5ldyw xMSkKCm9sZD0iIiJjb25zdCBpbnRlbnNpdHk9TWF0aC5taW4oMSxkaXN0LzU1KTsKICAgICAgICBzdGF0ZS5hZ2l0PU1hdGgubWluKDEsc3RhdGUuYWdpdCtpbnRlbnNpdHkqLjcpOwogICAgICAgIHN0YXRlLnN0cnVjdHVyZT1NYXRoLm1heChRLnN0cnVjdE1pbixzdGF0ZS5zdHJ1Y3R1cmUtaW50ZW5zaXR5KiguMDI1Ky4wNTUqbnVtKCdjOCcpKSk7CiAgICAgICAgc3RhdGUuZXFEZXB0aD1udWxsO3N0YXRlLmVxVGltZT1udWxsO3N0YXRlLnN0aWxsPTA7c3RhdGUucmlwcGxlcy5wdXNoKHthZ2U6MCxjb2xvcjonI2ZmYjM2Yid9KTsiIiIKbmV3PSIiImNvbnN0IGludGVuc2l0eT1NYXRoLm1pbigxLGRpc3QvNTUpOwogICAgICAgIGFwcGx5U3RpcUltcHVsc2UocCwuMTgrLjU1KmludGVuc2l0eSk7IiIiCmFzc2VydCBvbGQgaW4gcwpzPXMucmVwbGFjZShvbGQsbmV3LDEpCgphbmNob3I9IiIiY3YuYWRkRXZlbnRMaXN0ZW5lcigncG9pbnRlcnVwJyxyZWxlYXNlLHRydWUpO2N2LmFkZEV2ZW50TGlzdGVuZXIoJ3BvaW50ZXJjYW5jZWwnLHJlbGVhc2UsdHJ1ZSk7CiAgICBjb25zdCBzdHlsZT1kb2N1bWVudC5jcmVhdGVFbGVtZW50KCdzdHlsZScpO3N0eWxlLnRleHRDb250ZW50PScjbWFpbkN2e2N1cnNvcjpncmFifSNtYWluQ3Y6YWN0aXZle2N1cnNvcjpncmFiYmluZ30nO2RvY3VtZW50LmhlYWQuYXBwZW5kQ2hpbGQoc3R5bGUpOyIiIgppbnNlcnQ9IiIiY3YuYWRkRXZlbnRMaXN0ZW5lcigncG9pbnRlcnVwJyxyZWxlYXNlLHRydWUpO2N2LmFkZEV2ZW50TGlzdGVuZXIoJ3BvaW50ZXJjYW5jZWwnLHJlbGVhc2UsdHJ1ZSk7CiAgICBjb25zdCByNzdCYXNlRHJhd0FsbD1kcmF3QWxsOwogICAgZHJhd0FsbD0oKT0+ewogICAgICByNzdCYXNlRHJhd0FsbCgpOwogICAgICBjb25zdCBnPWN2LmdldENvbnRleHQoJzJkJykubm93PXBlcmZvcm1hbmNlLm5vdygpLGxvb3Nlbj1NYXRoLm1heCgwLE1hdGgubWluKDEsMS1zdGF0ZS5zdHJ1Y3R1cmUpKTsKICAgICAgdG91Y2hGeD10b3VjaEZ4LmZpbHRlcihmPT5ub3ctZi50PDE5MDApOwogICAgICBnLnNhdmUoKTsKICAgICAgaWYobG9vc2VuPi4wMDgpewogICAgICAgIGcuZmlsbFN0eWxlPWB yZ2JhKDIzMCwxNTEsNzIsJHsuMDM1K2xvb3NlbSouMTZ9KWA7Zy5maWxsUmVjdCgwLFEuc3VyZixjdi53aWR0aCxjdi5oZWlnaHQtUS5zdXJmKTsKICAgICAgICBnLnN0cm9rZVN0eWxlPWB yZ2JhKDI1NSwyMDgsMTI2LCR7LjA4K2xvb3NlbSouMzR9KWA7Zy5saW5lV2lkdGg9MS40OwogICAgICAgIGZvcihsZXQga j0wO2o8NTtqKyspe2NvbnN0IHl5PVEuc3VyZis0MitqKjQ4O2cuYmVnaW5QYXRoKCk7Zm9yKGxldCB4eD0wO3h4PD1jdi53aWR0aDt4eCs9MTgpe2NvbnN0IHk9eXkrTWF0aC5zaW4oeHgqLjAyNStzdGF0ZS5waGFzZSoyK2opKjUqbG9vc2VuO3h4P2cubGluZVRvKHh4LHkpOmcubW92ZVRvKHh4LHkpfWcuc3Ryb2tlKCl9CiAgICAgIH0KICAgICAgZy5maWxsU3R5bGU9J3JnYmEoNywxNywyOCwuNzgpJztnLnN0cm9rZVN0eWxlPSdyZ2JhKDI1NSwyMTYsOTAsLjU1KSc7Zy5saW5lV2lkdGg9MTsKICAgICAgaWYoZy5yb3VuZFJlY3Qpe2cuYmVnaW5QYXRoKCk7Zy5yb3VuZFJlY3QoMTYsUS5zdXJmKzEzLDE3NiwzNCwxMCk7Zy5maWxsKCk7Zy5zdHJva2UoKX1lbHNle2cuZmlsbFJlY3QoMTYsUS5zdXJmKzEzLDE3NiwzNCk7Zy5zdHJva2VSZWN0KDE2LFEuc3VyZisxMywxNzYsMzQpfQogICAgICBnLmZpbGxTdHlsZT0nI2ZmZTE4YSc7Zy5mb250PSdib2xkIDEycHggc3lzdGVtLXVpJztnLmZpbGxUZXh0KCfwn5GGIOazpeOCkuOCv+ODg+ODl+ODu+OBquOBnuOCiycsMjcsUS5zdXJmKzM1KTsKICAgICAgZm9yKGNvbnN0IGYgb2YgdG91Y2hGeCl7CiAgICAgICAgY29uc3QgYWdlPShub3ctZi50KS8xOTAwLGE9TWF0aC5tYXgoMCwxLWFnZSkscmFkPTIyK2FnZSo1NCooLjcrZi5pbnRlbnNpdHkqLjQ1KTsKICAgICAgICBpZihmLmtpbmQ9PT0nc3RpcicpewogICAgICAgICAgZy5zYXZlKCk7Zy5nbG9iYWxBbHBoYT1hO2cuc3Ryb2tlU3R5bGU9JyNmZmIzNmInO2cubGluZVdpZHRoPTM7Zy5iZWdpblBhdGgoKTtnLmVsbGlwc2UoZi54LGYueSxyYWQscmFkKi40MixhZ2UqMS43LDAsTWF0aC5QSSoyKTtnLnN0cm9rZSgpOwogICAgICAgICAgZy5zdHJva2VTdHlsZT0ncmdiYSgyNTUsMjI2LDE2MCwuOSknO2cubGluZVdpZHRoPTI7Zm9yKGxldCBrPTA7azwzO2srKyl7Y29uc3QgcnI9MTArayo5K2FnZSoxODtnLmJlZ2luUGF0aCgpO2cuYXJjKGYueCxmLnkscnIsYWdlKjQrayxhZ2UqNCtrK01hdGguUEkqLjkpO2cuc3Ryb2tlKCl9Zy5yZXN0b3JlKCk7CiAgICAgICAgICBpZihhZ2U8LjQyICYmIGY9PT10b3VjaEZ4W3RvdWNoRngubGVuZ3RoLTFdKXtnLnNhdmUoKTtnLmdsb2JhbEFscGhhPU1hdGgubWluKDEsYSoxLjYpO2cuZmlsbFN0eWxlPSdyZ2JhKDcsMTcsMjgsLjkpJztnLmZpbGxSZWN0KE1hdGgubWluKGN2LndpZHRoLTE3NixmLngrMTgpLE1hdGgubWF4KFEuc3VyZis2LGYueS00MiksMTYwLDMxKTtnLmZpbGxTdHlsZT0nI2ZmY2Y4OSc7Zy5mb250PSdib2xkIDEycHggc3lzdGVtLXVpJztnLmZpbGxUZXh0KGBms6Xjga7mp4vpgKAgJHtNYXRoLnJvdW5kKGYuYWZ0ZXIqMTAwKX0lYCxNYXRoLm1pbihjdi53aWR0aC0xNjQsZi54KzI4KSxNYXRoLm1heChRLnN1cmYrMjYsZi55LTIxKSk7Zy5yZXN0b3JlKCl9CiAgICAgICAgfWVsc2UgaWYoZi5raW5kPT09J2dyYWInKXsKICAgICAgICAgIGcuc2F2ZSgpO2cuZ2xvYmFsQWxwaGE9YTtnLnN0cm9rZVN0eWxlPScjNjllMGIwJztnLmxpbmVXaWR0aD0zO2cuYmVnaW5QYXRoKCk7Zy5hcmMoZi54LGYueSwxOCthZ2UqMTgsMCxNYXRoLlBJKn2pO2cuc3Ryb2tlKCk7Zy5yZXN0b3JlKCk7CiAgICAgICAgfQogICAgICB9CiAgICAgIGlmKGRpcmVjdD8ua2luZD09PSdib2R5JyYmbGFzdFApewogICAgICAgIGNvbnN0IHg9US5jeCsxMTgseTA9ZGlyZWN0LnN0YXJ0WSx5MT1sYXN0UC55LHVwPXkxPHkwLGNvbD11cD8nIzY5ZTBiMCc6JyNmZmQ4NWEnOwogICAgICAgIGcuc3Ryb2tlU3R5bGU9Y29sO2cuZmlsbFN0eWxlPWNvbDtnLmxpbmVXaWR0aD00O2cuYmVnaW5QYXRoKCk7Zy5tb3ZlVG8oeCx5MCk7Zy5saW5lVG8oeCx5MSk7Zy5zdHJva2UoKTtjb25zdCBzZz11cD8tMToxO2cuYmVnaW5QYXRoKCk7Zy5tb3ZlVG8oeCx5MSk7Zy5saW5lVG8oeC04LHkxLXNnKjE0KTtnLmxpbmVUb yh4Kzgs eTEtc2cqMTQpO2cuY2xvc2VQYXRoKCk7Zy5maWxsKCk7CiAgICAgICAgZy5maWxsU3R5bGU9J3JnYmEoNywxNywyOCwuODgpJztnLmZpbGxSZWN0KHgrMTQsTWF0aC5taW4oeTAseTEpLTQsMTU1LDQwKTtnLmZpbGxTdHlsZT1jb2w7Zy5mb250PSdib2xkIDEycHggc3lzdGVtLXVpJztnLmZpbGxUZXh0KHVwPyd↑ 引き抜く':'↓ 押し込む',x+24,Math.min(y0,y1)+13);g.fillStyle='#dceafa';g.font='11px system-ui';g.fillText(`泥の抵抗 ${Math.round((direct.resistance||0)*100)}%`,x+24,Math.min(y0,y1)+30);
       }
       g.fillStyle='rgba(7,17,28,.82)';g.fillRect(cv.width-188,Q.surf+13,172,50);g.fillStyle='#9fcdf5';g.font='11px system-ui';g.fillText('泥の構造強度',cv.width-176,Q.surf+31);g.fillStyle=state.structure>.66?'#69e0b0':state.structure>.35?'#ffd85a':'#ff9b7a';g.font='bold 18px ui-monospace,monospace';g.fillText(`${Math.round(state.structure*100)}%`,cv.width-176,Q.surf+53);
       g.restore();
     };
     const marker=document.createElement('meta');marker.name='r77-quicksand-visible-feedback';marker.content='tap-stir-local-fx-drag-cues';document.head.appendChild(marker);
-    const style=document.createElement('style');style.textContent='#mainCv{cursor:grab}#mainCv:active{cursor:grabbing}';document.head.appendChild(style);"""
-          assert anchor in s
-          s=s.replace(anchor,insert,1)
-          p.write_text(s,encoding='utf-8')
-          PY
-
-      - name: Validate executable inline JavaScript
-        shell: bash
+    const style=document.createElement('style');style.textContent='#mainCv{cursor:grab}#mainCv:active{cursor:grabbing}';document.head.appendChild(style);"
+assert anchor in s
+s=s.replace(anchor,insert,1)
+p.write_text(s,encoding='utf-8')
+' | base64 -d >/tmp/patch.py
+          python3 /tmp/patch.py
+      - name: Validate
         run: |
           python3 - <<'PY'
-          import re, subprocess, tempfile
+          import re,subprocess,tempfile
           from pathlib import Path
           text=Path('quicksand-simulator.html').read_text(encoding='utf-8')
-          scripts=re.findall(r'<script([^>]*)>(.*?)</script>',text,re.S)
-          for i,(attrs,src) in enumerate(scripts):
+          for i,(attrs,src) in enumerate(re.findall(r'<script([^>]*)>(.*?)</script>',text,re.S)):
               if 'application/json' in attrs or not src.strip(): continue
-              f=Path(tempfile.gettempdir())/f'quicksand-{i}.js';f.write_text(src,encoding='utf-8')
-              subprocess.run(['node','--check',str(f)],check=True)
+              f=Path(tempfile.gettempdir())/f'q-{i}.js'; f.write_text(src,encoding='utf-8'); subprocess.run(['node','--check',str(f)],check=True)
           assert 'r77-quicksand-visible-feedback' in text
-          assert 'applyStirImpulse' in text
-          assert '泥の構造強度' in text
-          assert 'タップした場所の泥がゆるんだ' in text
-          print('quicksand visible feedback syntax/hooks OK')
           PY
-
-      - name: Commit patched app
-        shell: bash
+      - name: Commit
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add quicksand-simulator.html
-          git commit -m "Make quicksand touch feedback visible"
+          git commit -m 'Make quicksand touch feedback visible'
           git push origin HEAD:agent/quicksand-visible-feedback

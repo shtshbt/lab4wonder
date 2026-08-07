@@ -1,0 +1,39 @@
+name: Apply spider r81
+on:
+  push:
+    branches:
+      - agent/spider-r81-exclusive-reinforce
+    paths:
+      - .github/workflows/apply-spider-r81.yml
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/spider-r81-exclusive-reinforce
+          fetch-depth: 0
+      - run: python3 .tmp_spider_r81_patch.py
+      - name: Validate
+        run: |
+          python3 - <<'PY'
+          import re,subprocess,tempfile
+          from pathlib import Path
+          text=Path('spider-web.html').read_text(encoding='utf-8')
+          for i,(attrs,src) in enumerate(re.findall(r'<script([^>]*)>(.*?)</script>',text,re.S)):
+              if 'application/json' in attrs or not src.strip(): continue
+              f=Path(tempfile.gettempdir())/f'spider-r81-{i}.js';f.write_text(src,encoding='utf-8');subprocess.run(['node','--check',str(f)],check=True)
+          assert 'r81-spider-exclusive-reinforcement' in text
+          assert '補強糸は「🧵 補強糸」を選んでドラッグして張ろう' in text
+          assert 'const p=canvasPoint(e);repairDown=null;' in text
+          print('spider r81 validation OK')
+          PY
+      - name: Commit
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add spider-web.html
+          git commit -m 'Make reinforcement exclusive to explicit mode'
+          git push origin HEAD:agent/spider-r81-exclusive-reinforce

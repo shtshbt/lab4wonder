@@ -1,0 +1,71 @@
+name: Apply spider escaped prey fall fix
+on:
+  push:
+    branches: [agent/spider-escaped-prey-fall]
+    paths:
+      - .github/workflows/apply-spider-escaped-prey-fall.yml
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/spider-escaped-prey-fall
+          fetch-depth: 0
+      - name: Patch spider escaped prey behavior
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('spider-web.html')
+          s=p.read_text(encoding='utf-8')
+          old="const captured=progress>.65&&d<310&&p.sticky>.18;"
+          new="const captured=!prey.free&&prey.result!=='escaped'&&progress>.65&&d<310&&p.sticky>.18;"
+          assert old in s
+          s=s.replace(old,new,1)
+          old="prey.free=true;fx.flash=1;"
+          new="prey.free=true;prey.escapeT=prey.t;const fallA=Math.atan2(prey.y-center.y,prey.x-center.x);prey.vx+=Math.cos(fallA)*34;prey.vy=Math.max(prey.vy,105);fx.flash=1;"
+          assert old in s
+          s=s.replace(old,new,1)
+          old="setNote('もがいて 糸から はずれた… おちていく','bad');"
+          new="setNote('もがいて 糸から はずれた！ 下へ おちていく','bad');"
+          assert old in s
+          s=s.replace(old,new,1)
+          old="if(prey.result==='escaped'&&prey.trail.length>1){\n    c.setLineDash([5,7]);"
+          new="if(prey.result==='escaped'&&prey.trail.length>1){\n    c.setLineDash([5,7]);"
+          assert old in s
+          # Add explicit falling cue immediately before prey translation.
+          anchor="  c.translate(x,y);c.rotate(sa+osc*.25*(prey.hit?1:.2));"
+          insert="  if(prey.result==='escaped'){c.fillStyle='rgba(255,185,150,.95)';c.font='bold 13px system-ui';c.fillText('↓ 落下中',x+16,y-12)}\n  c.translate(x,y);c.rotate(sa+osc*.25*(prey.hit?1:.2));"
+          assert anchor in s
+          s=s.replace(anchor,insert,1)
+          marker="<meta name=\"r78-spider-escaped-prey-fall\" content=\"escaped-prey-not-captured-visible-fall\">"
+          assert '</head>' in s
+          s=s.replace('</head>',marker+'\n</head>',1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Validate JavaScript and hooks
+        run: |
+          python3 - <<'PY'
+          import re,subprocess,tempfile
+          from pathlib import Path
+          text=Path('spider-web.html').read_text(encoding='utf-8')
+          for i,(attrs,src) in enumerate(re.findall(r'<script([^>]*)>(.*?)</script>',text,re.S)):
+              if 'application/json' in attrs or not src.strip(): continue
+              f=Path(tempfile.gettempdir())/f'spider-{i}.js'
+              f.write_text(src,encoding='utf-8')
+              subprocess.run(['node','--check',str(f)],check=True)
+          assert "!prey.free&&prey.result!=='escaped'" in text
+          assert 'prey.vy=Math.max(prey.vy,105)' in text
+          assert '↓ 落下中' in text
+          assert 'r78-spider-escaped-prey-fall' in text
+          print('spider escaped prey fall fix OK')
+          PY
+      - name: Commit patch
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add spider-web.html
+          git commit -m 'Make escaped prey visibly fall from spider web'
+          git push origin HEAD:agent/spider-escaped-prey-fall

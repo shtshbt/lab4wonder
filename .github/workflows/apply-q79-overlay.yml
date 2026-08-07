@@ -1,0 +1,38 @@
+name: Apply q79 overlay fix
+on:
+  push:
+    branches:
+      - agent/quicksand-r79-interaction
+    paths:
+      - .github/workflows/apply-q79-overlay.yml
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/quicksand-r79-interaction
+          fetch-depth: 0
+      - run: python3 .tmp_q79_overlay_fix.py
+      - name: Validate
+        run: |
+          python3 - <<'PY'
+          import re,subprocess,tempfile
+          from pathlib import Path
+          text=Path('quicksand-simulator.html').read_text(encoding='utf-8')
+          for i,(attrs,src) in enumerate(re.findall(r'<script([^>]*)>(.*?)</script>',text,re.S)):
+              if 'application/json' in attrs or not src.strip(): continue
+              f=Path(tempfile.gettempdir())/f'q79o-{i}.js';f.write_text(src,encoding='utf-8');subprocess.run(['node','--check',str(f)],check=True)
+          for token in ["const input=document.createElement('canvas')","input.addEventListener('pointerdown'",'lastP','5200','qsObjectSel']:
+              assert token in text,token
+          print('q79 overlay validation OK')
+          PY
+      - name: Commit
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add quicksand-simulator.html
+          git commit -m 'Fix quicksand direct input overlay and strengthen deformation'
+          git push origin HEAD:agent/quicksand-r79-interaction

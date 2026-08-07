@@ -25,7 +25,8 @@ jobs:
           import re, subprocess, tempfile
           s=Path('fossil-formation.html').read_text(encoding='utf-8')
           HTMLParser().feed(s)
-          for i,js in enumerate(re.findall(r'<script[^>]*>(.*?)</script>',s,re.S)):
+          scripts=re.findall(r'<script(?![^>]*type=["\']application/json["\'])[^>]*>(.*?)</script>',s,re.S|re.I)
+          for i,js in enumerate(scripts):
               if js.strip():
                   f=Path(tempfile.gettempdir())/f'fossil_{i}.js'; f.write_text(js,encoding='utf-8'); subprocess.run(['node','--check',str(f)],check=True)
           for hook in ['r83-fossil-scene-style','r83Advance','drawPlanView','r83FoundGrid','plan-section-time-identity']:

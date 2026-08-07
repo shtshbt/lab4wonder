@@ -20,7 +20,9 @@ jobs:
         run: python .github/patch_fossil_r81.py
       - name: Validate HTML and inline JavaScript
         run: |
-          node scripts/check_inline_js.js fossil-formation.html
+          mkdir -p /tmp/fossil-check
+          cp fossil-formation.html /tmp/fossil-check/
+          node scripts/check_inline_js.js /tmp/fossil-check
           python - <<'PY'
           from html.parser import HTMLParser
           from pathlib import Path

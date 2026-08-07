@@ -1,0 +1,44 @@
+name: Apply spider r82
+on:
+  push:
+    branches:
+      - agent/spider-r82-capture-probability
+    paths:
+      - .github/workflows/apply-spider-r82.yml
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/spider-r82-capture-probability
+          fetch-depth: 0
+      - run: python3 .tmp_spider_r82_patch.py
+      - name: Validate
+        run: |
+          python3 - <<'PY'
+          import re,subprocess,tempfile
+          from pathlib import Path
+          text=Path('spider-web.html').read_text(encoding='utf-8')
+          for i,(attrs,src) in enumerate(re.findall(r'<script([^>]*)>(.*?)</script>',text,re.S)):
+              if 'application/json' in attrs or not src.strip(): continue
+              f=Path(tempfile.gettempdir())/f'spider-r82-{i}.js';f.write_text(src,encoding='utf-8');subprocess.run(['node','--check',str(f)],check=True)
+          assert 'r82-spider-probabilistic-capture' in text
+          assert "prey.result=prey.hit&&r49Rand()<chance?'caught':'escaped'" in text
+          assert "(.30+.75*p.sticky)" in text
+          assert "st.capture>=.46" not in text
+          # Default completed, undamaged web should be ~75% baseline capture.
+          sticky=.62; spir=17; progress=1; tension=.2*(1+spir/24)*(1.2-.65*.5)
+          capture=progress*(.30+.75*sticky)*(.55+.45*min(1,spir/18))*(1-max(0,tension-1)*.35)
+          assert .70 < capture < .80, capture
+          print('spider r82 validation OK; default capture',round(capture,3))
+          PY
+      - name: Commit
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add spider-web.html
+          git commit -m 'Balance spider prey capture outcomes'
+          git push origin HEAD:agent/spider-r82-capture-probability

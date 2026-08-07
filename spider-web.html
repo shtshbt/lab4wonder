@@ -18,6 +18,7 @@ body>a[href="index.html"]{display:inline-flex;align-items:center;min-height:40px
 #trayOpen.trayOpen{position:static!important;right:auto!important;bottom:auto!important;z-index:1!important;margin-left:auto}
 </style><meta name="r66-coach-design" content="optional; compact; explicit-targets; no-auto-advance"><meta name="r67-release" content="spotlight-polish"><link rel="stylesheet" href="lab4wonder_v1_1.css">
 <meta name="r78-spider-escaped-prey-fall" content="escaped-prey-not-captured-visible-fall">
+<meta name="r81-spider-exclusive-reinforcement" content="reinforcement-only-in-explicit-mode">
 </head><body data-first="同じ糸強度でらせん密度だけを増やし、捕獲確率・残り糸・最大張力を比べよう。">
 <header class="hdr"><div><span class="badge">生態・構造</span><h1>クモの巣・建設・振動伝達ラボ</h1><div class="sub">枠糸、放射糸、粘着らせんを順に張り、材料・風荷重・振動伝達・捕獲性能の交換条件を調べる。</div></div><div class="head-actions"><button id="guideBtn">？ ガイド</button><button id="speakBtn">🔊 読む</button><button id="tourBtn">👣 操作</button><button id="resetTop">↺ リセット</button></div></header>
 <section class="learn"><div><b>これは何？</b><p>枠糸、放射糸、粘着らせんを順に張り、材料・風荷重・振動伝達・捕獲性能の交換条件を調べる。</p></div><div><b>どこを見る？</b><p>建設工程、糸の張力、獲物の振動波、ゆれが中心へ届くまでの時間、破損、材料配分、捕獲確率。</p></div><div><b>何を変える？</b><p>放射糸数、らせん密度、糸の強さ、粘着性、風、獲物、突風。</p></div><div><b>持ち帰る一文</b><p data-takeaway="">巣の形は装飾ではなく、振動を中心へ伝える骨格と獲物を止める捕獲面を、限られた糸で両立させる設計である。</p></div></section>
@@ -72,10 +73,7 @@ cv.addEventListener('pointerup',event=>{
   if(!webPointer)return;
   const end=canvasPoint(event),distance=Math.hypot(end.x-webPointer.x,end.y-webPointer.y);
   if(distance>38){
-    customStrands.push({x1:webPointer.x,y1:webPointer.y,x2:end.x,y2:end.y});
-    if(customStrands.length>6)customStrands.shift();
-    progress=Math.max(progress,.68);
-    lastOutcome='補強糸を張った！ 次は巣をタップして獲物を落とそう';
+    lastOutcome='補強糸は「🧵 補強糸」を選んでドラッグして張ろう';
   }else{
     prey={x:end.x,y:end.y,vx:0,vy:5,amp:1,t:0,result:null};
     lastOutcome=progress<.55?'まだ巣が未完成。ドラッグで糸を張って助けよう':'判定中… 黄色い波が中心へ届くか見よう';
@@ -764,7 +762,7 @@ show(0);
     draw();
   };
   cv.addEventListener('pointerdown',e=>{
-    const p=canvasPoint(e);repairDown=p;
+    const p=canvasPoint(e);repairDown=null;
     if(interactionMode!=='stim')return;
     e.preventDefault();e.stopImmediatePropagation();stimDown=p;cv.setPointerCapture?.(e.pointerId);
   },true);

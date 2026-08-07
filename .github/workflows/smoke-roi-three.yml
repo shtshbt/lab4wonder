@@ -1,0 +1,31 @@
+name: Smoke ROI three apps
+on:
+  push:
+    branches:
+      - agent/roi-fourier-sediment-ant
+    paths:
+      - .github/workflows/smoke-roi-three.yml
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/roi-fourier-sediment-ant
+      - name: Headless browser smoke
+        run: |
+          BROWSER="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser)"
+          test -n "$BROWSER"
+          python3 -m http.server 8123 >/tmp/lab4wonder-http.log 2>&1 &
+          sleep 1
+          "$BROWSER" --headless --no-sandbox --disable-gpu --virtual-time-budget=2500 --dump-dom http://127.0.0.1:8123/fourier_drawing.html >/tmp/fourier-dom.html
+          grep -q '形をつくる周波数' /tmp/fourier-dom.html
+          grep -q 'data-preset="low"' /tmp/fourier-dom.html
+          "$BROWSER" --headless --no-sandbox --disable-gpu --virtual-time-budget=2500 --dump-dom http://127.0.0.1:8123/sediment-resuspension.html >/tmp/sediment-dom.html
+          grep -q 'r83-flow-badge' /tmp/sediment-dom.html
+          grep -q 'ドラッグ：その向きに水流を描く' /tmp/sediment-dom.html
+          "$BROWSER" --headless --no-sandbox --disable-gpu --virtual-time-budget=2500 --dump-dom http://127.0.0.1:8123/ant-colony.html >/tmp/ant-dom.html
+          grep -q 'r83InspectBtn' /tmp/ant-dom.html
+          grep -q '現在のボトルネック' /tmp/ant-dom.html

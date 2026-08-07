@@ -1,0 +1,54 @@
+name: Fossil R81 direct taphonomy patch
+
+on:
+  push:
+    branches:
+      - agent/fossil-taphonomy-direct
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply direct taphonomy patch
+        run: python .github/patch_fossil_r81.py
+      - name: Validate HTML and inline JavaScript
+        run: |
+          node scripts/check_inline_js.js fossil-formation.html
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          text=Path('fossil-formation.html').read_text(encoding='utf-8')
+          HTMLParser().feed(text)
+          required=['r81-taphonomy-direct-style','r81-phasebar','r81-overlay','昔の世界','あなたが発掘','地下水','粗掘り','ブラシ']
+          missing=[x for x in required if x not in text]
+          if missing:
+              raise SystemExit('missing hooks: '+', '.join(missing))
+          print('HTML + required hooks OK')
+          PY
+      - name: Browser smoke test when Chrome is available
+        run: |
+          CHROME="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || true)"
+          if [ -n "$CHROME" ]; then
+            "$CHROME" --headless --disable-gpu --no-sandbox --allow-file-access-from-files --virtual-time-budget=2500 --dump-dom "file://$PWD/fossil-formation.html" > /tmp/fossil-dom.html
+            grep -q 'id="r81-phasebar"' /tmp/fossil-dom.html
+            grep -q 'id="r81-overlay"' /tmp/fossil-dom.html
+            grep -q 'タフォノミー実験' /tmp/fossil-dom.html
+            echo 'Browser smoke test OK'
+          else
+            echo 'Chrome not installed; browser smoke test skipped'
+          fi
+      - name: Commit application and remove temporary patch files
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add fossil-formation.html
+          git rm .github/patch_fossil_r81.py .github/r81.part00 .github/r81.part01 .github/r81.part02 .github/r81.part03 .github/r81.part04 .github/workflows/fossil-r81-patch.yml
+          git commit -m "Redesign fossil lab around direct taphonomy interactions"
+          git push

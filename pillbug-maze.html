@@ -3,443 +3,454 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ダンゴムシ迷路</title>
+<meta name="r75-release" content="pillbug-microclimate-lab">
+<title>ダンゴムシ・環境選択迷路ラボ</title>
 <link rel="stylesheet" href="lab4wonder_v1_1.css">
 <style>
+:root{--bg:#08111c;--panel:#101d2b;--panel2:#15283b;--line:#36506b;--text:#eef5fb;--dim:#afc0d0;--accent:#ffd85a;--blue:#64c9ff;--green:#70dda6;--red:#ff8d8d}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0}
-body{max-width:980px;margin:auto;padding:12px 12px 100px;background:#08111c;color:#eef5fb;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}
-button,input{font:inherit}
-button{min-height:44px;border:1px solid #3d5873;border-radius:11px;padding:8px 11px;background:#16283a;color:#f4f8fb;font-weight:850}
-button.primary,button.on{border-color:#d5b43d;background:#ffd75a;color:#211a00}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}
+body{max-width:1040px;margin:auto;padding:calc(10px + env(safe-area-inset-top)) 10px calc(24px + env(safe-area-inset-bottom));touch-action:manipulation}
+button,input,select{font:inherit}
+button,select{min-height:42px;border:1px solid var(--line);border-radius:11px;background:var(--panel2);color:var(--text);padding:8px 10px;font-weight:850}
+button.primary,button.on{background:var(--accent);color:#211a00;border-color:#d2b139}
+button:disabled{opacity:.45}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #8dd7ff;outline-offset:2px}
+#r59-globalbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 10px;padding:7px 8px;background:rgba(7,14,24,.96);border:1px solid #38506b;border-radius:12px;box-shadow:0 5px 18px rgba(0,0,0,.28);backdrop-filter:blur(8px)}
+#r59-globalbar a,#r59-globalbar button{min-height:38px;padding:6px 9px;border:1px solid #47617e;border-radius:10px;background:#16263a;color:#f3f8fd;font:800 11px/1.25 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap}
+#r59-globalbar .home{background:#ffd85a;color:#241c00;border-color:#d8b63b}
+#r59-globalbar .badge{display:inline-flex;align-items:center;min-height:30px;padding:3px 7px;border:1px solid #52708f;border-radius:999px;background:#0f1f31;color:#b9d8f5;font-size:10px;font-weight:850}
 .header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-.header h1{margin:0;font-size:clamp(21px,4vw,29px)}
-.sub{margin:5px 0 0;color:#adbdcd;font-size:13px;line-height:1.65}
-.tools{display:flex;flex-wrap:wrap;gap:7px;margin:11px 0}
-.stage{position:relative;overflow:hidden;border:1px solid #36506b;border-radius:18px;background:#cbbd94}
+.header h1{margin:0;font-size:clamp(21px,4vw,29px);line-height:1.35}
+.sub{margin:5px 0 0;color:var(--dim);font-size:13px;line-height:1.65}
+.headActions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.learn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:11px 0}
+.learn>div{border:1px solid #2f4760;border-radius:13px;background:var(--panel);padding:9px;min-height:90px}
+.learn b{display:block;color:var(--accent);font-size:11px;margin-bottom:4px}
+.learn p{margin:0;color:#dce6ef;font-size:12px;line-height:1.62}
+.toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:10px 0;padding:9px;border:1px solid #2d465e;border-radius:14px;background:var(--panel)}
+.toolbar .spacer{flex:1}
+.toolGroup{display:flex;gap:6px;flex-wrap:wrap}
+.toolGroup button{font-size:12px;padding:7px 9px}
+.levelBar{display:none;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px;padding:8px;border:1px solid #304b65;border-radius:12px;background:#0d1a28}
+.levelBar.show{display:flex}
+.levelBar strong{font-size:12px;color:#bfe1ff;margin-right:3px}
+.levelBar button{font-size:12px;padding:7px 10px}
+.stage{position:relative;overflow:hidden;border:1px solid #3a5873;border-radius:18px;background:#cbbd94}
 #maze_canvas{display:block;width:100%;height:auto;aspect-ratio:3/2;touch-action:none}
 .status{position:absolute;left:10px;top:10px;max-width:calc(100% - 20px);padding:7px 10px;border-radius:999px;background:#07121ddd;color:#fff;font-size:12px;font-weight:850;pointer-events:none}
-.panel{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
-.card{padding:10px 11px;border:1px solid #30485f;border-radius:13px;background:#101d2b}
-.card h2{margin:0 0 7px;color:#ffd75a;font-size:14px}
-.control{display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center;font-size:12px}
-.control input{grid-column:1/-1;width:100%;height:32px}
-.control output{color:#ffd75a;font:800 12px ui-monospace,monospace}
-.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.metric{padding:8px;border-radius:10px;background:#0a1724;text-align:center}
-.metric b{display:block;color:#9fb2c5;font-size:12px;line-height:1.35}.metric strong{font:850 18px ui-monospace,monospace}
-.note{margin:9px 0 0;font-size:12px;line-height:1.7;color:#cbd6e0}
-@media(max-width:650px){.header{display:block}.panel{grid-template-columns:1fr}.tools button{flex:1 1 28%}}
+.legend{position:absolute;right:10px;bottom:10px;display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:70%;pointer-events:none}
+.legend span{padding:4px 7px;border-radius:999px;background:#07121ddd;font-size:10px;font-weight:850}
+.panel{display:grid;grid-template-columns:1.05fr .95fr;gap:10px;margin-top:10px}
+.card{padding:11px;border:1px solid #30485f;border-radius:14px;background:var(--panel)}
+.card h2{margin:0 0 8px;color:var(--accent);font-size:15px}
+.control{display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center;margin:8px 0;font-size:12px}
+.control input,.control select{grid-column:1/-1;width:100%}
+.control output{color:var(--accent);font:800 12px ui-monospace,monospace}
+.controls2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.metric{padding:8px;border-radius:10px;background:#0a1724;border:1px solid #29425b;min-width:0}
+.metric b{display:block;color:#9fb2c5;font-size:11px;line-height:1.35}.metric strong{display:block;color:var(--accent);font:850 17px/1.35 ui-monospace,monospace;overflow-wrap:anywhere}
+.note,.callout{margin:9px 0 0;font-size:12px;line-height:1.7;color:#d2dee8}
+.callout{padding:9px;border:1px solid #3c5d79;border-radius:11px;background:#13283b}
+.inspector{margin-top:9px;padding:9px;border:1px solid #46637f;border-radius:11px;background:#0c1927;font-size:12px;line-height:1.65}
+.inspector b{color:var(--accent)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:7px}
+.envChip{padding:7px;border-radius:9px;background:#122538;text-align:center}.envChip span{display:block;color:#9fb2c5;font-size:10px}.envChip strong{display:block;margin-top:2px;font-size:13px}
+.guideBack{position:fixed;inset:0;display:none;align-items:flex-end;justify-content:center;padding-top:8vh;background:#000c;z-index:100;overflow:auto}
+.guideBack.show{display:flex}
+.guide{width:min(780px,100%);max-height:90vh;overflow:auto;border-radius:20px 20px 0 0;background:#0e1a29;border:1px solid #405978;padding:14px 14px calc(20px + env(safe-area-inset-bottom))}
+.guideHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.guide h2{margin:0;color:var(--accent);font-size:18px}.guide h3{margin:13px 0 5px;color:#bfe1ff;font-size:14px}.guide p,.guide li{font-size:12px;line-height:1.8;color:#d7e2ef}.guideClose{min-width:42px;font-size:20px}
+@media(max-width:760px){.header{display:block}.headActions{justify-content:flex-start;margin-top:8px}.learn{grid-template-columns:1fr 1fr}.panel{grid-template-columns:1fr}.toolbar .spacer{display:none}.metrics{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){body{padding-left:7px;padding-right:7px}.learn{grid-template-columns:1fr}.toolGroup{width:100%}.toolGroup button{flex:1 1 29%}.toolbar select{flex:1}.levelBar button{flex:1 1 28%}.metrics{grid-template-columns:repeat(2,1fr)}.controls2{grid-template-columns:1fr}.legend{max-width:90%}}
 </style>
 </head>
 <body>
+<nav id="r59-globalbar" aria-label="共通ナビゲーション">
+  <a class="home" href="index.html">← 一覧</a>
+  <a href="kids-index.html">こども一覧</a>
+  <span class="badge">オフライン</span>
+  <button id="guide_button" type="button">？ ガイド</button>
+</nav>
 <header class="header">
   <div>
-    <h1>ダンゴムシ迷路</h1>
-    <p class="sub">自分で壁を描き、ダンゴムシが触角と壁沿い行動で出口を探す様子を観察します。</p>
+    <h1>ダンゴムシ・環境選択迷路ラボ</h1>
+    <p class="sub">壁と微小環境を描き、ダンゴムシが湿り・明るさ・温度・壁接触を手掛かりに居場所を選ぶ様子を観察します。</p>
   </div>
-  <button id="reset_button" type="button">↺ はじめから</button>
+  <div class="headActions">
+    <button id="scenario_button" type="button">別の実験</button>
+    <button id="reset_all_button" type="button">↺ 全体リセット</button>
+  </div>
 </header>
-
-<div class="tools" aria-label="迷路を作る道具">
-  <button id="draw_tool" class="on" type="button">✏️ 壁を描く</button>
-  <button id="erase_tool" type="button">🧽 壁を消す</button>
-  <button id="start_tool" type="button">🔵 出発点</button>
-  <button id="exit_tool" type="button">🟢 出口</button>
-  <button id="play_button" class="primary" type="button">▶ 放す</button>
-  <button id="clear_button" type="button">迷路を空にする</button>
-</div>
-
-<section class="stage">
-  <canvas id="maze_canvas" width="900" height="600" aria-label="指で描けるダンゴムシ迷路"></canvas>
-  <div class="status" id="status">壁を指で描いてください</div>
+<section class="learn">
+  <div><b>これは何？</b><p>出口を知る迷路AIではなく、目の前の環境と触角だけで動く行動模型です。</p></div>
+  <div><b>何を描く？</b><p>壁、湿り具合、明るさ、温度、出発点、隠れ場所を同じ地面へ重ねます。</p></div>
+  <div><b>どこを見る？</b><p>快適な場所で速度が落ち、乾燥・高温・明るい場所では探索が増える違いを見ます。</p></div>
+  <div><b>比べ方</b><p>同じ個体を再使用し、一つの環境要因だけ変えて分布と到着時間を比較します。</p></div>
 </section>
-
+<section class="toolbar" aria-label="操作">
+  <div class="toolGroup" id="tool_group">
+    <button data-tool="wall" class="on" type="button">✏️ 壁</button>
+    <button data-tool="erase" type="button">🧽 消す</button>
+    <button data-tool="moisture" type="button">💧 湿り</button>
+    <button data-tool="light" type="button">☀️ 明るさ</button>
+    <button data-tool="temperature" type="button">🌡️ 温度</button>
+    <button data-tool="start" type="button">🔵 出発点</button>
+    <button data-tool="shelter" type="button">🪵 隠れ場所</button>
+    <button data-tool="inspect" type="button">🔎 個体観察</button>
+  </div>
+  <span class="spacer"></span>
+  <select id="view_select" aria-label="地面の表示">
+    <option value="composite">環境を重ねて表示</option>
+    <option value="moisture">湿りだけ表示</option>
+    <option value="light">明るさだけ表示</option>
+    <option value="temperature">温度だけ表示</option>
+    <option value="heatmap">通行ヒートマップ</option>
+  </select>
+</section>
+<div class="levelBar" id="level_bar" aria-live="polite"></div>
+<section class="stage">
+  <canvas id="maze_canvas" width="900" height="600" aria-label="壁と湿り、明るさ、温度を描き、ダンゴムシの環境選択を観察するキャンバス"></canvas>
+  <div class="status" id="status">壁を描けます。環境も重ねて配置してください。</div>
+  <div class="legend" id="legend"></div>
+</section>
+<section class="toolbar" aria-label="再生操作">
+  <button id="play_button" class="primary" type="button">▶ 放す</button>
+  <button id="same_button" type="button">同じ個体でもう一度</button>
+  <button id="new_button" type="button">新しい個体差</button>
+  <button id="clear_trails_button" type="button">軌跡を消す</button>
+  <button id="clear_env_button" type="button">環境だけ消す</button>
+</section>
 <div class="panel">
   <section class="card">
-    <h2>ダンゴムシの行動</h2>
-    <label class="control">放す数 <output id="count_output">6匹</output>
-      <input id="bug_count" type="range" min="1" max="15" value="6">
-    </label>
-    <label class="control">壁沿いの強さ <output id="wall_output">70%</output>
-      <input id="wall_follow" type="range" min="20" max="100" value="70">
-    </label>
-    <label class="control">迷い・個体差 <output id="noise_output">35%</output>
-      <input id="noise" type="range" min="0" max="100" value="35">
-    </label>
+    <h2>実験条件</h2>
+    <div class="controls2">
+      <label class="control">放す数 <output id="count_output">12匹</output><input id="bug_count" type="range" min="1" max="24" value="12"></label>
+      <label class="control">塗る広さ <output id="brush_output">3</output><input id="brush_size" type="range" min="1" max="7" value="3"></label>
+    </div>
+    <label class="control">壁沿い行動 <output id="wall_output">70%</output><input id="wall_follow" type="range" min="0" max="100" value="70"></label>
+    <label class="control">探索性・個体差 <output id="noise_output">35%</output><input id="noise" type="range" min="0" max="100" value="35"></label>
+    <label class="control">実験時間 <output id="duration_output">60秒</output><input id="duration" type="range" min="20" max="120" step="10" value="60"></label>
+    <div class="callout" id="observation">左側と右側で一条件だけ変え、どちらに多く滞在するか予想してください。</div>
   </section>
   <section class="card">
-    <h2>観察</h2>
+    <h2>観察結果</h2>
     <div class="metrics">
-      <div class="metric"><b>出口へ到着</b><strong id="goal_metric">0</strong></div>
-      <div class="metric"><b>動いている</b><strong id="moving_metric">0</strong></div>
+      <div class="metric"><b>隠れ場所</b><strong id="shelter_metric">0 / 12</strong></div>
+      <div class="metric"><b>平均ストレス</b><strong id="stress_metric">—</strong></div>
+      <div class="metric"><b>平均移動距離</b><strong id="distance_metric">0</strong></div>
+      <div class="metric"><b>湿潤域の割合</b><strong id="wet_metric">—</strong></div>
+      <div class="metric"><b>日陰域の割合</b><strong id="shade_metric">—</strong></div>
+      <div class="metric"><b>適温域の割合</b><strong id="temp_metric">—</strong></div>
       <div class="metric"><b>経過</b><strong id="time_metric">0秒</strong></div>
+      <div class="metric"><b>選択中</b><strong id="selected_metric">なし</strong></div>
+      <div class="metric"><b>個体セット</b><strong id="seed_metric">A</strong></div>
     </div>
-    <p class="note" id="observation">同じ迷路でも、最初に向いた方向や壁への当たり方で通る道が変わります。</p>
+    <div class="inspector" id="inspector"><b>個体観察：</b>「個体観察」を選び、ダンゴムシをタップすると、触角・局所環境・判断方向を表示します。</div>
   </section>
 </div>
-
+<div class="guideBack" id="guide_back" aria-hidden="true">
+  <section class="guide" role="dialog" aria-modal="true" aria-labelledby="guide_title">
+    <div class="guideHead"><h2 id="guide_title">環境を描いて行動を比べる</h2><button class="guideClose" id="guide_close" type="button" aria-label="閉じる">×</button></div>
+    <h3>基本操作</h3>
+    <ol>
+      <li>湿り、明るさ、温度のどれかを選び、3段階から一つ選んで地面へ塗ります。</li>
+      <li>壁、出発点、隠れ場所を配置し、「放す」を押します。</li>
+      <li>ヒートマップや計器を見て、どの環境へ集まったか比較します。</li>
+    </ol>
+    <h3>この模型の重要な点</h3>
+    <p>ダンゴムシは隠れ場所の座標を知りません。前方の空き、壁接触、近くの湿り・明るさ・温度だけを評価します。快適な場所では速度と方向転換が減り、乾燥・明るすぎる場所・適温から外れた場所では探索が増えます。</p>
+    <h3>おすすめ実験</h3>
+    <ul>
+      <li><b>一要因比較：</b>左右を同じ温度・明るさにし、湿りだけ変える。</li>
+      <li><b>競合選択：</b>湿潤だが日向・高温の場所と、乾燥だが日陰・適温の場所を比べる。</li>
+      <li><b>壁沿い行動：</b>環境を同じにして、壁沿い行動だけ変える。</li>
+      <li><b>個体差：</b>同じ環境で「同じ個体」と「新しい個体差」を比べる。</li>
+    </ul>
+    <h3>模型の限界</h3>
+    <p>実際のダンゴムシの行動は種、齢、脱皮、飢餓、基質、空気湿度、履歴などにも左右されます。このアプリは局所環境選択を理解する簡略模型で、実験データの代替ではありません。</p>
+  </section>
+</div>
 <script>
 (() => {
-  "use strict";
-
-  const canvas = document.getElementById("maze_canvas");
-  const context = canvas.getContext("2d");
-  const status = document.getElementById("status");
-  const start = { x: 80, y: 520 };
-  const exit = { x: 820, y: 80, radius: 30 };
+  'use strict';
+  const canvas = document.getElementById('maze_canvas');
+  const ctx = canvas.getContext('2d');
+  const GRID_X = 45, GRID_Y = 30, CELL_W = canvas.width / GRID_X, CELL_H = canvas.height / GRID_Y;
+  const fieldSize = GRID_X * GRID_Y;
+  const moisture = new Int8Array(fieldSize);
+  const light = new Int8Array(fieldSize);
+  const temperature = new Int8Array(fieldSize);
+  const visits = new Float32Array(fieldSize);
+  const start = {x:90,y:510};
+  const shelter = {x:810,y:85,radius:42};
   let walls = [];
   let bugs = [];
   let running = false;
-  let tool = "draw";
-  let activePointer = null;
-  let lastDrawPoint = null;
   let elapsed = 0;
-  let arrived = 0;
-  let previousFrame = performance.now();
+  let tool = 'wall';
+  let level = 1;
+  let activePointer = null;
+  let lastPoint = null;
+  let scenario = 0;
+  let seedSet = 0;
+  let selectedBug = null;
+  let previousTime = performance.now();
+  let finished = false;
 
-  const defaultWalls = [
-    [170,600,170,370],[170,285,170,0],[300,480,300,150],[300,150,500,150],
-    [300,480,590,480],[430,360,430,245],[430,245,650,245],[590,480,590,355],
-    [590,355,760,355],[760,355,760,145],[650,245,650,70],
-  ];
+  const $ = id => document.getElementById(id);
+  const status = $('status');
+  const levelBar = $('level_bar');
+  const legend = $('legend');
 
-  function setDefaultMaze() {
-    walls = defaultWalls.map(([x1, y1, x2, y2]) => ({ x1, y1, x2, y2 }));
+  const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+  const idx = (x,y) => clamp(y,0,GRID_Y-1)*GRID_X + clamp(x,0,GRID_X-1);
+  const gridAt = (px,py) => ({x:clamp(Math.floor(px/CELL_W),0,GRID_X-1),y:clamp(Math.floor(py/CELL_H),0,GRID_Y-1)});
+  const valueAt = (arr,px,py) => { const g=gridAt(px,py); return arr[idx(g.x,g.y)]; };
+  function mulberry32(seed){return function(){let t=seed+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;};}
+  let rand = mulberry32(0x75a11ce);
+  function reseed(){ rand = mulberry32((0x75a11ce + seedSet*104729 + scenario*7919)>>>0); }
+
+  function defaultWalls(){
+    return [
+      [170,600,170,390],[170,300,170,0],[315,500,315,160],[315,160,510,160],
+      [315,500,610,500],[455,385,455,255],[455,255,670,255],[610,500,610,370],
+      [610,370,780,370],[780,370,780,150],[670,255,670,75]
+    ].map(([x1,y1,x2,y2])=>({x1,y1,x2,y2}));
   }
 
-  function pointFromEvent(event) {
-    const rect = canvas.getBoundingClientRect();
-    return {
-      x: (event.clientX - rect.left) / rect.width * canvas.width,
-      y: (event.clientY - rect.top) / rect.height * canvas.height,
-    };
-  }
-
-  function setTool(nextTool) {
-    tool = nextTool;
-    document.querySelectorAll(".tools button").forEach((button) => button.classList.remove("on"));
-    document.getElementById(`${nextTool}_tool`)?.classList.add("on");
-    const labels = {
-      draw: "指でなぞって壁を描きます",
-      erase: "消したい壁を指でなぞります",
-      start: "新しい出発点をタップします",
-      exit: "新しい出口をタップします",
-    };
-    status.textContent = labels[nextTool];
-  }
-
-  function beginPointer(event) {
-    if (running) return;
-    const point = pointFromEvent(event);
-    activePointer = event.pointerId;
-    canvas.setPointerCapture?.(event.pointerId);
-    if (tool === "start") {
-      start.x = point.x;
-      start.y = point.y;
-      resetBugs();
-      return;
+  function clearFields(){ moisture.fill(0); light.fill(0); temperature.fill(0); visits.fill(0); }
+  function paintCircle(arr,px,py,val,radius){
+    const g=gridAt(px,py); const r=radius;
+    for(let y=g.y-r;y<=g.y+r;y++) for(let x=g.x-r;x<=g.x+r;x++){
+      if(x<0||x>=GRID_X||y<0||y>=GRID_Y) continue;
+      if(Math.hypot(x-g.x,y-g.y)<=r+.25) arr[idx(x,y)] = val;
     }
-    if (tool === "exit") {
-      exit.x = point.x;
-      exit.y = point.y;
-      return;
-    }
-    lastDrawPoint = point;
-    if (tool === "erase") eraseNear(point);
+  }
+  function fillRegion(arr,x0,x1,y0,y1,val){
+    for(let y=y0;y<=y1;y++) for(let x=x0;x<=x1;x++) if(x>=0&&x<GRID_X&&y>=0&&y<GRID_Y) arr[idx(x,y)] = val;
   }
 
-  function movePointer(event) {
-    if (event.pointerId !== activePointer || running) return;
-    const point = pointFromEvent(event);
-    if (tool === "draw" && lastDrawPoint) {
-      if (Math.hypot(point.x - lastDrawPoint.x, point.y - lastDrawPoint.y) >= 8) {
-        walls.push({ x1: lastDrawPoint.x, y1: lastDrawPoint.y, x2: point.x, y2: point.y });
-        lastDrawPoint = point;
+  function applyScenario(n){
+    scenario = n%4; clearFields(); walls = defaultWalls();
+    start.x=90; start.y=510; shelter.x=810; shelter.y=85;
+    if(scenario===0){
+      fillRegion(moisture,0,21,0,29,1); fillRegion(moisture,23,44,0,29,-1);
+      fillRegion(light,0,44,0,29,0); fillRegion(temperature,0,44,0,29,0);
+      $('observation').textContent='湿りだけが違う左右を比べます。温度と明るさは同じです。';
+    }else if(scenario===1){
+      fillRegion(moisture,0,21,0,29,1); fillRegion(light,0,21,0,29,1); fillRegion(temperature,0,21,0,29,1);
+      fillRegion(moisture,23,44,0,29,-1); fillRegion(light,23,44,0,29,-1); fillRegion(temperature,23,44,0,29,0);
+      $('observation').textContent='左は湿潤だが日向・高温、右は乾燥だが日陰・適温です。何を優先するか観察します。';
+    }else if(scenario===2){
+      for(let x=0;x<GRID_X;x++){
+        const t=x<15?-1:x<30?0:1;
+        for(let y=0;y<GRID_Y;y++){temperature[idx(x,y)]=t; moisture[idx(x,y)]=1; light[idx(x,y)]=-1;}
       }
-    } else if (tool === "erase") {
-      eraseNear(point);
+      walls=[]; start.x=450;start.y=520;shelter.x=450;shelter.y=75;
+      $('observation').textContent='湿りと明るさを一定にし、低温・適温・高温の勾配だけを比べます。';
+    }else{
+      walls=[];
+      $('observation').textContent='自由実験です。三つの環境を重ね、短い道と快適な道の競合を作ってください。';
     }
+    resetBugs(true); updateLegend();
   }
 
-  function endPointer(event) {
-    if (event.pointerId !== activePointer) return;
-    canvas.releasePointerCapture?.(event.pointerId);
-    activePointer = null;
-    lastDrawPoint = null;
-  }
+  function pointFromEvent(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*canvas.width,y:(e.clientY-r.top)/r.height*canvas.height};}
+  function distanceToSegment(p,w){const dx=w.x2-w.x1,dy=w.y2-w.y1,l=dx*dx+dy*dy||1;const q=clamp(((p.x-w.x1)*dx+(p.y-w.y1)*dy)/l,0,1);return Math.hypot(p.x-(w.x1+q*dx),p.y-(w.y1+q*dy));}
+  function nearestWallDistance(p,max=80){let d=max;for(const w of walls)d=Math.min(d,distanceToSegment(p,w));return d;}
+  function eraseNear(p){walls=walls.filter(w=>distanceToSegment(p,w)>26);}
 
-  function distanceToSegment(point, wall) {
-    const dx = wall.x2 - wall.x1;
-    const dy = wall.y2 - wall.y1;
-    const lengthSquared = dx * dx + dy * dy || 1;
-    const ratio = Math.max(0, Math.min(1, ((point.x - wall.x1) * dx + (point.y - wall.y1) * dy) / lengthSquared));
-    const x = wall.x1 + ratio * dx;
-    const y = wall.y1 + ratio * dy;
-    return Math.hypot(point.x - x, point.y - y);
+  function setTool(next){
+    tool=next; document.querySelectorAll('[data-tool]').forEach(b=>b.classList.toggle('on',b.dataset.tool===next));
+    selectedBug = next==='inspect'?selectedBug:null; renderLevelBar();
+    const labels={wall:'壁を指で描きます',erase:'壁と環境を消します',moisture:'湿り具合を塗ります',light:'明るさを塗ります',temperature:'温度を塗ります',start:'出発点をタップします',shelter:'隠れ場所をタップします',inspect:'観察するダンゴムシをタップします'};
+    status.textContent=labels[next];
   }
-
-  function eraseNear(point) {
-    const before = walls.length;
-    walls = walls.filter((wall) => distanceToSegment(point, wall) > 24);
-    if (walls.length !== before) status.textContent = "壁を消しました";
-  }
-
-  function makeBug(index) {
-    return {
-      x: start.x + (index % 3) * 8,
-      y: start.y + Math.floor(index / 3) * 8,
-      angle: -Math.PI / 4 + (Math.random() - 0.5) * 1.2,
-      speed: 31 + Math.random() * 10,
-      turnBias: index % 2 ? 1 : -1,
-      trail: [],
-      done: false,
-      stuck: 0,
+  function renderLevelBar(){
+    const specs={
+      moisture:{title:'湿り具合',items:[[-1,'乾燥'],[0,'普通'],[1,'湿潤']]},
+      light:{title:'明るさ',items:[[-1,'日陰'],[0,'半日陰'],[1,'日向']]},
+      temperature:{title:'温度',items:[[-1,'低温'],[0,'適温'],[1,'高温']]}
     };
+    const spec=specs[tool]; levelBar.innerHTML=''; levelBar.classList.toggle('show',!!spec);
+    if(!spec)return;
+    const strong=document.createElement('strong');strong.textContent=spec.title;levelBar.appendChild(strong);
+    spec.items.forEach(([v,label])=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.className=v===level?'on':'';b.onclick=()=>{level=v;renderLevelBar();};levelBar.appendChild(b);});
   }
 
-  function resetBugs() {
-    const count = Number(document.getElementById("bug_count").value);
-    bugs = Array.from({ length: count }, (_, index) => makeBug(index));
-    elapsed = 0;
-    arrived = 0;
-    running = false;
-    document.getElementById("play_button").textContent = "▶ 放す";
-    updateMetrics();
+  function handlePaint(p,drag=false){
+    const radius=Number($('brush_size').value);
+    if(tool==='wall'){
+      if(lastPoint&&Math.hypot(p.x-lastPoint.x,p.y-lastPoint.y)>=7){walls.push({x1:lastPoint.x,y1:lastPoint.y,x2:p.x,y2:p.y});lastPoint=p;}
+    }else if(tool==='erase'){
+      eraseNear(p); paintCircle(moisture,p.x,p.y,0,radius);paintCircle(light,p.x,p.y,0,radius);paintCircle(temperature,p.x,p.y,0,radius);
+    }else if(tool==='moisture') paintCircle(moisture,p.x,p.y,level,radius);
+    else if(tool==='light') paintCircle(light,p.x,p.y,level,radius);
+    else if(tool==='temperature') paintCircle(temperature,p.x,p.y,level,radius);
+    else if(tool==='start'&&!drag){start.x=p.x;start.y=p.y;resetBugs(true);}
+    else if(tool==='shelter'&&!drag){shelter.x=p.x;shelter.y=p.y;}
+    else if(tool==='inspect'&&!drag){selectBugAt(p);}
   }
+  function selectBugAt(p){
+    let best=null,dist=28;
+    for(const b of bugs){const d=Math.hypot(b.x-p.x,b.y-p.y);if(d<dist){best=b;dist=d;}}
+    selectedBug=best; updateInspector();
+  }
+  canvas.addEventListener('pointerdown',e=>{const p=pointFromEvent(e);activePointer=e.pointerId;canvas.setPointerCapture?.(e.pointerId);lastPoint=p;handlePaint(p,false);});
+  canvas.addEventListener('pointermove',e=>{if(e.pointerId!==activePointer)return;const p=pointFromEvent(e);handlePaint(p,true);});
+  canvas.addEventListener('pointerup',e=>{if(e.pointerId!==activePointer)return;canvas.releasePointerCapture?.(e.pointerId);activePointer=null;lastPoint=null;});
+  canvas.addEventListener('pointercancel',()=>{activePointer=null;lastPoint=null;});
 
-  function rayDistance(bug, angle, maxDistance = 58) {
-    for (let distance = 6; distance <= maxDistance; distance += 5) {
-      const point = {
-        x: bug.x + Math.cos(angle) * distance,
-        y: bug.y + Math.sin(angle) * distance,
-      };
-      if (point.x < 12 || point.x > canvas.width - 12 || point.y < 12 || point.y > canvas.height - 12) return distance;
-      if (walls.some((wall) => distanceToSegment(point, wall) < 11)) return distance;
+  function comfortAt(b,x,y){
+    const m=valueAt(moisture,x,y),l=valueAt(light,x,y),t=valueAt(temperature,x,y);
+    const wet=(m+1)/2, shade=(1-l)/2, tempFit=1-Math.abs(t);
+    const score=(wet*b.prefWet + shade*b.prefShade + tempFit*b.prefTemp)/(b.prefWet+b.prefShade+b.prefTemp);
+    return clamp(score,0,1);
+  }
+  function localState(b){
+    const m=valueAt(moisture,b.x,b.y),l=valueAt(light,b.x,b.y),t=valueAt(temperature,b.x,b.y);
+    const comfort=comfortAt(b,b.x,b.y); const wall=nearestWallDistance(b,45);
+    return {m,l,t,comfort,stress:1-comfort,wall};
+  }
+  function rayDistance(b,angle,max=72){
+    for(let d=7;d<=max;d+=5){const p={x:b.x+Math.cos(angle)*d,y:b.y+Math.sin(angle)*d};if(p.x<12||p.x>canvas.width-12||p.y<12||p.y>canvas.height-12)return d;if(walls.some(w=>distanceToSegment(p,w)<11))return d;}return max;
+  }
+  function chooseDirection(b,dt){
+    const wallFollow=Number($('wall_follow').value)/100;
+    const noise=Number($('noise').value)/100;
+    const state=localState(b);
+    const offsets=[-1.15,-.72,-.38,-.16,0,.16,.38,.72,1.15];
+    let best={angle:b.angle,score:-1e9};
+    for(const off of offsets){
+      const angle=b.angle+off; const clearance=rayDistance(b,angle);
+      const sampleD=Math.min(46,Math.max(20,clearance-8));
+      const sx=b.x+Math.cos(angle)*sampleD,sy=b.y+Math.sin(angle)*sampleD;
+      const env=comfortAt(b,sx,sy);
+      const edge=(clearance<34?wallFollow*11:0);
+      const side=-Math.abs(off-b.turnBias*.28)*wallFollow*4;
+      const avoid=clearance<18?-28:0;
+      const forward=Math.cos(off)*3;
+      const exploration=(rand()-.5)*noise*(9+state.stress*18);
+      const score=clearance*.34+env*(18+b.envSensitivity*15)+edge+side+avoid+forward+exploration;
+      if(score>best.score)best={angle,score,sx,sy};
     }
-    return maxDistance;
+    b.decisionAngle=best.angle; b.sensePoint={x:best.sx??b.x,y:best.sy??b.y};
+    const turnRate=Math.min(1,dt*(3.2+state.stress*4+wallFollow*2));
+    b.angle+=normalize(best.angle-b.angle)*turnRate;
+  }
+  function normalize(a){while(a>Math.PI)a-=Math.PI*2;while(a<-Math.PI)a+=Math.PI*2;return a;}
+
+  function makeBug(i){
+    const a=rand()*Math.PI*2;
+    return {id:i+1,x:start.x+(i%4-1.5)*7,y:start.y+Math.floor(i/4)*7,angle:a,turnBias:rand()<.5?-1:1,
+      prefWet:.85+rand()*.45,prefShade:.65+rand()*.5,prefTemp:.75+rand()*.45,envSensitivity:.7+rand()*.6,
+      baseSpeed:31+rand()*11,trail:[],distance:0,shelterTime:0,done:false,decisionAngle:a,sensePoint:{x:start.x,y:start.y},lastState:null};
+  }
+  function resetBugs(sameProfiles=false){
+    if(!sameProfiles)reseed(); else reseed();
+    const count=Number($('bug_count').value);bugs=Array.from({length:count},(_,i)=>makeBug(i));
+    elapsed=0;running=false;finished=false;visits.fill(0);selectedBug=null;$('play_button').textContent='▶ 放す';updateMetrics();updateInspector();
+  }
+  function updateBug(b,dt){
+    chooseDirection(b,dt); const st=localState(b);b.lastState=st;
+    const speed=b.baseSpeed*(.52+st.stress*.95);
+    const wobble=(rand()-.5)*Number($('noise').value)/100*(.5+st.stress)*dt*4;
+    b.angle+=wobble;
+    const next={x:b.x+Math.cos(b.angle)*speed*dt,y:b.y+Math.sin(b.angle)*speed*dt};
+    const blocked=next.x<11||next.x>canvas.width-11||next.y<11||next.y>canvas.height-11||walls.some(w=>distanceToSegment(next,w)<10);
+    if(blocked){b.angle+=b.turnBias*(.75+rand()*.85);if(rand()<.22)b.turnBias*=-1;return;}
+    const d=Math.hypot(next.x-b.x,next.y-b.y);b.x=next.x;b.y=next.y;b.distance+=d;
+    const g=gridAt(b.x,b.y);visits[idx(g.x,g.y)]+=dt;
+    if(!b.trail.length||Math.hypot(b.x-b.trail.at(-1).x,b.y-b.trail.at(-1).y)>5){b.trail.push({x:b.x,y:b.y});if(b.trail.length>700)b.trail.shift();}
+    if(Math.hypot(b.x-shelter.x,b.y-shelter.y)<shelter.radius){b.shelterTime+=dt;if(b.shelterTime>2.4)b.done=true;}else b.shelterTime=Math.max(0,b.shelterTime-dt*.5);
+  }
+  function update(dt){
+    elapsed+=dt;for(const b of bugs)updateBug(b,dt);
+    const duration=Number($('duration').value);
+    if(elapsed>=duration){running=false;finished=true;$('play_button').textContent='▶ 続ける';status.textContent='実験時間になりました。ヒートマップと計器を比較してください。';}
+    else status.textContent=`${bugs.length}匹が局所環境を探っています。個体を観察できます。`;
+    updateMetrics();updateInspector();
   }
 
-  function chooseDirection(bug, delta) {
-    const goalAngle = Math.atan2(exit.y - bug.y, exit.x - bug.x);
-    const wallFollow = Number(document.getElementById("wall_follow").value) / 100;
-    const noise = Number(document.getElementById("noise").value) / 100;
-    const offsets = [-1.05, -0.55, -0.22, 0, 0.22, 0.55, 1.05];
-    let best = { angle: bug.angle, score: -Infinity };
-    offsets.forEach((offset) => {
-      const angle = bug.angle + offset;
-      const clearance = rayDistance(bug, angle);
-      const goalScore = Math.cos(angle - goalAngle) * 12;
-      const edgeScore = clearance < 34 ? wallFollow * 9 : 0;
-      const sideScore = -Math.abs(offset - bug.turnBias * 0.3) * wallFollow * 4;
-      const randomScore = (Math.random() - 0.5) * noise * 18;
-      const score = clearance + goalScore + edgeScore + sideScore + randomScore;
-      if (score > best.score) best = { angle, score };
-    });
-    const turnRate = Math.min(1, delta * (4.5 + wallFollow * 3));
-    bug.angle += normalizeAngle(best.angle - bug.angle) * turnRate;
-  }
-
-  function normalizeAngle(angle) {
-    let value = angle;
-    while (value > Math.PI) value -= Math.PI * 2;
-    while (value < -Math.PI) value += Math.PI * 2;
-    return value;
-  }
-
-  function updateBug(bug, delta) {
-    if (bug.done) return;
-    chooseDirection(bug, delta);
-    const next = {
-      x: bug.x + Math.cos(bug.angle) * bug.speed * delta,
-      y: bug.y + Math.sin(bug.angle) * bug.speed * delta,
-    };
-    const blocked = next.x < 11 || next.x > canvas.width - 11 || next.y < 11 || next.y > canvas.height - 11
-      || walls.some((wall) => distanceToSegment(next, wall) < 10);
-    if (blocked) {
-      bug.angle += bug.turnBias * (0.8 + Math.random() * 0.75);
-      bug.turnBias *= Math.random() < 0.18 ? -1 : 1;
-      bug.stuck += delta;
-      return;
+  function drawField(){
+    const view=$('view_select').value;let maxVisit=1;if(view==='heatmap')for(const v of visits)maxVisit=Math.max(maxVisit,v);
+    for(let y=0;y<GRID_Y;y++)for(let x=0;x<GRID_X;x++){
+      const i=idx(x,y),m=moisture[i],l=light[i],t=temperature[i];let color;
+      if(view==='moisture')color=m<0?'#d7c498':m>0?'#78b7b5':'#bdae87';
+      else if(view==='light')color=l<0?'#62695f':l>0?'#eadb8d':'#aaa98a';
+      else if(view==='temperature')color=t<0?'#7da9c8':t>0?'#d98b73':'#b8aa86';
+      else if(view==='heatmap'){
+        const q=Math.sqrt(visits[i]/maxVisit);color=`rgb(${Math.round(126+125*q)},${Math.round(116+70*(1-q))},${Math.round(82-45*q)})`;
+      }else{
+        const r=188 + t*23 + l*18 - m*18, g=171 - t*18 + m*18 + l*10, b=126 - l*24 + m*30 - t*8;
+        color=`rgb(${clamp(Math.round(r),70,240)},${clamp(Math.round(g),70,230)},${clamp(Math.round(b),55,220)})`;
+      }
+      ctx.fillStyle=color;ctx.fillRect(x*CELL_W,y*CELL_H,CELL_W+.5,CELL_H+.5);
     }
-    bug.x = next.x;
-    bug.y = next.y;
-    bug.stuck = 0;
-    if (!bug.trail.length || Math.hypot(bug.x - bug.trail.at(-1).x, bug.y - bug.trail.at(-1).y) > 5) {
-      bug.trail.push({ x: bug.x, y: bug.y });
-      if (bug.trail.length > 650) bug.trail.shift();
-    }
-    if (Math.hypot(bug.x - exit.x, bug.y - exit.y) < exit.radius) {
-      bug.done = true;
-      arrived += 1;
-    }
+    ctx.strokeStyle='rgba(55,45,30,.08)';ctx.lineWidth=1;
+    for(let x=0;x<=GRID_X;x+=5){ctx.beginPath();ctx.moveTo(x*CELL_W,0);ctx.lineTo(x*CELL_W,canvas.height);ctx.stroke();}
+    for(let y=0;y<=GRID_Y;y+=5){ctx.beginPath();ctx.moveTo(0,y*CELL_H);ctx.lineTo(canvas.width,y*CELL_H);ctx.stroke();}
   }
-
-  function update(delta) {
-    bugs.forEach((bug) => updateBug(bug, delta));
-    elapsed += delta;
-    if (arrived === bugs.length && bugs.length) {
-      running = false;
-      status.textContent = "全員が出口へ着きました！";
-      document.getElementById("play_button").textContent = "▶ もう一度";
-    } else {
-      status.textContent = `${bugs.length - arrived}匹が出口を探しています`;
-    }
-    updateMetrics();
+  function drawWalls(){ctx.strokeStyle='#725f45';ctx.lineWidth=17;ctx.lineCap='round';ctx.lineJoin='round';for(const w of walls){ctx.beginPath();ctx.moveTo(w.x1,w.y1);ctx.lineTo(w.x2,w.y2);ctx.stroke();}}
+  function drawMarkers(){
+    ctx.fillStyle='#4489d8';ctx.beginPath();ctx.arc(start.x,start.y,23,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText('出発',start.x,start.y+5);
+    ctx.fillStyle='#704b2f';ctx.beginPath();ctx.arc(shelter.x,shelter.y,shelter.radius,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#382617';ctx.lineWidth=4;ctx.stroke();ctx.fillStyle='#fff';ctx.fillText('隠れ場所',shelter.x,shelter.y+5);
   }
-
-  function drawBackground() {
-    context.fillStyle = "#cdbf99";
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    context.fillStyle = "rgba(95,74,43,.08)";
-    for (let index = 0; index < 90; index += 1) {
-      const x = (index * 73) % canvas.width;
-      const y = (index * 131) % canvas.height;
-      context.beginPath();
-      context.arc(x, y, 2 + index % 4, 0, Math.PI * 2);
-      context.fill();
+  function drawTrail(b){if(b.trail.length<2)return;ctx.strokeStyle=b.done?'rgba(74,180,112,.58)':'rgba(255,245,190,.28)';ctx.lineWidth=2;ctx.beginPath();b.trail.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();}
+  function drawBug(b){
+    ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.angle);ctx.fillStyle=b.done?'#47775a':'#48545d';ctx.strokeStyle=selectedBug===b?'#ffd85a':'#111820';ctx.lineWidth=selectedBug===b?3:1.7;ctx.beginPath();ctx.ellipse(0,0,13,8.5,0,0,Math.PI*2);ctx.fill();ctx.stroke();
+    ctx.strokeStyle='#9aa7af';ctx.lineWidth=1;for(let x=-8;x<=7;x+=3){ctx.beginPath();ctx.moveTo(x,-7);ctx.lineTo(x,-9);ctx.moveTo(x,7);ctx.lineTo(x,9);ctx.stroke();}
+    ctx.strokeStyle='#c9d1d7';ctx.beginPath();ctx.moveTo(10,-4);ctx.lineTo(18,-9);ctx.moveTo(10,4);ctx.lineTo(18,9);ctx.stroke();ctx.restore();
+    if(selectedBug===b){
+      ctx.strokeStyle='#ffd85a';ctx.lineWidth=2;ctx.setLineDash([5,4]);ctx.beginPath();ctx.moveTo(b.x,b.y);ctx.lineTo(b.sensePoint.x,b.sensePoint.y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#ffd85a';ctx.beginPath();ctx.arc(b.sensePoint.x,b.sensePoint.y,4,0,Math.PI*2);ctx.fill();
     }
   }
+  function render(){drawField();for(const b of bugs)drawTrail(b);drawWalls();drawMarkers();for(const b of bugs)drawBug(b);requestAnimationFrame(loop);}
+  function loop(now){const dt=Math.min(.035,(now-previousTime)/1000||0);previousTime=now;if(running)update(dt);render();}
 
-  function drawWalls() {
-    context.strokeStyle = "#725f45";
-    context.lineWidth = 17;
-    context.lineCap = "round";
-    context.lineJoin = "round";
-    walls.forEach((wall) => {
-      context.beginPath();
-      context.moveTo(wall.x1, wall.y1);
-      context.lineTo(wall.x2, wall.y2);
-      context.stroke();
-    });
+  function mean(arr){return arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0;}
+  function updateMetrics(){
+    const count=bugs.length||1;const states=bugs.map(b=>b.lastState||localState(b));
+    const shelterCount=bugs.filter(b=>Math.hypot(b.x-shelter.x,b.y-shelter.y)<shelter.radius).length;
+    $('shelter_metric').textContent=`${shelterCount} / ${bugs.length}`;
+    $('stress_metric').textContent=`${Math.round(mean(states.map(s=>s.stress))*100)}%`;
+    $('distance_metric').textContent=`${Math.round(mean(bugs.map(b=>b.distance)))} px`;
+    $('wet_metric').textContent=`${Math.round(bugs.filter(b=>valueAt(moisture,b.x,b.y)>0).length/count*100)}%`;
+    $('shade_metric').textContent=`${Math.round(bugs.filter(b=>valueAt(light,b.x,b.y)<0).length/count*100)}%`;
+    $('temp_metric').textContent=`${Math.round(bugs.filter(b=>valueAt(temperature,b.x,b.y)===0).length/count*100)}%`;
+    $('time_metric').textContent=`${Math.floor(elapsed)}秒`;$('selected_metric').textContent=selectedBug?`#${selectedBug.id}`:'なし';$('seed_metric').textContent=String.fromCharCode(65+(seedSet%26));
+  }
+  function label(v,kind){const map={moisture:{'-1':'乾燥','0':'普通','1':'湿潤'},light:{'-1':'日陰','0':'半日陰','1':'日向'},temperature:{'-1':'低温','0':'適温','1':'高温'}};return map[kind][String(v)];}
+  function updateInspector(){
+    if(!selectedBug){$('inspector').innerHTML='<b>個体観察：</b>「個体観察」を選び、ダンゴムシをタップすると、触角・局所環境・判断方向を表示します。';return;}
+    const s=selectedBug.lastState||localState(selectedBug);
+    $('inspector').innerHTML=`<b>個体 #${selectedBug.id}</b>　快適度 ${Math.round(s.comfort*100)}%／壁まで ${Math.round(s.wall)} px<div class="grid3"><div class="envChip"><span>湿り</span><strong>${label(s.m,'moisture')}</strong></div><div class="envChip"><span>明るさ</span><strong>${label(s.l,'light')}</strong></div><div class="envChip"><span>温度</span><strong>${label(s.t,'temperature')}</strong></div></div><div class="note">黄色い破線は、触角と局所環境から次に選んだ方向です。隠れ場所そのものの座標は評価していません。</div>`;
+  }
+  function updateLegend(){
+    const view=$('view_select').value;const items={composite:['青み＝湿潤','暗色＝日陰','赤み＝高温'],moisture:['青緑＝湿潤','黄土＝乾燥'],light:['暗色＝日陰','明色＝日向'],temperature:['青＝低温','赤＝高温'],heatmap:['赤いほど長く滞在']}[view];legend.innerHTML=items.map(x=>`<span>${x}</span>`).join('');
   }
 
-  function drawMarkers() {
-    context.fillStyle = "#4489d8";
-    context.beginPath();
-    context.arc(start.x, start.y, 24, 0, Math.PI * 2);
-    context.fill();
-    context.fillStyle = "#fff";
-    context.font = "bold 14px sans-serif";
-    context.textAlign = "center";
-    context.fillText("出発", start.x, start.y + 5);
-    context.fillStyle = "#51b77a";
-    context.beginPath();
-    context.arc(exit.x, exit.y, exit.radius, 0, Math.PI * 2);
-    context.fill();
-    context.fillStyle = "#fff";
-    context.fillText("出口", exit.x, exit.y + 5);
-  }
+  document.querySelectorAll('[data-tool]').forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
+  $('view_select').addEventListener('change',updateLegend);
+  $('play_button').addEventListener('click',()=>{running=!running;finished=false;$('play_button').textContent=running?'⏸ 一時停止':'▶ 続ける';});
+  $('same_button').addEventListener('click',()=>resetBugs(true));
+  $('new_button').addEventListener('click',()=>{seedSet++;resetBugs(false);});
+  $('clear_trails_button').addEventListener('click',()=>{visits.fill(0);for(const b of bugs)b.trail=[];});
+  $('clear_env_button').addEventListener('click',()=>{clearFields();updateMetrics();});
+  $('scenario_button').addEventListener('click',()=>applyScenario(scenario+1));
+  $('reset_all_button').addEventListener('click',()=>{scenario=0;seedSet=0;applyScenario(0);});
+  $('bug_count').addEventListener('input',()=>{$('count_output').textContent=`${$('bug_count').value}匹`;resetBugs(true);});
+  $('brush_size').addEventListener('input',()=>{$('brush_output').textContent=$('brush_size').value;});
+  $('wall_follow').addEventListener('input',()=>{$('wall_output').textContent=`${$('wall_follow').value}%`;});
+  $('noise').addEventListener('input',()=>{$('noise_output').textContent=`${$('noise').value}%`;});
+  $('duration').addEventListener('input',()=>{$('duration_output').textContent=`${$('duration').value}秒`;});
+  $('guide_button').addEventListener('click',()=>{$('guide_back').classList.add('show');$('guide_back').setAttribute('aria-hidden','false');});
+  $('guide_close').addEventListener('click',()=>{$('guide_back').classList.remove('show');$('guide_back').setAttribute('aria-hidden','true');});
+  $('guide_back').addEventListener('click',e=>{if(e.target===$('guide_back'))$('guide_close').click();});
 
-  function drawTrail(bug) {
-    if (bug.trail.length < 2) return;
-    context.strokeStyle = bug.done ? "rgba(81,183,122,.62)" : "rgba(255,193,58,.35)";
-    context.lineWidth = 2.2;
-    context.beginPath();
-    bug.trail.forEach((point, index) => {
-      if (index) context.lineTo(point.x, point.y);
-      else context.moveTo(point.x, point.y);
-    });
-    context.stroke();
-  }
-
-  function drawBug(bug) {
-    context.save();
-    context.translate(bug.x, bug.y);
-    context.rotate(bug.angle);
-    context.fillStyle = bug.done ? "#5c9570" : "#48545d";
-    context.strokeStyle = "#111820";
-    context.lineWidth = 1.7;
-    context.beginPath();
-    context.ellipse(0, 0, 13, 8.5, 0, 0, Math.PI * 2);
-    context.fill();
-    context.stroke();
-    context.strokeStyle = "#9aa7af";
-    for (let x = -8; x <= 7; x += 3) {
-      context.beginPath();
-      context.moveTo(x, -7);
-      context.lineTo(x, 7);
-      context.stroke();
-    }
-    context.strokeStyle = "#273139";
-    context.beginPath();
-    context.moveTo(10, -4);
-    context.lineTo(19, -10);
-    context.moveTo(10, 4);
-    context.lineTo(19, 10);
-    context.stroke();
-    context.restore();
-  }
-
-  function draw() {
-    drawBackground();
-    bugs.forEach(drawTrail);
-    drawWalls();
-    drawMarkers();
-    bugs.forEach(drawBug);
-  }
-
-  function updateMetrics() {
-    document.getElementById("goal_metric").textContent = `${arrived}/${bugs.length}`;
-    document.getElementById("moving_metric").textContent = String(bugs.length - arrived);
-    document.getElementById("time_metric").textContent = `${elapsed.toFixed(0)}秒`;
-    const observation = document.getElementById("observation");
-    if (arrived) observation.textContent = "緑の軌跡が出口まで届いた経路です。別の個体は同じ道を選ぶでしょうか。";
-    else if (elapsed > 25) observation.textContent = "行き止まりでは向きを変え、壁に沿える側を探しています。壁を一本消すとどう変わるでしょう。";
-  }
-
-  function frame(now) {
-    const delta = Math.min(0.035, Math.max(0, (now - previousFrame) / 1000));
-    previousFrame = now;
-    if (running) update(delta);
-    draw();
-    requestAnimationFrame(frame);
-  }
-
-  function fullReset() {
-    setDefaultMaze();
-    start.x = 80;
-    start.y = 520;
-    exit.x = 820;
-    exit.y = 80;
-    resetBugs();
-    setTool("draw");
-    status.textContent = "壁を指で描いてください";
-  }
-
-  canvas.addEventListener("pointerdown", beginPointer);
-  canvas.addEventListener("pointermove", movePointer);
-  canvas.addEventListener("pointerup", endPointer);
-  canvas.addEventListener("pointercancel", endPointer);
-  ["draw", "erase", "start", "exit"].forEach((name) => {
-    document.getElementById(`${name}_tool`).addEventListener("click", () => setTool(name));
-  });
-  document.getElementById("play_button").addEventListener("click", (event) => {
-    if (arrived === bugs.length) resetBugs();
-    running = !running;
-    event.currentTarget.textContent = running ? "⏸ とめる" : "▶ 放す";
-  });
-  document.getElementById("clear_button").addEventListener("click", () => {
-    walls = [];
-    resetBugs();
-    status.textContent = "空の画面に迷路を描いてください";
-  });
-  document.getElementById("bug_count").addEventListener("input", (event) => {
-    document.getElementById("count_output").textContent = `${event.target.value}匹`;
-    resetBugs();
-  });
-  document.getElementById("wall_follow").addEventListener("input", (event) => {
-    document.getElementById("wall_output").textContent = `${event.target.value}%`;
-  });
-  document.getElementById("noise").addEventListener("input", (event) => {
-    document.getElementById("noise_output").textContent = `${event.target.value}%`;
-  });
-  document.getElementById("reset_button").addEventListener("click", fullReset);
-
-  fullReset();
-  requestAnimationFrame(frame);
+  setTool('wall');applyScenario(0);updateLegend();resetBugs(true);requestAnimationFrame(loop);
 })();
 </script>
-<script src="lab4wonder_v1_1.js"></script>
 </body>
 </html>

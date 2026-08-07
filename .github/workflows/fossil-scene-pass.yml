@@ -14,7 +14,9 @@ jobs:
         with:
           fetch-depth: 0
       - name: Apply redesign
-        run: python .github/scripts/fossil_scene_pass.py
+        run: |
+          python .github/scripts/prepare_fossil_scene.py
+          python .github/scripts/fossil_scene_pass.py
       - name: Validate HTML and JavaScript
         run: |
           python - <<'PY'

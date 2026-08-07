@@ -1,0 +1,38 @@
+name: Apply spider r80
+on:
+  push:
+    branches:
+      - agent/spider-r80-action-modes
+    paths:
+      - .github/workflows/apply-spider-r80.yml
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/spider-r80-action-modes
+          fetch-depth: 0
+      - run: python3 .tmp_spider_r80_patch.py
+      - name: Validate
+        run: |
+          python3 - <<'PY'
+          import re,subprocess,tempfile
+          from pathlib import Path
+          text=Path('spider-web.html').read_text(encoding='utf-8')
+          for i,(attrs,src) in enumerate(re.findall(r'<script([^>]*)>(.*?)</script>',text,re.S)):
+              if 'application/json' in attrs or not src.strip(): continue
+              f=Path(tempfile.gettempdir())/f'spider-r80-{i}.js';f.write_text(src,encoding='utf-8');subprocess.run(['node','--check',str(f)],check=True)
+          for token in ['spiderActionBar','repairBtn','repairLayer','r80-spider-action-modes','gusting','補強糸','突風 発生中']:
+              assert token in text,token
+          print('spider r80 validation OK')
+          PY
+      - name: Commit
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add spider-web.html
+          git commit -m 'Make spider actions explicit and enhance gust feedback'
+          git push origin HEAD:agent/spider-r80-action-modes

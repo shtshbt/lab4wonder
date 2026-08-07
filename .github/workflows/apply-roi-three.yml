@@ -1,0 +1,53 @@
+name: Apply ROI three app upgrades
+on:
+  push:
+    branches:
+      - agent/roi-fourier-sediment-ant
+    paths:
+      - .github/workflows/apply-roi-three.yml
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/roi-fourier-sediment-ant
+          fetch-depth: 0
+      - name: Apply patches
+        run: |
+          python3 .tmp_roi_fourier_patch.py
+          python3 .tmp_roi_sediment_patch.py
+          python3 .tmp_roi_ant_patch.py
+      - name: Validate HTML and JavaScript
+        run: |
+          python3 - <<'PY'
+          import re, subprocess, tempfile
+          from html.parser import HTMLParser
+          from pathlib import Path
+          class P(HTMLParser): pass
+          targets=['fourier_drawing.html','sediment-resuspension.html','ant-colony.html']
+          for target in targets:
+              text=Path(target).read_text(encoding='utf-8')
+              P().feed(text)
+              for i,(attrs,src) in enumerate(re.findall(r'<script([^>]*)>(.*?)</script>',text,re.S)):
+                  if 'application/json' in attrs or not src.strip(): continue
+                  f=Path(tempfile.gettempdir())/f'{target}-{i}.js'
+                  f.write_text(src,encoding='utf-8')
+                  subprocess.run(['node','--check',str(f)],check=True)
+          f=Path('fourier_drawing.html').read_text(encoding='utf-8')
+          s=Path('sediment-resuspension.html').read_text(encoding='utf-8')
+          a=Path('ant-colony.html').read_text(encoding='utf-8')
+          assert 'r83-fourier-spectrum-direct-control' in f and 'data-preset="low"' in f and 'fitScore()' in f
+          assert 'r83-sediment-spatial-flow' in s and 'const baseDomainStep=domainStep' in s and 'ドラッグ：その向きに水流を描く' in s
+          assert 'r83-ant-individual-inspector' in a and 'r83InspectBtn' in a and '現在のボトルネック' in a
+          print('ROI three validation OK')
+          PY
+      - name: Commit app changes
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add fourier_drawing.html sediment-resuspension.html ant-colony.html
+          git commit -m 'Upgrade Fourier sediment and ant interactions'
+          git push origin HEAD:agent/roi-fourier-sediment-ant

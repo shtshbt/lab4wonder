@@ -696,4 +696,112 @@ if(d.core){const handled=new WeakSet();const onMeaningful=e=>{if(!sec.classList.
 show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
+
+<script id="r76-spider-direct-interaction">
+(()=>{
+  if(window.__r76SpiderDirectInteraction)return;
+  window.__r76SpiderDirectInteraction=true;
+  const toolbar=document.querySelector('.toolbar');
+  const preyModeBtn=document.getElementById('preyBtn');
+  const gustButton=document.getElementById('gustBtn');
+  const stimBtn=document.createElement('button');
+  stimBtn.id='stimBtn';stimBtn.type='button';stimBtn.textContent='☝ 巣をゆらす';
+  toolbar.insertBefore(stimBtn,gustButton);
+  preyModeBtn.textContent='🪰 獲物を置く';
+  let interactionMode='prey',stimDown=null,repairDown=null;
+  const setMode=mode=>{
+    interactionMode=mode;
+    preyModeBtn.classList.toggle('on',mode==='prey');
+    stimBtn.classList.toggle('on',mode==='stim');
+    setNote(mode==='stim'?'刺激モード：巣の好きな場所をタップして、ゆれの伝わり方を見よう':'獲物モード：巣の好きな場所をタップして獲物を置こう','info');
+    draw();
+  };
+  setMode('prey');
+  preyModeBtn.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();setMode('prey')},true);
+  stimBtn.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();setMode('stim')},true);
+
+  const hint=document.createElement('div');
+  hint.className='callout';hint.id='webDamageGuide';
+  hint.innerHTML='<b>👆 巣を直接ためす：</b>「巣をゆらす」で好きな糸をタップ。<b style="color:#ff7474">赤い×は糸が切れた場所</b>で、そこを越える振動が弱まり捕獲性能も下がります。切断点をまたぐようにドラッグして補強糸を張ると修復できます。';
+  document.querySelector('.stage').insertAdjacentElement('afterend',hint);
+
+  const angleDiff=(a,b)=>Math.abs(((a-b+Math.PI*3)%(Math.PI*2))-Math.PI);
+  const segDist=(px,py,a,b)=>{
+    const dx=b.x-a.x,dy=b.y-a.y,l2=dx*dx+dy*dy||1;
+    const t=Math.max(0,Math.min(1,((px-a.x)*dx+(py-a.y)*dy)/l2));
+    return Math.hypot(px-(a.x+t*dx),py-(a.y+t*dy));
+  };
+  const damageXY=d=>({x:center.x+Math.cos(d.a)*d.r*300,y:center.y+Math.sin(d.a)*d.r*190});
+  const originalWaveAmpAt=waveAmpAt;
+  waveAmpAt=(w,u)=>{
+    let amp=originalWaveAmpAt(w,u);
+    const tol=Math.PI/Math.max(8,par().rad)*.92;
+    let cuts=0;
+    for(const d of damage){
+      if(angleDiff(d.a,w.a)<tol && d.r<=w.u0+.04 && d.r>=Math.max(0,u)-.04)cuts++;
+    }
+    return amp*Math.pow(.28,cuts);
+  };
+  const originalStats=stats;
+  stats=()=>{
+    const st=originalStats();
+    const penalty=Math.min(.48,damage.length*.045);
+    st.capture*=1-penalty;st.damagePenalty=penalty;st.breaks=damage.length;
+    return st;
+  };
+  const stimulate=(point)=>{
+    if(progress<.2){setNote('まだ骨格が少ない。まず巣を少し建設しよう','bad');return}
+    const spot=webCoord(point.x,point.y);
+    if(spot.u>.99||spot.u<.08){setNote('糸の上をタップしてゆらしてみよう','info');return}
+    const a=snapRadial(spot.a),u=Math.max(.1,Math.min(.97,spot.u));
+    fx.waves.push({a,u,u0:u,len:radialLength(a),amp:.9,lam:decayLength(),t:0,direct:true});
+    ring(point.x,point.y,90,.55,'rgba(255,224,100,.9)',3);
+    const cut=damage.some(d=>angleDiff(d.a,a)<Math.PI/Math.max(8,par().rad)*.92&&d.r<u);
+    setNote(cut?'糸をゆらした。途中の切断点で振動が大きく弱まる':'糸をゆらした！ 黄色い波が中心へ届くか見よう',cut?'bad':'good');
+    if(!running){running=true;document.getElementById('playPause').textContent='⏸ 一時停止';last=performance.now()}
+    draw();
+  };
+  cv.addEventListener('pointerdown',e=>{
+    const p=canvasPoint(e);repairDown=p;
+    if(interactionMode!=='stim')return;
+    e.preventDefault();e.stopImmediatePropagation();stimDown=p;cv.setPointerCapture?.(e.pointerId);
+  },true);
+  cv.addEventListener('pointerup',e=>{
+    const end=canvasPoint(e);
+    if(interactionMode==='stim'){
+      e.preventDefault();e.stopImmediatePropagation();
+      if(stimDown&&Math.hypot(end.x-stimDown.x,end.y-stimDown.y)<34)stimulate(end);
+      stimDown=null;repairDown=null;return;
+    }
+    if(repairDown&&Math.hypot(end.x-repairDown.x,end.y-repairDown.y)>38&&damage.length){
+      const before=damage.length;
+      damage=damage.filter(d=>{const p=damageXY(d);return segDist(p.x,p.y,repairDown,end)>34});
+      const repaired=before-damage.length;
+      if(repaired){setNote(`補強糸で切断点を ${repaired}か所 修復した！`,'good');ring(end.x,end.y,85,.55,'rgba(150,255,190,.85)',3);draw()}
+    }
+    repairDown=null;
+  });
+
+  const previousDraw=draw;
+  draw=()=>{
+    previousDraw();
+    const st=stats();
+    for(const d of damage){
+      const p=damageXY(d),ux=Math.cos(d.a),uy=Math.sin(d.a)*.64,n=Math.hypot(ux,uy)||1,vx=ux/n,vy=uy/n;
+      c.save();
+      c.fillStyle='#07101a';c.beginPath();c.arc(p.x,p.y,13,0,Math.PI*2);c.fill();
+      c.strokeStyle='rgba(225,240,255,.72)';c.lineWidth=2.3;
+      c.beginPath();c.moveTo(p.x-vx*25,p.y-vy*25);c.lineTo(p.x-vx*9,p.y-vy*9);c.moveTo(p.x+vx*9,p.y+vy*9);c.lineTo(p.x+vx*25,p.y+vy*25);c.stroke();
+      c.strokeStyle='#ff7474';c.lineWidth=3.5;c.beginPath();c.moveTo(p.x-7,p.y-7);c.lineTo(p.x+7,p.y+7);c.moveTo(p.x+7,p.y-7);c.lineTo(p.x-7,p.y+7);c.stroke();
+      c.restore();
+    }
+    if(damage.length){
+      c.save();c.fillStyle='rgba(7,16,26,.9)';c.fillRect(655,18,225,48);c.strokeStyle='#ff7474';c.strokeRect(655,18,225,48);
+      c.fillStyle='#ff9a9a';c.font='bold 12px system-ui';c.fillText(`糸切れ ${damage.length}か所`,667,38);
+      c.fillStyle='#dceafa';c.font='11px system-ui';c.fillText(`捕獲性能 −${Math.round(st.damagePenalty*100)}%`,667,56);c.restore();
+    }
+  };
+})();
+</script>
+
 </body></html>

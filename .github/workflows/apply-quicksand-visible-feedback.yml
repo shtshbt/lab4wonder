@@ -2,7 +2,9 @@ name: Apply quicksand visible feedback
 on:
   push:
     branches: [agent/quicksand-visible-feedback]
-    paths: [.github/workflows/apply-quicksand-visible-feedback.yml]
+    paths:
+      - .github/workflows/apply-quicksand-visible-feedback.yml
+      - .tmp_quicksand_visible_feedback.py
 permissions:
   contents: write
 jobs:
@@ -12,13 +14,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: agent/quicksand-visible-feedback
+          fetch-depth: 0
       - name: Patch app
-        run: |
-          python3 - <<'PY'
-          import base64,gzip
-          data='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'
-          exec(gzip.decompress(base64.b64decode(data)).decode())
-          PY
+        run: python3 .tmp_quicksand_visible_feedback.py
       - name: Validate
         run: |
           python3 - <<'PY'
@@ -29,6 +27,8 @@ jobs:
               if 'application/json' in attrs or not src.strip(): continue
               f=Path(tempfile.gettempdir())/f'q-{i}.js';f.write_text(src,encoding='utf-8');subprocess.run(['node','--check',str(f)],check=True)
           assert 'r77-quicksand-visible-feedback' in text
+          assert 'applyStirImpulse' in text
+          assert '泥の構造強度' in text
           print('quicksand visible feedback OK')
           PY
       - name: Commit

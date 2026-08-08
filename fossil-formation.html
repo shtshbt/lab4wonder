@@ -435,7 +435,7 @@ show(0);
 if(document.getElementById('r81-phasebar'))return;
 const stage=document.querySelector('.stage'),baseCanvas=document.getElementById('geo');
 if(!stage||!baseCanvas||typeof specimens==='undefined')return;
-document.documentElement.dataset.r81Fossil='taphonomy-direct';document.documentElement.dataset.r83Fossil='plan-section-time-identity';document.documentElement.dataset.r84Fossil='stationary-horizon-visible-excavation-fate-gates';document.documentElement.dataset.r85Fossil='compact-section-material-layers-excavation-atlas';document.documentElement.dataset.r86Fossil='all-48-reachable-via-excavation';
+document.documentElement.dataset.r81Fossil='taphonomy-direct';document.documentElement.dataset.r83Fossil='plan-section-time-identity';document.documentElement.dataset.r84Fossil='stationary-horizon-visible-excavation-fate-gates';document.documentElement.dataset.r85Fossil='compact-section-material-layers-excavation-atlas';document.documentElement.dataset.r86Fossil='all-48-reachable-via-excavation';document.documentElement.dataset.r87Fossil='star-rarity-weighted-duplicates';
 document.body.classList.add('r81-direct');
 const sub=document.querySelector('.hdr .sub');
 if(sub)sub.textContent='この遺骸は100万年後まで残る？ 水底から埋没・化石化・露出・発掘までを追う化石サバイバル実験。';
@@ -635,17 +635,19 @@ const atlasSitePools={
 };
 const atlasSiteKey=s=>s.x<320?'lagoon':s.x<640?'river':'marine';
 const atlasSiteLabel=k=>k==='lagoon'?'静かな潟':k==='river'?'川・洪水原':'海の堆積物';
+const atlasRarityWeight={1:16,2:8,3:4,4:2,5:1};
 function chooseAtlasSideFind(pool){
- const atlas=window.__lwAtlas;if(!atlas)return null;const available=[...new Set(pool)].filter(n=>!atlas.has(n));if(!available.length)return null;
- const weighted=[];available.forEach(n=>{const r=atlas.info(n)?.rarity||3,w=Math.max(1,6-r);for(let i=0;i<w;i++)weighted.push(n)});return weighted[Math.floor(Math.random()*weighted.length)]||available[0];
+ const atlas=window.__lwAtlas;if(!atlas)return null;const candidates=[...new Set(pool)];if(!candidates.length)return null;
+ let total=0;const weighted=candidates.map(name=>{const rarity=Math.max(1,Math.min(5,atlas.info(name)?.rarity||3)),weight=atlasRarityWeight[rarity]||1;total+=weight;return{name,rarity,weight,cum:total}});
+ let roll=Math.random()*total;return weighted.find(x=>roll<x.cum)||weighted[weighted.length-1];
 }
 function unlockAtlasFromExcavation(s){
- const atlas=window.__lwAtlas;if(!atlas)return{primary:null,side:[]};const primary=atlasCardFor(s);const primaryFresh=primary&&atlas.collect(primary,false)?primary:null;const pool=atlasSitePools[atlasSiteKey(s)]||[];const side=[];const slots=s.integrity>=.70?2:1;
- for(let i=0;i<slots;i++){const n=chooseAtlasSideFind(pool);if(!n)break;if(atlas.collect(n,false))side.push(n)}
- return{primary:primaryFresh,side};
+ const atlas=window.__lwAtlas;if(!atlas)return{primary:null,side:[]};const primaryName=atlasCardFor(s),primary=primaryName?{name:primaryName,fresh:atlas.collect(primaryName,false),rarity:atlas.info(primaryName)?.rarity||3}:null;const pool=atlasSitePools[atlasSiteKey(s)]||[],side=[];const slots=s.integrity>=.70?2:1;
+ for(let i=0;i<slots;i++){const hit=chooseAtlasSideFind(pool);if(!hit)break;const fresh=atlas.collect(hit.name,false);side.push({...hit,fresh})}
+ return{primary,side};
 }
 function updateAtlasRoute(){
- const atlas=window.__lwAtlas,el=document.getElementById('r86AtlasRoute');if(!atlas||!el)return;const miss=k=>[...new Set(atlasSitePools[k])].filter(n=>!atlas.has(n)).length;el.innerHTML=`<b>📚 48種すべて本編から収集可能</b><span>発掘成功で主化石＋同じ地層の共伴化石・微化石・生痕・地層手がかりを登録。</span><span>未発見候補：潟 ${miss('lagoon')} ｜ 川 ${miss('river')} ｜ 海 ${miss('marine')} ｜ 全体 ${48-atlas.count()}/48</span>`;
+ const atlas=window.__lwAtlas,el=document.getElementById('r86AtlasRoute');if(!atlas||!el)return;const miss=k=>[...new Set(atlasSitePools[k])].filter(n=>!atlas.has(n)).length;el.innerHTML=`<b>📚 48種すべて本編から収集可能</b><span>共伴発見は重複あり。★が1つ増えるごとに出現重みは半分（16→8→4→2→1）。</span><span>未発見候補：潟 ${miss('lagoon')} ｜ 川 ${miss('river')} ｜ 海 ${miss('marine')} ｜ 全体 ${48-atlas.count()}/48</span>`;
 }
 function atlasCardFor(s){
  const mode=s.preservationMode||'';
@@ -657,10 +659,10 @@ function atlasCardFor(s){
  return null;
 }
 function showFound(s){
- focusSpecimenId=s.id;focusUntil=performance.now()+3500;const unlocked=unlockAtlasFromExcavation(s),primaryName=atlasCardFor(s),freshNames=[...(unlocked.primary?[unlocked.primary]:[]),...unlocked.side];foundCard.classList.add('show');
- if(freshNames.length)showBurst(`📚 新規登録 +${freshNames.length}！ ${freshNames[0]}`);else showBurst(`🧺 #${s.id} を取り出した！`);
- const sideText=unlocked.side.length?`<span>🔎 同じ${atlasSiteLabel(atlasSiteKey(s))}の地層から：${unlocked.side.join('・')}</span>`:'';
- foundCard.innerHTML=`<b>✨ 地層から取り出した：#${s.id} ${typeIcons[s.type]} ${typeNames[s.type]}</b><span>保存：${s.preservationMode||'化石'}</span><span>運搬距離：${Math.round(s.transport)} ｜ 完整度：${Math.round(s.integrity*100)}%</span><span>場所：${positionName(s.x)}</span>${primaryName?`<span>${unlocked.primary?'📚 主化石を新規登録':'📚 主化石は登録済み'}：${primaryName}</span>`:''}${sideText}`;
+ focusSpecimenId=s.id;focusUntil=performance.now()+3500;const unlocked=unlockAtlasFromExcavation(s),primaryName=unlocked.primary?.name||atlasCardFor(s),freshNames=[...(unlocked.primary?.fresh?[unlocked.primary.name]:[]),...unlocked.side.filter(x=>x.fresh).map(x=>x.name)];foundCard.classList.add('show');
+ if(freshNames.length)showBurst(`📚 新規登録 +${freshNames.length}！ ${freshNames[0]}`);else showBurst(`🧺 #${s.id} を取り出した！ 図鑑は再発見`);
+ const sideText=unlocked.side.length?`<span>🔎 同じ${atlasSiteLabel(atlasSiteKey(s))}の地層から：${unlocked.side.map(x=>`${x.fresh?'🆕':'↻'} ${x.name} ${'★'.repeat(x.rarity)}`).join(' ・ ')}</span>`:'';
+ foundCard.innerHTML=`<b>✨ 地層から取り出した：#${s.id} ${typeIcons[s.type]} ${typeNames[s.type]}</b><span>保存：${s.preservationMode||'化石'}</span><span>運搬距離：${Math.round(s.transport)} ｜ 完整度：${Math.round(s.integrity*100)}%</span><span>場所：${positionName(s.x)}</span>${primaryName?`<span>${unlocked.primary?.fresh?'📚 主化石を新規登録':'↻ 主化石は再発見'}：${primaryName}</span>`:''}${sideText}`;
  updateAtlasRoute();setTimeout(()=>foundCard.classList.remove('show'),6200);
 }
 function specimenState(s){

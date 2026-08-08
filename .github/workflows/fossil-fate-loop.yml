@@ -1,0 +1,48 @@
+name: Fossil fate loop
+on:
+  push:
+    branches:
+      - agent/fossil-fate-loop-v4
+permissions:
+  contents: write
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply fate-loop redesign
+        run: python .github/scripts/fossil_fate_loop.py
+      - name: Validate HTML and JavaScript
+        run: |
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import re, subprocess, tempfile
+          s=Path('fossil-formation.html').read_text(encoding='utf-8')
+          HTMLParser().feed(s)
+          scripts=re.findall(r'<script(?![^>]*type=["\']application/json["\'])[^>]*>(.*?)</script>',s,re.S|re.I)
+          for i,js in enumerate(scripts):
+              if js.strip():
+                  f=Path(tempfile.gettempdir())/f'fossil_fate_{i}.js'
+                  f.write_text(js,encoding='utf-8')
+                  subprocess.run(['node','--check',str(f)],check=True)
+          for hook in ['r84-fossil-fate-style','stationary-horizon-visible-excavation-fate-gates','surfaceProfile','fateGates','drawSectionScene','次の関門へ']:
+              assert hook in s, hook
+          print('validation ok')
+          PY
+      - name: Browser smoke test
+        run: |
+          chromium --headless --no-sandbox --disable-gpu --virtual-time-budget=2500 --dump-dom "file://$PWD/fossil-formation.html" > /tmp/dom.html
+          grep -q '化石サバイバル実験' /tmp/dom.html
+          grep -q 'r84Gate' /tmp/dom.html
+          grep -q '次の関門へ' /tmp/dom.html
+      - name: Commit application
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add fossil-formation.html
+          git diff --cached --quiet || git commit -m "Rebuild fossil formation around fate and excavation"
+          git push

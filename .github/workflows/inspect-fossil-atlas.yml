@@ -1,27 +1,54 @@
-name: Inspect fossil atlas
+name: Fossil atlas integration
 on:
   push:
     branches:
       - agent/fossil-atlas-integration
 permissions:
-  contents: read
+  contents: write
 jobs:
-  inspect:
+  patch:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Inspect atlas hooks
+        with:
+          fetch-depth: 0
+      - name: Apply integration
+        run: python .github/scripts/fossil_atlas_integration.py
+      - name: Validate structure and JavaScript
         run: |
           python - <<'PY'
+          from html.parser import HTMLParser
           from pathlib import Path
+          import re, subprocess, tempfile
           s=Path('fossil-formation.html').read_text(encoding='utf-8')
-          for needle in ['const DATA=','const CFG=','const explore=','function explore','r60-atlas-scan','発掘する','name":"三葉虫','name":"アンモナイト','name":"魚','name":"葉','name":"足跡','group":"']:
-              print('\n###',needle)
-              pos=0; n=0
-              while True:
-                  i=s.find(needle,pos)
-                  if i<0 or n>=10: break
-                  print(s[max(0,i-1200):min(len(s),i+3600)].replace('\n','\\n'))
-                  print('\n---')
-                  pos=i+len(needle); n+=1
+          HTMLParser().feed(s)
+          scripts=re.findall(r'<script(?![^>]*type=["\']application/json["\'])[^>]*>(.*?)</script>',s,re.S|re.I)
+          for i,js in enumerate(scripts):
+              if not js.strip(): continue
+              f=Path(tempfile.gettempdir())/f'fossil_r85_{i}.js'
+              f.write_text(js,encoding='utf-8')
+              subprocess.run(['node','--check',str(f)],check=True)
+          for hook in ['compact-section-material-layers-excavation-atlas','HORIZON_Y=500','strataDeposits','atlasCardFor','本編の発掘成功で登録','r60-atlas-fossil-progress-v2','鉱物充填した骨']:
+              assert hook in s, hook
+          assert 'id="r60-atlas-scan"' not in s
+          assert 'id="r60-atlas-random"' not in s
+          assert "if(s.type==='fish')return '魚の骨格'" in s
+          assert "if(s.type==='trace')return '足跡化石'" in s
+          print('validation ok')
           PY
+      - name: Browser smoke test
+        run: |
+          chromium --headless --no-sandbox --disable-gpu --virtual-time-budget=2500 --dump-dom "file://$PWD/fossil-formation.html" > /tmp/dom.html
+          grep -q '化石サバイバル実験' /tmp/dom.html
+          grep -q '本編の発掘成功で登録' /tmp/dom.html
+          grep -q '🟫 泥' /tmp/dom.html
+          grep -q '🟨 砂' /tmp/dom.html
+          ! grep -q 'id="r60-atlas-scan"' /tmp/dom.html
+      - name: Commit application
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add fossil-formation.html
+          git diff --cached --quiet || git commit -m "Integrate fossil excavation with atlas collection"
+          git push

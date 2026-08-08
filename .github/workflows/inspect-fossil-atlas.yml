@@ -14,7 +14,14 @@ jobs:
         with:
           fetch-depth: 0
       - name: Apply integration
-        run: python .github/scripts/fossil_atlas_integration.py
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('.github/scripts/fossil_atlas_integration.py')
+          s=p.read_text(encoding='utf-8').replace('r81-taphonomy-style','r82-fossil-clarity-style')
+          p.write_text(s,encoding='utf-8')
+          PY
+          python .github/scripts/fossil_atlas_integration.py
       - name: Validate structure and JavaScript
         run: |
           python - <<'PY'

@@ -29,14 +29,13 @@ jobs:
               f=Path(tempfile.gettempdir())/f'fossil_r88_{i}.js'
               f.write_text(js,encoding='utf-8')
               subprocess.run(['node','--check',str(f)],check=True)
-          for hook in ['kid-readable-strong-flow-clean-layout','④ のこる？','⏩ 時間をすすめる','が \'+'動いた' if False else 'r88-viewbadge']:
-              pass
           assert 'kid-readable-strong-flow-clean-layout' in s
           assert "{name:'④ のこる？'" in s
           assert '⏩ 時間をすすめる' in s
-          assert 'd>210' in s and 'maxShift=s.type===\'leaf\'?260' in s
+          assert 'd>210' in s and "maxShift=s.type==='leaf'?260" in s
           assert '.stage-help,.r81-direct #geoLabel' in s
           assert "const tag=s.preserved?'★':s.status==='lost'?'×':over>8?'↓':'○'" in s
+          assert 'r88-viewbadge' in s
           print('structure/js validation ok')
           PY
       - name: Browser interaction and mobile screenshots

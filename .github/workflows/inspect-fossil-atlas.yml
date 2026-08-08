@@ -1,0 +1,27 @@
+name: Inspect fossil atlas
+on:
+  push:
+    branches:
+      - agent/fossil-atlas-integration
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect atlas hooks
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('fossil-formation.html').read_text(encoding='utf-8')
+          for needle in ['r60-atlas-open','r60-atlas','localStorage','showFound','foundCard','fossilCards','unlock']:
+              print('\n###',needle)
+              pos=0; n=0
+              while True:
+                  i=s.find(needle,pos)
+                  if i<0 or n>=8: break
+                  print(s[max(0,i-900):min(len(s),i+1800)].replace('\n','\\n'))
+                  print('\n---')
+                  pos=i+len(needle); n+=1
+          PY

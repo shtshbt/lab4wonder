@@ -397,6 +397,16 @@ show(0);
 })();
 </script><script src="lab4wonder_v1_1.js"></script>
 
+
+<style id="r88-fossil-kids-flow-layout-style">
+.r81-direct .stage-help,.r81-direct #geoLabel,.r81-direct .r82-viewmode,.r81-direct .r84-section-label{display:none!important}
+.r81-panel #r81Status{position:static!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;max-width:none!important;margin-top:8px;padding:7px 9px;border-radius:10px!important;background:#0c1b28!important;border:1px solid #46647b!important;color:#eaf6ff!important;font-size:11px!important;line-height:1.45;font-weight:850}
+.r88-viewbadge{display:inline-flex;width:max-content;margin-top:2px;padding:3px 7px;border:1px solid #486b82;border-radius:999px;background:#102637;color:#cfeeff;font-size:9px;font-weight:900}
+.r81-head{flex-wrap:wrap}.r81-head>div:last-child{margin-left:auto}.r81-phasebar button{white-space:normal;overflow-wrap:anywhere}
+.r83-time .ticks{gap:2px}.r83-time .ticks span{min-width:0;text-align:center;flex:1}.r84-fates{display:flex;flex-wrap:wrap;overflow:visible}.r84-fate{flex:1 1 105px;min-width:92px;max-width:160px}.r84-fate .mini{font-size:11px;font-weight:900;color:inherit}
+.r86-atlas-route span,.r81-found-card span{overflow-wrap:anywhere}.r81-found-card{line-height:1.5}
+@media(max-width:560px){.r81-head>div{width:100%}.r81-head>div:last-child{margin-left:0}.r81-head button{flex:1}.r83-time .ticks{font-size:8px}.r84-fate{flex-basis:88px;min-width:82px}.r81-guide strong{font-size:11px;line-height:1.45}}
+</style>
 <style id="r81-taphonomy-direct-style">
 #r81-overlay{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;z-index:6;touch-action:none;cursor:crosshair;background:transparent}
 .r81-panel{margin:10px 0;border:1px solid #466984;border-radius:16px;background:linear-gradient(145deg,#0e1d2b,#122a38);padding:10px;box-shadow:0 10px 28px rgba(0,0,0,.2)}
@@ -435,10 +445,10 @@ show(0);
 if(document.getElementById('r81-phasebar'))return;
 const stage=document.querySelector('.stage'),baseCanvas=document.getElementById('geo');
 if(!stage||!baseCanvas||typeof specimens==='undefined')return;
-document.documentElement.dataset.r81Fossil='taphonomy-direct';document.documentElement.dataset.r83Fossil='plan-section-time-identity';document.documentElement.dataset.r84Fossil='stationary-horizon-visible-excavation-fate-gates';document.documentElement.dataset.r85Fossil='compact-section-material-layers-excavation-atlas';document.documentElement.dataset.r86Fossil='all-48-reachable-via-excavation';document.documentElement.dataset.r87Fossil='star-rarity-weighted-duplicates';
+document.documentElement.dataset.r81Fossil='taphonomy-direct';document.documentElement.dataset.r83Fossil='plan-section-time-identity';document.documentElement.dataset.r84Fossil='stationary-horizon-visible-excavation-fate-gates';document.documentElement.dataset.r85Fossil='compact-section-material-layers-excavation-atlas';document.documentElement.dataset.r86Fossil='all-48-reachable-via-excavation';document.documentElement.dataset.r87Fossil='star-rarity-weighted-duplicates';document.documentElement.dataset.r88Fossil='kid-readable-strong-flow-clean-layout';
 document.body.classList.add('r81-direct');
 const sub=document.querySelector('.hdr .sub');
-if(sub)sub.textContent='この遺骸は100万年後まで残る？ 水底から埋没・化石化・露出・発掘までを追う化石サバイバル実験。';
+if(sub)sub.textContent='さいごまで のこったら、★ 化石！ 流す・埋める・時間を進める・削る・掘る。';
 const learn=[...document.querySelectorAll('.learn>div p')];
 if(learn.length>=4){
   learn[0].textContent='生物が死んだ後、運搬・埋没・分解・保存・侵食・発見を経て化石記録になる過程を直接操作します。';
@@ -449,20 +459,20 @@ if(learn.length>=4){
 
 const phaseData=[
  {name:'① 水底の生物',icon:'🐟',guide:'魚・貝・葉・骨・足跡を選び、水底の好きな場所へ置く。画面全体が水底の平面図。',gesture:'👆 水底をタップして置く'},
- {name:'② 流される',icon:'🌊',guide:'水底をスワイプして流れを作る。遺骸が移動・摩耗し、足跡は消えることがある。',gesture:'☝→ スワイプで水流'},
+ {name:'② 水でながす',icon:'🌊',guide:'水底を大きくスワイプ。葉や魚は大きく、貝や骨は少し動く。足跡は消えることもある。',gesture:'☝→ 大きくスワイプ'},
  {name:'③ 上から埋まる',icon:'🟫',guide:'ここで断面図へ。標本はその場所から動かない。泥・砂を置くと地表が上へ積み上がり、標本が覆われる。',gesture:'👆 標本の上に地層を積む'},
- {name:'④ 生き残るか？',icon:'⏳',guide:'黄色い「次の関門へ」を押す。腐敗・散逸・圧密・続成作用を1つずつ通過し、最後まで残れば化石になる。',gesture:'⏩ 1関門ずつ運命を見る'},
+ {name:'④ のこる？',icon:'⏳',guide:'「時間をすすめる」を押すたび、○ のこった / × きえた がわかる。さいごまで残ったら ★ 化石！',gesture:'⏩ 時間をすすめる'},
  {name:'⑤ 地表へ近づく',icon:'⛰',guide:'地表をこすると、本当に地表線が下がる。化石の層へ近づくまで侵食させる。',gesture:'☝↔ 地表線を削る'},
  {name:'⑥ 掘り出す',icon:'🖌',guide:'粗掘り／ブラシで地表を局所的に削る。土が実際に減り、化石が露出したら取り出せる。',gesture:'🖌 地表を削って化石を出す'}
 ];
 let phase=0,tool='fish',pointer=null,holdTimer=null,holdInterval=null,holdStart=0,directAge=0,xray=true,focusSpecimenId=null,focusUntil=0,fateStep=0,trialSeed=1,burstUntil=0;
 const SURFACE_Y=175,HORIZON_Y=500,PROFILE_N=97;
 let surfaceProfile=Array(PROFILE_N).fill(HORIZON_Y);
-const fateGates=[{age:0,label:'開始',risk:'まだ遺骸・痕跡'},{age:1/365,label:'1日',risk:'腐敗・掃除屋'},{age:1,label:'1年',risk:'散逸・埋没'},{age:1e4,label:'1万年',risk:'圧密・変形'},{age:1e5,label:'10万年',risk:'続成作用'},{age:1e6,label:'100万年',risk:'化石記録へ'}];
+const fateGates=[{age:0,label:'いま',risk:'まだそのまま'},{age:1/365,label:'1日後',risk:'くさらず のこれる？'},{age:1,label:'1年後',risk:'流されず のこれる？'},{age:1e4,label:'1万年後',risk:'つぶれず のこれる？'},{age:1e5,label:'10万年後',risk:'地中で のこれる？'},{age:1e6,label:'100万年後',risk:'★ 化石になれる？'}];
 const acted=Array(6).fill(false),flowFx=[],dustFx=[],sedimentMarks=[],strataDeposits=[];
 const typeNames={fish:'魚',shell:'二枚貝',leaf:'葉',bone:'恐竜の骨',trace:'足跡'};
 const typeIcons={fish:'🐟',shell:'🐚',leaf:'🍃',bone:'🦴',trace:'👣'};
-const mobility={fish:.72,shell:.28,leaf:1.08,bone:.38,trace:0};
+const mobility={fish:.95,shell:.45,leaf:1.35,bone:.55,trace:0};
 const hardFactor={fish:.5,shell:.92,leaf:.16,bone:.9,trace:.36};
 
 function clamp81(v,a,b){return Math.max(a,Math.min(b,v))}
@@ -488,19 +498,19 @@ drawSpecimen=function(s){
 };
 
 const panel=document.createElement('section');panel.className='r81-panel';
-panel.innerHTML=`<div class="r81-head"><div><b>🦴 化石サバイバル実験</b><span>この遺骸は100万年後まで残る？</span></div><div><button id="r82Xray" class="r82-xray on" type="button">👁 地中を透視：ON</button><button id="r81Reset" type="button">↻ 最初から</button></div></div><div id="r81-phasebar" class="r81-phasebar"></div><div class="r81-action"><div id="r81Guide" class="r81-guide"></div><div id="r81Tools" class="r81-tools"></div><button id="r81Next" class="primary" type="button"></button></div>`;
+panel.innerHTML=`<div class="r81-head"><div><b>🦴 化石になれるかな？</b><span>さいごまで のこったら ★化石！</span></div><div><button id="r82Xray" class="r82-xray on" type="button">👁 地中を透視：ON</button><button id="r81Reset" type="button">↻ 最初から</button></div></div><div id="r81-phasebar" class="r81-phasebar"></div><div class="r81-action"><div id="r81Guide" class="r81-guide"></div><div id="r81Tools" class="r81-tools"></div><button id="r81Next" class="primary" type="button"></button></div>`;
 stage.before(panel);
 const phasebar=panel.querySelector('#r81-phasebar'),guide=panel.querySelector('#r81Guide'),tools=panel.querySelector('#r81Tools'),nextBtn=panel.querySelector('#r81Next');
 phaseData.forEach((p,i)=>{const b=document.createElement('button');b.type='button';b.dataset.phase=i;b.innerHTML=`<span>${p.icon}</span>${p.name}`;b.onclick=()=>setPhase(i);phasebar.appendChild(b)});
 
 const overlay=document.createElement('canvas');overlay.id='r81-overlay';overlay.width=960;overlay.height=620;overlay.setAttribute('aria-label','化石形成の直接操作レイヤー');stage.appendChild(overlay);const oc=overlay.getContext('2d');
-const status=document.createElement('div');status.id='r81Status';status.className='r81-status';stage.appendChild(status);
+const status=document.createElement('div');status.id='r81Status';status.className='r81-status';panel.appendChild(status);
 const viewMode=document.createElement('div');viewMode.className='r82-viewmode';stage.appendChild(viewMode);
 const compare=document.createElement('section');compare.className='r81-compare';compare.innerHTML='<div><b>① 昔の世界</b><div id="r81Past"></div></div><div class="r81-arrow">→ 死後・保存 →</div><div class="r82-fossilcol"><b>② 化石になった</b><div id="r82Fossil"></div></div><div class="r81-arrow">→ 露出・発見 →</div><div><b>③ あなたが発掘</b><div id="r81Found"></div></div><div id="r81Question" class="r81-question">化石になっても、発見されるとは限らない。</div>';
 const ledger=document.createElement('section');ledger.className='r82-ledger';
 stage.after(compare);stage.after(ledger);
 const foundCard=document.createElement('div');foundCard.id='r81FoundCard';foundCard.className='r81-found-card';compare.after(foundCard);
-const timePanel=document.createElement('section');timePanel.className='r83-time';timePanel.innerHTML='<button id="r83Advance" type="button">⏩ 次の関門へ</button><div class="meta"><b id="r83Age">まだ判定前</b><div class="track"><div id="r83TimeFill" class="fill"></div></div><div class="ticks"><span>遺骸</span><span>埋没</span><span>圧密</span><span>続成</span><span>化石</span></div><div id="r84Gate" class="r84-gate">次の関門：腐敗・掃除屋</div><div id="r84Fates" class="r84-fates"></div></div>';panel.after(timePanel);
+const timePanel=document.createElement('section');timePanel.className='r83-time';timePanel.innerHTML='<button id="r83Advance" type="button">⏩ 時間をすすめる</button><div class="meta"><b id="r83Age">○ のこってる 0　× きえた 0　★ 化石 0</b><div class="track"><div id="r83TimeFill" class="fill"></div></div><div class="ticks"><span>いま</span><span>1日</span><span>1年</span><span>1万年</span><span>10万年</span><span>100万年</span></div><div id="r84Gate" class="r84-gate">つぎ：1日後　くさらず のこれる？</div><div id="r84Fates" class="r84-fates"></div></div>';panel.after(timePanel);
 const burst=document.createElement('div');burst.className='r84-stage-burst';stage.appendChild(burst);const sectionLabel=document.createElement('div');sectionLabel.className='r84-section-label';sectionLabel.textContent='破線＝当時の水底 ｜ 🟫泥 / 🟨砂';stage.appendChild(sectionLabel);
 const foundTray=document.createElement('section');foundTray.className='r83-foundtray';foundTray.innerHTML='<b>🧺 発掘トレイ</b><div id="r83FoundGrid" class="r83-foundgrid"><span style="font-size:10px;color:#9eb0c4">まだ発掘していません。</span></div>';compare.after(foundTray);const atlasRoute=document.createElement('div');atlasRoute.id='r86AtlasRoute';atlasRoute.className='r86-atlas-route';foundTray.after(atlasRoute);
 
@@ -522,13 +532,12 @@ function renderTools(){
  tools.innerHTML='';toolDefs().forEach(([id,label])=>{const b=document.createElement('button');b.type='button';b.dataset.tool=id;b.textContent=label;b.classList.toggle('on',tool===id);b.onclick=()=>{tool=id;renderTools();updateGuide()};tools.appendChild(b)});
 }
 function updateGuide(){
- const p=phaseData[phase];guide.innerHTML=`<strong>${p.icon} ${p.guide}</strong><span>${p.gesture}</span>`;
+ const p=phaseData[phase],view=phase<=1?'🗺 水底を上から見る':'🪨 地層の断面を見る';guide.innerHTML=`<strong>${p.icon} ${p.guide}</strong><span>${p.gesture}</span><small class="r88-viewbadge">${view}</small>`;
  [...phasebar.children].forEach((b,i)=>b.classList.toggle('on',i===phase));
  nextBtn.textContent=phase<5?`次へ：${phaseData[phase+1].name}`:'↻ もう一度くらべる';
- const help=document.querySelector('.stage-help');if(help)help.innerHTML=`<b>${p.name}</b><br>${p.gesture}<br><small>${phase<=1?'今は水底を上から見ています':'今は地層の断面を見ています'}</small>`;
  document.body.classList.toggle('phase-plan',phase<=1);document.body.classList.toggle('phase-section',phase>=2);timePanel.classList.toggle('show',phase===3);
- viewMode.innerHTML=phase<=1?'🗺 <b>水底を上から見る</b>':phase===2?`🟫 <b>ここから地層断面</b> ${xray?'<span class="r82-xray-note">｜地中を透視</span>':''}`:`🪨 <b>地層断面</b> ${xray?'<span class="r82-xray-note">｜地中を透視</span>':''}`;
- status.textContent=phase===3?`④ 地中で化石化 ｜ ${formatAge(directAge)} ｜ 黄色いボタンで進める`:`${p.name} ｜ ${p.gesture}`;updateTimePanel();
+ viewMode.textContent='';
+ status.textContent=phase===3?`④ のこる？ ｜ ${formatAge(directAge)} ｜ ○ / × / ★ を見よう`:`${p.name} ｜ ${p.gesture}`;updateTimePanel();
 }
 function setPhase(i){
  phase=clamp81(i,0,5);tool=defaultTool(phase);pointer=null;clearHold();
@@ -539,11 +548,11 @@ nextBtn.onclick=()=>{if(phase<5)setPhase(phase+1);else resetDirect()};
 panel.querySelector('#r81Reset').onclick=resetDirect;
 const xrayBtn=panel.querySelector('#r82Xray');xrayBtn.onclick=()=>{xray=!xray;xrayBtn.classList.toggle('on',xray);xrayBtn.textContent=xray?'👁 地中を透視：ON':'👁 地中を透視：OFF';updateGuide()};
 function updateTimePanel(){
- const fossilN=specimens.filter(s=>s.preserved&&s.status!=='lost').length,lostN=specimens.filter(s=>s.status==='lost').length,age=document.getElementById('r83Age'),fill=document.getElementById('r83TimeFill'),gate=document.getElementById('r84Gate'),fates=document.getElementById('r84Fates'),btn=document.getElementById('r83Advance');
- if(age)age.textContent=fateStep?`${fateGates[fateStep].label} — 残存 ${Math.max(0,specimens.length-lostN)} / 消失 ${lostN} / 化石 ${fossilN}`:'まだ判定前 — まず埋没させよう';if(fill)fill.style.width=`${Math.round(fateStep/(fateGates.length-1)*100)}%`;
- if(gate)gate.textContent=fateStep>=fateGates.length-1?'判定完了：次は地表へ露出させよう':`次の関門：${fateGates[fateStep+1].label}｜${fateGates[fateStep+1].risk}`;
- if(btn)btn.textContent=fateStep>=fateGates.length-1?'✓ 化石化判定 完了':`⏩ 次の関門へ：${fateGates[fateStep+1].risk}`;
- if(fates)fates.innerHTML=specimens.map(s=>{ensure(s);const cls=s.preserved?'fossil':s.status==='lost'?'lost':s.fateState==='close'?'close':'wait';return `<div class="r84-fate ${cls}"><b>#${s.id} ${typeIcons[s.type]||'🦴'}</b><span class="mini">${s.preserved?'★ 化石になった':s.status==='lost'?'× 消失':s.fateNote||'? まだわからない'}</span></div>`}).join('');
+ const fossilN=specimens.filter(s=>s.preserved&&s.status!=='lost').length,lostN=specimens.filter(s=>s.status==='lost').length,liveN=Math.max(0,specimens.length-lostN-fossilN),age=document.getElementById('r83Age'),fill=document.getElementById('r83TimeFill'),gate=document.getElementById('r84Gate'),fates=document.getElementById('r84Fates'),btn=document.getElementById('r83Advance');
+ if(age)age.textContent=`${fateStep?fateGates[fateStep].label+'　':''}○ のこってる ${liveN}　× きえた ${lostN}　★ 化石 ${fossilN}`;if(fill)fill.style.width=`${Math.round(fateStep/(fateGates.length-1)*100)}%`;
+ if(gate)gate.textContent=fateStep>=fateGates.length-1?'★ おしまい：どれが化石になった？':`つぎ：${fateGates[fateStep+1].label}　${fateGates[fateStep+1].risk}`;
+ if(btn)btn.textContent=fateStep>=fateGates.length-1?'✓ おしまい':'⏩ 時間をすすめる';
+ if(fates)fates.innerHTML=specimens.map(s=>{ensure(s);const cls=s.preserved?'fossil':s.status==='lost'?'lost':s.fateState==='close'?'close':'wait',txt=s.preserved?'★ 化石！':s.status==='lost'?'× きえた':s.fateState==='close'?'△ あぶない！':s.fateState==='survive'?'○ のこった！':'? まだ';return `<div class="r84-fate ${cls}"><b>#${s.id} ${typeIcons[s.type]||'🦴'}</b><span class="mini">${txt}</span></div>`}).join('');
 }
 document.getElementById('r83Advance').onclick=()=>{advanceDeepTime();acted[3]=true;updateTimePanel()};
 
@@ -563,16 +572,12 @@ function addDirectSpecimen(p){
  const py=clamp81(p.y,145,555),s=createSpecimen(p.x,SURFACE_Y,tool);ensure(s);s.createdPhase=phase;s.surfaceY=SURFACE_Y;s.planY=py;specimens.push(s);markAction(`#${s.id} ${typeIcons[tool]} ${typeNames[tool]}を${positionName(p.x)}の水底に置いた`);draw();updateComparison();
 }
 function applyFlow(a,b){
- const dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy);if(len<3)return;addFx(flowFx,{a:{...a},b:{...b},life:1100},60);
- specimens.forEach(s=>{ensure(s);if(s.status==='lost'||s.burialDepth>.28)return;const sy=s.planY??s.y,d=segDist(s.x,sy,a,b);if(d>125)return;const near=1-d/125,m=mobility[s.type]??.4,scale=near*m*.42;
-   if(s.type!=='trace'){s.x=clamp81(s.x+dx*scale,45,915);s.planY=clamp81(sy+dy*scale*.45,145,555);s.transport+=len*scale;s.abrasion=clamp81(s.abrasion+len*scale/900,0,1);}
-   const frag=(s.type==='leaf'?.004:s.type==='fish'?.0024:s.type==='bone'?.0007:.00045)*len*near;
-   s.integrity=clamp81(s.integrity-frag,0,1);if(s.type==='fish'||s.type==='bone')s.articulation=clamp81(s.articulation-len*near*(s.type==='fish'?.0022:.0008),0,1);
-   s.organic=clamp81(s.organic-len*near*(s.type==='leaf'?.0014:.00065),0,1);
-   if(s.type==='trace')s.integrity=clamp81(s.integrity-len*near*.0045,0,1);
-   if(s.integrity<.16){s.status='lost';s.reason=s.type==='trace'?'水流で痕跡が消えた':'運搬・摩耗で壊れた'}
+ const dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy);if(len<10)return;addFx(flowFx,{a:{...a},b:{...b},life:1500},60);let moved=[];
+ specimens.forEach(s=>{ensure(s);if(s.status==='lost'||s.burialDepth>.28)return;const sy=s.planY??s.y,d=segDist(s.x,sy,a,b);if(d>210)return;const near=1-d/210,m=mobility[s.type]??.4,scale=near*m*.88;
+   const old={x:s.x,y:sy};if(s.type!=='trace'){let mx=dx*scale,my=dy*scale*.65,maxShift=s.type==='leaf'?260:s.type==='fish'?190:s.type==='bone'?110:85,mag=Math.hypot(mx,my);if(mag>maxShift){mx*=maxShift/mag;my*=maxShift/mag}s.x=clamp81(s.x+mx,45,915);s.planY=clamp81(sy+my,145,555);const shift=Math.hypot(s.x-old.x,s.planY-old.y);s.transport+=shift;s.abrasion=clamp81(s.abrasion+shift/800,0,1);if(shift>3){moved.push({id:s.id,shift:Math.round(shift)});addFx(flowFx,{a:old,b:{x:s.x,y:s.planY},carried:true,life:1700},80)}}
+   const frag=(s.type==='leaf'?.0012:s.type==='fish'?.0006:s.type==='bone'?.00018:.00012)*len*near;s.integrity=clamp81(s.integrity-frag,0,1);if(s.type==='fish'||s.type==='bone')s.articulation=clamp81(s.articulation-len*near*(s.type==='fish'?.0007:.00025),0,1);s.organic=clamp81(s.organic-len*near*(s.type==='leaf'?.0004:.0002),0,1);if(s.type==='trace')s.integrity=clamp81(s.integrity-len*near*.0022,0,1);if(s.integrity<.16){s.status='lost';s.reason=s.type==='trace'?'水流で痕跡が消えた':'運搬・摩耗で壊れた'}
  });
- markAction(`🌊 ${Math.round(len)} の流れ：軽いものほど大きく運ばれる`);draw();updateComparison();
+ markAction(moved.length?`🌊 ${moved.slice(0,4).map(x=>'#'+x.id+' が '+x.shift+' 動いた').join(' ｜ ')}${moved.length>4?' ほか':''}`:'🌊 水流はできた。標本の近くを大きくスワイプしてみよう');draw();updateComparison();
 }
 let lastDepositAt=0;
 function depositAt(p){
@@ -607,13 +612,13 @@ function advanceDeepTime(){
    else if(fateStep===4)prob=.55+.16*b+.10*h+.11*s.groundwater+.06*s.integrity;
    else prob=.70+.12*b+.08*h+.05*s.integrity;
    prob=clamp81(prob,.08,.97);const roll=fateRoll(s,fateStep);
-   if(roll>prob){s.status='lost';s.fateState='lost';s.reason=fateStep===1?'腐敗・掃除屋で失われた':fateStep===2?'埋没前に散逸した':fateStep===3?'圧密・変形で記録が失われた':fateStep===4?'続成作用で保存されなかった':'化石記録として残らなかった';s.fateNote='× '+s.reason;lost.push(s)}
-   else if(fateStep===fateGates.length-1){s.preserved=true;s.status='success';s.stage=4;s.preservationMode=preservationMode(s);s.fateState='fossil';s.fateNote='★ '+s.preservationMode;survived.push(s)}
-   else {const margin=prob-roll;s.fateState=margin<.13?'close':'survive';s.fateNote=margin<.13?'⚠ 危ない…まだ残った':'● 関門を通過';(margin<.13?close:survived).push(s)}
+   if(roll>prob){s.status='lost';s.fateState='lost';s.reason=fateStep===1?'腐敗・掃除屋で失われた':fateStep===2?'埋没前に散逸した':fateStep===3?'圧密・変形で記録が失われた':fateStep===4?'続成作用で保存されなかった':'化石記録として残らなかった';s.fateNote='× きえた';lost.push(s)}
+   else if(fateStep===fateGates.length-1){s.preserved=true;s.status='success';s.stage=4;s.preservationMode=preservationMode(s);s.fateState='fossil';s.fateNote='★ 化石！';survived.push(s)}
+   else {const margin=prob-roll;s.fateState=margin<.13?'close':'survive';s.fateNote=margin<.13?'△ あぶない！':'○ のこった！';(margin<.13?close:survived).push(s)}
  });
  const live=specimens.filter(s=>s.status!=='lost'&&!s.preserved).length,formed=specimens.filter(s=>s.preserved).length;
- if(fateStep===fateGates.length-1){showBurst(formed?`✨ ${formed}個が化石になった！`:'今回は化石が残らなかった…');markAction(formed?`✨ 100万年後：${specimens.filter(s=>s.preserved).map(s=>'#'+s.id+' '+typeIcons[s.type]).join('・')} が化石になった！`:'100万年後まで残った標本はなかった。条件を変えて再挑戦できる')}
- else {showBurst(`${gate.label}：${gate.risk} を通過できる？`);markAction(`⏳ ${gate.label}｜残った ${live}｜消失 ${lost.length}${close.length?'｜危ない '+close.map(s=>'#'+s.id).join('・'):''}`)}
+ if(fateStep===fateGates.length-1){showBurst(formed?`✨ ★ 化石！ ${formed}こ のこった！`:'今回は のこらなかった…');markAction(formed?`✨ 100万年後：${specimens.filter(s=>s.preserved).map(s=>'#'+s.id+' '+typeIcons[s.type]).join('・')} が ★化石！`:'100万年後まで残らなかった。埋め方を変えてもう一度できる')}
+ else {showBurst(`${gate.label}　○ ${live}こ のこった　× ${lost.length}こ きえた`);markAction(`⏳ ${gate.label}｜○ のこった ${live}｜× きえた ${lost.length}${close.length?'｜△ '+close.map(s=>'#'+s.id).join('・'):''}`)}
  const f=survived[0]||close[0]||lost[0];if(f){focusSpecimenId=f.id;focusUntil=performance.now()+1900}draw();updateComparison();updateTimePanel();
 }
 function erodeSegment(a,b,strength=.1){
@@ -679,7 +684,7 @@ function updateComparison(){
  const keys=['fish','shell','leaf','bone','trace'],past={},fossil={},found={};keys.forEach(k=>past[k]=fossil[k]=found[k]=0);specimens.forEach(s=>{if(past[s.type]!=null)past[s.type]++;if(s.preserved&&s.status!=='lost'&&fossil[s.type]!=null)fossil[s.type]++;if(s.found&&found[s.type]!=null)found[s.type]++});
  const render=o=>keys.filter(k=>o[k]).map(k=>`<span>${typeIcons[k]} ${o[k]}</span>`).join(' ')||'<span>—</span>';
  document.getElementById('r81Past').innerHTML=render(past);document.getElementById('r82Fossil').innerHTML=render(fossil);document.getElementById('r81Found').innerHTML=render(found);
- const totalPast=Object.values(past).reduce((a,b)=>a+b,0),totalFossil=Object.values(fossil).reduce((a,b)=>a+b,0),totalFound=Object.values(found).reduce((a,b)=>a+b,0);updateAtlasRoute();document.getElementById('r81Question').textContent=totalFossil?`昔 ${totalPast} → 化石形成 ${totalFossil} → 発掘 ${totalFound}。地中に化石があっても、発見されるとは限らない。`:'深時間を進めると、どれが本当に化石になったか中央に表示される。';renderLedger();
+ const totalPast=Object.values(past).reduce((a,b)=>a+b,0),totalFossil=Object.values(fossil).reduce((a,b)=>a+b,0),totalFound=Object.values(found).reduce((a,b)=>a+b,0);updateAtlasRoute();document.getElementById('r81Question').textContent=totalFossil?`昔 ${totalPast} → 化石形成 ${totalFossil} → 発掘 ${totalFound}。地中に化石があっても、発見されるとは限らない。`:'④で「時間をすすめる」を押すと、○ のこる / × きえる / ★ 化石 がわかる。';renderLedger();
 }
 function resetDirect(){
  running=false;directAge=0;fateStep=0;trialSeed=Math.floor(Math.random()*900000)+1000;surfaceProfile=Array(PROFILE_N).fill(HORIZON_Y);strataDeposits.length=0;sedimentMarks.length=0;flowFx.length=0;dustFx.length=0;for(let i=0;i<acted.length;i++)acted[i]=false;specimens=[];nextId=1;
@@ -695,11 +700,11 @@ overlay.addEventListener('pointerdown',e=>{
 });
 overlay.addEventListener('pointermove',e=>{
  if(!pointer)return;const p=point(e),d=Math.hypot(p.x-pointer.last.x,p.y-pointer.last.y);if(Math.hypot(p.x-pointer.start.x,p.y-pointer.start.y)>7)pointer.moved=true;
- if(phase===1&&d>3)applyFlow(pointer.last,p);else if(phase===2&&d>18)depositAt(p);else if(phase===4&&d>4)erodeSegment(pointer.last,p,.075);else if(phase===5&&d>3)digSegment(pointer.last,p);
+ if(phase===2&&d>18)depositAt(p);else if(phase===4&&d>4)erodeSegment(pointer.last,p,.075);else if(phase===5&&d>3)digSegment(pointer.last,p);
  pointer.last=p;
 });
 overlay.addEventListener('pointerup',e=>{
- if(!pointer)return;const p=point(e);if(phase===0&&!pointer.moved)addDirectSpecimen(p);else if(phase===1&&!pointer.moved){applyFlow({x:p.x-70,y:p.y},{x:p.x+70,y:p.y});}else if(phase===4&&!pointer.moved){erodeSegment({x:p.x-35,y:p.y},{x:p.x+35,y:p.y},.055)}else if(phase===5&&!pointer.moved){digSegment({x:p.x-22,y:p.y},{x:p.x+22,y:p.y})}
+ if(!pointer)return;const p=point(e);if(phase===0&&!pointer.moved)addDirectSpecimen(p);else if(phase===1){pointer.moved?applyFlow(pointer.start,p):applyFlow({x:p.x-85,y:p.y},{x:p.x+85,y:p.y});}else if(phase===4&&!pointer.moved){erodeSegment({x:p.x-35,y:p.y},{x:p.x+35,y:p.y},.055)}else if(phase===5&&!pointer.moved){digSegment({x:p.x-22,y:p.y},{x:p.x+22,y:p.y})}
  clearHold();pointer=null;
 });overlay.addEventListener('pointercancel',()=>{clearHold();pointer=null});
 
@@ -707,15 +712,15 @@ function drawArrow(ctx,a,b,color){const ang=Math.atan2(b.y-a.y,b.x-a.x);ctx.stro
 function drawGesture(t){
  if(acted[phase])return;const pulse=1+.12*Math.sin(t/220);oc.save();oc.font='bold 18px sans-serif';oc.textAlign='center';oc.lineCap='round';oc.setLineDash([8,7]);oc.strokeStyle='rgba(255,226,95,.95)';oc.fillStyle='#fff7b0';oc.lineWidth=4;
  if(phase===0){oc.beginPath();oc.arc(520,285,42*pulse,0,Math.PI*2);oc.stroke();oc.fillText('👆 ここをタップ',520,345)}
- else if(phase===1){drawArrow(oc,{x:260,y:270},{x:690,y:270},'#7fe5ff');oc.fillText('☝ 指で水流を描く',475,235)}
- else if(phase===2){for(let i=0;i<5;i++){oc.beginPath();oc.arc(450+i*24,300+(i%2)*12,11*pulse,0,Math.PI*2);oc.stroke()}oc.fillText('👆 上から地層を積む（標本は動かない）',510,255)}
- else if(phase===3){oc.fillText('⏩ 黄色いボタンで1関門ずつ進む',500,115);oc.fillText('💧 地下水は化石の近くをタップ',500,145)}
- else if(phase===4){drawArrow(oc,{x:720,y:190},{x:300,y:190},'#ffd772');oc.fillText('☝ 地表線をこすって下げる',510,235)}
- else{drawArrow(oc,{x:390,y:330},{x:610,y:300},'#dff7ff');oc.fillText('🖌 土を削って化石を露出する',500,270)}oc.restore();
+ else if(phase===1){drawArrow(oc,{x:260,y:300},{x:690,y:300},'#7fe5ff');oc.fillText('🌊 大きくスワイプ',475,255)}
+ else if(phase===2){for(let i=0;i<5;i++){oc.beginPath();oc.arc(450+i*24,300+(i%2)*12,11*pulse,0,Math.PI*2);oc.stroke()}oc.fillText('🟫 土をかぶせる',510,255)}
+ else if(phase===3){oc.fillText('○ のこる？　× きえる？　★ 化石？',500,118)}
+ else if(phase===4){drawArrow(oc,{x:720,y:190},{x:300,y:190},'#ffd772');oc.fillText('☝ 地表をこする',510,235)}
+ else{drawArrow(oc,{x:390,y:330},{x:610,y:300},'#dff7ff');oc.fillText('🖌 土をけずる',500,270)}oc.restore();
 }
 function drawPlanView(now){
  oc.fillStyle='#123d4d';oc.fillRect(0,0,960,620);const zones=[['静かな潟','#315e58'],['川の土砂','#6a5a3e'],['波のある浅瀬','#416674']];zones.forEach((z,i)=>{oc.globalAlpha=.72;oc.fillStyle=z[1];oc.fillRect(i*320,0,320,620);oc.globalAlpha=1;oc.fillStyle='rgba(4,18,25,.66)';oc.fillRect(i*320+10,16,300,40);oc.fillStyle='#fff';oc.font='900 16px sans-serif';oc.textAlign='center';oc.fillText(z[0],i*320+160,42)});oc.strokeStyle='rgba(255,255,255,.14)';oc.lineWidth=2;for(let y=85;y<620;y+=70){oc.beginPath();for(let x=0;x<=960;x+=30)oc.lineTo(x,y+Math.sin(x*.025+y)*4);oc.stroke()}
- specimens.forEach(s=>{ensure(s);const y=s.planY??300;oc.globalAlpha=s.status==='lost'?.28:1;oc.fillStyle='rgba(3,14,20,.72)';oc.beginPath();oc.arc(s.x,y,29,0,Math.PI*2);oc.fill();oc.font='24px sans-serif';oc.textAlign='center';oc.fillStyle='#fff';oc.fillText(typeIcons[s.type]||'🦴',s.x,y+8);oc.font='900 11px sans-serif';oc.fillStyle=s.status==='lost'?'#ff9a8c':'#fff6a8';oc.fillText(`#${s.id}`,s.x,y+43);if(focusSpecimenId===s.id&&now<focusUntil){oc.strokeStyle='#ffe25c';oc.lineWidth=5;oc.beginPath();oc.arc(s.x,y,39+5*Math.sin(now/120),0,Math.PI*2);oc.stroke()}oc.globalAlpha=1});flowFx.forEach(f=>{const age=now-f.t;if(age>f.life)return;const a=1-age/f.life;oc.save();oc.globalAlpha=a;drawArrow(oc,f.a,f.b,'#8eeaff');oc.restore()});
+ specimens.forEach(s=>{ensure(s);const y=s.planY??300;oc.globalAlpha=s.status==='lost'?.28:1;oc.fillStyle='rgba(3,14,20,.72)';oc.beginPath();oc.arc(s.x,y,29,0,Math.PI*2);oc.fill();oc.font='24px sans-serif';oc.textAlign='center';oc.fillStyle='#fff';oc.fillText(typeIcons[s.type]||'🦴',s.x,y+8);oc.font='900 11px sans-serif';oc.fillStyle=s.status==='lost'?'#ff9a8c':'#fff6a8';oc.fillText(`#${s.id}`,s.x,y+43);if(focusSpecimenId===s.id&&now<focusUntil){oc.strokeStyle='#ffe25c';oc.lineWidth=5;oc.beginPath();oc.arc(s.x,y,39+5*Math.sin(now/120),0,Math.PI*2);oc.stroke()}oc.globalAlpha=1});flowFx.forEach(f=>{const age=now-f.t;if(age>f.life)return;const a=1-age/f.life;oc.save();oc.globalAlpha=a;drawArrow(oc,f.a,f.b,f.carried?'#fff0a3':'#8eeaff');oc.restore()});
 }
 function drawSectionScene(now){
  oc.fillStyle='#183947';oc.fillRect(0,0,960,620);
@@ -734,8 +739,8 @@ function drawSectionScene(now){
  // Current surface and original fossil horizon.
  oc.beginPath();for(let i=0;i<PROFILE_N;i++){const x=i*960/(PROFILE_N-1),y=surfaceProfile[i];i?oc.lineTo(x,y):oc.moveTo(x,y)}oc.strokeStyle='#f2d79f';oc.lineWidth=4;oc.stroke();
  oc.setLineDash([8,7]);oc.strokeStyle='rgba(151,220,255,.68)';oc.lineWidth=2;oc.beginPath();oc.moveTo(0,HORIZON_Y);oc.lineTo(960,HORIZON_Y);oc.stroke();oc.setLineDash([]);oc.fillStyle='#c8efff';oc.font='900 11px sans-serif';oc.textAlign='left';oc.fillText('遺骸が横たわった水底',14,HORIZON_Y+18);
- specimens.forEach(s=>{ensure(s);syncBurial(s);const over=Math.max(0,s.stratumY-profileAt(s.x));if(s.found){oc.save();oc.strokeStyle='#78e3b1';oc.setLineDash([5,4]);oc.beginPath();oc.arc(s.x,s.stratumY,24,0,Math.PI*2);oc.stroke();oc.setLineDash([]);oc.fillStyle='#baf7dc';oc.textAlign='center';oc.font='900 10px sans-serif';oc.fillText(`#${s.id} 取り出した跡`,s.x,s.stratumY+38);oc.restore();return}
-   const visible=over<8||xray||s.preserved||s.status==='lost';if(!visible)return;oc.save();oc.globalAlpha=s.status==='lost'?.22:(over>8&&xray?.72:1);oc.font='25px sans-serif';oc.textAlign='center';oc.fillStyle='#fff';oc.fillText(typeIcons[s.type]||'🦴',s.x,s.stratumY+8);oc.font='900 11px sans-serif';oc.fillStyle=s.preserved?'#ffe56e':s.status==='lost'?'#dc887e':'#d8f4ff';const tag=s.preserved?'★ 化石':s.status==='lost'?'× 消失':over>8?`${Math.round(over)}px 覆われた`:'水底';oc.fillText(`#${s.id} ${tag}`,s.x,s.stratumY+35);if(focusSpecimenId===s.id&&now<focusUntil){oc.strokeStyle='#ffe25c';oc.lineWidth=5;oc.beginPath();oc.arc(s.x,s.stratumY,39+5*Math.sin(now/120),0,Math.PI*2);oc.stroke()}oc.restore()})
+ specimens.forEach(s=>{ensure(s);syncBurial(s);const over=Math.max(0,s.stratumY-profileAt(s.x));if(s.found){oc.save();oc.strokeStyle='#78e3b1';oc.setLineDash([5,4]);oc.beginPath();oc.arc(s.x,s.stratumY,24,0,Math.PI*2);oc.stroke();oc.setLineDash([]);oc.fillStyle='#baf7dc';oc.textAlign='center';oc.font='900 10px sans-serif';oc.fillText(`#${s.id} ✓`,s.x,s.stratumY+38);oc.restore();return}
+   const visible=over<8||xray||s.preserved||s.status==='lost';if(!visible)return;oc.save();oc.globalAlpha=s.status==='lost'?.22:(over>8&&xray?.72:1);oc.font='25px sans-serif';oc.textAlign='center';oc.fillStyle='#fff';oc.fillText(typeIcons[s.type]||'🦴',s.x,s.stratumY+8);oc.font='900 11px sans-serif';oc.fillStyle=s.preserved?'#ffe56e':s.status==='lost'?'#dc887e':'#d8f4ff';const tag=s.preserved?'★':s.status==='lost'?'×':over>8?'↓':'○';oc.fillText(`#${s.id}${tag}`,s.x,s.stratumY+35);if(focusSpecimenId===s.id&&now<focusUntil){oc.strokeStyle='#ffe25c';oc.lineWidth=5;oc.beginPath();oc.arc(s.x,s.stratumY,39+5*Math.sin(now/120),0,Math.PI*2);oc.stroke()}oc.restore()})
 }
 function drawOverlay(now){
  oc.clearRect(0,0,960,620);if(phase<=1){drawPlanView(now);drawGesture(now);requestAnimationFrame(drawOverlay);return}

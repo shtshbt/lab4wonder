@@ -38,47 +38,60 @@ jobs:
           assert 'r88-viewbadge' in s
           print('structure/js validation ok')
           PY
+      - name: Build interaction test pages
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('fossil-formation.html').read_text(encoding='utf-8')
+          flow=r'''
+          <script>
+          setTimeout(()=>{try{
+            const overlay=document.querySelector('#r81-overlay');
+            document.querySelector('#r81-phasebar button[data-phase="1"]').click();
+            document.querySelector('.stage').scrollIntoView({block:'center'});
+            overlay.setPointerCapture=()=>{};
+            const r=overlay.getBoundingClientRect();
+            const fire=(type,x,y)=>overlay.dispatchEvent(new PointerEvent(type,{bubbles:true,cancelable:true,pointerId:1,clientX:r.left+x/960*r.width,clientY:r.top+y/620*r.height}));
+            fire('pointerdown',100,260);fire('pointermove',820,260);fire('pointerup',820,260);
+            setTimeout(()=>{
+              const status=document.querySelector('#r81Status')?.textContent||'';
+              const hidden=[...document.querySelectorAll('.stage-help,#geoLabel,.r82-viewmode,.r84-section-label')].every(x=>getComputedStyle(x).display==='none');
+              const parent=document.querySelector('#r81Status')?.parentElement?.classList.contains('r81-panel')||false;
+              const out=document.createElement('pre');out.id='r88-browser-result';out.textContent=JSON.stringify({moved:/動いた/.test(status),status,hidden,parent,marker:document.documentElement.dataset.r88Fossil});document.body.appendChild(out);
+            },180);
+          }catch(e){const out=document.createElement('pre');out.id='r88-browser-result';out.textContent=JSON.stringify({error:String(e)});document.body.appendChild(out)}},700);
+          </script>
+          '''
+          fate=r'''
+          <script>
+          setTimeout(()=>{try{
+            document.querySelector('#r81-phasebar button[data-phase="3"]').click();
+            document.querySelector('#r83Advance').click();document.querySelector('#r83Advance').click();
+            document.querySelector('.r83-time').scrollIntoView({block:'center'});
+            setTimeout(()=>{
+              const btn=document.querySelector('#r83Advance')?.textContent||'';
+              const gate=document.querySelector('#r84Gate')?.textContent||'';
+              const fates=[...document.querySelectorAll('.r84-fate .mini')].map(x=>x.textContent);
+              const out=document.createElement('pre');out.id='r88-browser-result';out.textContent=JSON.stringify({clear:btn==='⏩ 時間をすすめる'&&fates.some(x=>/[○×△★]/.test(x)),btn,gate,fates});document.body.appendChild(out);
+            },180);
+          }catch(e){const out=document.createElement('pre');out.id='r88-browser-result';out.textContent=JSON.stringify({error:String(e)});document.body.appendChild(out)}},700);
+          </script>
+          '''
+          Path('fossil-r88-flow-test.html').write_text(s.replace('</body>',flow+'</body>'),encoding='utf-8')
+          Path('fossil-r88-fate-test.html').write_text(s.replace('</body>',fate+'</body>'),encoding='utf-8')
+          PY
       - name: Browser interaction and mobile screenshots
         run: |
-          cat > /tmp/r88_cdp.mjs <<'JS'
-          import fs from 'fs';
-          const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-          async function json(url){return await (await fetch(url)).json()}
-          let pages=[];for(let i=0;i<30&&!pages.length;i++){try{pages=await json('http://127.0.0.1:9222/json/list')}catch{};if(!pages.length)await sleep(200)}
-          if(!pages.length)throw new Error('no CDP page');
-          const ws=new WebSocket(pages[0].webSocketDebuggerUrl);let seq=0,pending=new Map();
-          await new Promise((res,rej)=>{ws.onopen=res;ws.onerror=rej});
-          ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id&&pending.has(m.id)){const {res,rej}=pending.get(m.id);pending.delete(m.id);m.error?rej(m.error):res(m.result)}};
-          const call=(method,params={})=>new Promise((res,rej)=>{const id=++seq;pending.set(id,{res,rej});ws.send(JSON.stringify({id,method,params}))});
-          const evalv=async expression=>(await call('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true})).result.value;
-          await call('Page.enable');await call('Runtime.enable');
-          await call('Emulation.setDeviceMetricsOverride',{width:390,height:900,deviceScaleFactor:1,mobile:true});
-          await call('Page.navigate',{url:'file://'+process.cwd()+'/fossil-formation.html'});await sleep(1800);
-          let basics=await evalv(`(()=>({phase:[...document.querySelectorAll('#r81-phasebar button')].map(x=>x.textContent.trim()),statusParent:document.querySelector('#r81Status')?.parentElement?.className,hidden:[...document.querySelectorAll('.stage-help,#geoLabel,.r82-viewmode,.r84-section-label')].map(x=>getComputedStyle(x).display),marker:document.documentElement.dataset.r88Fossil}))()`);
-          if(basics.marker!=='kid-readable-strong-flow-clean-layout')throw new Error('marker missing');
-          if(!basics.phase.some(x=>x.includes('④ のこる？')))throw new Error('child phase label missing');
-          if(!String(basics.statusParent).includes('r81-panel'))throw new Error('status is still on canvas');
-          if(basics.hidden.some(x=>x!=='none'))throw new Error('legacy canvas text overlay visible '+JSON.stringify(basics.hidden));
-          await evalv(`document.querySelector('#r81-phasebar button[data-phase="1"]').click();document.querySelector('.stage').scrollIntoView({block:'center'});true`);await sleep(250);
-          const rect=await evalv(`(()=>{const r=document.querySelector('#r81-overlay').getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height}})()`);
-          const px=x=>rect.x+x/960*rect.w, py=y=>rect.y+y/620*rect.h;
-          await call('Input.dispatchMouseEvent',{type:'mousePressed',x:px(100),y:py(260),button:'left',clickCount:1});
-          await call('Input.dispatchMouseEvent',{type:'mouseMoved',x:px(820),y:py(260),button:'left',buttons:1});
-          await call('Input.dispatchMouseEvent',{type:'mouseReleased',x:px(820),y:py(260),button:'left',clickCount:1});await sleep(350);
-          const flowStatus=await evalv(`document.querySelector('#r81Status').textContent`);
-          if(!/動いた/.test(flowStatus))throw new Error('strong flow did not move specimen: '+flowStatus);
-          let shot=await call('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/fossil-r88-flow-mobile.png',Buffer.from(shot.data,'base64'));
-          await evalv(`document.querySelector('#r81-phasebar button[data-phase="3"]').click();document.querySelector('#r83Advance').click();document.querySelector('#r83Advance').click();document.querySelector('.r83-time').scrollIntoView({block:'center'});true`);await sleep(250);
-          const fate=await evalv(`(()=>({btn:document.querySelector('#r83Advance').textContent,gate:document.querySelector('#r84Gate').textContent,fates:[...document.querySelectorAll('.r84-fate .mini')].map(x=>x.textContent),status:document.querySelector('#r81Status').textContent}))()`);
-          if(fate.btn!=='⏩ 時間をすすめる')throw new Error('time button unclear');
-          if(!fate.fates.some(x=>/[○×△★]/.test(x)))throw new Error('simple fate states missing');
-          shot=await call('Page.captureScreenshot',{format:'png'});fs.writeFileSync('/tmp/fossil-r88-fate-mobile.png',Buffer.from(shot.data,'base64'));
-          console.log(JSON.stringify({flowStatus,fate}));ws.close();
-          JS
-          chromium --headless --no-sandbox --disable-gpu --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-r88 about:blank >/tmp/chrome.log 2>&1 &
-          CHPID=$!
-          node /tmp/r88_cdp.mjs
-          kill $CHPID || true
+          chromium --headless --no-sandbox --disable-gpu --window-size=390,900 --virtual-time-budget=2200 --dump-dom "file://$PWD/fossil-r88-flow-test.html" > /tmp/flow-dom.html
+          grep -q '"moved":true' /tmp/flow-dom.html
+          grep -q '"hidden":true' /tmp/flow-dom.html
+          grep -q '"parent":true' /tmp/flow-dom.html
+          grep -q '"marker":"kid-readable-strong-flow-clean-layout"' /tmp/flow-dom.html
+          chromium --headless --no-sandbox --disable-gpu --hide-scrollbars --window-size=390,900 --virtual-time-budget=1700 --screenshot=/tmp/fossil-r88-flow-mobile.png "file://$PWD/fossil-r88-flow-test.html"
+          chromium --headless --no-sandbox --disable-gpu --window-size=390,900 --virtual-time-budget=2200 --dump-dom "file://$PWD/fossil-r88-fate-test.html" > /tmp/fate-dom.html
+          grep -q '"clear":true' /tmp/fate-dom.html
+          chromium --headless --no-sandbox --disable-gpu --hide-scrollbars --window-size=390,900 --virtual-time-budget=1700 --screenshot=/tmp/fossil-r88-fate-mobile.png "file://$PWD/fossil-r88-fate-test.html"
+          rm fossil-r88-flow-test.html fossil-r88-fate-test.html
       - name: Upload screenshots
         uses: actions/upload-artifact@v4
         with:

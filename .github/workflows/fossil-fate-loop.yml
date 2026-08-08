@@ -14,7 +14,9 @@ jobs:
         with:
           fetch-depth: 0
       - name: Apply fate-loop redesign
-        run: python .github/scripts/fossil_fate_loop.py
+        run: |
+          python .github/scripts/fossil_fate_loop.py
+          python .github/scripts/fix_fossil_fate_loop.py
       - name: Validate HTML and JavaScript
         run: |
           python - <<'PY'

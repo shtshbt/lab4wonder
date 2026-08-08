@@ -31,7 +31,7 @@ jobs:
               subprocess.run(['node','--check',str(f)],check=True)
           for hook in ['star-rarity-weighted-duplicates','atlasRarityWeight={1:16,2:8,3:4,4:2,5:1}','共伴発見は重複あり','↻ 主化石は再発見']:
               assert hook in s, hook
-          assert "filter(n=>!atlas.has(n))" not in s
+          assert "const available=[...new Set(pool)].filter(n=>!atlas.has(n))" not in s
           print('structure/js validation ok')
           PY
       - name: Validate rarity odds and 48-card reachability

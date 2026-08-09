@@ -1,0 +1,40 @@
+name: Honeybee comb season UI
+on:
+  push:
+    branches: [agent/honeybee-comb-season-ui]
+permissions:
+  contents: write
+jobs:
+  patch-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/honeybee-comb-season-ui
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply patch
+        run: python tools/patch_honeybee_comb.py
+      - name: Validate syntax and behavior
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('honeybee-colony.html').read_text()
+          assert '.swarmModal{position:fixed' in s
+          assert 'max-height:calc(100dvh - 28px);overflow:auto' in s
+          assert '蜜ろう1＋蜂蜜0.6' in s
+          assert "if(seasonIndex===3){toast('❄️ 冬は巣板を広げず" in s
+          script=re.findall(r'<script>(.*?)</script>',s,re.S)[-1]
+          Path('/tmp/bee.js').write_text(script)
+          PY
+          node --check /tmp/bee.js
+      - name: Commit result
+        run: |
+          rm -f tools/patch_honeybee_comb.py .github/workflows/honeybee-comb-season-ui.yml
+          git config user.name sshibata
+          git config user.email 107645802+shtshbt@users.noreply.github.com
+          git add honeybee-colony.html tools/patch_honeybee_comb.py .github/workflows/honeybee-comb-season-ui.yml
+          git commit -m "Fix swarm modal and gate comb building by season and resources"
+          git push origin agent/honeybee-comb-season-ui

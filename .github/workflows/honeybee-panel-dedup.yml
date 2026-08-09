@@ -26,32 +26,25 @@ jobs:
           if hud not in s: raise SystemExit('HUD anchor missing')
           s=s.replace(hud,'''<div class="quickStatus" aria-label="コロニーの要約"><strong id="hudWorkers">🐝 120</strong><span id="hudSeason">🌿 春</span><span class="danger" id="hudDanger">👹 ○○○○○ 平穏</span></div>''',1)
 
-          # All ordinary and crisis notices become non-overlay rows below the canvas.
-          css='''.quickStatus{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 10px;border-top:1px solid #30465c;background:#0d1925;font:850 12px/1.3 ui-monospace,monospace}.quickStatus strong{color:#ffd765;font-size:14px}.quickStatus span{padding-left:8px;border-left:1px solid #40536b}.quickStatus .danger{color:#ffb0a0;flex:1}.stage>.toast{position:static;display:none;transform:none;opacity:1;transition:none;margin:7px 10px;padding:8px 10px;border-radius:10px;max-width:none;white-space:normal;background:#243442;color:#eef5fb;text-align:left}.stage>.toast.show{display:block;transform:none;opacity:1}.stage>.bigalert{position:static;display:none;transform:none;width:auto;margin:7px 10px;padding:9px 12px;border:2px solid #ffb091;border-radius:12px;box-shadow:none;opacity:1;text-align:left;background:#35191a}.stage>.bigalert.show{display:block;transform:none}.stage>.bigalert.safe{background:#2b260f}.stage>.bigalert h2{display:inline;margin:0 8px 0 0;font-size:16px}.stage>.bigalert p{display:inline;margin:0;font-size:12px}.stage>.bigalert button{display:none!important}.stage>.bigalert.hold{pointer-events:none}@media(max-width:430px){.quickStatus{font-size:11px;gap:5px}.quickStatus strong{font-size:13px}.quickStatus span{padding-left:5px}.stage>.bigalert h2{font-size:14px}.stage>.bigalert p{font-size:11px}}'''
+          css='''.quickStatus{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 10px;border-top:1px solid #30465c;background:#0d1925;font:850 12px/1.3 ui-monospace,monospace}.quickStatus strong{color:#ffd765;font-size:14px}.quickStatus span{padding-left:8px;border-left:1px solid #40536b}.quickStatus .danger{color:#ffb0a0;flex:1}.stage>.toast{position:static;display:none;left:auto;bottom:auto;transform:none;opacity:1;transition:none;margin:7px 10px;padding:8px 10px;border-radius:10px;max-width:none;white-space:normal;background:#243442;color:#eef5fb;text-align:left}.stage>.toast.show{display:block;transform:none;opacity:1}.stage>.bigalert{position:static;display:none;left:auto;right:auto;top:auto;transform:none;width:auto;margin:7px 10px;padding:9px 12px;border:2px solid #ffb091;border-radius:12px;box-shadow:none;opacity:1;text-align:left;background:#35191a}.stage>.bigalert.show{display:block;transform:none}.stage>.bigalert.safe{background:#2b260f}.stage>.bigalert h2{display:inline;margin:0 8px 0 0;font-size:16px}.stage>.bigalert p{display:inline;margin:0;font-size:12px}.stage>.bigalert button{display:none!important}.stage>.bigalert.hold{pointer-events:none}@media(max-width:430px){.quickStatus{font-size:11px;gap:5px}.quickStatus strong{font-size:13px}.quickStatus span{padding-left:5px}.stage>.bigalert h2{font-size:14px}.stage>.bigalert p{font-size:11px}}'''
           s=s.replace('</style>',css+'</style>',1)
 
-          # Remove old overlay offsets so no notice reserves/blocks hornet airspace.
-          s=s.replace('left:10px;right:10px;top:8px','left:10px;right:10px;top:8px')
-
-          # Detailed duplicated HUD updates are removed; left panel remains the source of detail.
           pat=re.compile(r"\$\('hudWorkers'\)\.textContent=`🐝 \$\{Math\.round\(workers\)\}`;\$\('hudHeat'\).*?\$\('hudLineage'\)\.textContent=.*?;const d=",re.S)
-          repl="$('hudWorkers').textContent=`🐝 ${Math.round(workers)}`;$('hudSeason').textContent=`${s.icon} ${s.name}`;const d="
-          s,n=pat.subn(repl,s,count=1)
+          s,n=pat.subn("$('hudWorkers').textContent=`🐝 ${Math.round(workers)}`;$('hudSeason').textContent=`${s.icon} ${s.name}`;const d=",s,count=1)
           if n!=1: raise SystemExit(f'HUD update replacement count={n}')
 
-          # Scout warning should never block progression. Manual scout auto-starts playback if paused.
-          old="""threat.scoutChecked=false;threat.scoutChance=0;holdNotice('👹 スズメバチ偵察！','巣口へ接近中。状況を確認してから「続ける」で防衛へ進む。危機中は速度も自動で落ちる。','danger');if(manual)toast('👹 スズメバチの偵察！',true)"""
-          new="""threat.scoutChecked=false;threat.scoutChance=0;bigNotice('👹 スズメバチ偵察！','右から偵察蜂が接近中。しばらく見ていると蜂球で迎撃するか、逃げられるかが決まる。','danger',4200);if(manual&&!running){running=true;$('play').textContent='⏸ 一時停止'}if(manual)toast('👹 偵察蜂が飛んできた。動きを見てみよう',true)"""
-          if old not in s: raise SystemExit('triggerScout hold anchor missing')
-          s=s.replace(old,new,1)
+          pat=re.compile(r"threat\.scoutChance=0;holdNotice\('👹 スズメバチ偵察！'.*?\);if\(manual\)toast\('👹 スズメバチの偵察！',true\)")
+          replacement="threat.scoutChance=0;bigNotice('👹 スズメバチ偵察！','右から偵察蜂が接近中。しばらく見ていると蜂球で迎撃するか、逃げられるかが決まる。','danger',4200);if(manual&&!running){running=true;$('play').textContent='⏸ 一時停止'}if(manual)toast('👹 偵察蜂が飛んできた。動きを見てみよう',true)"
+          s,n=pat.subn(replacement,s,count=1)
+          if n!=1: raise SystemExit(f'triggerScout replacement count={n}')
 
-          old="""holdNotice('⚠️ 偵察蜂を逃した！','巣を覚えられた。2〜5日ほどの警戒期間を経て、本格襲来する可能性がある。','danger');toast('⚠ 偵察蜂が逃げた。巣を覚えられたかも…',true)"""
-          new="""bigNotice('⚠️ 偵察蜂を逃した！','巣を覚えられた。2〜5日ほどの警戒期間を経て、本格襲来する可能性がある。','danger',4800);toast('⚠ 偵察蜂が逃げた。巣を覚えられたかも…',true)"""
-          if old not in s: raise SystemExit('markNest hold anchor missing')
-          s=s.replace(old,new,1)
+          pat=re.compile(r"holdNotice\('⚠️ 偵察蜂を逃した！'.*?\);toast\('⚠ 偵察蜂が逃げた。巣を覚えられたかも…',true\)")
+          s,n=pat.subn("bigNotice('⚠️ 偵察蜂を逃した！','巣を覚えられた。2〜5日ほどの警戒期間を経て、本格襲来する可能性がある。','danger',4800);toast('⚠ 偵察蜂が逃げた。巣を覚えられたかも…',true)",s,count=1)
+          if n!=1: raise SystemExit(f'markNest replacement count={n}')
 
-          # PR34 uses staged raid with negative timer; keep staging but remove blocking click.
-          s=s.replace("holdNotice('🚨 スズメバチ襲来！',`${n}匹が巣へ殺到。働き蜂・育児個体・貯蜜が危険。「続ける」で戦闘が始まる。`,'danger')","bigNotice('🚨 スズメバチ大群！',`${n}匹が右から接近中。まず姿を確認しよう。巣口へ着くまでは被害は始まらない。`,'danger',5200)")
+          pat=re.compile(r"holdNotice\('🚨 スズメバチの大群！'.*?\);toast\(`👹 \$\{n\}匹の大群が接近！`,true\)")
+          s,n=pat.subn("bigNotice('🚨 スズメバチ大群！',`${n}匹が右から接近中。まず姿を確認しよう。巣口へ着くまでは被害は始まらない。`,'danger',5200);toast(`👹 ${n}匹の大群が接近！`,true)",s,count=1)
+          if n!=1: raise SystemExit(f'startRaid replacement count={n}')
 
           p.write_text(s)
           PY
@@ -66,6 +59,7 @@ jobs:
           assert 'id="hudHeat"' not in s and 'id="hudQueen"' not in s
           assert "holdNotice('👹 スズメバチ偵察！'" not in s
           assert "holdNotice('⚠️ 偵察蜂を逃した！'" not in s
+          assert "holdNotice('🚨 スズメバチの大群！'" not in s
           assert 'stage>.toast{position:static' in s
           assert 'stage>.bigalert{position:static' in s
           script=re.findall(r'<script>(.*?)</script>',s,re.S)[-1]
@@ -77,7 +71,7 @@ jobs:
           cat > bee-ui-test.cjs <<'JS'
           const fs=require('fs'); const {JSDOM}=require('jsdom');
           const html=fs.readFileSync('honeybee-colony.html','utf8');
-          const dom=new JSDOM(html,{runScripts:'dangerously',pretendToBeVisual:true,beforeParse(w){w.HTMLCanvasElement.prototype.getContext=()=>({clearRect(){},fillRect(){},strokeRect(){},beginPath(){},closePath(){},moveTo(){},lineTo(){},bezierCurveTo(){},arc(){},ellipse(){},fill(){},stroke(){},save(){},restore(){},translate(){},rotate(){},scale(){},setLineDash(){},fillText(){},measureText(t){return {width:String(t).length*7}},createLinearGradient(){return {addColorStop(){}}},set fillStyle(v){},set strokeStyle(v){},set lineWidth(v){},set font(v){},set textAlign(v){},set globalAlpha(v){}}); w.requestAnimationFrame=()=>0;}});
+          const dom=new JSDOM(html,{runScripts:'dangerously',pretendToBeVisual:true,beforeParse(w){w.HTMLCanvasElement.prototype.getContext=()=>({clearRect(){},fillRect(){},strokeRect(){},beginPath(){},closePath(){},moveTo(){},lineTo(){},bezierCurveTo(){},arc(){},ellipse(){},fill(){},stroke(){},save(){},restore(){},translate(){},rotate(){},scale(){},setLineDash(){},fillText(){},strokeText(){},measureText(t){return {width:String(t).length*7}},createLinearGradient(){return {addColorStop(){}}},set fillStyle(v){},set strokeStyle(v){},set shadowColor(v){},set shadowBlur(v){},set lineWidth(v){},set font(v){},set textAlign(v){},set globalAlpha(v){}}); w.requestAnimationFrame=()=>0;}});
           const w=dom.window,d=w.document,lab=w.__beeLab;
           if(!lab) throw new Error('beeLab missing');
           if(d.querySelector('.hud')) throw new Error('old overlay HUD remains');

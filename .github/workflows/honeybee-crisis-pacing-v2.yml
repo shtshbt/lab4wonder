@@ -1,0 +1,104 @@
+name: Honeybee crisis pacing v2
+
+on:
+  push:
+    branches:
+      - agent/honeybee-crisis-pacing-fix
+
+permissions:
+  contents: write
+
+jobs:
+  patch-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/honeybee-crisis-pacing-fix
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Patch pacing, collapse freeze, and resource-growth coupling
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('honeybee-colony.html'); s=p.read_text()
+          def rep(a,b):
+              global s
+              if a not in s: raise SystemExit('missing anchor: '+a[:160])
+              s=s.replace(a,b,1)
+
+          rep('.bigalert h2{margin:0 0 6px;font-size:27px;color:#fff}.bigalert p{margin:0;font-size:14px;line-height:1.6;font-weight:850;color:#ffe8df}',
+              '.bigalert h2{margin:0 0 6px;font-size:27px;color:#fff}.bigalert p{margin:0;font-size:14px;line-height:1.6;font-weight:850;color:#ffe8df}.bigalert button{display:none;margin:12px auto 0;min-width:150px;background:#ffd765;color:#2b2100;border-color:#ffd765}.bigalert.hold{pointer-events:auto}.bigalert.hold button{display:block}.collapsedCurtain{position:absolute;z-index:25;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(4,8,12,.76);backdrop-filter:grayscale(1) blur(2px);text-align:center}.collapsedCurtain.show{display:flex}.collapsedCurtain .box{max-width:520px;padding:22px;border:2px solid #ff8f78;border-radius:20px;background:#1d1113f2}.collapsedCurtain h2{margin:0 0 8px;font-size:28px;color:#ffb4a5}.collapsedCurtain p{margin:0 0 14px;line-height:1.7;font-weight:800;color:#f3d8d3}')
+          rep('<div class="bigalert" id="bigAlert"><h2 id="bigAlertTitle"></h2><p id="bigAlertBody"></p></div>',
+              '<div class="bigalert" id="bigAlert"><h2 id="bigAlertTitle"></h2><p id="bigAlertBody"></p><button id="bigAlertContinue">▶ 続ける</button></div><div class="collapsedCurtain" id="collapsedCurtain"><div class="box"><h2>💀 コロニー崩壊</h2><p id="collapseReason">働き蜂がいなくなり、巣を維持できなくなった。</p><button id="collapseReset">↺ 新しい群れで始める</button></div></div>')
+          rep("swarmPending=false,swarmDoneThisSpring=false,noticeTimer=0,honey=28", "swarmPending=false,swarmDoneThisSpring=false,noticeTimer=0,crisisHold=false,crisisResume=false,collapseReason='',honey=28")
+          rep("swarmPending=false;swarmDoneThisSpring=false;honey=28;", "swarmPending=false;swarmDoneThisSpring=false;crisisHold=false;crisisResume=false;collapseReason='';$('bigAlert').classList.remove('show','hold');$('collapsedCurtain').classList.remove('show');honey=28;")
+          rep("function bigNotice(title,body,kind='danger',ms=3000){const el=$('bigAlert');$('bigAlertTitle').textContent=title;$('bigAlertBody').textContent=body;el.classList.toggle('safe',kind==='safe');el.classList.add('show');clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>el.classList.remove('show'),ms)}", "function bigNotice(title,body,kind='danger',ms=3000,hold=false){const el=$('bigAlert');$('bigAlertTitle').textContent=title;$('bigAlertBody').textContent=body;el.classList.toggle('safe',kind==='safe');el.classList.toggle('hold',hold);el.classList.add('show');clearTimeout(noticeTimer);if(hold){crisisResume=running;crisisHold=true;running=false;$('play').textContent='▶ 再生'}else noticeTimer=setTimeout(()=>el.classList.remove('show'),ms)}function holdNotice(title,body,kind='danger'){bigNotice(title,body,kind,0,true)}function releaseCrisisHold(){if(!crisisHold)return;crisisHold=false;$('bigAlert').classList.remove('show','hold');if(colonyAlive&&crisisResume){running=true;$('play').textContent='⏸ 一時停止'}crisisResume=false}")
+          rep("function step(h){if(h<=0||!colonyAlive||swarmPending)return;", "function step(h){if(h<=0||!colonyAlive||swarmPending||crisisHold)return;")
+          rep("function collapseColony(reason){if(!colonyAlive)return;bigNotice('💀 コロニー崩壊',reason,'danger',6000);colonyAlive=false;queenAlive=false;workers=Math.max(0,workers);heatDamaged=Math.min(heatDamaged,workers);running=false;$('play').textContent='▶ 再生';threat.mode='collapsed';threat.hornets=[];threat.raidPending=0;toast(`💀 コロニー崩壊：${reason}`,true)}", "function collapseColony(reason){if(!colonyAlive)return;collapseReason=reason;colonyAlive=false;queenAlive=false;workers=0;heatDamaged=0;eggs=0;larvae=0;pupae=0;running=false;crisisHold=false;crisisResume=false;$('play').textContent='▶ 再生';threat.mode='collapsed';threat.hornets=[];threat.raidPending=0;bees=[];dance=null;buildTargets=[];$('bigAlert').classList.remove('show','hold');$('collapseReason').textContent=reason;$('collapsedCurtain').classList.add('show');toast(`💀 コロニー崩壊：${reason}`,true)}")
+
+          rep("bigNotice('👹 スズメバチ偵察！','巣口へ接近中。十分な健康な防衛蜂が集まれるか？','danger',3200);", "holdNotice('👹 スズメバチ偵察！','巣口へ接近中。状況を確認してから「続ける」で防衛へ進む。危機中は速度も自動で落ちる。','danger');")
+          rep("bigNotice('⚠️ 偵察蜂を逃した！','巣を覚えられた。本格襲来につながる危険が高い。','danger',4200);", "holdNotice('⚠️ 偵察蜂を逃した！','巣を覚えられた。数日の警戒期間を経て、本格襲来する可能性がある。','danger');")
+          rep("threat.raidPending=12+Math.random()*20;", "threat.raidPending=48+Math.random()*72;")
+          rep("bigNotice('🚨 スズメバチ襲来！',`${n}匹が巣へ殺到。働き蜂だけでなく育児中の蜂も危険！`,'danger',4600);", "holdNotice('🚨 スズメバチ襲来！',`${n}匹が巣へ殺到。働き蜂・育児個体・貯蜜が危険。「続ける」で戦闘が始まる。`,'danger');")
+          rep("if(threat.mode==='calm'&&Math.random()<h*.00034*pressure*seasonThreat)triggerScout(false);", "if(threat.mode==='calm'&&Math.random()<h*.00034*pressure*seasonThreat)triggerScout(false);if(crisisHold)return;")
+
+          rep("function drawBees(){const now=performance.now()/1000,winter=seasonIndex===3;", "function drawBees(){if(!colonyAlive)return;const now=performance.now()/1000,winter=seasonIndex===3;")
+          rep("function drawQueen(){if(!queenAlive)return;", "function drawQueen(){if(!colonyAlive||!queenAlive)return;")
+          rep("cv.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;const p=point(e);", "cv.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;if(!colonyAlive){toast('💀 コロニーは崩壊している。リセットしてね');return}const p=point(e);")
+          rep("$('play').onclick=()=>{running=!running;$('play').textContent=running?'⏸ 一時停止':'▶ 再生'};", "$('play').onclick=()=>{if(!colonyAlive){toast('💀 リセットして新しい群れを始めてね');return}if(crisisHold){releaseCrisisHold();return}running=!running;$('play').textContent=running?'⏸ 一時停止':'▶ 再生'};")
+          rep("$('day').onclick=()=>{for(let i=0;i<24;i++)step(1)};", "$('day').onclick=()=>{if(crisisHold){toast('⚠️ まず通知の「続ける」を押してね');return}for(let i=0;i<24;i++)step(1)};")
+          rep("$('reset').onclick=reset;$('scout').onclick=()=>triggerScout(true);", "$('reset').onclick=reset;$('collapseReset').onclick=reset;$('bigAlertContinue').onclick=releaseCrisisHold;$('scout').onclick=()=>triggerScout(true);")
+          rep("if(running)step(dt*(+$('speed').value||6));", "if(running){const chosen=+$('speed').value||6,activeThreat=!['calm','recovered','collapsed'].includes(threat.mode);step(dt*(activeThreat?Math.min(chosen,6):chosen))}")
+
+          rep("flowers=[{x:125,y:115,n:62,maxN:62,q:.68,life:11*24},{x:270,y:165,n:50,maxN:50,q:.78,life:14*24}];waters=[{x:70,y:205,n:72,maxN:72,life:12*24}]", "flowers=[{x:125,y:115,n:100,maxN:100,q:.68,life:20*24},{x:270,y:165,n:100,maxN:100,q:.78,life:26*24}];waters=[{x:70,y:205,n:100,maxN:100,life:36*24}]")
+          old="const flowerMass=Math.max(0,flowers.reduce((a,f)=>a+Math.max(0,f.n)*f.q,0));const forageFrac=rr.forage/Math.max(1,workers),foragePotential=forageFrac*s.forage*workers*Math.min(1.05,flowerMass/70);for(const f of flowers){f.life-=h;const share=flowerMass?Math.max(0,f.n)*f.q/flowerMass:0,take=Math.min(Math.max(0,f.n),h*.020*foragePotential*share);f.n=Math.max(0,f.n-take);nectar+=take*.62;pollen+=take*.20;if(take>.45&&f.q>.84&&(!dance||dance.life<=0)){dance={x:f.x,y:f.y,life:18,quality:f.q};toast('💃 よい花！ 8の字ダンスで仲間へ')}}const flowerBefore=flowers.length;flowers=flowers.filter(f=>f.n>.6&&f.life>0&&seasonIndex!==3);"
+          new="const flowerMass=Math.max(0,flowers.reduce((a,f)=>a+(0.25+0.75*clamp(f.n/Math.max(1,f.maxN),0,1))*f.q,0));const forageFrac=rr.forage/Math.max(1,workers),foragePotential=forageFrac*s.forage*workers*clamp(flowerMass/1.2,0,2.2);for(const f of flowers){f.life-=h;const avail=clamp(f.n/Math.max(1,f.maxN),0,1),weight=(0.25+0.75*avail)*f.q,share=flowerMass?weight/flowerMass:0,take=h*.014*foragePotential*share*(.45+.55*avail);nectar+=take*.62;pollen+=take*.20;f.n=Math.max(0,f.n-h*(.018+.00045*rr.forage)*(.7+.3*f.q));if(take>.30&&f.q>.84&&(!dance||dance.life<=0)){dance={x:f.x,y:f.y,life:18,quality:f.q};toast('💃 よい花！ 8の字ダンスで仲間へ')}}const flowerBefore=flowers.length;flowers=flowers.filter(f=>f.n>4&&f.life>0&&seasonIndex!==3);"
+          rep(old,new)
+          rep("flowers.push({x:clamp(p.x,45,365),y:clamp(p.y,65,190),n:64,maxN:64,q:rand(.62,.98),life:rand(8,15)*24});", "flowers.push({x:clamp(p.x,45,365),y:clamp(p.y,65,190),n:100,maxN:100,q:rand(.62,.98),life:rand(18,30)*24});")
+          rep("waters.push({x:clamp(p.x,35,370),y:clamp(p.y,80,215),n:70,maxN:70,life:rand(7,13)*24});water+=8;", "waters.push({x:clamp(p.x,35,370),y:clamp(p.y,80,215),n:100,maxN:100,life:rand(25,45)*24});water+=8;")
+          rep("const n=Math.max(2,Math.min(18,Math.floor(f.n/5)));", "const n=Math.max(2,Math.min(18,Math.round(3+15*clamp(f.n/Math.max(1,f.maxN),0,1))));")
+          rep("c.fillText(`${Math.round(f.n)}`,f.x-7,f.y+45)", "c.fillText(`🌸${Math.round(100*f.n/Math.max(1,f.maxN))}%`,f.x-18,f.y+45)")
+          rep("c.fillText(`💧${Math.round(w.n)}`,w.x-18,w.y+26)", "c.fillText(`💧${Math.round(100*w.n/Math.max(1,w.maxN))}%`,w.x-20,w.y+26)")
+          rep("addTestFlower:(life=24,n=4)=>flowers.push({x:160,y:120,n,maxN:n,q:.8,life}),addTestWater:(life=24,n=4)=>waters.push({x:90,y:190,n,maxN:n,life}),", "addTestFlower:(life=24,n=100)=>flowers.push({x:160+flowers.length*5,y:120,n,maxN:n,q:.88,life}),addTestWater:(life=24,n=100)=>waters.push({x:90+waters.length*5,y:190,n,maxN:n,life}),")
+
+          rep("snapshot:()=>({workers:Math.round(workers),year", "snapshot:()=>({workers:Math.round(workers),crisisHold,collapseReason,visualBees:bees.length,year")
+          rep("setTool:t=>{tool=t},removeResourceAt", "setTool:t=>{tool=t},releaseCrisisHold,removeResourceAt")
+          p.write_text(s)
+          PY
+      - name: Validate behavior
+        shell: bash
+        run: |
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          class P(HTMLParser): pass
+          s=Path('honeybee-colony.html').read_text(); P().feed(s)
+          for token in ['bigAlertContinue','crisisHold','collapsedCurtain','raidPending=48+Math.random()*72','clamp(flowerMass/1.2,0,2.2)','Math.min(chosen,6)']:
+              assert token in s, token
+          a=s.index('<script>')+8; b=s.index('</script>',a); Path('/tmp/bee.js').write_text(s[a:b])
+          PY
+          node --check /tmp/bee.js
+          npm install --no-save jsdom@26 >/dev/null 2>&1
+          cat > bee-fix-test.mjs <<'JS'
+          import fs from 'fs'; import {JSDOM} from 'jsdom';
+          const html=fs.readFileSync('honeybee-colony.html','utf8');
+          function make(){return new JSDOM(html,{runScripts:'dangerously',pretendToBeVisual:true,beforeParse(w){w.HTMLCanvasElement.prototype.getContext=()=>({clearRect(){},fillRect(){},strokeRect(){},beginPath(){},closePath(){},fill(){},stroke(){},moveTo(){},lineTo(){},arc(){},ellipse(){},bezierCurveTo(){},fillText(){},save(){},restore(){},translate(){},rotate(){},scale(){},setLineDash(){},createLinearGradient(){return{addColorStop(){}}},measureText(t){return{width:String(t).length*7}},set fillStyle(v){},set strokeStyle(v){},set lineWidth(v){},set font(v){},set textAlign(v){}});w.requestAnimationFrame=()=>0;}})}
+          let dom=make(),lab=dom.window.__beeLab;lab.setPressure(0);let a=lab.snapshot();lab.stepHours(24);let b=lab.snapshot();console.log('DAY1',JSON.stringify({a,b}));if(b.flowers!==a.flowers)throw new Error('flowers vanished within one day');if(!(b.flowerResource<a.flowerResource&&b.flowerResource>a.flowerResource*.75))throw new Error('flower depletion not gradual');
+          dom=make();lab=dom.window.__beeLab;lab.setPressure(0);let base0=lab.snapshot();lab.stepHours(24*14);let base=lab.snapshot();console.log('BASE14D',JSON.stringify(base));
+          dom=make();lab=dom.window.__beeLab;lab.setPressure(0);for(let i=0;i<3;i++)lab.addTestFlower(24*28,100);lab.stepHours(24*14);let g=lab.snapshot();console.log('MANAGED14D',JSON.stringify(g));if(g.workers<125)throw new Error('managed colony cannot grow');if(g.workers<=base.workers+6)throw new Error('extra flowers do not materially improve growth');if(g.flowers<3)throw new Error('managed flowers vanish too fast');
+          dom=make();lab=dom.window.__beeLab;lab.setPressure(100);dom.window.Math.random=()=>.99;lab.triggerScout();let s=lab.snapshot();if(!s.crisisHold||s.threat!=='scout')throw new Error('scout did not hold');const d=s.seasonDay;lab.stepHours(24);if(lab.snapshot().seasonDay!==d)throw new Error('time advanced while held');lab.releaseCrisisHold();for(let i=0;i<50&&!lab.snapshot().crisisHold;i++)lab.stepHours(1);s=lab.snapshot();if(!s.crisisHold||s.threat!=='marked')throw new Error('failed scout notice did not hold '+JSON.stringify(s));lab.releaseCrisisHold();for(let i=0;i<40;i++)lab.stepHours(1);if(lab.snapshot().threat!=='marked')throw new Error('raid arrived too soon');for(let i=0;i<100&&!lab.snapshot().crisisHold;i++)lab.stepHours(1);s=lab.snapshot();if(!s.crisisHold||s.threat!=='raid')throw new Error('raid notice did not hold '+JSON.stringify(s));lab.releaseCrisisHold();for(let i=0;i<160&&lab.snapshot().colonyAlive;i++)lab.stepHours(1);s=lab.snapshot();console.log('COLLAPSE',JSON.stringify(s));if(s.colonyAlive)throw new Error('forced raid did not collapse');if(s.workers!==0||s.visualBees!==0)throw new Error('collapsed colony still animates bees');if(!dom.window.document.getElementById('collapsedCurtain').classList.contains('show'))throw new Error('collapse curtain missing');console.log('PASS');
+          JS
+          node bee-fix-test.mjs
+          rm -f bee-fix-test.mjs
+          rm -rf node_modules package-lock.json package.json
+      - name: Commit HTML
+        shell: bash
+        run: |
+          git config user.name 'sshibata'
+          git config user.email '107645802+shtshbt@users.noreply.github.com'
+          git add honeybee-colony.html
+          git commit -m 'Fix crisis pacing and reconnect flowers to colony growth'
+          git push origin HEAD:agent/honeybee-crisis-pacing-fix

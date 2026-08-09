@@ -1,0 +1,92 @@
+name: Honeybee resource lifecycle
+
+on:
+  push:
+    branches:
+      - agent/honeybee-scout-risk-tune
+
+permissions:
+  contents: write
+
+jobs:
+  patch-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/honeybee-scout-risk-tune
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Patch finite flower and water resources
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('honeybee-colony.html'); s=p.read_text()
+          def rep(a,b):
+              global s
+              if a not in s: raise SystemExit('missing anchor: '+a[:120])
+              s=s.replace(a,b,1)
+
+          rep('<button data-tool="inspect">🔎 観察</button><div class="toolhint"', '<button data-tool="inspect">🔎 観察</button><button data-tool="remove">🗑 除去</button><div class="toolhint"')
+          rep("flowers=[{x:125,y:115,n:62,q:.68},{x:270,y:165,n:50,q:.78}];waters=[{x:70,y:205,n:100}]", "flowers=[{x:125,y:115,n:62,maxN:62,q:.68,life:11*24},{x:270,y:165,n:50,maxN:50,q:.78,life:14*24}];waters=[{x:70,y:205,n:72,maxN:72,life:12*24}]")
+
+          old="const flowerMass=Math.max(0,flowers.reduce((a,f)=>a+f.n*f.q,0));const forageFrac=rr.forage/Math.max(1,workers),foragePotential=forageFrac*s.forage*workers*Math.min(1.15,flowerMass/90);for(const f of flowers){const share=flowerMass?f.n*f.q/flowerMass:0,take=Math.min(f.n,h*.028*foragePotential*share);f.n=Math.max(2,f.n-take*.055);nectar+=take*.62;pollen+=take*.20;if(take>.8&&f.q>.84&&(!dance||dance.life<=0)){dance={x:f.x,y:f.y,life:18,quality:f.q};toast('💃 よい花！ 8の字ダンスで仲間へ')}}for(const f of flowers){const regen=seasonIndex===0?.020:seasonIndex===1?.012:seasonIndex===2?.003:0;f.n=Math.min(110,f.n+h*regen)}if(dance){dance.life-=h;if(dance.life<=0)dance=null}water=Math.max(0,water-h*(temp>35?.045:.010));"
+          new="const flowerMass=Math.max(0,flowers.reduce((a,f)=>a+Math.max(0,f.n)*f.q,0));const forageFrac=rr.forage/Math.max(1,workers),foragePotential=forageFrac*s.forage*workers*Math.min(1.05,flowerMass/70);for(const f of flowers){f.life-=h;const share=flowerMass?Math.max(0,f.n)*f.q/flowerMass:0,take=Math.min(Math.max(0,f.n),h*.020*foragePotential*share);f.n=Math.max(0,f.n-take);nectar+=take*.62;pollen+=take*.20;if(take>.45&&f.q>.84&&(!dance||dance.life<=0)){dance={x:f.x,y:f.y,life:18,quality:f.q};toast('💃 よい花！ 8の字ダンスで仲間へ')}}const flowerBefore=flowers.length;flowers=flowers.filter(f=>f.n>.6&&f.life>0&&seasonIndex!==3);if(flowers.length<flowerBefore)logEvent('🌸 花畑が咲き終わった／採り尽くされた');if(dance){dance.life-=h;if(dance.life<=0)dance=null}for(const w of waters)w.life-=h;const waterUse=h*(temp>35?.060:.014);water=Math.max(0,water-waterUse);let waterNeed=Math.max(0,26-water),waterCollect=Math.min(waterNeed,h*.006*Math.max(0,rr.forage));for(const w of waters){if(waterCollect<=0)break;const got=Math.min(w.n,waterCollect);w.n-=got;water+=got;waterCollect-=got}const waterBefore=waters.length;waters=waters.filter(w=>w.n>.4&&w.life>0);if(waters.length<waterBefore)logEvent('💧 水場が干上がった／使い切った');"
+          rep(old,new)
+
+          rep("flowers.push({x:clamp(p.x,45,365),y:clamp(p.y,65,190),n:80,q:rand(.62,.98)});", "flowers.push({x:clamp(p.x,45,365),y:clamp(p.y,65,190),n:64,maxN:64,q:rand(.62,.98),life:rand(8,15)*24});")
+          rep("waters.push({x:clamp(p.x,35,370),y:clamp(p.y,80,215),n:100});water+=20;", "waters.push({x:clamp(p.x,35,370),y:clamp(p.y,80,215),n:70,maxN:70,life:rand(7,13)*24});water+=8;")
+
+          old="else if(tool==='comb'){if(p.y<245){toast('⬡ 巣板の端をタップしてね');return}addBuildNear(p)}else{if(Math.hypot(p.x-630,p.y-385)<38)"
+          new="else if(tool==='comb'){if(p.y<245){toast('⬡ 巣板の端をタップしてね');return}addBuildNear(p)}else if(tool==='remove'){const fi=flowers.findIndex(f=>Math.hypot(f.x-p.x,f.y-p.y)<52),wi=waters.findIndex(w=>Math.hypot(w.x-p.x,w.y-p.y)<45);if(fi>=0){flowers.splice(fi,1);toast('🗑 花畑を除去',true)}else if(wi>=0){waters.splice(wi,1);toast('🗑 水場を除去',true)}else toast('🗑 花畑か水場をタップしてね')}else{if(Math.hypot(p.x-630,p.y-385)<38)"
+          rep(old,new)
+
+          rep("inspect:'🔎 女王や巣房をタップ：左下パネルに観察結果を出す。'};", "inspect:'🔎 女王や巣房をタップ：左下パネルに観察結果を出す。',remove:'🗑 花畑や水場をタップ：その資源を取り除く。'};")
+
+          old="for(const w of waters){c.fillStyle=winter?'#b9d9e8':'#5cc9ef';c.beginPath();c.ellipse(w.x,w.y,30,12,0,0,TAU);c.fill()}"
+          new="for(const w of waters){c.fillStyle=winter?'#b9d9e8':'#5cc9ef';c.beginPath();c.ellipse(w.x,w.y,30,12,0,0,TAU);c.fill();c.fillStyle='#17301a';c.font='bold 10px system-ui';c.fillText(`💧${Math.round(w.n)}`,w.x-18,w.y+26)}"
+          rep(old,new)
+
+          rep("<div class=\"learn\"><b>この模型：</b>", "<div class=\"learn\"><b>この模型：</b>花畑と水場は有限資源で、採餌・採水と時間経過で使い切ると消える。🗑除去でも取り除ける。 ")
+
+          rep("flowers:flowers.length,buildTargets:buildTargets.length", "flowers:flowers.length,waters:waters.length,flowerResource:Math.round(flowers.reduce((a,f)=>a+f.n,0)),waterSourceResource:Math.round(waters.reduce((a,w)=>a+w.n,0)),buildTargets:buildTargets.length")
+          rep("setTool:t=>{tool=t},triggerSwarm", "setTool:t=>{tool=t},removeResourceAt:(x,y)=>{const fi=flowers.findIndex(f=>Math.hypot(f.x-x,f.y-y)<52),wi=waters.findIndex(w=>Math.hypot(w.x-x,w.y-y)<45);if(fi>=0){flowers.splice(fi,1);return 'flower'}if(wi>=0){waters.splice(wi,1);return 'water'}return null},addTestFlower:(life=24,n=4)=>flowers.push({x:160,y:120,n,maxN:n,q:.8,life}),addTestWater:(life=24,n=4)=>waters.push({x:90,y:190,n,maxN:n,life}),triggerSwarm")
+
+          p.write_text(s)
+          PY
+      - name: Validate finite resource behavior
+        shell: bash
+        run: |
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          class P(HTMLParser): pass
+          s=Path('honeybee-colony.html').read_text(); P().feed(s)
+          for token in ['data-tool="remove"','flowerResource','waterSourceResource','花畑が咲き終わった','水場が干上がった']:
+              assert token in s, token
+          a=s.index('<script>')+8; b=s.index('</script>',a); Path('/tmp/bee.js').write_text(s[a:b])
+          PY
+          node --check /tmp/bee.js
+          npm install --no-save jsdom@26 >/dev/null 2>&1
+          cat > resource-test.mjs <<'JS'
+          import fs from 'fs'; import {JSDOM} from 'jsdom';
+          const html=fs.readFileSync('honeybee-colony.html','utf8');
+          const dom=new JSDOM(html,{runScripts:'dangerously',pretendToBeVisual:true,beforeParse(w){w.HTMLCanvasElement.prototype.getContext=()=>({clearRect(){},fillRect(){},strokeRect(){},beginPath(){},closePath(){},fill(){},stroke(){},moveTo(){},lineTo(){},arc(){},ellipse(){},bezierCurveTo(){},fillText(){},save(){},restore(){},translate(){},rotate(){},scale(){},setLineDash(){},createLinearGradient(){return{addColorStop(){}}},measureText(t){return{width:String(t).length*7}},set fillStyle(v){},set strokeStyle(v){},set lineWidth(v){},set font(v){},set textAlign(v){}});w.requestAnimationFrame=()=>0;}});
+          const lab=dom.window.__beeLab;lab.setPressure(0);
+          const b=lab.snapshot();lab.addTestFlower(5,2);lab.addTestWater(5,2);const mid=lab.snapshot();if(mid.flowers!==b.flowers+1||mid.waters!==b.waters+1)throw new Error('test resources not added');lab.stepHours(6);const aft=lab.snapshot();if(aft.flowers>=mid.flowers||aft.waters>=mid.waters)throw new Error('expired resources did not disappear '+JSON.stringify({mid,aft}));
+          lab.addTestFlower(100,20);const add=lab.snapshot();const r=lab.removeResourceAt(160,120);const rem=lab.snapshot();if(r!=='flower'||rem.flowers!==add.flowers-1)throw new Error('manual flower removal failed');
+          console.log('PASS',JSON.stringify({before:b,expired:aft,removed:rem}));
+          JS
+          node resource-test.mjs
+          rm -f resource-test.mjs
+          rm -rf node_modules package-lock.json package.json
+      - name: Commit HTML
+        shell: bash
+        run: |
+          git config user.name 'sshibata'
+          git config user.email '107645802+shtshbt@users.noreply.github.com'
+          git add honeybee-colony.html
+          git commit -m 'Make flowers and water finite resources'
+          git push origin HEAD:agent/honeybee-scout-risk-tune

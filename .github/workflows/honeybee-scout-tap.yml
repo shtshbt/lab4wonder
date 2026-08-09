@@ -1,0 +1,134 @@
+name: Honeybee scout tap
+on:
+  push:
+    branches: [agent/honeybee-scout-tap]
+permissions:
+  contents: write
+jobs:
+  patch-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/honeybee-scout-tap
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Patch scout interaction
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('honeybee-colony.html')
+          s=p.read_text()
+
+          # Threat state: add discovery fields.
+          s=s.replace("ballDamage:0};const seasons=", "ballDamage:0,scoutDetected:false,scoutSource:'',scoutDetectionRoll:false};const seasons=", 1)
+          s=s.replace("ballDamage:0};for(let q=-5", "ballDamage:0,scoutDetected:false,scoutSource:'',scoutDetectionRoll:false};for(let q=-5", 1)
+
+          # Make alerted scouts draw more defenders.
+          old="let guard=.075+.25*(threat.mode!=='calm'||p>.65?1:0)+.10*(seasonIndex===2),thermo="
+          new="let guard=.075+.25*(threat.mode!=='calm'||p>.65?1:0)+.10*(seasonIndex===2)+(threat.mode==='scout'&&threat.scoutDetected?(threat.scoutSource==='player'?.12:.06):0),thermo="
+          if old not in s: raise SystemExit('roles anchor missing')
+          s=s.replace(old,new,1)
+
+          # Scout trigger copy + state reset.
+          start=s.index('function triggerScout(manual=false){')
+          end=s.index('function markNest(){',start)
+          new_trigger="function triggerScout(manual=false){if(!colonyAlive){toast('💀 コロニーは崩壊している');return}if(seasonIndex===3){toast('❄️ 冬はスズメバチの活動を休止している');return}if(!['calm','recovered'].includes(threat.mode)){toast('👹 すでに警戒中');return}threat.mode='scout';threat.timer=0;threat.hornets=[{x:880,y:138}];threat.ballTemp=0;threat.losses=0;threat.ballLosses=0;threat.ballEnergy=0;threat.ballDamage=0;threat.scoutChecked=false;threat.scoutChance=0;threat.scoutDetected=false;threat.scoutSource='';threat.scoutDetectionRoll=false;bigNotice('👹 偵察スズメバチ！','右から接近中。見つけたらスズメバチをタップして群れに知らせよう。蜂自身が先に気づくこともある。','danger',5200);if(manual&&!running){running=true;$('play').textContent='⏸ 一時停止'}if(manual)toast('👹 偵察蜂を見つけたらタップ！',true)}function spotScout(source='player'){if(threat.mode!=='scout'||threat.scoutChecked||threat.scoutDetected||!threat.hornets[0])return false;threat.scoutDetected=true;threat.scoutSource=source;const h=threat.hornets[0];addCombatFx(h.x,h.y,'spot');if(source==='player'){bigNotice('👆 見つけた！','早く発見できたので防衛蜂が巣口へ集まる。蜂球の成功率が上がった。','safe',3300);toast('👆 発見！ ミツバチに警戒を知らせた',true)}else{bigNotice('🐝 蜂が自分で気づいた！','門番蜂が偵察スズメバチを発見。防衛蜂が集まり始めた。','safe',3000);toast('🐝 ミツバチが偵察蜂を発見！',true)}return true}function trySpotScoutAt(p){if(threat.mode!=='scout'||!threat.hornets[0]||threat.scoutDetected)return false;const h=threat.hornets[0];if(Math.hypot(p.x-h.x,p.y-h.y)<=90)return spotScout('player');return false}"
+          s=s[:start]+new_trigger+s[end:]
+
+          # Replace scout branch only.
+          start=s.index("if(threat.mode==='scout'){")
+          end=s.index("}else if(threat.mode==='ball'){",start)
+          new_scout="if(threat.mode==='scout'){threat.timer+=h;const x=880-Math.min(320,threat.timer*8);threat.hornets[0].x=x;threat.hornets[0].y=145+Math.sin(threat.timer*.55)*18;const healthy=Math.max(0,workers-heatDamaged),guardFrac=rr.guard/Math.max(1,workers);if(x<700&&!threat.scoutDetectionRoll&&!threat.scoutDetected){threat.scoutDetectionRoll=true;const pNotice=clamp(.16+.32*clamp(healthy/300,0,1)+.55*clamp(guardFrac-.18,0,.28)-.12*clamp(heatDamaged/Math.max(1,workers),0,1),.18,.72);if(Math.random()<pNotice)spotScout('bees')}if(x<610&&!threat.scoutChecked){threat.scoutChecked=true;if(!threat.scoutDetected){markNest()}else{const honeyQ=clamp(honey/40,0,1),damageFrac=heatDamaged/Math.max(1,workers),alertBonus=threat.scoutSource==='player'?.20:.08;const pBall=clamp(.08+.46*clamp(healthy/300,0,1)+.9*clamp(guardFrac-.20,0,.25)+.12*clamp((healthy-200)/300,0,1)+.10*honeyQ-.28*damageFrac+alertBonus,.12,.90);threat.scoutChance=pBall;if(Math.random()<pBall){threat.mode='ball';threat.timer=0;threat.ballTemp=36;threat.ballLosses=0;threat.ballEnergy=0;threat.ballDamage=0;bigNotice('🔥 熱殺蜂球！',`${threat.scoutSource==='player'?'早期発見':'自発発見'}から包囲。成功率の目安 ${Math.round(pBall*100)}%。多数の蜂が熱ダメージを負う。`,'safe',3600);toast('🔥 蜂球！ みんなで包んだ',true)}else markNest()}}"
+          s=s[:start]+new_scout+s[end:]
+
+          # Scout status explains tap/self-discovery.
+          old="scout:`👹 偵察蜂が巣口へ接近中。蜂球成立は確定ではない。${threat.scoutChance?` 成功目安 ${Math.round(threat.scoutChance*100)}%`:''}`"
+          new="scout:threat.scoutDetected?`⚠️ 偵察蜂を${threat.scoutSource==='player'?'あなたが':'ミツバチが'}発見済み。防衛蜂が集結中。`:`👹 偵察蜂が接近中。見つけたら画面のスズメバチをタップ！ 蜂自身が気づくこともある。`"
+          if old not in s: raise SystemExit('status anchor missing')
+          s=s.replace(old,new,1)
+
+          # Spot animation.
+          old="if(f.type==='fall'){c.strokeStyle='#ffd765';"
+          new="if(f.type==='spot'){c.strokeStyle='#fff2a8';c.lineWidth=4;c.beginPath();c.arc(f.x,f.y,r+18,0,TAU);c.stroke();c.fillStyle='#fff7c9';c.font='900 17px system-ui';c.textAlign='center';c.fillText('👆 見つけた！',f.x,f.y-34);c.textAlign='left'}else if(f.type==='fall'){c.strokeStyle='#ffd765';"
+          if old not in s: raise SystemExit('fx anchor missing')
+          s=s.replace(old,new,1)
+
+          # Draw tap affordance on undetected scout.
+          old="c.strokeText(threat.mode==='scout'?'👹 偵察スズメバチ':'👹 スズメバチ大群 →',x-70,y-28);c.fillText(threat.mode==='scout'?'👹 偵察スズメバチ':'👹 スズメバチ大群 →',x-70,y-28)"
+          new="c.strokeText(threat.mode==='scout'?(threat.scoutDetected?'⚠️ 発見済み':'👆 タップ！ 偵察スズメバチ'):'👹 スズメバチ大群 →',x-92,y-28);c.fillText(threat.mode==='scout'?(threat.scoutDetected?'⚠️ 発見済み':'👆 タップ！ 偵察スズメバチ'):'👹 スズメバチ大群 →',x-92,y-28)"
+          if old not in s: raise SystemExit('threat label anchor missing')
+          s=s.replace(old,new,1)
+
+          # Tap scout before normal tools so any selected tool can still warn the colony.
+          old="const p=point(e);e.preventDefault();if(tool==='flower'){"
+          new="const p=point(e);e.preventDefault();if(trySpotScoutAt(p))return;if(tool==='flower'){"
+          if old not in s: raise SystemExit('pointer anchor missing')
+          s=s.replace(old,new,1)
+
+          # Expose test hooks/snapshot.
+          old="scoutChance:threat.scoutChance||0}),stepHours:n=>"
+          new="scoutChance:threat.scoutChance||0,scoutDetected:!!threat.scoutDetected,scoutSource:threat.scoutSource||'',scoutX:threat.hornets[0]?Math.round(threat.hornets[0].x):null,scoutY:threat.hornets[0]?Math.round(threat.hornets[0].y):null}),stepHours:n=>"
+          if old not in s: raise SystemExit('snapshot anchor missing')
+          s=s.replace(old,new,1)
+          old="triggerScout:()=>triggerScout(true),setPressure:v=>"
+          new="triggerScout:()=>triggerScout(true),tapScout:()=>spotScout('player'),tapScoutAt:(x,y)=>trySpotScoutAt({x,y}),setPressure:v=>"
+          if old not in s: raise SystemExit('test hook anchor missing')
+          s=s.replace(old,new,1)
+
+          p.write_text(s)
+          PY
+      - name: Validate scout tap and autonomous discovery
+        run: |
+          python3 - <<'PY'
+          import re, pathlib
+          s=pathlib.Path('honeybee-colony.html').read_text()
+          js=re.search(r'<script>\s*(.*?)\s*</script>',s,re.S).group(1)
+          pathlib.Path('/tmp/bee.js').write_text(js)
+          for token in ["function spotScout(source='player')","function trySpotScoutAt(p)","👆 タップ！ 偵察スズメバチ","scoutSource==='player'?.20:.08"]:
+              assert token in s, token
+          PY
+          node --check /tmp/bee.js
+          npm install --no-save jsdom@26 >/dev/null 2>&1
+          cat > test-scout-tap.cjs <<'JS'
+          const fs=require('fs'),{JSDOM}=require('jsdom');
+          const html=fs.readFileSync('honeybee-colony.html','utf8');
+          function boot(rand){
+            const dom=new JSDOM(html,{runScripts:'dangerously',pretendToBeVisual:true,beforeParse(w){w.Math.random=()=>rand;w.HTMLCanvasElement.prototype.getContext=()=>new Proxy({measureText:t=>({width:String(t).length*7})},{get:(o,k)=>k in o?o[k]:(()=>{})});w.requestAnimationFrame=()=>0;}});
+            return dom.window.__beeLab;
+          }
+          const p=boot(0);
+          p.triggerScout();
+          let s=p.snapshot();
+          if(s.threat!=='scout'||s.scoutDetected) throw Error('scout did not start cleanly');
+          if(!p.tapScoutAt(s.scoutX+65,s.scoutY+45)) throw Error('forgiving scout hit target failed');
+          s=p.snapshot();
+          if(!s.scoutDetected||s.scoutSource!=='player') throw Error('player discovery not recorded');
+          p.stepHours(40);
+          if(p.snapshot().threat!=='ball') throw Error('player discovery did not proceed to ball under favorable RNG');
+
+          const a=boot(0);
+          a.triggerScout();
+          a.stepHours(30);
+          s=a.snapshot();
+          if(!s.scoutDetected||s.scoutSource!=='bees') throw Error('autonomous bee discovery route failed');
+          a.stepHours(10);
+          if(a.snapshot().threat!=='ball') throw Error('autonomous discovery did not proceed to defense');
+
+          const m=boot(.9999);
+          m.triggerScout();
+          m.stepHours(40);
+          s=m.snapshot();
+          if(s.threat!=='marked') throw Error('missed scout should mark nest');
+          console.log(JSON.stringify({playerRoute:true,selfDiscovery:true,missedRoute:s.threat,hitRadius:true}));
+          JS
+          node test-scout-tap.cjs
+          rm -f test-scout-tap.cjs
+      - name: Commit result
+        run: |
+          git config user.name "shtshbt"
+          git config user.email "107645802+shtshbt@users.noreply.github.com"
+          git add honeybee-colony.html
+          git commit -m "Let players spot hornet scouts"
+          git push origin HEAD:agent/honeybee-scout-tap

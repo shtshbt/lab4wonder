@@ -46,6 +46,11 @@ jobs:
           s,n=pat.subn("bigNotice('🚨 スズメバチ大群！',`${n}匹が右から接近中。まず姿を確認しよう。巣口へ着くまでは被害は始まらない。`,'danger',5200);toast(`👹 ${n}匹の大群が接近！`,true)",s,count=1)
           if n!=1: raise SystemExit(f'startRaid replacement count={n}')
 
+          # PR34 accidentally capped x at exactly 610 while testing x < 610, so scout could never arrive.
+          old="const x=880-Math.min(270,threat.timer*8);"
+          if old not in s: raise SystemExit('scout movement cap anchor missing')
+          s=s.replace(old,"const x=880-Math.min(300,threat.timer*8);",1)
+
           p.write_text(s)
           PY
       - name: Validate behavior
@@ -60,6 +65,7 @@ jobs:
           assert "holdNotice('👹 スズメバチ偵察！'" not in s
           assert "holdNotice('⚠️ 偵察蜂を逃した！'" not in s
           assert "holdNotice('🚨 スズメバチの大群！'" not in s
+          assert 'Math.min(300,threat.timer*8)' in s
           assert 'stage>.toast{position:static' in s
           assert 'stage>.bigalert{position:static' in s
           script=re.findall(r'<script>(.*?)</script>',s,re.S)[-1]

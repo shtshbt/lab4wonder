@@ -24,17 +24,7 @@ jobs:
           if grep -q 'heatDamaged' honeybee-colony.html; then
             echo 'Patch already applied.'
           else
-            python - <<'PY'
-            from pathlib import Path
-            import textwrap
-            src=Path('.github/workflows/honeybee-damage-collapse.yml').read_text()
-            start="          cat > /tmp/patch.py <<'PY'\n"
-            end="          PY\n          python /tmp/patch.py"
-            if start not in src or end not in src:
-                raise SystemExit('could not extract original patch')
-            block=src.split(start,1)[1].split(end,1)[0]
-            Path('/tmp/patch.py').write_text(textwrap.dedent(block))
-            PY
+            python -c "from pathlib import Path; import textwrap; src=Path('.github/workflows/honeybee-damage-collapse.yml').read_text(); start=\"          cat > /tmp/patch.py <<'PY'\\n\"; end=\"          PY\\n          python /tmp/patch.py\"; assert start in src and end in src; Path('/tmp/patch.py').write_text(textwrap.dedent(src.split(start,1)[1].split(end,1)[0]))"
             python /tmp/patch.py
           fi
       - name: Validate HTML and JavaScript

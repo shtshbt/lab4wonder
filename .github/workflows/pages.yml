@@ -33,8 +33,8 @@ jobs:
           test -f explore.html
           test -f kids-index.html
           html_count="$(find . -maxdepth 1 -type f -name '*.html' | wc -l)"
-          if [[ "$html_count" -ne 186 ]]; then
-            echo "Expected 186 HTML files, found $html_count." >&2
+          if [[ "$html_count" -ne 187 ]]; then
+            echo "Expected 187 HTML files, found $html_count." >&2
             exit 1
           fi
 

@@ -1,0 +1,85 @@
+name: Honeybee colony v1
+on:
+  push:
+    branches: [agent/honeybee-colony-v1]
+permissions:
+  contents: write
+jobs:
+  build-test-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/honeybee-colony-v1
+      - name: Apply catalog integration
+        run: python .github/scripts/honeybee_v1_finalize.py
+      - name: Validate HTML and inline JavaScript
+        run: |
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import re, subprocess, tempfile
+          class P(HTMLParser): pass
+          for fn in ['honeybee-colony.html','kids-index.html','explore.html']:
+              s=Path(fn).read_text(); P().feed(s)
+              if fn=='honeybee-colony.html':
+                  assert '<canvas' in s and 'スズメバチ圧力' in s and '⚡ 偵察を呼ぶ' in s
+                  assert all(x in s for x in ['🐝','👑','🥚','🐛','🍯','🌼','⬡'])
+              for i,m in enumerate(re.finditer(r'<script([^>]*)>(.*?)</script>',s,re.S),1):
+                  attrs,js=m.group(1),m.group(2)
+                  if 'application/json' in attrs or not js.strip(): continue
+                  p=Path(tempfile.gettempdir())/f'{fn.replace("/","_")}-{i}.js'; p.write_text(js)
+                  subprocess.run(['node','--check',str(p)],check=True)
+          for fn in ['kids-index.html','explore.html']:
+              s=Path(fn).read_text(); assert s.count('"f":"honeybee-colony.html"')==1
+          print('HTML/JS/catalog validation passed')
+          PY
+      - name: Install Chromium
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y chromium-browser >/dev/null 2>&1 || sudo apt-get install -y chromium >/dev/null 2>&1
+      - name: Build interaction harness
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('honeybee-colony.html'); s=p.read_text()
+          test=r'''<script>
+          addEventListener('load',()=>setTimeout(()=>{
+            const cv=document.getElementById('cv');
+            const tap=(x,y)=>{const r=cv.getBoundingClientRect();cv.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,button:0,clientX:r.left+x/cv.width*r.width,clientY:r.top+y/cv.height*r.height,pointerId:1,pointerType:'mouse'}));};
+            const btn=t=>document.querySelector(`[data-tool="${t}"]`).click();
+            const initial=__beeLab.snapshot(); __beeLab.setPressure(0);
+            btn('flower'); tap(185,120); const afterFlower=__beeLab.snapshot();
+            btn('comb'); tap(703,424); const afterCombTap=__beeLab.snapshot();
+            __beeLab.stepHours(90); const afterGrowth=__beeLab.snapshot();
+            btn('inspect'); tap(630,385); const queenOpen=document.getElementById('inspect').classList.contains('show')&&document.getElementById('inspect').textContent.includes('女王');
+            __beeLab.setPressure(70); __beeLab.triggerScout(); __beeLab.stepHours(29); const duringDefense=__beeLab.snapshot(); __beeLab.stepHours(35); const afterDefense=__beeLab.snapshot();
+            const pass=initial.workers===120 && afterFlower.flowers===initial.flowers+1 && afterCombTap.buildTargets>=1 && afterGrowth.cells>initial.cells && afterGrowth.workers>initial.workers && queenOpen && ['ball','recovered','calm'].includes(duringDefense.threat) && afterDefense.ballTemp>=45.7;
+            const out={pass,initial,afterFlower,afterCombTap,afterGrowth,queenOpen,duringDefense,afterDefense};
+            document.documentElement.dataset.honeybeeTest=pass?'PASS':'FAIL'; const pre=document.createElement('pre');pre.id='honeybeeTestResult';pre.textContent=JSON.stringify(out);document.body.append(pre);
+          },700));
+          </script>'''
+          s=s.replace('</body>',test+'</body>');Path('honeybee-test.html').write_text(s)
+          PY
+      - name: Browser interaction test
+        run: |
+          CHROME=$(command -v chromium-browser || command -v chromium)
+          "$CHROME" --headless --no-sandbox --disable-gpu --allow-file-access-from-files --virtual-time-budget=8000 --dump-dom file://$PWD/honeybee-test.html > /tmp/honeybee-dom.txt
+          grep -q 'data-honeybee-test="PASS"' /tmp/honeybee-dom.txt
+          grep 'honeybeeTestResult' /tmp/honeybee-dom.txt | tail -1
+      - name: Mobile screenshot
+        run: |
+          CHROME=$(command -v chromium-browser || command -v chromium)
+          mkdir -p /tmp/honeybee-shot
+          "$CHROME" --headless --no-sandbox --disable-gpu --window-size=390,920 --virtual-time-budget=2500 --screenshot=/tmp/honeybee-shot/honeybee-mobile.png file://$PWD/honeybee-colony.html
+      - uses: actions/upload-artifact@v4
+        with:
+          name: honeybee-v1-screenshot
+          path: /tmp/honeybee-shot/honeybee-mobile.png
+      - name: Commit application and catalogs
+        run: |
+          rm -f honeybee-test.html
+          git config user.name "sshibata"
+          git config user.email "107645802+shtshbt@users.noreply.github.com"
+          git add honeybee-colony.html kids-index.html explore.html
+          if ! git diff --cached --quiet; then git commit -m "Integrate Japanese honeybee colony app"; git push origin HEAD:agent/honeybee-colony-v1; fi

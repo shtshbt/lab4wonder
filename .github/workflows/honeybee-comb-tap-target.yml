@@ -1,0 +1,77 @@
+name: Honeybee comb tap target
+on:
+  push:
+    branches: [agent/honeybee-comb-tap-target]
+permissions:
+  contents: write
+jobs:
+  patch-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/honeybee-comb-tap-target
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Patch comb targeting
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('honeybee-colony.html')
+          s=p.read_text()
+          old="function nearestCell(p){let best=null,bd=30;for(const z of cells){const hp=hexPos(z.q,z.r),d=Math.hypot(hp.x-p.x,hp.y-p.y);if(d<bd){bd=d;best={z,...hp}}}return best}function addBuildNear(p){const base=nearestCell(p);if(!base){toast('⬡ 巣板の端をタップしてね');return}const dirs=[[1,0],[-1,0],[0,1],[0,-1],[1,-1],[-1,1]],opts=dirs.map(([dq,dr])=>({q:base.z.q+dq,r:base.z.r+dr})).filter(a=>!cells.some(z=>z.q===a.q&&z.r===a.r)&&!buildTargets.some(z=>z.q===a.q&&z.r===a.r));if(!opts.length){toast('ここはもう巣房でいっぱい');return}opts.sort((a,b)=>Math.hypot(hexPos(a.q,a.r).x-p.x,hexPos(a.q,a.r).y-p.y)-Math.hypot(hexPos(b.q,b.r).x-p.x,hexPos(b.q,b.r).y-p.y));buildTargets.push(opts[0]);toast('⬡ 建築蜂が巣房を作りに来る',true)}"
+          new="function nearestCell(p){let best=null,bd=42;for(const z of cells){const hp=hexPos(z.q,z.r),d=Math.hypot(hp.x-p.x,hp.y-p.y);if(d<bd){bd=d;best={z,...hp}}}return best}function buildCandidates(){const dirs=[[1,0],[-1,0],[0,1],[0,-1],[1,-1],[-1,1]],seen=new Set(),out=[];for(const z of cells)for(const [dq,dr] of dirs){const q=z.q+dq,r=z.r+dr,key=q+','+r;if(seen.has(key)||cells.some(c=>c.q===q&&c.r===r)||buildTargets.some(c=>c.q===q&&c.r===r))continue;seen.add(key);const hp=hexPos(q,r);if(hp.x<combArea.x+18||hp.x>combArea.x+combArea.w-18||hp.y<combArea.y+18||hp.y>combArea.y+combArea.h-18)continue;out.push({q,r,...hp})}return out}function nearestBuildSpot(p){const opts=buildCandidates();if(!opts.length)return null;opts.sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y));return opts[0]}function addBuildNear(p){const can=canBuildComb();if(!can.ok){toast(can.reason);return false}if(p.x<combArea.x-28||p.x>combArea.x+combArea.w+18||p.y<combArea.y-28||p.y>combArea.y+combArea.h+18){toast('⬡ 巣板のあたりをタップしてね');return false}const spot=nearestBuildSpot(p);if(!spot){toast('ここはもう巣房でいっぱい');return false}buildTargets.push({q:spot.q,r:spot.r});toast('⬡ 近い外周へ吸着！ 建築蜂が巣房を作りに来る',true);return true}"
+          if old not in s: raise SystemExit('targeting anchor missing')
+          s=s.replace(old,new,1)
+          old2="for(const b of buildTargets){const p=hexPos(b.q,b.r);c.setLineDash([4,4]);drawHex(p.x,p.y,p.R,'rgba(255,215,101,.08)','#ffd765');c.setLineDash([])}c.textAlign='left';"
+          new2="if(tool==='comb'){const can=canBuildComb();if(can.ok){for(const b of buildCandidates()){c.setLineDash([3,4]);drawHex(b.x,b.y,b.R,'rgba(255,215,101,.055)','rgba(255,215,101,.55)');c.setLineDash([]);c.fillStyle='rgba(255,235,165,.82)';c.font='900 12px system-ui';c.textAlign='center';c.fillText('＋',b.x,b.y+4)}}}for(const b of buildTargets){const p=hexPos(b.q,b.r);c.setLineDash([4,4]);drawHex(p.x,p.y,p.R,'rgba(255,215,101,.12)','#ffd765');c.setLineDash([])}c.textAlign='left';"
+          if old2 not in s: raise SystemExit('draw anchor missing')
+          s=s.replace(old2,new2,1)
+          s=s.replace("if(tool==='comb'){if(p.y<245){toast('⬡ 巣板の端をタップしてね');return}addBuildNear(p)}","if(tool==='comb'){addBuildNear(p)}",1)
+          s=s.replace("comb:'⬡ 巣板の端をタップ：建築候補を指定。建築には春夏の暖かさ・働き蜂55匹以上・蜜ろう1・蜂蜜0.6が必要。冬は増築しない。'","comb:'⬡ 巣板の中〜外周を大ざっぱにタップ：最寄りの黄色い＋へ吸着して増築。春夏の暖かさ・働き蜂55匹以上・蜜ろう1・蜂蜜0.6が必要。冬は増築しない。'",1)
+          old3="forceSeason:i=>{seasonIndex=i;seasonHour=0;if(i===3){threat.mode='calm';threat.hornets=[];threat.raidPending=0}update()}"
+          new3="queueBuildAt:(x,y)=>addBuildNear({x,y}),buildCandidateCount:()=>buildCandidates().length,forceSeason:i=>{seasonIndex=i;seasonHour=0;if(i===3){threat.mode='calm';threat.hornets=[];threat.raidPending=0}update()}"
+          if old3 not in s: raise SystemExit('test api anchor missing')
+          s=s.replace(old3,new3,1)
+          p.write_text(s)
+          PY
+      - name: Validate syntax and tap behavior
+        run: |
+          python3 - <<'PY'
+          import re, pathlib
+          s=pathlib.Path('honeybee-colony.html').read_text()
+          js=re.search(r'<script>\s*(.*?)\s*</script>',s,re.S).group(1)
+          pathlib.Path('/tmp/bee.js').write_text(js)
+          assert "function buildCandidates()" in s
+          assert "近い外周へ吸着" in s
+          assert "fillText('＋'" in s
+          PY
+          node --check /tmp/bee.js
+          npm install --no-save jsdom@26 >/dev/null 2>&1
+          cat > test-comb-tap.cjs <<'JS'
+          const fs=require('fs'),{JSDOM}=require('jsdom');
+          const html=fs.readFileSync('honeybee-colony.html','utf8');
+          const dom=new JSDOM(html,{runScripts:'dangerously',pretendToBeVisual:true,beforeParse(w){w.HTMLCanvasElement.prototype.getContext=()=>new Proxy({measureText:t=>({width:String(t).length*7})},{get:(o,k)=>k in o?o[k]:(()=>{})});w.requestAnimationFrame=()=>0;}});
+          const lab=dom.window.__beeLab;
+          if(!lab) throw Error('beeLab missing');
+          const start=lab.snapshot();
+          if(lab.buildCandidateCount()<1) throw Error('no build candidates');
+          const ok=lab.queueBuildAt(650,395);
+          const queued=lab.snapshot();
+          if(!ok || queued.buildTargets!==start.buildTargets+1) throw Error('center tap did not snap to perimeter build candidate');
+          lab.forceSeason(3);
+          const winterBefore=lab.snapshot().buildTargets;
+          const winterOk=lab.queueBuildAt(650,395);
+          if(winterOk || lab.snapshot().buildTargets!==winterBefore) throw Error('winter build gate regressed');
+          console.log(JSON.stringify({candidates:lab.buildCandidateCount(),queued:queued.buildTargets,winterBlocked:!winterOk}));
+          JS
+          node test-comb-tap.cjs
+          rm -f test-comb-tap.cjs
+      - name: Commit result
+        run: |
+          git config user.name "shtshbt"
+          git config user.email "107645802+shtshbt@users.noreply.github.com"
+          git add honeybee-colony.html
+          git commit -m "Make comb expansion taps forgiving"
+          git push origin HEAD:agent/honeybee-comb-tap-target

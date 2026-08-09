@@ -1,0 +1,127 @@
+name: Honeybee final fix
+
+on:
+  push:
+    branches:
+      - agent/honeybee-crisis-pacing-fix
+
+permissions:
+  contents: write
+
+jobs:
+  patch-test-clean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/honeybee-crisis-pacing-fix
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Patch pacing, forage range, collapse state, and resource balance
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('honeybee-colony.html'); s=p.read_text()
+          def rep(a,b):
+              global s
+              if a not in s: raise SystemExit('missing anchor: '+a[:180])
+              s=s.replace(a,b,1)
+
+          # Crisis notices should become deliberate beats, not race past at high speed.
+          rep('.bigalert h2{margin:0 0 6px;font-size:27px;color:#fff}.bigalert p{margin:0;font-size:14px;line-height:1.6;font-weight:850;color:#ffe8df}',
+              '.bigalert h2{margin:0 0 6px;font-size:27px;color:#fff}.bigalert p{margin:0;font-size:14px;line-height:1.6;font-weight:850;color:#ffe8df}.bigalert button{display:none;margin:12px auto 0;min-width:150px;background:#ffd765;color:#2b2100;border-color:#ffd765}.bigalert.hold{pointer-events:auto}.bigalert.hold button{display:block}.collapsedCurtain{position:absolute;z-index:25;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(4,8,12,.76);backdrop-filter:grayscale(1) blur(2px);text-align:center}.collapsedCurtain.show{display:flex}.collapsedCurtain .box{max-width:520px;padding:22px;border:2px solid #ff8f78;border-radius:20px;background:#1d1113f2}.collapsedCurtain h2{margin:0 0 8px;font-size:28px;color:#ffb4a5}.collapsedCurtain p{margin:0 0 14px;line-height:1.7;font-weight:800;color:#f3d8d3}')
+          rep('<div class="bigalert" id="bigAlert"><h2 id="bigAlertTitle"></h2><p id="bigAlertBody"></p></div>',
+              '<div class="bigalert" id="bigAlert"><h2 id="bigAlertTitle"></h2><p id="bigAlertBody"></p><button id="bigAlertContinue">▶ 続ける</button></div><div class="collapsedCurtain" id="collapsedCurtain"><div class="box"><h2>💀 コロニー崩壊</h2><p id="collapseReason">働き蜂がいなくなり、巣を維持できなくなった。</p><button id="collapseReset">↺ 新しい群れで始める</button></div></div>')
+          rep('<div id="hudSeason">🌿 春</div>', '<div id="hudSeason">🌿 春</div><div id="hudRange">🧭 1.1km</div>')
+          rep("swarmPending=false,swarmDoneThisSpring=false,noticeTimer=0,honey=28", "swarmPending=false,swarmDoneThisSpring=false,noticeTimer=0,crisisHold=false,crisisResume=false,collapseReason='',honey=28")
+          rep("swarmPending=false;swarmDoneThisSpring=false;honey=28;", "swarmPending=false;swarmDoneThisSpring=false;crisisHold=false;crisisResume=false;collapseReason='';$('bigAlert').classList.remove('show','hold');$('collapsedCurtain').classList.remove('show');honey=28;")
+          rep("function bigNotice(title,body,kind='danger',ms=3000){const el=$('bigAlert');$('bigAlertTitle').textContent=title;$('bigAlertBody').textContent=body;el.classList.toggle('safe',kind==='safe');el.classList.add('show');clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>el.classList.remove('show'),ms)}", "function bigNotice(title,body,kind='danger',ms=3000,hold=false){const el=$('bigAlert');$('bigAlertTitle').textContent=title;$('bigAlertBody').textContent=body;el.classList.toggle('safe',kind==='safe');el.classList.toggle('hold',hold);el.classList.add('show');clearTimeout(noticeTimer);if(hold){crisisResume=running;crisisHold=true;running=false;$('play').textContent='▶ 再生'}else noticeTimer=setTimeout(()=>el.classList.remove('show'),ms)}function holdNotice(title,body,kind='danger'){bigNotice(title,body,kind,0,true)}function releaseCrisisHold(){if(!crisisHold)return;crisisHold=false;$('bigAlert').classList.remove('show','hold');if(colonyAlive&&crisisResume){running=true;$('play').textContent='⏸ 一時停止'}crisisResume=false}")
+          rep("function resourceQuality(){return clamp((honey+nectar*.12)/32,.06,1.15)*clamp((pollen+2)/16,.06,1.15)}", "function resourceQuality(){return clamp((honey+nectar*.12)/32,.06,1.15)*clamp((pollen+2)/16,.06,1.15)}function effectiveForageRange(){return clamp(550+Math.sqrt(Math.max(0,workers))*55,650,1800)}function flowerDistanceFromX(x){return Math.round(clamp(120+(365-clamp(x,45,365))/320*1080,120,1200))}")
+          rep("function step(h){if(h<=0||!colonyAlive||swarmPending)return;", "function step(h){if(h<=0||!colonyAlive||swarmPending||crisisHold)return;")
+          rep("function collapseColony(reason){if(!colonyAlive)return;bigNotice('💀 コロニー崩壊',reason,'danger',6000);colonyAlive=false;queenAlive=false;workers=Math.max(0,workers);heatDamaged=Math.min(heatDamaged,workers);running=false;$('play').textContent='▶ 再生';threat.mode='collapsed';threat.hornets=[];threat.raidPending=0;toast(`💀 コロニー崩壊：${reason}`,true)}", "function collapseColony(reason){if(!colonyAlive)return;collapseReason=reason;colonyAlive=false;queenAlive=false;workers=0;heatDamaged=0;eggs=0;larvae=0;pupae=0;running=false;crisisHold=false;crisisResume=false;$('play').textContent='▶ 再生';threat.mode='collapsed';threat.hornets=[];threat.raidPending=0;bees=[];dance=null;buildTargets=[];$('bigAlert').classList.remove('show','hold');$('collapseReason').textContent=reason;$('collapsedCurtain').classList.add('show');toast(`💀 コロニー崩壊：${reason}`,true)}")
+
+          # Flower patches are flowering-density patches with realistic schematic distances, not one-shot nectar tanks.
+          rep("flowers=[{x:125,y:115,n:62,maxN:62,q:.68,life:11*24},{x:270,y:165,n:50,maxN:50,q:.78,life:14*24}];waters=[{x:70,y:205,n:72,maxN:72,life:12*24}]", "flowers=[{x:125,y:115,n:100,maxN:100,q:.68,life:22*24,dist:930},{x:270,y:165,n:100,maxN:100,q:.78,life:28*24,dist:440}];waters=[{x:70,y:205,n:100,maxN:100,life:36*24}]")
+          old="const flowerMass=Math.max(0,flowers.reduce((a,f)=>a+Math.max(0,f.n)*f.q,0));const forageFrac=rr.forage/Math.max(1,workers),foragePotential=forageFrac*s.forage*workers*Math.min(1.05,flowerMass/70);for(const f of flowers){f.life-=h;const share=flowerMass?Math.max(0,f.n)*f.q/flowerMass:0,take=Math.min(Math.max(0,f.n),h*.020*foragePotential*share);f.n=Math.max(0,f.n-take);nectar+=take*.62;pollen+=take*.20;if(take>.45&&f.q>.84&&(!dance||dance.life<=0)){dance={x:f.x,y:f.y,life:18,quality:f.q};toast('💃 よい花！ 8の字ダンスで仲間へ')}}const flowerBefore=flowers.length;flowers=flowers.filter(f=>f.n>.6&&f.life>0&&seasonIndex!==3);"
+          new="const forageRange=effectiveForageRange(),flowerMass=Math.max(0,flowers.reduce((a,f)=>{const avail=clamp(f.n/Math.max(1,f.maxN),0,1),dist=f.dist||250,access=clamp((forageRange-dist+260)/260,0,1),tripEff=clamp(1-dist/2200,.34,.98);return a+(0.25+0.75*avail)*f.q*access*tripEff},0));const forageFrac=rr.forage/Math.max(1,workers),foragePotential=forageFrac*s.forage*workers*clamp(flowerMass/.90,0,2.4);for(const f of flowers){f.life-=h;const avail=clamp(f.n/Math.max(1,f.maxN),0,1),dist=f.dist||250,access=clamp((forageRange-dist+260)/260,0,1),tripEff=clamp(1-dist/2200,.34,.98),weight=(0.25+0.75*avail)*f.q*access*tripEff,share=flowerMass?weight/flowerMass:0,take=h*.014*foragePotential*share*(.45+.55*avail);nectar+=take*.62;pollen+=take*.20;f.n=Math.max(0,f.n-h*(.016+.00040*rr.forage)*(.7+.3*f.q));if(take>.30&&f.q>.84&&(!dance||dance.life<=0)){dance={x:f.x,y:f.y,life:18,quality:f.q,dist};toast(`💃 ${dist}m先のよい花！ 8の字ダンスで仲間へ`)}}const flowerBefore=flowers.length;flowers=flowers.filter(f=>f.n>4&&f.life>0&&seasonIndex!==3);const activePatches=flowers.filter(f=>f.n>12).length;if(seasonIndex!==3&&activePatches<2&&Math.random()<h*.005*s.forage*clamp(rr.forage/30,.25,1.3)){const dist=Math.round(rand(260,Math.min(1500,forageRange))),x=clamp(365-(dist-120)/1080*320,45,365);flowers.push({x,y:rand(75,190),n:100,maxN:100,q:rand(.58,.95),life:rand(16,28)*24,dist,wild:true});toast(`🧭 偵察蜂が${dist}m先の花畑を発見！`,true)}"
+          rep(old,new)
+          rep("const lay=(queenMode==='mated'?s.lay:0)*space*food*(temp>30.5&&temp<36.8?1:.25);", "const floralLayBoost=clamp(flowerMass/1.15,.70,1.42),lay=(queenMode==='mated'?s.lay:0)*space*food*floralLayBoost*(temp>30.5&&temp<36.8?1:.25);")
+
+          # Hornet sequence gets time separation and explicit user-controlled continuation.
+          rep("bigNotice('👹 スズメバチ偵察！','巣口へ接近中。十分な健康な防衛蜂が集まれるか？','danger',3200);", "holdNotice('👹 スズメバチ偵察！','巣口へ接近中。状況を確認してから「続ける」で防衛へ進む。危機中は速度も自動で落ちる。','danger');")
+          rep("bigNotice('⚠️ 偵察蜂を逃した！','巣を覚えられた。本格襲来につながる危険が高い。','danger',4200);", "holdNotice('⚠️ 偵察蜂を逃した！','巣を覚えられた。2〜5日ほどの警戒期間を経て、本格襲来する可能性がある。','danger');")
+          rep("threat.raidPending=12+Math.random()*20;", "threat.raidPending=48+Math.random()*72;")
+          rep("bigNotice('🚨 スズメバチ襲来！',`${n}匹が巣へ殺到。働き蜂だけでなく育児中の蜂も危険！`,'danger',4600);", "holdNotice('🚨 スズメバチ襲来！',`${n}匹が巣へ殺到。働き蜂・育児個体・貯蜜が危険。「続ける」で戦闘が始まる。`,'danger');")
+          rep("if(threat.mode==='calm'&&Math.random()<h*.00034*pressure*seasonThreat)triggerScout(false);", "if(threat.mode==='calm'&&Math.random()<h*.00034*pressure*seasonThreat)triggerScout(false);if(crisisHold)return;")
+          rep("if(threat.raidPending>0){threat.raidPending-=h;if(threat.raidPending<=0&&threat.mode==='marked')startRaid()}if(threat.mode==='scout')", "if(threat.raidPending>0){threat.raidPending-=h;if(threat.raidPending<=0&&threat.mode==='marked')startRaid()}if(crisisHold)return;if(threat.mode==='scout')")
+
+          # Collapse must be visually terminal.
+          rep("function syncVisualBees(rr){const want=", "function syncVisualBees(rr){if(!colonyAlive){bees=[];return}const want=")
+          rep("function drawBees(){const now=performance.now()/1000,winter=seasonIndex===3;", "function drawBees(){if(!colonyAlive)return;const now=performance.now()/1000,winter=seasonIndex===3;")
+          rep("function drawQueen(){if(!queenAlive)return;", "function drawQueen(){if(!colonyAlive||!queenAlive)return;")
+          rep("cv.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;const p=point(e);", "cv.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;if(!colonyAlive){toast('💀 コロニーは崩壊している。リセットしてね');return}const p=point(e);")
+
+          # Direct interactions and visuals expose the new distance model.
+          rep("flowers.push({x:clamp(p.x,45,365),y:clamp(p.y,65,190),n:64,maxN:64,q:rand(.62,.98),life:rand(8,15)*24});toast('🌸 花畑を追加！ 採餌蜂が向かう',true)", "const fx=clamp(p.x,45,365),dist=flowerDistanceFromX(fx);flowers.push({x:fx,y:clamp(p.y,65,190),n:100,maxN:100,q:rand(.62,.98),life:rand(18,30)*24,dist});toast(`🌸 ${dist}m先に花畑を追加！`,true)")
+          rep("waters.push({x:clamp(p.x,35,370),y:clamp(p.y,80,215),n:70,maxN:70,life:rand(7,13)*24});water+=8;", "waters.push({x:clamp(p.x,35,370),y:clamp(p.y,80,215),n:100,maxN:100,life:rand(25,45)*24});water+=8;")
+          rep("const n=Math.max(2,Math.min(18,Math.floor(f.n/5)));", "const n=Math.max(2,Math.min(18,Math.round(3+15*clamp(f.n/Math.max(1,f.maxN),0,1))));")
+          rep("c.fillText(`${Math.round(f.n)}`,f.x-7,f.y+45)", "c.fillText(`🌸${Math.round(100*f.n/Math.max(1,f.maxN))}% · ${Math.round(f.dist||250)}m`,f.x-34,f.y+45)")
+          rep("c.fillText(`💧${Math.round(w.n)}`,w.x-18,w.y+26)", "c.fillText(`💧${Math.round(100*w.n/Math.max(1,w.maxN))}%`,w.x-20,w.y+26)")
+          rep("c.fillStyle=winter?'#dbe4e4':'#4e8a48';c.fillRect(0,205,410,40);", "c.fillStyle=winter?'#dbe4e4':'#4e8a48';c.fillRect(0,205,410,40);if(!winter){c.fillStyle='#17301a';c.font='bold 10px system-ui';c.fillText('← 約1.2km　採餌圏（模式図）　約0.1km →',42,224)}")
+          rep("$('hudSeason').textContent=`${s.icon} ${s.name}`;", "$('hudSeason').textContent=`${s.icon} ${s.name}`;$('hudRange').textContent=`🧭 ${(effectiveForageRange()/1000).toFixed(1)}km`;" )
+          rep("$('colonyText').textContent=`巣温 ${temp.toFixed(1)}℃ ｜ 花蜜 ${nectar.toFixed(0)} ｜ 水 ${water.toFixed(0)} ｜ 蜜ろう ${wax.toFixed(0)} ｜ 群れの目安容量 ${Math.round(workerCapacity())}匹。`;", "$('colonyText').textContent=`巣温 ${temp.toFixed(1)}℃ ｜ 花蜜 ${nectar.toFixed(0)} ｜ 水 ${water.toFixed(0)} ｜ 蜜ろう ${wax.toFixed(0)} ｜ 実効探索圏 約${Math.round(effectiveForageRange())}m ｜ 群れの目安容量 ${Math.round(workerCapacity())}匹。`;")
+          rep("$('danceText').textContent=dance?'💃 ダンス中！ 質のよい花畑へ採餌蜂が集まりやすくなっている。':'よい花を見つけると、採餌蜂が巣で「8の字ダンス」をして仲間へ場所を伝える。';", "$('danceText').textContent=dance?`💃 ${Math.round(dance.dist||250)}m先の花畑をダンスで共有中。距離が遠いほど往復コストは高い。`:`🧭 群れの実効探索圏は約${Math.round(effectiveForageRange())}m。近場が乏しいと偵察蜂が遠くを探す。`;" )
+
+          rep("$('play').onclick=()=>{running=!running;$('play').textContent=running?'⏸ 一時停止':'▶ 再生'};", "$('play').onclick=()=>{if(!colonyAlive){toast('💀 リセットして新しい群れを始めてね');return}if(crisisHold){releaseCrisisHold();return}running=!running;$('play').textContent=running?'⏸ 一時停止':'▶ 再生'};")
+          rep("$('day').onclick=()=>{for(let i=0;i<24;i++)step(1)};", "$('day').onclick=()=>{if(crisisHold){toast('⚠️ まず通知の「続ける」を押してね');return}for(let i=0;i<24;i++)step(1)};")
+          rep("$('reset').onclick=reset;$('scout').onclick=()=>triggerScout(true);", "$('reset').onclick=reset;$('collapseReset').onclick=reset;$('bigAlertContinue').onclick=releaseCrisisHold;$('scout').onclick=()=>triggerScout(true);")
+          rep("if(running)step(dt*(+$('speed').value||6));", "if(running){const chosen=+$('speed').value||6,activeThreat=!['calm','recovered','collapsed'].includes(threat.mode);step(dt*(activeThreat?Math.min(chosen,6):chosen))}")
+
+          # Learning copy: visible patches are a schematic landscape, not the whole real-world foraging universe.
+          rep("<b>この模型：</b>花畑と水場は有限資源で、採餌・採水と時間経過で使い切ると消える。🗑除去でも取り除ける。", "<b>この模型：</b>画面の花は1本の花ではなく「花畑パッチ」の代表表示。右ほど巣に近く、左ほど遠い模式図で、通常は数百mを効率よく使い、近場が乏しいと1km以上も探索できる。遠距離ほど往復効率は下がる。表示する探索圏は個体の飛行限界ではなく、群れとして実際に使いやすい範囲を簡略化した値。花畑と水場は開花・利用・時間経過でゆっくり衰え、🗑除去でも取り除ける。")
+
+          # Test hooks.
+          rep("snapshot:()=>({workers:Math.round(workers),year", "snapshot:()=>({workers:Math.round(workers),crisisHold,collapseReason,visualBees:bees.length,forageRange:Math.round(effectiveForageRange()),flowerDistances:flowers.map(f=>Math.round(f.dist||250)),year")
+          rep("setTool:t=>{tool=t},removeResourceAt", "setTool:t=>{tool=t},releaseCrisisHold,removeResourceAt")
+          rep("addTestFlower:(life=24,n=4)=>flowers.push({x:160,y:120,n,maxN:n,q:.8,life}),addTestWater:(life=24,n=4)=>waters.push({x:90,y:190,n,maxN:n,life}),", "addTestFlower:(life=24,n=100,dist=500)=>flowers.push({x:clamp(365-(dist-120)/1080*320,45,365),y:120,n,maxN:n,q:.88,life,dist}),addTestWater:(life=24,n=100)=>waters.push({x:90,y:190,n,maxN:n,life}),")
+
+          p.write_text(s)
+          PY
+      - name: Validate behavior
+        shell: bash
+        run: |
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          class P(HTMLParser): pass
+          s=Path('honeybee-colony.html').read_text();P().feed(s)
+          must=['bigAlertContinue','crisisHold','collapsedCurtain','raidPending=48+Math.random()*72','effectiveForageRange','flowerDistanceFromX','採餌圏（模式図）','function syncVisualBees(rr){if(!colonyAlive)','function drawBees(){if(!colonyAlive)','floralLayBoost']
+          for token in must: assert token in s,token
+          a=s.index('<script>')+8;b=s.index('</script>',a);Path('/tmp/bee.js').write_text(s[a:b])
+          PY
+          node --check /tmp/bee.js
+          npm install --no-save jsdom@26 >/dev/null 2>&1
+          cat > final-bee-test.mjs <<'JS'
+          import fs from 'fs';import {JSDOM} from 'jsdom';const html=fs.readFileSync('honeybee-colony.html','utf8');
+          function make(){return new JSDOM(html,{runScripts:'dangerously',pretendToBeVisual:true,beforeParse(w){w.HTMLCanvasElement.prototype.getContext=()=>({clearRect(){},fillRect(){},strokeRect(){},beginPath(){},closePath(){},fill(){},stroke(){},moveTo(){},lineTo(){},arc(){},ellipse(){},bezierCurveTo(){},fillText(){},save(){},restore(){},translate(){},rotate(){},scale(){},setLineDash(){},createLinearGradient(){return{addColorStop(){}}},measureText(t){return{width:String(t).length*7}},set fillStyle(v){},set strokeStyle(v){},set lineWidth(v){},set font(v){},set textAlign(v){}});w.requestAnimationFrame=()=>0;}})}
+          let dom=make(),lab=dom.window.__beeLab;lab.setPressure(0);let initial=lab.snapshot();if(initial.forageRange<900||Math.max(...initial.flowerDistances)<800)throw new Error('forage range still too narrow '+JSON.stringify(initial));lab.stepHours(24);let day1=lab.snapshot();console.log('DAY1',JSON.stringify(day1));if(day1.flowers!==2||day1.flowerResource<initial.flowerResource*.75)throw new Error('flowers vanish too fast');
+          dom=make();lab=dom.window.__beeLab;lab.setPressure(0);dom.window.Math.random=()=>.5;lab.stepHours(24*20);let base=lab.snapshot();console.log('BASE20',JSON.stringify(base));if(base.workers<142)throw new Error('normal spring colony does not grow');
+          dom=make();lab=dom.window.__beeLab;lab.setPressure(0);dom.window.Math.random=()=>.5;lab.addTestFlower(24*30,100,250);lab.addTestFlower(24*30,100,600);lab.addTestFlower(24*30,100,1050);lab.stepHours(24*20);let managed=lab.snapshot();console.log('MANAGED20',JSON.stringify(managed));const baseFuture=base.eggs+base.larvae+base.pupae,managedFuture=managed.eggs+managed.larvae+managed.pupae,baseStores=base.honey+base.nectar+base.pollen,managedStores=managed.honey+managed.nectar+managed.pollen;if(managed.workers<base.workers)throw new Error('extra forage reduces workers');if(managedFuture<baseFuture+4)throw new Error('extra forage does not improve next generation');if(managedStores<baseStores+50)throw new Error('flower amount/distance does not affect stores');
+          dom=make();lab=dom.window.__beeLab;lab.setPressure(100);dom.window.Math.random=()=>.99;lab.triggerScout();let s=lab.snapshot();if(!s.crisisHold||s.threat!=='scout')throw new Error('scout notice not held');const beforeDay=s.seasonDay;lab.stepHours(24);if(lab.snapshot().seasonDay!==beforeDay)throw new Error('time advances while crisis notice is held');lab.releaseCrisisHold();for(let i=0;i<50&&!lab.snapshot().crisisHold;i++)lab.stepHours(1);s=lab.snapshot();if(!s.crisisHold||s.threat!=='marked')throw new Error('escape notice not held '+JSON.stringify(s));lab.releaseCrisisHold();for(let i=0;i<40;i++)lab.stepHours(1);if(lab.snapshot().threat!=='marked')throw new Error('raid starts immediately');for(let i=0;i<100&&!lab.snapshot().crisisHold;i++)lab.stepHours(1);s=lab.snapshot();if(!s.crisisHold||s.threat!=='raid')throw new Error('raid notice not held '+JSON.stringify(s));lab.releaseCrisisHold();for(let i=0;i<180&&lab.snapshot().colonyAlive;i++)lab.stepHours(1);s=lab.snapshot();console.log('COLLAPSE',JSON.stringify(s));if(s.colonyAlive||s.workers!==0||s.visualBees!==0)throw new Error('collapse not terminal');if(!dom.window.document.getElementById('collapsedCurtain').classList.contains('show'))throw new Error('collapse screen missing');console.log('PASS');
+          JS
+          node final-bee-test.mjs
+          rm -f final-bee-test.mjs
+          rm -rf node_modules package-lock.json package.json
+      - name: Commit fix and remove temporary workflows
+        shell: bash
+        run: |
+          git config user.name 'sshibata'
+          git config user.email '107645802+shtshbt@users.noreply.github.com'
+          git add honeybee-colony.html
+          git rm -f .github/workflows/honeybee-crisis-pacing*.yml .github/workflows/honeybee-final-fix.yml || true
+          git commit -m 'Fix honeybee pacing, forage range, and collapse state'
+          git push origin HEAD:agent/honeybee-crisis-pacing-fix

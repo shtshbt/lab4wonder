@@ -1,0 +1,45 @@
+name: Honeybee scout-risk tuning
+
+on:
+  push:
+    branches:
+      - agent/honeybee-scout-risk-tune
+
+permissions:
+  contents: write
+
+jobs:
+  tune:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/honeybee-scout-risk-tune
+      - name: Tune scout interception probability
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('honeybee-colony.html'); s=p.read_text()
+          old="const pBall=clamp(.08+.55*clamp(healthy/300,0,1)+.9*clamp(guardFrac-.20,0,.25)+.12*clamp((healthy-200)/300,0,1)+.10*honeyQ-.28*damageFrac,.12,.94);"
+          new="const pBall=clamp(.08+.46*clamp(healthy/300,0,1)+.9*clamp(guardFrac-.20,0,.25)+.12*clamp((healthy-200)/300,0,1)+.10*honeyQ-.28*damageFrac,.12,.90);"
+          if old not in s: raise SystemExit('scout formula anchor missing')
+          p.write_text(s.replace(old,new,1))
+          PY
+      - name: Validate formula
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('honeybee-colony.html').read_text()
+          assert '.46*clamp(healthy/300' in s
+          assert ',.12,.90);' in s
+          PY
+      - name: Commit HTML
+        shell: bash
+        run: |
+          git config user.name 'sshibata'
+          git config user.email '107645802+shtshbt@users.noreply.github.com'
+          git add honeybee-colony.html
+          git commit -m 'Keep scout interception risky for large colonies'
+          git push origin HEAD:agent/honeybee-scout-risk-tune

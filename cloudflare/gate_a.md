@@ -10,6 +10,9 @@ untouched. This record supersedes the initial Gate A STOP.
 
 ## Reproduce
 
+Source validation requires Bash, ripgrep, Git and Node. CI explicitly installs
+ripgrep rather than assuming it is included in the runner image.
+
 ```bash
 bash scripts/validate_release.sh "$PWD"
 node cloudflare/build-static.mjs

@@ -15,6 +15,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Install source validation dependency
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y ripgrep
       - name: Validate source acceptance
         run: bash scripts/validate_release.sh "$GITHUB_WORKSPACE"
       - name: Build and validate runtime artifact

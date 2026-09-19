@@ -24,17 +24,41 @@ check_equal() {
 
 app_count=$(find "$repo_dir" -maxdepth 1 -type f -name '*.html' \
   ! -name 'index.html' ! -name 'explore.html' ! -name 'kids-index.html' | wc -l)
-check_equal "root app count" "$app_count" "183"
+# Honeybee became the 184th cataloged app in 1f79121.
+check_equal "root app count" "$app_count" "184"
 
 for catalog_name in explore.html kids-index.html; do
   catalog_count=$(rg -o '"f":"[^"]+\.html"' "$repo_dir/$catalog_name" | wc -l)
-  check_equal "$catalog_name entries" "$catalog_count" "183"
+  check_equal "$catalog_name entries" "$catalog_count" "184"
   drawing_count=$(rg -o '"f":"fourier_drawing\.html"' "$repo_dir/$catalog_name" | wc -l)
   check_equal "$catalog_name hand-drawn Fourier entry" "$drawing_count" "1"
 done
 
 asset_count=$(rg -l 'lab4wonder_v1_1\.js' "$repo_dir"/*.html | wc -l)
-check_equal "apps using v1.1 behavior" "$asset_count" "183"
+check_equal "apps using v1.1 behavior" "$asset_count" "182"
+
+# Preserve the standalone honeybee (1f79121) and pillbug rewrite (3e5d4aa).
+# A count alone could hide an accidental removal paired with an added tag.
+shared_js_mismatches=0
+while IFS= read -r app_path; do
+  app_name="${app_path##*/}"
+  case "$app_name" in
+    honeybee-colony.html|pillbug-maze.html)
+      if rg -q 'lab4wonder_v1_1\.js' "$app_path"; then
+        printf 'error: standalone app unexpectedly uses shared JS: %s\n' "$app_name" >&2
+        shared_js_mismatches=$((shared_js_mismatches + 1))
+      fi
+      ;;
+    *)
+      if ! rg -q 'lab4wonder_v1_1\.js' "$app_path"; then
+        printf 'error: shared JS missing from app: %s\n' "$app_name" >&2
+        shared_js_mismatches=$((shared_js_mismatches + 1))
+      fi
+      ;;
+  esac
+done < <(find "$repo_dir" -maxdepth 1 -type f -name '*.html' \
+  ! -name 'index.html' ! -name 'explore.html' ! -name 'kids-index.html')
+check_equal "shared JS membership mismatches" "$shared_js_mismatches" "0"
 
 precache_gap_count=0
 while IFS= read -r page_name; do
@@ -85,7 +109,7 @@ atlas_silent_collect_count=$(rg -l 'collect:\(name,showDetail=true\)' \
 check_equal "main-scene collection without forced detail modal" "$atlas_silent_collect_count" "6"
 
 audit_row_count=$(rg -o '^\| `[^`]+\.html` \|' "$repo_dir/docs/app_quality_audit_v1_1.md" | wc -l)
-check_equal "quality audit app rows" "$audit_row_count" "183"
+check_equal "historical quality audit baseline rows" "$audit_row_count" "183"
 
 if ! rg -q 'この数字はなに？' "$repo_dir/paper-plane.html"; then
   printf 'error: paper-plane vocabulary guide is missing\n' >&2
@@ -102,7 +126,7 @@ else
   printf 'ok: protected app behavior retained with version labels removed\n'
 fi
 
-for required_name in fourier.html fourier_drawing.html pillbug-maze.html \
+for required_name in fourier.html fourier_drawing.html pillbug-maze.html honeybee-colony.html \
   lab4wonder_v1_1.css lab4wonder_v1_1.js sw.js manifest.webmanifest \
   icon-192.png icon-512.png apple-touch-icon.png; do
   if [[ ! -s "$repo_dir/$required_name" ]]; then

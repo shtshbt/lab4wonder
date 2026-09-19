@@ -1,7 +1,8 @@
 (() => {
   'use strict';
 
-  const page = location.pathname.split('/').pop();
+  const route = location.pathname.split('/').pop() || '';
+  const page = route && !route.includes('.') ? `${route}.html` : route;
   const byId = id => document.getElementById(id);
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const point = (event, canvas) => {

@@ -233,12 +233,21 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET") {
     return;
   }
-  if (!request.url.startsWith(self.location.origin)) {
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) {
     return;
   }
   event.respondWith((async () => {
     const cache = await caches.open(CACHE_NAME);
-    const cached = await cache.match(request, { ignoreSearch: true });
+    let cached = await cache.match(request, { ignoreSearch: true });
+    const route = url.pathname.split("/").pop() || "";
+    // Precache keys stay canonical; cold extensionless navigations reuse them.
+    if (!cached && request.mode === "navigate" && route && !route.includes(".")) {
+      const canonical = new URL(url);
+      canonical.pathname += ".html";
+      canonical.search = "";
+      cached = await cache.match(canonical.href, { ignoreSearch: true });
+    }
     const refresh = fetch(request)
       .then((response) => {
         if (response && response.ok && response.type === "basic") {
@@ -249,6 +258,15 @@ self.addEventListener("fetch", (event) => {
       .catch(() => null);
     if (cached) {
       event.waitUntil(refresh);
+      // Redirect-followed precache responses cannot be used for manual-redirect
+      // navigations. Preserve their bytes and headers without the redirect flag.
+      if (request.mode === "navigate" && cached.redirected) {
+        return new Response(cached.body, {
+          status: cached.status,
+          statusText: cached.statusText,
+          headers: cached.headers,
+        });
+      }
       return cached;
     }
     const fresh = await refresh;

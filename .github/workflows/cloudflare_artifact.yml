@@ -1,0 +1,41 @@
+name: Validate Cloudflare artifact
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  artifact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install source validation dependency
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y ripgrep
+      - name: Validate source acceptance
+        run: bash scripts/validate_release.sh "$GITHUB_WORKSPACE"
+      - name: Build and validate runtime artifact
+        if: ${{ !cancelled() }}
+        run: |
+          node --check cloudflare/build-static.mjs
+          node --check cloudflare/validate_artifact.mjs
+          node cloudflare/build-static.mjs
+          node cloudflare/validate_artifact.mjs
+          node --test cloudflare/test_routes.mjs
+          git diff --exit-code
+          git diff --check
+      - name: Install browser test dependency outside the repository
+        run: |
+          npm install --prefix "$RUNNER_TEMP/l4w_browser" --no-package-lock --ignore-scripts playwright@1.62.1
+          node "$RUNNER_TEMP/l4w_browser/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Test browser online and cold offline routes
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/l4w_browser/node_modules/playwright/index.mjs
+        run: node cloudflare/test_browser_routes.mjs

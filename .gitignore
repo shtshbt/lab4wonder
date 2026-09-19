@@ -12,3 +12,6 @@ NEXT_SESSION_HANDOFF_*.md
 Thumbs.db
 *.swp
 *~
+
+# Generated Cloudflare runtime artifact
+/dist-pages/

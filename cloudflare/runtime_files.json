@@ -1,11 +1,4 @@
-// Lab4Wonder offline service worker.
-// Precaches every page and shared asset so the whole site keeps working
-// without a network connection. __BUILD_ID__ is replaced with the commit
-// id by the deployment build at deploy time.
-const CACHE_NAME = "lab4wonder-__BUILD_ID__";
-
-const PRECACHE_URLS = [
-  "./",
+[
   "2048.html",
   "abyss.html",
   "accelerator.html",
@@ -13,7 +6,14 @@ const PRECACHE_URLS = [
   "acorn-fermi.html",
   "airship-expedition.html",
   "ant-colony.html",
+  "apple-touch-icon.png",
+  "art-athens.jpg",
+  "art-grande.jpg",
   "art-looking-gallery.html",
+  "art-matthew.jpg",
+  "art-starry.jpg",
+  "art-sunrise.jpg",
+  "art-wave.jpg",
   "atom.html",
   "attractor.html",
   "balloon-gases.html",
@@ -36,6 +36,7 @@ const PRECACHE_URLS = [
   "cue-navigation.html",
   "derivative-lab.html",
   "digestion.html",
+  "direct_play_patch.js",
   "distribution-explorer.html",
   "divergence-angle.html",
   "dna-protein.html",
@@ -82,9 +83,11 @@ const PRECACHE_URLS = [
   "haiku-tanka.html",
   "hearing-balance.html",
   "heat-transfer.html",
-  "hydraulic-elevator.html",
   "honeybee-colony.html",
+  "hydraulic-elevator.html",
   "hypothesis-testing.html",
+  "icon-192.png",
+  "icon-512.png",
   "image-formation.html",
   "immune-memory.html",
   "impact-deformation.html",
@@ -99,9 +102,12 @@ const PRECACHE_URLS = [
   "kids-index.html",
   "kite-lab.html",
   "l-system.html",
+  "lab4wonder_v1_1.css",
+  "lab4wonder_v1_1.js",
   "logic-circuit.html",
   "lumens-scenarios.html",
   "mandelbrot.html",
+  "manifest.webmanifest",
   "markdown-editor.html",
   "market-risk.html",
   "material-fatigue.html",
@@ -167,6 +173,7 @@ const PRECACHE_URLS = [
   "succession.html",
   "sudoku.html",
   "supply-chain-manager.html",
+  "sw.js",
   "tanker-control.html",
   "taxonomy-tree.html",
   "terrain-gen.html",
@@ -192,93 +199,5 @@ const PRECACHE_URLS = [
   "weather-fronts.html",
   "weathering-lab.html",
   "whirlpool-strait.html",
-  "world-clock.html",
-  "lab4wonder_v1_1.css",
-  "lab4wonder_v1_1.js",
-  "direct_play_patch.js",
-  "manifest.webmanifest",
-  "icon-192.png",
-  "icon-512.png",
-  "apple-touch-icon.png",
-  "art-athens.jpg",
-  "art-grande.jpg",
-  "art-matthew.jpg",
-  "art-starry.jpg",
-  "art-sunrise.jpg",
-  "art-wave.jpg",
-];
-
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(PRECACHE_URLS))
-      .then(() => self.skipWaiting())
-  );
-});
-
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys()
-      .then((names) => Promise.all(
-        names
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name))
-      ))
-      .then(() => self.clients.claim())
-  );
-});
-
-self.addEventListener("fetch", (event) => {
-  const request = event.request;
-  if (request.method !== "GET") {
-    return;
-  }
-  const url = new URL(request.url);
-  if (url.origin !== self.location.origin) {
-    return;
-  }
-  event.respondWith((async () => {
-    const cache = await caches.open(CACHE_NAME);
-    let cached = await cache.match(request, { ignoreSearch: true });
-    const route = url.pathname.split("/").pop() || "";
-    // Precache keys stay canonical; cold extensionless navigations reuse them.
-    if (!cached && request.mode === "navigate" && route && !route.includes(".")) {
-      const canonical = new URL(url);
-      canonical.pathname += ".html";
-      canonical.search = "";
-      cached = await cache.match(canonical.href, { ignoreSearch: true });
-    }
-    const refresh = fetch(request)
-      .then((response) => {
-        if (response && response.ok && response.type === "basic") {
-          return cache.put(request, response.clone()).then(() => response);
-        }
-        return response;
-      })
-      .catch(() => null);
-    if (cached) {
-      event.waitUntil(refresh);
-      // Redirect-followed precache responses cannot be used for manual-redirect
-      // navigations. Preserve their bytes and headers without the redirect flag.
-      if (request.mode === "navigate" && cached.redirected) {
-        return new Response(cached.body, {
-          status: cached.status,
-          statusText: cached.statusText,
-          headers: cached.headers,
-        });
-      }
-      return cached;
-    }
-    const fresh = await refresh;
-    if (fresh) {
-      return fresh;
-    }
-    if (request.mode === "navigate") {
-      const fallback = await cache.match("index.html");
-      if (fallback) {
-        return fallback;
-      }
-    }
-    return Response.error();
-  })());
-});
+  "world-clock.html"
+]

@@ -1,7 +1,8 @@
 (() => {
   "use strict";
 
-  const page = location.pathname.split("/").pop() || "";
+  const route = location.pathname.split("/").pop() || "";
+  const page = route && !route.includes(".") ? `${route}.html` : route;
   const explorationPages = new Set([
     "abyss.html",
     "cave.html",

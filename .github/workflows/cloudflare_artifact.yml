@@ -1,0 +1,27 @@
+name: Validate Cloudflare artifact
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate source acceptance
+        run: bash scripts/validate_release.sh "$GITHUB_WORKSPACE"
+      - name: Build and validate runtime artifact
+        if: ${{ !cancelled() }}
+        run: |
+          node --check cloudflare/build-static.mjs
+          node --check cloudflare/validate_artifact.mjs
+          node cloudflare/build-static.mjs
+          node cloudflare/validate_artifact.mjs
+          git diff --exit-code
+          git diff --check
